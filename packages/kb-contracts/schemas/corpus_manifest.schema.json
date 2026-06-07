@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lpearf-pixel.local/schemas/corpus_manifest.schema.json",
+  "title": "Corpus Manifest v1",
+  "type": "object",
+  "required": ["schema_version", "corpus_version", "ingest_run_id", "source_manifest_hash", "collection", "created_at"],
+  "properties": {
+    "schema_version": {"const": "corpus-manifest/v1"},
+    "corpus_version": {"type": "string"},
+    "ingest_run_id": {"type": "string"},
+    "source_manifest_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "collection": {"type": "string"},
+    "created_at": {"type": "string"}
+  },
+  "additionalProperties": true
+}

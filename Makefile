@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health inspect-kaiyuan generate-candidate sync downstream-test upstream-test
+.PHONY: status up kb-search ingest health inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test
 
 status:
 	git status --short
@@ -27,6 +27,18 @@ inspect-kaiyuan:
 	  --limit 8 \
 	  --show-raw
 
+validate-candidates:
+	cd $(UPSTREAM_DIR) && python scripts/import_candidate_cards.py \
+	  --inbox incoming/downstream_candidates/codex-ready \
+	  --book-id kaiyuan_zhanjing \
+	  --mode validate
+
+promote-candidates:
+	cd $(UPSTREAM_DIR) && python scripts/import_candidate_cards.py \
+	  --inbox incoming/downstream_candidates/codex-ready \
+	  --book-id kaiyuan_zhanjing \
+	  --mode promote
+
 generate-candidate:
 	cd $(DOWNSTREAM_DIR) && python -m src.cli generate-candidate-card \
 	  --query "荧惑守心" \
@@ -43,4 +55,7 @@ downstream-test:
 	cd $(DOWNSTREAM_DIR) && pytest -q
 
 upstream-test:
-	cd $(UPSTREAM_DIR) && pytest -q
+	cd $(UPSTREAM_DIR) && PYTHONPATH=.:../../packages/kb-contracts/python pytest -q
+
+contracts-test:
+	PYTHONPATH=packages/kb-contracts/python pytest -q packages/kb-contracts/tests

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lpearf-pixel.local/schemas/candidate_card.schema.json",
+  "title": "Candidate Card Frontmatter v1",
+  "description": "Schema for YAML frontmatter in a markdown candidate extract card.",
+  "type": "object",
+  "required": [
+    "schema_version", "kb_book_id", "book_title", "card_type", "evidence_level",
+    "source_namespace", "generated_by", "generated_status", "review_status", "sync_status",
+    "term", "aliases", "source_file", "source_locator", "source_volume", "page_marker",
+    "heading_path", "paragraph_index", "match_type", "match_offset", "anchor_text",
+    "content_hash", "base_corpus_version", "base_ingest_run_id"
+  ],
+  "properties": {
+    "schema_version": {"const": "candidate-card/v1"},
+    "kb_book_id": {"type": "string", "minLength": 1},
+    "book_title": {"type": "string", "minLength": 1},
+    "card_type": {"const": "extract_card"},
+    "evidence_level": {"enum": ["candidate", "primary"]},
+    "source_namespace": {"enum": ["downstream_generated", "official"]},
+    "generated_by": {"type": "string", "minLength": 1},
+    "generated_status": {"enum": ["candidate", "promoted"]},
+    "review_status": {"enum": ["pending", "approved", "rejected"]},
+    "sync_status": {"enum": ["pending", "merged", "needs_review", "stale"]},
+    "term": {"type": "string", "minLength": 1},
+    "aliases": {"type": "array", "items": {"type": "string"}},
+    "source_file": {"type": "string", "minLength": 1},
+    "source_locator": {"type": "string", "minLength": 1},
+    "source_volume": {"type": "string"},
+    "page_marker": {"type": ["string", "null"]},
+    "heading_path": {"type": "array", "items": {"type": "string"}},
+    "paragraph_index": {"type": "integer", "minimum": 0},
+    "match_type": {"const": "exact_phrase"},
+    "match_offset": {"type": "integer", "minimum": 0},
+    "anchor_text": {"type": "string", "minLength": 1},
+    "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "base_corpus_version": {"type": "string"},
+    "base_ingest_run_id": {"type": "string"}
+  },
+  "additionalProperties": true
+}

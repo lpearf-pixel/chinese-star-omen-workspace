@@ -137,6 +137,14 @@ def test_api_key_required():
         assert "KB_SEARCH_API_KEY" in str(exc)
 
 
+
+def test_dev_change_me_api_key_is_allowed_for_local_dev():
+    r = KBSearchRetriever(base_url="http://127.0.0.1:8008", api_key="dev_change_me")
+    headers = r._auth_headers()
+    assert headers["Authorization"] == "Bearer dev_change_me"
+    assert headers["X-API-Key"] == "dev_change_me"
+
+
 def test_api_key_headers_shape():
     r = KBSearchRetriever(base_url="http://127.0.0.1:8008", api_key="abc")
     headers = r._auth_headers()

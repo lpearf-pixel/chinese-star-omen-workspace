@@ -12,6 +12,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 from src.config.settings import Settings, SettingsError, get_settings, mask_secret, require_api_key
 from src.connectors.kb_contract import infer_metadata_from_path
+from src.connectors.candidate_overlay import overlay_hits
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ class KBSearchRetriever:
     PRIMARY_ONLY_PHRASES = {"荧惑守心", "熒惑守心", "月犯心宿", "五星聚", "土木合"}
     PRIMARY_CARD_TYPES = {"fenjuan", "fulltext"}
     STRUCTURED_CARD_TYPES = {"term_card", "zhusu_card", "extract_card"}
-    INVALID_API_KEY_PLACEHOLDERS = {"dev_change_me", "change_me", "please_change_me", "replace_me"}
+    INVALID_API_KEY_PLACEHOLDERS = {"change_me", "please_change_me", "replace_me"}
     RETRIEVAL_POOL_SPEC: dict[str, dict[str, list[str]]] = {
         "knowledge": {
             "stage1": ["xingguan_card", "zhusu_card", "term_card", "extract_card", "topic_index", "chapter_summary"],
@@ -320,6 +321,21 @@ class KBSearchRetriever:
     def health(self) -> dict[str, Any]:
         return self._request("GET", "/v1/health", use_auth=False)
 
+    def get_upstream_meta(self) -> dict[str, Any]:
+        for path in ("/v1/meta", "/v1/health"):
+            try:
+                data = self._request("GET", path, use_auth=False)
+                if data.get("corpus_version") or data.get("ingest_run_id"):
+                    return {
+                        "corpus_version": data.get("corpus_version", "unknown"),
+                        "ingest_run_id": data.get("ingest_run_id", "unknown"),
+                        "source_manifest_hash": data.get("source_manifest_hash", "unknown"),
+                        "collection": data.get("collection", self.default_collection),
+                    }
+            except Exception:
+                continue
+        return {"corpus_version": "unknown", "ingest_run_id": "unknown", "source_manifest_hash": "unknown", "collection": self.default_collection}
+
     def retrieve(
         self,
         query: str,
@@ -504,6 +520,12 @@ class KBSearchRetriever:
             ][:3]
         primary_candidates = [h for h in primary_candidates if h.get("card_type") in self.PRIMARY_CARD_TYPES][:3]
         stage2_exact = [h for h in stage2_exact if h.get("card_type") in self.PRIMARY_CARD_TYPES][:3]
+        if self.settings.kb_enable_candidate_overlay:
+            candidate_hits = overlay_hits(Path(self.settings.kb_candidate_overlay_root), query, book_id=book_id, limit=3)
+            for hit in candidate_hits:
+                if hit not in primary_candidates:
+                    primary_candidates.append(hit)
+            primary_candidates = primary_candidates[:3]
         stage2_related = [h for h in primary_candidates if h not in stage2_exact][:3]
         structured_fallbacks = []
         if mode == "support":

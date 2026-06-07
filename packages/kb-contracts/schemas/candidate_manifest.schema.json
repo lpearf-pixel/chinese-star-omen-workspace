@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lpearf-pixel.local/schemas/candidate_manifest.schema.json",
+  "title": "Candidate Manifest v1",
+  "type": "object",
+  "required": ["schema_version", "source_project", "target_upstream", "book_id", "base_corpus_version", "base_ingest_run_id", "items"],
+  "properties": {
+    "schema_version": {"const": "candidate-manifest/v1"},
+    "source_project": {"type": "string"},
+    "target_upstream": {"type": "string"},
+    "book_id": {"type": "string"},
+    "base_corpus_version": {"type": "string"},
+    "base_ingest_run_id": {"type": "string"},
+    "current_upstream_corpus_version": {"type": ["string", "null"]},
+    "last_synced_at": {"type": ["string", "null"]},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "file", "term", "source_locator", "source_volume", "match_offset", "content_hash", "anchor_text", "review_status", "sync_status"],
+        "properties": {
+          "id": {"type": "string"},
+          "file": {"type": "string"},
+          "term": {"type": "string"},
+          "source_locator": {"type": "string"},
+          "source_volume": {"type": "string"},
+          "match_offset": {"type": "integer"},
+          "content_hash": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+          "anchor_text": {"type": "string"},
+          "review_status": {"enum": ["pending", "approved", "rejected"]},
+          "sync_status": {"enum": ["pending", "merged", "needs_review", "stale"]}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

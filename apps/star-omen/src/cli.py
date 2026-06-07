@@ -23,6 +23,7 @@ from src.connectors.evidence_resolver import resolve_evidence
 from src.connectors.kb_contract import STAGE1_RECALL_CARD_TYPES, STAGE2_PRIMARY_CARD_TYPES, is_citable_evidence
 from src.connectors.kb_search_retriever import KBSearchRetriever
 from src.connectors.manifest_reader import ManifestReader
+from src.candidate_cards import generate_candidate_cards, sync_upstream_status
 from src.eval.corpus_eval import run_corpus_eval
 from src.rule_engine.minimal_matcher import run_match_rule
 
@@ -87,6 +88,8 @@ def inspect_kb_impl(
     api_key: str | None = None,
     collection: str | None = None,
     show_related: bool = False,
+    query_mode: str | None = None,
+    literal_first: bool | None = None,
 ):
     settings = get_settings()
     effective_limit = limit if limit is not None else settings.app_default_limit
@@ -105,6 +108,8 @@ def inspect_kb_impl(
                 top_k=effective_limit,
                 collection=collection,
                 filters=filters or None,
+                query_mode=query_mode,
+                literal_first=literal_first,
             )
         except Exception as exc:
             return {
@@ -117,7 +122,7 @@ def inspect_kb_impl(
         stage1_out = _split_hits(stage.get("stage1", {}), include_raw=show_raw)
         stage2_out = _split_hits(stage.get("stage2", {}), include_raw=show_raw)
         top_hit = (stage.get("stage1", {}).get("hits") or stage.get("stage1", {}).get("inferred_hits") or [None])[0]
-        query_mode = stage.get("stage1", {}).get("query_mode", "knowledge")
+        query_mode = stage.get("stage1", {}).get("query_mode", query_mode or "knowledge")
 
         if query_mode == "knowledge":
             stage1_out["exact_hits"] = stage1_out.get("exact_hits", [])[:1]
@@ -175,6 +180,14 @@ def inspect_kb_impl(
 
     return {"mode": "noop", "message": "provide --query for kb-search or --root for local inspection"}
 
+
+
+def generate_candidate_card_impl(query: str, book_id: str, out_dir: Path, base_url: str | None = None):
+    return generate_candidate_cards(query, book_id, out_dir, base_url=base_url)
+
+
+def sync_upstream_status_impl(book_id: str, candidate_root: Path, base_url: str):
+    return sync_upstream_status(book_id, candidate_root, base_url)
 
 def resolve_evidence_impl(rule: Path, kb_root: Path | None = None, strict: bool = False):
     settings = get_settings()
@@ -241,8 +254,10 @@ if typer:
         api_key: str | None = typer.Option(None, "--api-key"),
         show_related: bool = typer.Option(False, "--show-related"),
         show_raw: bool = typer.Option(False, "--show-raw"),
+        query_mode: str | None = typer.Option(None, "--query-mode"),
+        literal_first: bool | None = typer.Option(None, "--literal-first"),
     ):
-        out = inspect_kb_impl(root, query, book_id, card_type, evidence_level, limit, show_raw, base_url, api_key, collection, show_related)
+        out = inspect_kb_impl(root, query, book_id, card_type, evidence_level, limit, show_raw, base_url, api_key, collection, show_related, query_mode, literal_first)
         typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
 
 
@@ -321,6 +336,28 @@ if typer:
         typer.echo(json.dumps(report, ensure_ascii=False, indent=2))
 
 
+    @app.command("generate-candidate-card")
+    def generate_candidate_card(
+        query: str = typer.Option(..., "--query"),
+        book_id: str = typer.Option(..., "--book-id"),
+        out_dir: Path = typer.Option(..., "--out-dir"),
+        base_url: str | None = typer.Option(None, "--base-url"),
+    ):
+        out = generate_candidate_card_impl(query, book_id, out_dir, base_url)
+        typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+        typer.echo("candidate cards generated; submit to upstream Local-KB-Unified after review.")
+
+
+    @app.command("sync-upstream-status")
+    def sync_upstream_status_cmd(
+        book_id: str = typer.Option(..., "--book-id"),
+        candidate_root: Path = typer.Option(Path("data/generated_candidates"), "--candidate-root"),
+        base_url: str = typer.Option("http://127.0.0.1:8008", "--base-url"),
+    ):
+        out = sync_upstream_status_impl(book_id, candidate_root, base_url)
+        typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+
+
     @app.command("eval-corpus")
     def eval_corpus(
         eval_path: Path = typer.Option(Path("eval/corpus_eval_cases.yaml"), "--eval-path"),
@@ -363,12 +400,24 @@ def _main_fallback():  # pragma: no cover
     p_inspect.add_argument("--api-key")
     p_inspect.add_argument("--show-related", action="store_true")
     p_inspect.add_argument("--show-raw", action="store_true")
+    p_inspect.add_argument("--query-mode")
+    p_inspect.add_argument("--literal-first", action="store_true")
 
     p_resolve = sub.add_parser("resolve-evidence")
     p_resolve.add_argument("--rule", required=True)
     p_resolve.add_argument("--kb-root")
     p_resolve.add_argument("--pretty", action="store_true")
     p_resolve.add_argument("--strict", action="store_true")
+    p_gen = sub.add_parser("generate-candidate-card")
+    p_gen.add_argument("--query", required=True)
+    p_gen.add_argument("--book-id", required=True)
+    p_gen.add_argument("--out-dir", required=True)
+    p_gen.add_argument("--base-url")
+    p_sync = sub.add_parser("sync-upstream-status")
+    p_sync.add_argument("--book-id", required=True)
+    p_sync.add_argument("--candidate-root", default="data/generated_candidates")
+    p_sync.add_argument("--base-url", default="http://127.0.0.1:8008")
+
     p_eval = sub.add_parser("eval-corpus")
     p_eval.add_argument("--eval-path", default="eval/corpus_eval_cases.yaml")
     p_eval.add_argument("--collection")
@@ -397,6 +446,8 @@ def _main_fallback():  # pragma: no cover
             args.api_key,
             args.collection,
             args.show_related,
+            args.query_mode,
+            args.literal_first,
         )
         print(json.dumps(out, ensure_ascii=False, indent=2))
     elif args.cmd == "resolve-evidence":
@@ -407,6 +458,13 @@ def _main_fallback():  # pragma: no cover
                 print("当前仅为候选证据")
         else:
             print(json.dumps(out, ensure_ascii=False, indent=2))
+    elif args.cmd == "generate-candidate-card":
+        out = generate_candidate_card_impl(args.query, args.book_id, Path(args.out_dir), args.base_url)
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        print("candidate cards generated; submit to upstream Local-KB-Unified after review.")
+    elif args.cmd == "sync-upstream-status":
+        out = sync_upstream_status_impl(args.book_id, Path(args.candidate_root), args.base_url)
+        print(json.dumps(out, ensure_ascii=False, indent=2))
     elif args.cmd == "eval-corpus":
         retriever = KBSearchRetriever(base_url=args.base_url, api_key=args.api_key)
         out = run_corpus_eval(eval_path=Path(args.eval_path), retriever=retriever, collection=args.collection, top_k=args.top_k)
