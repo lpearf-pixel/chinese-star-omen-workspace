@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test
+.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test
 
 status:
 	git status --short
@@ -17,6 +17,9 @@ ingest:
 
 health:
 	cd $(UPSTREAM_DIR) && bash scripts/healthcheck.sh
+
+sync-kaiyuan-source:
+	python scripts/sync_kaiyuan_source.py --clean
 
 inspect-kaiyuan:
 	cd $(DOWNSTREAM_DIR) && python -m src.cli inspect-kb \

@@ -126,6 +126,9 @@ def infer_book_title_from_path(path: str | None) -> str | None:
     for idx, token in enumerate(parts):
         if token == "古籍" and idx + 1 < len(parts):
             return parts[idx + 1]
+    lowered = normalized.lower()
+    if "kaiyuanzhanjin" in lowered or "唐開元占經" in normalized or "唐开元占经" in normalized:
+        return "唐開元占經"
     return None
 
 

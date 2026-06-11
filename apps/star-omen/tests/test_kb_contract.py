@@ -35,3 +35,11 @@ def test_infer_fulltext_from_path():
     assert meta["book_id"] == "kaiyuan_zhanjing"
     assert meta["card_type"] == "fulltext"
     assert meta["evidence_level"] == "primary"
+
+
+def test_infer_kaiyuanzhanjin_repo_layout_from_path():
+    meta = infer_metadata_from_path("/tmp/kaiyuanzhanjin/分卷/KR3g0018_031.md")
+    assert meta["book_title"] == "唐開元占經"
+    assert meta["book_id"] == "kaiyuan_zhanjing"
+    assert meta["card_type"] == "fenjuan"
+    assert meta["evidence_level"] == "primary"

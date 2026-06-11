@@ -17,6 +17,24 @@ When running scripts directly, expose the shared Python helpers with:
 export PYTHONPATH="$PWD/packages/kb-contracts/python:$PYTHONPATH"
 ```
 
+## Open-source Kaiyuan source sync
+
+The downstream filesystem fallback and candidate generator can use the public `lpearf-pixel/kaiyuanzhanjin` text layout directly. To copy that repo into both upstream and downstream source roots, run:
+
+```bash
+make sync-kaiyuan-source
+```
+
+If the repo is already cloned locally, avoid network access and use:
+
+```bash
+python scripts/sync_kaiyuan_source.py \
+  --source-dir /path/to/kaiyuanzhanjin \
+  --clean
+```
+
+The sync script writes the source under `data/sources/古籍/唐開元占經/`, preserving folders such as `分卷/` and `唐開元占經-全文合併版.md`, so existing path inference resolves `book_id=kaiyuan_zhanjing` and primary `fenjuan/fulltext` card types.
+
 ## Candidate Sync v1 Flow
 
 ```bash
@@ -37,6 +55,7 @@ Detailed upstream procedure: `apps/local-kb-unified/docs/downstream-candidate-sy
 make up
 make ingest
 make health
+make sync-kaiyuan-source
 make inspect-kaiyuan
 make generate-candidate
 make validate-candidates
