@@ -19,7 +19,7 @@ health:
 	cd $(UPSTREAM_DIR) && bash scripts/healthcheck.sh
 
 sync-kaiyuan-source:
-	python scripts/sync_kaiyuan_source.py --clean
+	python scripts/sync_kaiyuan_source.py $(if $(KAIYUAN_SOURCE_DIR),--source-dir "$(KAIYUAN_SOURCE_DIR)",) --clean
 
 inspect-kaiyuan:
 	cd $(DOWNSTREAM_DIR) && python -m src.cli inspect-kb \

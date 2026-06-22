@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 import subprocess
 import tempfile
 from datetime import datetime, timezone
@@ -45,7 +46,11 @@ def _clone_repo(repo_url: str, ref: str, workdir: Path) -> Path:
         subprocess.run(cmd, check=True, text=True, capture_output=True)
     except subprocess.CalledProcessError as exc:
         stderr = (exc.stderr or "").strip()
-        raise RuntimeError(f"failed to clone {repo_url}@{ref}: {stderr or exc}") from exc
+        raise RuntimeError(
+            f"failed to clone {repo_url}@{ref}: {stderr or exc}. "
+            "If this environment cannot access GitHub, clone lpearf-pixel/kaiyuanzhanjin locally "
+            "and rerun with --source-dir /path/to/kaiyuanzhanjin, or set KAIYUAN_SOURCE_DIR for make sync-kaiyuan-source."
+        ) from exc
     return target
 
 
@@ -92,7 +97,11 @@ def main() -> int:
     parser.add_argument("--clean", action="store_true", help="Remove each destination before copying")
     args = parser.parse_args()
     dests = args.dest if args.dest else DEFAULT_DESTS
-    result = sync_kaiyuan_source(source_dir=args.source_dir, repo_url=args.repo_url, ref=args.ref, dests=dests, clean=args.clean)
+    try:
+        result = sync_kaiyuan_source(source_dir=args.source_dir, repo_url=args.repo_url, ref=args.ref, dests=dests, clean=args.clean)
+    except Exception as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 

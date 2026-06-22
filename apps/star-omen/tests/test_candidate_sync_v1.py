@@ -85,3 +85,23 @@ def test_sync_status_marks_merged_needs_review_and_stale(monkeypatch, tmp_path):
     source.write_text("卷三十一\n\n不含原锚点。\n", encoding="utf-8")
     out = cc.sync_upstream_status("kaiyuan_zhanjing", root, "http://upstream")
     assert out["updated"]["stale"] == 1
+
+
+def test_generate_candidate_from_direct_kaiyuanzhanjin_repo_layout(monkeypatch, tmp_path):
+    source = tmp_path / "kaiyuanzhanjin"
+    (source / "分卷").mkdir(parents=True)
+    (source / "分卷" / "KR3g0018_031.md").write_text("卷三十一\n\n熒惑守心，天下兵起。\n", encoding="utf-8")
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    monkeypatch.setenv("KB_SOURCES_ROOT", str(source))
+    monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
+    reload_settings()
+    out_dir = tmp_path / "generated_candidates" / "extract_cards" / "kaiyuan_zhanjing"
+
+    result = generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
+
+    assert result["generated"]
+    card = next(out_dir.glob("*.md"))
+    fm = yaml.safe_load(card.read_text(encoding="utf-8").split("---", 2)[1])
+    assert fm["source_locator"] == "KR3g0018_031"
+    assert fm["source_file"].endswith("kaiyuanzhanjin/分卷/KR3g0018_031.md")
+    assert fm["kb_book_id"] == "kaiyuan_zhanjing"

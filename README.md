@@ -28,6 +28,8 @@ make sync-kaiyuan-source
 If the repo is already cloned locally, avoid network access and use:
 
 ```bash
+KAIYUAN_SOURCE_DIR=/path/to/kaiyuanzhanjin make sync-kaiyuan-source
+# or:
 python scripts/sync_kaiyuan_source.py \
   --source-dir /path/to/kaiyuanzhanjin \
   --clean
