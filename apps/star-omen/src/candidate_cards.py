@@ -34,9 +34,17 @@ def _aliases(term: str) -> list[str]:
     return out
 
 
+def _safe_file_part(value: str) -> str:
+    safe = re.sub(r"[^0-9A-Za-z_.-]+", "_", str(value)).strip("._")
+    return safe or "source"
+
+
 def _source_locator(path: str) -> str:
-    m = re.search(r"(KR\w+_\d+)", path)
-    return m.group(1) if m else Path(path).stem
+    normalized = path.replace("\\", "/")
+    if "全文合併版" in normalized or "全文合并版" in normalized:
+        return "fulltext"
+    m = re.search(r"(KR\w+_\d+)", normalized)
+    return m.group(1) if m else _safe_file_part(Path(normalized).stem)
 
 
 def _volume(locator: str) -> str:
@@ -92,7 +100,7 @@ def generate_candidate_cards(query: str, book_id: str, out_dir: Path, *, base_ur
         anchor_text = _anchor(text, match_term.replace(" ", ""), offset)
         content_hash = sha256_text(anchor_text)
         candidate_id = stable_candidate_id(book_id, query, source_locator, offset)
-        file_name = f"{candidate_id.split(':')[1]}.{source_locator}.{offset}.md"
+        file_name = f"{candidate_id.split(':')[1]}.{_safe_file_part(source_locator)}.{offset}.md"
         card_path = out_dir / file_name
         card_meta = {
             "schema_version": "candidate-card/v1",
