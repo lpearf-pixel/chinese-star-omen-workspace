@@ -1,0 +1,29 @@
+book: 唐開元占經
+version: v1
+cases:
+- question: 什么是渾天？
+  route: 天體與曆法
+- question: 黄道与赤道是什么关系？
+  route: 天體與曆法
+- question: 《唐開元占經》如何看日食？
+  route: 日占
+- question: 月占集中在哪些卷？
+  route: 月占
+- question: 五緯分别是什么？
+  route: 五星占
+- question: 歲星如何占验？
+  route: 五星占
+- question: 客星与妖星有什么不同？
+  route: 流星客星妖星彗星
+- question: 彗星出现意味着什么？
+  route: 流星客星妖星彗星
+- question: 分野是什么意思？
+  route: 二十八宿與分野
+- question: 紫微太微天市分别是什么？
+  route: 二十八宿與分野
+- question: 云气与雷霆相关内容在哪里？
+  route: 風雨雲氣雷霆
+- question: 禽兽虫蛇之占看哪里？
+  route: 禽獸蟲蛇占
+- question: 星圖在哪几卷？
+  route: 星圖

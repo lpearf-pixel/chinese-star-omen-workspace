@@ -1,0 +1,60 @@
+{
+  "schema_version": "candidate-manifest/v1",
+  "source_project": "Codex-ready-chinese-star-omen-project",
+  "target_upstream": "Local-KB-Unified",
+  "book_id": "kaiyuan_zhanjing",
+  "base_corpus_version": "unknown",
+  "base_ingest_run_id": "unknown",
+  "current_upstream_corpus_version": null,
+  "last_synced_at": null,
+  "items": [
+    {
+      "id": "kaiyuan_zhanjing:yinghuo_shouxin:KR3g0018_031:6499",
+      "file": "yinghuo_shouxin.KR3g0018_031.6499.md",
+      "term": "荧惑守心",
+      "source_locator": "KR3g0018_031",
+      "source_volume": "卷31",
+      "match_offset": 6499,
+      "content_hash": "sha256:36a2cab43726ae2e755ab786cfb06d54b4f23debf0ab9b1acbb16086f9144038",
+      "anchor_text": "0018_WYG_031-16b> 天下民饑　郗萌曰熒惑與心鬬天下暴䘮期三年 洛書曰熒惑守心成鈎己不言王命凶　春秋緯曰熒 惑守心海内哭(案班固天文志曰漢髙帝十二年春熒惑",
+      "review_status": "pending",
+      "sync_status": "pending"
+    },
+    {
+      "id": "kaiyuan_zhanjing:yinghuo_shouxin:KR3g0018_005:6299",
+      "file": "yinghuo_shouxin.KR3g0018_005.6299.md",
+      "term": "荧惑守心",
+      "source_locator": "KR3g0018_005",
+      "source_volume": "卷5",
+      "match_offset": 6299,
+      "content_hash": "sha256:427c2cc0d2993ad45d4c9a7498471279474cb3752d91ef564539371cf4e4fcc2",
+      "anchor_text": "a> 正月望旬以上五月大霧九月朔日日蝕十月有兵倉 皇其來三月彗星如房后百二十日名山崩熒惑守心 其效也故日者天子之象君父夫兄之類中國之應也 夫明主之踐位羣賢履職天下和平黎",
+      "review_status": "pending",
+      "sync_status": "pending"
+    },
+    {
+      "id": "kaiyuan_zhanjing:yinghuo_shouxin:KR3g0018_088:554",
+      "file": "yinghuo_shouxin.KR3g0018_088.554.md",
+      "term": "荧惑守心",
+      "source_locator": "KR3g0018_088",
+      "source_volume": "卷88",
+      "match_offset": 554,
+      "content_hash": "sha256:4a24c0f5a4c630e346e79592483453a9b1c81acd03b20912cbc9c422e9c2daea",
+      "anchor_text": "曰歳星逆 行過度宿者則生彗星一曰天棓二曰天槍三曰天攙 四曰茀星此四者皆為彗　陳卓占曰熒惑守心期三 <pb:KR3g0018_WYG_088-2b> 十日彗星出　陳卓曰填",
+      "review_status": "pending",
+      "sync_status": "pending"
+    },
+    {
+      "id": "kaiyuan_zhanjing:yinghuo_shouxin:唐開元占經-全文合併版:38306",
+      "file": "yinghuo_shouxin.唐開元占經-全文合併版.38306.md",
+      "term": "荧惑守心",
+      "source_locator": "唐開元占經-全文合併版",
+      "source_volume": "unknown",
+      "match_offset": 38306,
+      "content_hash": "sha256:2b18017640f122a24f306f92ebbf505a0f7d4c13d574e50dce237d0799ac9601",
+      "anchor_text": "WYG_005-14a> 正月望旬以上五月大霧九月朔日日蝕十月有兵倉 皇其來三月彗星如房后百二十日名山崩熒惑守心 其效也故日者天子之象君父夫兄之類中國之應也 夫明主之踐",
+      "review_status": "pending",
+      "sync_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+book: 唐開元占經
+version: v1
+card_types:
+- term
+- sky_region
+- omen
+- instrument
+- planet
+- constellation_group
+fields:
+- name: title
+  type: string
+  required: true
+- name: aliases
+  type: list[string]
+  required: false
+- name: card_type
+  type: string
+  required: true
+- name: topic
+  type: string
+  required: true
+- name: source_files
+  type: list[string]
+  required: true
+- name: summary
+  type: string
+  required: true
+- name: quote
+  type: string
+  required: false
+- name: plain_explanation
+  type: string
+  required: true
+- name: agent_answering_notes
+  type: list[string]
+  required: true
+- name: related_cards
+  type: list[string]
+  required: false
+- name: confidence
+  type: float
+  required: true

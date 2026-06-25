@@ -1,0 +1,12 @@
+{"id": "qa-001", "question": "什么是渾天？", "expected_topic": "天體與曆法", "expected_terms": ["渾天"], "expected_volumes": ["KR3g0018_001"], "rubric": ["解释为天体总体框架", "提到天包地外或形渾", "指出卷一"]}
+{"id": "qa-002", "question": "黄道在《唐開元占經》中是什么意思？", "expected_topic": "天體與曆法", "expected_terms": ["黃道"], "expected_volumes": ["KR3g0018_001"], "rubric": ["说明日之所行", "提到与赤道关系", "不过度现代化"]}
+{"id": "qa-003", "question": "赤道是什么？", "expected_topic": "天體與曆法", "expected_terms": ["赤道"], "expected_volumes": ["KR3g0018_001"], "rubric": ["说明横带天腹", "与南北极相关"]}
+{"id": "qa-004", "question": "什么是璇璣玉衡？", "expected_topic": "天體與曆法", "expected_terms": ["璇璣玉衡"], "expected_volumes": ["KR3g0018_001"], "rubric": ["解释为观测仪器语境", "联系齐七政"]}
+{"id": "qa-005", "question": "什么是闇虛？", "expected_topic": "天體與曆法", "expected_terms": ["闇虛"], "expected_volumes": ["KR3g0018_001"], "rubric": ["与食象解释有关", "属于古代天象理论"]}
+{"id": "qa-006", "question": "什么是客星？", "expected_topic": "流星客星妖星彗星", "expected_terms": ["客星"], "expected_volumes": ["KR3g0018_077", "KR3g0018_084"], "rubric": ["说明非常出现", "与常星区分"]}
+{"id": "qa-007", "question": "什么是彗星？", "expected_topic": "流星客星妖星彗星", "expected_terms": ["彗星"], "expected_volumes": ["KR3g0018_088", "KR3g0018_090"], "rubric": ["星变类别", "古代灾异语境"]}
+{"id": "qa-008", "question": "什么是妖星？", "expected_topic": "流星客星妖星彗星", "expected_terms": ["妖星"], "expected_volumes": ["KR3g0018_085", "KR3g0018_087"], "rubric": ["异常天象", "不可只给现代定义"]}
+{"id": "qa-009", "question": "卷一主要讲什么？", "expected_topic": "天體與曆法", "expected_terms": ["渾天", "黃道", "赤道"], "expected_volumes": ["KR3g0018_001"], "rubric": ["总论基础框架", "不是细目占验"]}
+{"id": "qa-010", "question": "想研究月占应该看哪里？", "expected_topic": "月占", "expected_terms": [], "expected_volumes": ["KR3g0018_011", "KR3g0018_017"], "rubric": ["指出月占主题索引", "指出卷十一到十七"]}
+{"id": "qa-011", "question": "想研究二十八宿与分野看哪里？", "expected_topic": "二十八宿與分野", "expected_terms": ["二十八宿", "分野"], "expected_volumes": ["KR3g0018_060", "KR3g0018_064"], "rubric": ["指出主题索引", "指出相关卷群"]}
+{"id": "qa-012", "question": "北斗为什么重要？", "expected_topic": "天體與曆法", "expected_terms": ["北斗"], "expected_volumes": ["KR3g0018_001"], "rubric": ["与定占王命相关", "兼具天文与象征意义"]}
