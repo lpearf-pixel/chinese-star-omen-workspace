@@ -105,3 +105,21 @@ def test_generate_candidate_from_direct_kaiyuanzhanjin_repo_layout(monkeypatch, 
     assert fm["source_locator"] == "KR3g0018_031"
     assert fm["source_file"].endswith("kaiyuanzhanjin/分卷/KR3g0018_031.md")
     assert fm["kb_book_id"] == "kaiyuan_zhanjing"
+
+
+def test_generate_candidate_fulltext_filename_is_ascii_safe(monkeypatch, tmp_path):
+    source = tmp_path / "古籍" / "唐開元占經"
+    source.mkdir(parents=True)
+    (source / "唐開元占經-全文合併版.md").write_text("熒惑守心，天下兵起。\n", encoding="utf-8")
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    monkeypatch.setenv("KB_SOURCES_ROOT", str(tmp_path))
+    monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
+    reload_settings()
+    out_dir = tmp_path / "generated_candidates" / "extract_cards" / "kaiyuan_zhanjing"
+
+    result = generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
+
+    assert result["generated"] == [str(out_dir / "yinghuo_shouxin.fulltext.0.md")]
+    fm = yaml.safe_load((out_dir / "yinghuo_shouxin.fulltext.0.md").read_text(encoding="utf-8").split("---", 2)[1])
+    assert fm["source_locator"] == "fulltext"
+    assert fm["source_file"].endswith("唐開元占經/唐開元占經-全文合併版.md")
