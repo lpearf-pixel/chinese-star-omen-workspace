@@ -52,9 +52,35 @@ def _volume(locator: str) -> str:
     return f"卷{int(m.group(1))}" if m else "unknown"
 
 
-def _anchor(text: str, query: str, offset: int, window: int = 40) -> str:
-    start = max(offset - window, 0)
-    end = min(offset + len(query) + window, len(text))
+def _compact_with_index(text: str) -> tuple[str, list[int]]:
+    chars: list[str] = []
+    index_map: list[int] = []
+    for idx, ch in enumerate(text):
+        if ch.isspace():
+            continue
+        chars.append(ch)
+        index_map.append(idx)
+    return "".join(chars), index_map
+
+
+def _find_exact_phrase_span(text: str, variants: list[str]) -> tuple[int, int, str] | None:
+    compact_text, index_map = _compact_with_index(text)
+    for variant in variants:
+        compact_variant = "".join(str(variant).split())
+        if not compact_variant:
+            continue
+        compact_offset = compact_text.find(compact_variant)
+        if compact_offset < 0:
+            continue
+        start = index_map[compact_offset]
+        end = index_map[compact_offset + len(compact_variant) - 1] + 1
+        return start, end, compact_variant
+    return None
+
+
+def _anchor(text: str, start_offset: int, end_offset: int, window: int = 40) -> str:
+    start = max(start_offset - window, 0)
+    end = min(end_offset + window, len(text))
     return text[start:end].replace("\n", " ")
 
 
@@ -91,13 +117,12 @@ def generate_candidate_cards(query: str, book_id: str, out_dir: Path, *, base_ur
         if not source_path.exists():
             continue
         text = source_path.read_text(encoding="utf-8", errors="ignore")
-        compact_text = text.replace(" ", "")
-        match_term = next((v for v in variants if v.replace(" ", "") in compact_text), query)
-        offset = compact_text.find(match_term.replace(" ", ""))
-        if offset < 0:
+        span = _find_exact_phrase_span(text, variants)
+        if span is None:
             continue
+        offset, match_end, match_term = span
         source_locator = _source_locator(str(source_path))
-        anchor_text = _anchor(text, match_term.replace(" ", ""), offset)
+        anchor_text = _anchor(text, offset, match_end)
         content_hash = sha256_text(anchor_text)
         candidate_id = stable_candidate_id(book_id, query, source_locator, offset)
         file_name = f"{candidate_id.split(':')[1]}.{_safe_file_part(source_locator)}.{offset}.md"
