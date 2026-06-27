@@ -1,0 +1,25 @@
+{
+  "id": "hist_sample_leadership_change_001",
+  "title": "中枢权力变动样例历史事件",
+  "date_start": "2026-04-15",
+  "date_end": null,
+  "date_precision": "day",
+  "calendar_system": "gregorian",
+  "source_date_text": "样例日期，待补真实史料",
+  "calendar_note": "sample/draft；未进行历法换算。",
+  "dynasty": "sample",
+  "reign_period": null,
+  "location": "sample capital",
+  "domains": ["politics", "leadership"],
+  "summary": "用于演示天象—规则—证据—历史事件—报告链路的中性样例。",
+  "details": "此条不是史实录入，只作为离线测试 fixture。",
+  "source_refs": [
+    {
+      "title": "待补史料",
+      "citation": "placeholder",
+      "note": "后续研究者补入真实出处。"
+    }
+  ],
+  "certainty": "low",
+  "notes": "sample/draft；不要作为事实证据引用。"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "corr_mars_xin_leadership_change_001",
+  "celestial_event_id": "mars_guarding_xin_001",
+  "historical_event_id": "hist_sample_leadership_change_001",
+  "matched_rule_ids": ["rule_mars_guarding_xin_001"],
+  "time_delta_days": 35,
+  "relation_type": "within_rule_window",
+  "confidence": "low",
+  "status": "draft",
+  "evidence_status": "candidate_only",
+  "caveats": [
+    "样例 correlation，仅用于验证报告链路。",
+    "历史 source_refs 为 placeholder，待补真实史料。"
+  ],
+  "notes": "研究性关联样例，不表达因果证明。",
+  "created_at": "2026-06-27T00:00:00Z",
+  "updated_at": "2026-06-27T00:00:00Z"
+}

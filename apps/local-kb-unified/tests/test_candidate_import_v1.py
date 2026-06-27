@@ -4,6 +4,7 @@ import yaml
 
 from scripts.import_candidate_cards import promote_mode, validate_mode
 from scripts.corpus_manifest import write_manifest
+from kb_contracts import sha256_text
 
 
 def _card(tmp_path: Path, status="pending") -> Path:
@@ -31,12 +32,12 @@ def _card(tmp_path: Path, status="pending") -> Path:
         "match_type": "exact_phrase",
         "match_offset": 12345,
         "anchor_text": "……熒惑守心……",
-        "content_hash": "sha256:" + "a" * 64,
+        "content_hash": sha256_text("……熒惑守心……"),
         "base_corpus_version": "unknown",
         "base_ingest_run_id": "unknown",
     }
     (inbox / "yinghuo_shouxin.KR3g0018_031.md").write_text("---\n" + yaml.safe_dump(meta, allow_unicode=True, sort_keys=False) + "---\n\n# 荧惑守心\n", encoding="utf-8")
-    (inbox / "candidate_manifest.json").write_text('{"schema_version":"candidate-manifest/v1","source_project":"Codex-ready-chinese-star-omen-project","target_upstream":"Local-KB-Unified","book_id":"kaiyuan_zhanjing","base_corpus_version":"unknown","base_ingest_run_id":"unknown","current_upstream_corpus_version":null,"last_synced_at":null,"items":[{"id":"kaiyuan_zhanjing:yinghuo_shouxin:KR3g0018_031:12345","file":"yinghuo_shouxin.KR3g0018_031.md","term":"荧惑守心","source_locator":"KR3g0018_031","source_volume":"卷31","match_offset":12345,"content_hash":"sha256:' + 'a'*64 + '","anchor_text":"……熒惑守心……","review_status":"' + status + '","sync_status":"pending"}]}', encoding="utf-8")
+    (inbox / "candidate_manifest.json").write_text('{"schema_version":"candidate-manifest/v1","source_project":"Codex-ready-chinese-star-omen-project","target_upstream":"Local-KB-Unified","book_id":"kaiyuan_zhanjing","base_corpus_version":"unknown","base_ingest_run_id":"unknown","current_upstream_corpus_version":null,"last_synced_at":null,"items":[{"id":"kaiyuan_zhanjing:yinghuo_shouxin:KR3g0018_031:12345","file":"yinghuo_shouxin.KR3g0018_031.md","term":"荧惑守心","source_locator":"KR3g0018_031","source_volume":"卷31","match_offset":12345,"content_hash":"' + sha256_text("……熒惑守心……") + '","anchor_text":"……熒惑守心……","review_status":"' + status + '","sync_status":"pending"}]}', encoding="utf-8")
     return inbox
 
 
@@ -66,3 +67,19 @@ def test_corpus_manifest_excludes_incoming(monkeypatch, tmp_path):
     manifest = write_manifest("star_omen_kb", tmp_path / "data/corpus_manifest.json")
     assert manifest["schema_version"] == "corpus-manifest/v1"
     assert "incoming/downstream_candidates" in manifest["excluded_roots"]
+
+
+def test_validate_rejects_manifest_card_mismatch(tmp_path):
+    inbox = _card(tmp_path, "pending")
+    manifest = inbox / "candidate_manifest.json"
+    manifest.write_text(manifest.read_text(encoding="utf-8").replace("KR3g0018_031:12345", "KR3g0018_031:999"), encoding="utf-8")
+
+    assert validate_mode(inbox, "kaiyuan_zhanjing") == 1
+
+
+def test_validate_rejects_tampered_content_hash(tmp_path):
+    inbox = _card(tmp_path, "pending")
+    card = inbox / "yinghuo_shouxin.KR3g0018_031.md"
+    card.write_text(card.read_text(encoding="utf-8").replace("……熒惑守心……", "……熒惑守心……tampered", 1), encoding="utf-8")
+
+    assert validate_mode(inbox, "kaiyuan_zhanjing") == 1

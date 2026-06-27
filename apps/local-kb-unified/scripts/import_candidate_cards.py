@@ -14,7 +14,7 @@ except ModuleNotFoundError:  # pragma: no cover
 
 CONTRACTS = Path(__file__).resolve().parents[3] / "packages" / "kb-contracts" / "python"
 sys.path.insert(0, str(CONTRACTS))
-from kb_contracts import REVIEW_STATUSES, SYNC_STATUSES, load_candidate_manifest  # noqa: E402
+from kb_contracts import REVIEW_STATUSES, SYNC_STATUSES, load_candidate_manifest, sha256_text, stable_candidate_id  # noqa: E402
 
 REQUIRED = [
     "schema_version", "kb_book_id", "book_title", "card_type", "evidence_level",
@@ -89,11 +89,28 @@ def load_inbox(inbox: Path, book_id: str) -> tuple[dict[str, Any], list[dict[str
     return manifest, cards
 
 
+def validate_card(card: dict[str, Any], *, book_id: str) -> list[str]:
+    errors = validate_meta(card["meta"], book_id=book_id)
+    meta = card["meta"]
+    item = card["item"]
+    if not errors:
+        expected_id = stable_candidate_id(meta["kb_book_id"], meta["term"], meta["source_locator"], meta["match_offset"])
+        if item.get("id") != expected_id:
+            errors.append(f"manifest item id must be stable candidate id {expected_id!r}, got {item.get('id')!r}")
+        for key in ["term", "source_locator", "source_volume", "match_offset", "content_hash", "anchor_text", "review_status", "sync_status"]:
+            if item.get(key) != meta.get(key):
+                errors.append(f"manifest item field {key!r} must match card frontmatter")
+        expected_hash = sha256_text(str(meta.get("anchor_text") or ""))
+        if meta.get("content_hash") != expected_hash:
+            errors.append(f"content_hash must equal sha256_text(anchor_text): expected {expected_hash}")
+    return errors
+
+
 def validate_mode(inbox: Path, book_id: str) -> int:
     _, cards = load_inbox(inbox, book_id)
     report = {"mode": "validate", "inbox": str(inbox), "book_id": book_id, "checked": len(cards), "ok": 0, "errors": []}
     for card in cards:
-        errors = validate_meta(card["meta"], book_id=book_id)
+        errors = validate_card(card, book_id=book_id)
         if errors:
             report["errors"].append({"file": card["path"].name, "errors": errors})
         else:
@@ -109,7 +126,7 @@ def promote_mode(inbox: Path, book_id: str) -> int:
     promoted: list[dict[str, Any]] = []
     skipped: list[dict[str, str]] = []
     for card in cards:
-        errors = validate_meta(card["meta"], book_id=book_id)
+        errors = validate_card(card, book_id=book_id)
         if errors:
             raise ValueError(f"cannot promote invalid candidate {card['path']}: {errors}")
         meta = dict(card["meta"])
