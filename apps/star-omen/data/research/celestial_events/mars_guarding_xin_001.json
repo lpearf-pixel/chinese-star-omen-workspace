@@ -1,0 +1,14 @@
+{
+  "id": "mars_guarding_xin_001",
+  "title": "荧惑守心研究样例天象",
+  "datetime_utc": "2026-03-11T12:00:00Z",
+  "date_start": "2026-03-11",
+  "body": "mars",
+  "event_type": "guarding",
+  "target_asterism": "xin_xiu",
+  "related_asterisms": ["xin_xiu"],
+  "epoch": "J2000",
+  "raw_calc_source": "demo_ephemeris_stub",
+  "summary": "用于研究案例报告流程的最小样例天象。",
+  "notes": "sample/draft：非真实历史录入。"
+}

@@ -26,6 +26,7 @@ from src.connectors.manifest_reader import ManifestReader
 from src.candidate_cards import generate_candidate_cards, sync_upstream_status
 from src.eval.corpus_eval import run_corpus_eval
 from src.rule_engine.minimal_matcher import run_match_rule
+from src.research import build_case_report, build_research_index, validate_research_data
 
 app = typer.Typer(help="Chinese astro model CLI") if typer else None
 
@@ -188,6 +189,24 @@ def generate_candidate_card_impl(query: str, book_id: str, out_dir: Path, base_u
 
 def sync_upstream_status_impl(book_id: str, candidate_root: Path, base_url: str):
     return sync_upstream_status(book_id, candidate_root, base_url)
+
+
+def validate_research_data_impl(research_root: Path = Path("data/research"), rules_path: Path = Path("data/processed/corpus/sample_rules.json")):
+    return validate_research_data(research_root=research_root, rules_path=rules_path)
+
+
+def generate_case_report_impl(
+    correlation_id: str | None = None,
+    correlation_file: Path | None = None,
+    research_root: Path = Path("data/research"),
+    rules_path: Path = Path("data/processed/corpus/sample_rules.json"),
+    out_dir: Path = Path("data/research/case_reports"),
+):
+    return build_case_report(correlation_id=correlation_id, correlation_file=correlation_file, research_root=research_root, rules_path=rules_path, out_dir=out_dir)
+
+
+def build_research_index_impl(research_root: Path = Path("data/research")):
+    return build_research_index(research_root=research_root)
 
 def resolve_evidence_impl(rule: Path, kb_root: Path | None = None, strict: bool = False):
     settings = get_settings()
@@ -358,6 +377,48 @@ if typer:
         typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
 
 
+    @app.command("validate-research-data")
+    def validate_research_data_cmd(
+        research_root: Path = typer.Option(Path("data/research"), "--research-root"),
+        rules_path: Path = typer.Option(Path("data/processed/corpus/sample_rules.json"), "--rules-path"),
+        output_format: str = typer.Option("json", "--format"),
+    ):
+        out = validate_research_data_impl(research_root, rules_path)
+        if output_format == "text":
+            typer.echo(f"ok={out['ok']} celestial={out['celestial_events_count']} historical={out['historical_events_count']} correlations={out['correlations_count']}")
+            for err in out["errors"]:
+                typer.echo(f"ERROR: {err}")
+            for warning in out["warnings"]:
+                typer.echo(f"WARNING: {warning}")
+        else:
+            typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+        if not out["ok"]:
+            raise typer.Exit(code=1)
+
+
+    @app.command("generate-case-report")
+    def generate_case_report_cmd(
+        correlation_id: str | None = typer.Option(None, "--correlation-id"),
+        correlation_file: Path | None = typer.Option(None, "--correlation-file"),
+        research_root: Path = typer.Option(Path("data/research"), "--research-root"),
+        rules_path: Path = typer.Option(Path("data/processed/corpus/sample_rules.json"), "--rules-path"),
+        out_dir: Path = typer.Option(Path("data/research/case_reports"), "--out-dir"),
+        output_format: str = typer.Option("markdown", "--format"),
+    ):
+        if output_format != "markdown":
+            raise typer.BadParameter("only --format markdown is supported")
+        out = generate_case_report_impl(correlation_id, correlation_file, research_root, rules_path, out_dir)
+        typer.echo(json.dumps({k: v for k, v in out.items() if k != "case_report"}, ensure_ascii=False, indent=2))
+
+
+    @app.command("build-research-index")
+    def build_research_index_cmd(
+        research_root: Path = typer.Option(Path("data/research"), "--research-root"),
+    ):
+        out = build_research_index_impl(research_root)
+        typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+
+
     @app.command("eval-corpus")
     def eval_corpus(
         eval_path: Path = typer.Option(Path("eval/corpus_eval_cases.yaml"), "--eval-path"),
@@ -418,6 +479,22 @@ def _main_fallback():  # pragma: no cover
     p_sync.add_argument("--candidate-root", default="data/generated_candidates")
     p_sync.add_argument("--base-url", default="http://127.0.0.1:8008")
 
+    p_vr = sub.add_parser("validate-research-data")
+    p_vr.add_argument("--research-root", default="data/research")
+    p_vr.add_argument("--rules-path", default="data/processed/corpus/sample_rules.json")
+    p_vr.add_argument("--format", default="json", choices=["json", "text"])
+
+    p_gr = sub.add_parser("generate-case-report")
+    p_gr.add_argument("--correlation-id")
+    p_gr.add_argument("--correlation-file")
+    p_gr.add_argument("--research-root", default="data/research")
+    p_gr.add_argument("--rules-path", default="data/processed/corpus/sample_rules.json")
+    p_gr.add_argument("--out-dir", default="data/research/case_reports")
+    p_gr.add_argument("--format", default="markdown")
+
+    p_bi = sub.add_parser("build-research-index")
+    p_bi.add_argument("--research-root", default="data/research")
+
     p_eval = sub.add_parser("eval-corpus")
     p_eval.add_argument("--eval-path", default="eval/corpus_eval_cases.yaml")
     p_eval.add_argument("--collection")
@@ -464,6 +541,26 @@ def _main_fallback():  # pragma: no cover
         print("candidate cards generated; submit to upstream Local-KB-Unified after review.")
     elif args.cmd == "sync-upstream-status":
         out = sync_upstream_status_impl(args.book_id, Path(args.candidate_root), args.base_url)
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+    elif args.cmd == "validate-research-data":
+        out = validate_research_data_impl(Path(args.research_root), Path(args.rules_path))
+        if args.format == "text":
+            print(f"ok={out['ok']} celestial={out['celestial_events_count']} historical={out['historical_events_count']} correlations={out['correlations_count']}")
+            for err in out["errors"]:
+                print(f"ERROR: {err}")
+            for warning in out["warnings"]:
+                print(f"WARNING: {warning}")
+        else:
+            print(json.dumps(out, ensure_ascii=False, indent=2))
+        if not out["ok"]:
+            raise SystemExit(1)
+    elif args.cmd == "generate-case-report":
+        if args.format != "markdown":
+            raise SystemExit("only --format markdown is supported")
+        out = generate_case_report_impl(args.correlation_id, Path(args.correlation_file) if args.correlation_file else None, Path(args.research_root), Path(args.rules_path), Path(args.out_dir))
+        print(json.dumps({k: v for k, v in out.items() if k != "case_report"}, ensure_ascii=False, indent=2))
+    elif args.cmd == "build-research-index":
+        out = build_research_index_impl(Path(args.research_root))
         print(json.dumps(out, ensure_ascii=False, indent=2))
     elif args.cmd == "eval-corpus":
         retriever = KBSearchRetriever(base_url=args.base_url, api_key=args.api_key)

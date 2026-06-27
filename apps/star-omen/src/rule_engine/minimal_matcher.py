@@ -150,6 +150,7 @@ def match_event_to_rules(
         "trigger_match_reason": recommended.get("trigger_match_reason", {}),
         "missing_conditions": recommended.get("missing_conditions", []),
         "conflicting_conditions": recommended.get("conflicting_conditions", []),
+        "thresholds_used": recommended.get("thresholds_used", {}),
         "effect_domain": recommended.get("effect_domain", []),
         "severity": recommended.get("severity"),
         "time_window": recommended.get("time_window"),

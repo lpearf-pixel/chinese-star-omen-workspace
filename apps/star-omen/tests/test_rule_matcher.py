@@ -6,6 +6,7 @@ from src.rule_engine.minimal_matcher import run_match_rule
 def test_match_rule_minimal_closure_outputs_required_fields():
     out = run_match_rule(event_path=Path("data/examples/events/mars_guarding_xin_demo.json"))
     assert "rule_mars_guarding_xin_001" in out["matched_rule_ids"]
+    assert "thresholds_used" in out
     row = out["matches"][0]
     for field in [
         "trigger_match_reason",

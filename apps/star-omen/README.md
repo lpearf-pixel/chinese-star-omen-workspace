@@ -378,3 +378,48 @@ python -m src.cli match-rule --event data/examples/events/mars_guarding_xin_demo
 - `pytest -q`：**14 passed, 4 skipped**
 - `python -m src.cli validate-data`：成功
 - 建议在本地 Python 3.12 虚拟环境复现测试流程（详见 `docs/test_report.md`）
+
+## Research case reports
+
+当前研究案例报告流程保持在下游离线执行，不写 Qdrant，也不运行上游 ingest：
+
+```text
+CelestialEvent -> match-rule -> OmenRule/evidence -> HistoricalEvent -> Correlation -> CaseReport
+```
+
+新增研究数据位于 `data/research/`：
+
+- `celestial_events/`：研究用天象事件 JSON。
+- `historical_events/`：历史事件 JSON，使用 `date_start` / `date_end` / `date_precision` / `calendar_system` / `source_date_text` 保存不确定日期。
+- `correlations/`：一条天象与一条历史事件之间的研究性关联；同一天象可有多条 correlation。
+- `case_reports/`：生成的 Markdown 报告和 `.report.json` sidecar。
+- `indexes/case_index.json`：后续 Web UI 可只读使用的案例索引。
+
+常用 CLI：
+
+```bash
+python -m src.cli validate-research-data \
+  --research-root data/research \
+  --rules-path data/processed/corpus/sample_rules.json
+
+python -m src.cli generate-case-report \
+  --correlation-id corr_mars_xin_leadership_change_001 \
+  --research-root data/research \
+  --rules-path data/processed/corpus/sample_rules.json \
+  --out-dir data/research/case_reports
+
+python -m src.cli build-research-index \
+  --research-root data/research
+```
+
+证据状态：
+
+- `primary_citable`：已有可引用 primary evidence，可进入正式研究证据链。
+- `candidate_only`：只能作为候选线索，**不能作为最终事实证据**。
+- `missing`：缺少可用古籍证据，需要补证。
+
+注意：
+
+- correlation 表示研究性关联，不是因果证明；报告措辞应使用“对应”“关联”“落在应期窗口内”“研究性假设”。
+- `confidence`、`status`、`relation_type` 属于人工研究判断，系统只提供机器匹配、证据状态和时间窗口辅助判断。
+- 下游 `apps/star-omen` 不写 Qdrant，不跑上游 ingest；候选证据仍需经过上游 validate/promote/ingest/sync 流程。

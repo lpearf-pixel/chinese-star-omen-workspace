@@ -75,3 +75,62 @@ class BacktestRecord(BaseModel):
     event_id: str
     matched_rules: list[str]
     review_status: Literal["auto_generated", "manual_reviewed", "rejected", "needs_more_evidence"]
+
+
+class SourceRef(BaseModel):
+    title: str | None = None
+    citation: str | None = None
+    url: str | None = None
+    note: str | None = None
+
+
+class HistoricalEvent(BaseModel):
+    id: str
+    title: str
+    date_start: str | None = None
+    date_end: str | None = None
+    date_precision: Literal["day", "month", "year", "range", "unknown"]
+    calendar_system: Literal["gregorian", "julian", "chinese_lunisolar", "unknown"]
+    source_date_text: str | None = None
+    calendar_note: str | None = None
+    dynasty: str | None = None
+    reign_period: str | None = None
+    location: str | None = None
+    domains: list[str] = Field(default_factory=list)
+    summary: str
+    details: str | None = None
+    source_refs: list[SourceRef] = Field(default_factory=list)
+    certainty: Literal["high", "medium", "low"]
+    notes: str | None = None
+
+
+class CelestialHistoricalCorrelation(BaseModel):
+    id: str
+    celestial_event_id: str
+    historical_event_id: str
+    matched_rule_ids: list[str] = Field(default_factory=list)
+    time_delta_days: int | None = None
+    relation_type: Literal["within_rule_window", "same_record", "later_interpretation", "manual_hypothesis", "rejected"]
+    confidence: Literal["high", "medium", "low"]
+    status: Literal["draft", "reviewed", "published", "rejected"]
+    evidence_status: Literal["primary_citable", "candidate_only", "missing"]
+    caveats: list[str] = Field(default_factory=list)
+    notes: str | None = None
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+class CaseReport(BaseModel):
+    id: str
+    title: str
+    celestial_event: dict
+    historical_events: list[dict]
+    correlations: list[dict]
+    matched_rules: list[dict]
+    evidence_summary: dict
+    machine_assessment: dict
+    human_assessment: dict
+    conclusion: str
+    limitations: list[str]
+    generated_at: str
+    report_version: str
