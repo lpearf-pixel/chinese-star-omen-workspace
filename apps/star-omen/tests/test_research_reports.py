@@ -104,3 +104,82 @@ def test_build_research_index(tmp_path):
     assert out["items"][0]["correlation_id"] == "corr_mars_xin_leadership_change_001"
     assert out["items"][0]["evidence_status"] == "candidate_only"
     assert out["items"][0]["report_path"].endswith("corr_mars_xin_leadership_change_001.md")
+
+
+def test_validate_research_data_detects_id_filename_mismatch(tmp_path):
+    root = _copy_research(tmp_path)
+    hist = root / "historical_events/hist_sample_leadership_change_001.json"
+    data = json.loads(hist.read_text(encoding="utf-8"))
+    data["id"] = "different_id"
+    hist.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    out = validate_research_data(root, RULES_PATH)
+
+    assert out["ok"] is False
+    assert any("must match filename stem" in err for err in out["errors"])
+
+
+def test_validate_research_data_rejects_bad_day_date_and_bad_source_ref(tmp_path):
+    root = _copy_research(tmp_path)
+    hist = root / "historical_events/hist_sample_leadership_change_001.json"
+    data = json.loads(hist.read_text(encoding="utf-8"))
+    data["date_start"] = "not-a-date"
+    data["source_refs"] = [{"note": "missing title and citation"}]
+    hist.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+    out = validate_research_data(root, RULES_PATH)
+
+    assert out["ok"] is False
+    assert any("date_start" in err and "not parseable" in err for err in out["errors"])
+    assert any("source_refs[0]" in err for err in out["errors"])
+
+
+def test_research_cli_commands_are_callable(tmp_path):
+    import subprocess
+    import sys
+
+    root = _copy_research(tmp_path)
+    out_dir = root / "case_reports"
+    env = None
+
+    validate_cmd = [
+        sys.executable,
+        "-m",
+        "src.cli",
+        "validate-research-data",
+        "--research-root",
+        str(root),
+        "--rules-path",
+        str(RULES_PATH),
+    ]
+    generate_cmd = [
+        sys.executable,
+        "-m",
+        "src.cli",
+        "generate-case-report",
+        "--correlation-id",
+        "corr_mars_xin_leadership_change_001",
+        "--research-root",
+        str(root),
+        "--rules-path",
+        str(RULES_PATH),
+        "--out-dir",
+        str(out_dir),
+    ]
+    index_cmd = [sys.executable, "-m", "src.cli", "build-research-index", "--research-root", str(root)]
+
+    for cmd in [validate_cmd, generate_cmd, index_cmd]:
+        completed = subprocess.run(cmd, cwd=APP_ROOT, env=env, text=True, capture_output=True, check=True)
+        assert completed.stdout
+
+    assert (out_dir / "corr_mars_xin_leadership_change_001.md").exists()
+    assert (root / "indexes/case_index.json").exists()
+
+
+def test_computed_evidence_status_does_not_use_rule_ids_only():
+    from src.research import _computed_evidence_status
+
+    assert _computed_evidence_status({"matched_rule_ids": ["rule_x"], "candidate_only": False, "primary_evidence_found": False, "evidence_summary": {}}) == "missing"
+    assert _computed_evidence_status({"primary_evidence_found": True, "candidate_only": False}) == "primary_citable"
+    assert _computed_evidence_status({"primary_evidence_found": False, "candidate_only": True, "evidence_summary": {}}) == "candidate_only"
+    assert _computed_evidence_status({"primary_evidence_found": False, "candidate_only": False, "evidence_summary": {"status": "candidate_only"}}) == "candidate_only"

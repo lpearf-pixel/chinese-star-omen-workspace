@@ -395,6 +395,8 @@ CelestialEvent -> match-rule -> OmenRule/evidence -> HistoricalEvent -> Correlat
 - `case_reports/`：生成的 Markdown 报告和 `.report.json` sidecar。
 - `indexes/case_index.json`：后续 Web UI 可只读使用的案例索引。
 
+当前随仓库提供的 `data/research` 内容均标记为 `sample_demo`，只用于离线验证报告链路；后续真实研究案例应继续用独立 correlation 文件显式区分草稿、复核与发布状态。
+
 常用 CLI：
 
 ```bash

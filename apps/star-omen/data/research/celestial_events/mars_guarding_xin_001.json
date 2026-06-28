@@ -6,9 +6,12 @@
   "body": "mars",
   "event_type": "guarding",
   "target_asterism": "xin_xiu",
-  "related_asterisms": ["xin_xiu"],
+  "related_asterisms": [
+    "xin_xiu"
+  ],
   "epoch": "J2000",
   "raw_calc_source": "demo_ephemeris_stub",
   "summary": "用于研究案例报告流程的最小样例天象。",
-  "notes": "sample/draft：非真实历史录入。"
+  "notes": "sample/draft：非真实历史录入。",
+  "fixture_kind": "sample_demo"
 }

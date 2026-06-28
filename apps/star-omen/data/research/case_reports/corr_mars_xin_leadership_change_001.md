@@ -5,7 +5,7 @@
 - case_id: `corr_mars_xin_leadership_change_001`
 - correlation_id: `corr_mars_xin_leadership_change_001`
 - report_version: `case-report/v1`
-- generated_at: `2026-06-27T15:08:13.464595Z`
+- generated_at: `2026-06-28T01:57:21.587955Z`
 - evidence_status: `candidate_only`
 - confidence: `low`
 - status: `draft`

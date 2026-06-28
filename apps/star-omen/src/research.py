@@ -6,6 +6,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from src.models import CaseReport, CelestialHistoricalCorrelation, HistoricalEvent
 from src.rule_engine.minimal_matcher import match_event_to_rules
 
 DATE_PRECISIONS = {"day", "month", "year", "range", "unknown"}
@@ -32,6 +33,12 @@ def _json_files(root: Path, name: str) -> list[Path]:
     return sorted(folder.glob("*.json"))
 
 
+def _model_validate(model_cls: Any, data: dict[str, Any]) -> Any:
+    if hasattr(model_cls, "model_validate"):
+        return model_cls.model_validate(data)
+    return model_cls.parse_obj(data)
+
+
 def _load_collection(root: Path, name: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
     rows: dict[str, dict[str, Any]] = {}
     errors: list[str] = []
@@ -45,6 +52,8 @@ def _load_collection(root: Path, name: str) -> tuple[dict[str, dict[str, Any]], 
         if not obj_id:
             errors.append(f"{path}: missing id")
             continue
+        if path.stem != str(obj_id):
+            errors.append(f"{path}: id {obj_id!r} must match filename stem {path.stem!r}")
         rows[str(obj_id)] = {**obj, "_path": str(path)}
     return rows, errors
 
@@ -69,7 +78,29 @@ def validate_research_data(research_root: Path = Path("data/research"), rules_pa
     errors.extend(rule_errors)
     warnings: list[str] = []
 
+    for event_id, event in celestial.items():
+        for key in ["body", "event_type", "target_asterism"]:
+            if not event.get(key):
+                errors.append(f"celestial_event {event_id}: missing required field {key}")
+
     for event_id, event in historical.items():
+        try:
+            _model_validate(HistoricalEvent, {k: v for k, v in event.items() if k != "_path"})
+        except Exception as exc:
+            errors.append(f"historical_event {event_id}: invalid HistoricalEvent: {exc}")
+        for key in ["title", "summary", "source_refs"]:
+            if not event.get(key):
+                errors.append(f"historical_event {event_id}: missing required field {key}")
+        for idx, ref in enumerate(event.get("source_refs") or []):
+            if not isinstance(ref, dict) or not (ref.get("title") or ref.get("citation")):
+                errors.append(f"historical_event {event_id}: source_refs[{idx}] must include title or citation")
+        parsed_start = _parse_date(event.get("date_start"))
+        if event.get("date_start") and parsed_start is None:
+            msg = f"historical_event {event_id}: date_start {event.get('date_start')!r} is not parseable"
+            if event.get("date_precision") == "day":
+                errors.append(msg)
+            else:
+                warnings.append(msg)
         if event.get("date_precision") not in DATE_PRECISIONS:
             errors.append(f"historical_event {event_id}: invalid date_precision {event.get('date_precision')!r}")
         if event.get("calendar_system") not in CALENDAR_SYSTEMS:
@@ -78,6 +109,13 @@ def validate_research_data(research_root: Path = Path("data/research"), rules_pa
             warnings.append(f"historical_event {event_id}: date_precision={event.get('date_precision')} may be insufficient for exact time_delta_days")
 
     for corr_id, corr in correlations.items():
+        try:
+            _model_validate(CelestialHistoricalCorrelation, {k: v for k, v in corr.items() if k != "_path"})
+        except Exception as exc:
+            errors.append(f"correlation {corr_id}: invalid CelestialHistoricalCorrelation: {exc}")
+        for key in ["confidence", "status", "relation_type", "evidence_status"]:
+            if not corr.get(key):
+                errors.append(f"correlation {corr_id}: missing required field {key}")
         celestial_id = str(corr.get("celestial_event_id") or "")
         historical_id = str(corr.get("historical_event_id") or "")
         if celestial_id not in celestial:
@@ -141,9 +179,10 @@ def _parse_time_window_days(value: str | None) -> tuple[int | None, int | None]:
 
 
 def _computed_evidence_status(match: dict[str, Any]) -> str:
-    if match.get("primary_evidence_found"):
+    if match.get("primary_evidence_found") is True:
         return "primary_citable"
-    if match.get("matched_rule_ids") or match.get("candidate_only"):
+    evidence_summary = match.get("evidence_summary") if isinstance(match.get("evidence_summary"), dict) else {}
+    if match.get("candidate_only") is True or evidence_summary.get("status") == "candidate_only":
         return "candidate_only"
     return "missing"
 
@@ -245,6 +284,7 @@ def build_case_report(
     out_dir.mkdir(parents=True, exist_ok=True)
     md_path = out_dir / f"{report_id}.md"
     json_path = out_dir / f"{report_id}.report.json"
+    _model_validate(CaseReport, case_report)
     md_path.write_text(render_case_markdown(case_report), encoding="utf-8")
     write_json(json_path, case_report)
     return {"ok": True, "report_path": str(md_path), "json_report_path": str(json_path), "case_report": case_report}
