@@ -3,20 +3,26 @@ from __future__ import annotations
 from .models import NormalizedText
 
 
+# Deliberately conservative.  Do not use one-to-many simplifications such as
+# 台 -> 臺 or 里 -> 裏: those rewrites can change the lexical meaning of a
+# classical passage.  Add only reviewed, unambiguous forms used by the search
+# contract until an authoritative OpenCC/variant table is introduced.
 SIMPLIFIED_MAP = str.maketrans(
     {
         "熒": "荧",
         "併": "并",
-        "臺": "台",
-        "裏": "里",
+        "歲": "岁",
+        "蝕": "蚀",
+        "貫": "贯",
     }
 )
 TRADITIONAL_MAP = str.maketrans(
     {
         "荧": "熒",
         "并": "併",
-        "台": "臺",
-        "里": "裏",
+        "岁": "歲",
+        "蚀": "蝕",
+        "贯": "貫",
     }
 )
 
