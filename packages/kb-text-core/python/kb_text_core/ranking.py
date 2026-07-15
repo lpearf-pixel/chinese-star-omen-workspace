@@ -6,13 +6,20 @@ from typing import Any
 from .normalization import normalize_search_text
 
 
-MATCH_PRIORITY = {
-    "exact_raw": 0,
-    "exact_normalized": 1,
-    "loose_window": 2,
-    "heading_only": 3,
+# This is intentionally a combined priority rather than independent
+# (match_type, card_type) sorting.  A normalized exact match in the authoritative
+# volume is preferable to the same passage appearing as a raw exact match in the
+# combined fulltext.
+EVIDENCE_PRIORITY = {
+    ("exact_raw", "fenjuan"): 0,
+    ("exact_normalized", "fenjuan"): 1,
+    ("exact_raw", "fulltext"): 2,
+    ("exact_normalized", "fulltext"): 3,
+    ("loose_window", "fenjuan"): 4,
+    ("loose_window", "fulltext"): 5,
+    ("heading_only", "fenjuan"): 6,
+    ("heading_only", "fulltext"): 7,
 }
-CARD_PRIORITY = {"fenjuan": 0, "fulltext": 1}
 
 
 def fallback_score(match_type: str, card_type: str) -> float:
@@ -36,8 +43,7 @@ def fallback_sort_key(hit: dict[str, Any]) -> tuple[Any, ...]:
     offset = hit.get("match_offset")
     offset_value = int(offset) if isinstance(offset, int) else 10**15
     return (
-        MATCH_PRIORITY.get(match_type, 99),
-        CARD_PRIORITY.get(card_type, 99),
+        EVIDENCE_PRIORITY.get((match_type, card_type), 99),
         -int(hit.get("heading_term_hits") or 0),
         -score,
         offset_value,
