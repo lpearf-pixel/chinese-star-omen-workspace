@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from kb_text_core import (
     audit_kaiyuan_corpus,
     audit_page_markers,
@@ -9,6 +11,7 @@ from kb_text_core import (
     find_match_spans,
     normalize_search_text,
     split_kaiyuan_fulltext,
+    write_split_volumes,
 )
 
 
@@ -21,6 +24,13 @@ def test_whitespace_and_traditional_match_preserve_raw_offset():
     assert text[spans[0].start:spans[0].end] == "熒 惑 守 心"
 
 
+def test_heading_only_is_not_exact_primary():
+    text = "# 唐開元占經 卷31\n\n　　　熒惑守心\n正文只有旁證。"
+    spans = find_match_spans(text, "荧惑守心", allow_loose=False)
+    assert spans
+    assert {span.match_type for span in spans} == {"heading_only"}
+
+
 def test_anchor_extracts_page_and_ancient_heading():
     text = "# 唐開元占經 卷31\n\n　　　熒惑犯心五\n<pb:KR3g0018_WYG_031-17a>\n石氏曰熒惑守心。"
     start = text.index("熒惑守心")
@@ -31,15 +41,20 @@ def test_anchor_extracts_page_and_ancient_heading():
 
 
 def test_cluster_groups_matches_on_same_page_and_heading():
-    text = "# 唐開元占經 卷31\n　　　熒惑犯心五\n<pb:KR3g0018_WYG_031-17a>\n熒惑守心。又曰熒惑守心。"
+    text = "# 唐開元占經 卷31\n　　　熒惑犯心五\n<pb:KR3g0018_WYG_031-17a>\n熒惑守心。又曰熒 惑 守 心。"
     spans = find_match_spans(text, "荧惑守心", allow_loose=False)
     clusters = cluster_match_spans(text, spans)
     assert len(spans) == 2
+    assert {span.match_type for span in spans} == {"exact_raw", "exact_normalized"}
     assert len(clusters) == 1
     assert len(clusters[0].spans) == 2
 
 
-def test_dedupe_prefers_fenjuan_over_fulltext():
+def test_ordered_loose_terms_do_not_match_reverse_order():
+    assert not find_match_spans("心宿在前，後文才說熒惑。", "荧惑守心")
+
+
+def test_dedupe_prefers_fenjuan_over_fulltext_and_records_duplicate_source():
     common = {
         "kb_book_id": "kaiyuan_zhanjing",
         "page_marker": "KR3g0018_WYG_031-17a",
@@ -53,6 +68,7 @@ def test_dedupe_prefers_fenjuan_over_fulltext():
     ])
     assert len(hits) == 1
     assert hits[0]["card_type"] == "fenjuan"
+    assert hits[0]["duplicate_sources"] == ["full.md"]
 
 
 def test_normalized_fenjuan_ranks_before_raw_fulltext():
@@ -99,7 +115,7 @@ def test_normalize_search_text_does_not_rewrite_ambiguous_common_characters():
     assert normalize_search_text("千里") == "千里"
 
 
-def test_audit_reports_full_volume_agreement(tmp_path: Path):
+def test_audit_reports_full_volume_agreement_and_detailed_counts(tmp_path: Path):
     fulltext = tmp_path / "full.md"
     volumes = tmp_path / "volumes"
     volumes.mkdir()
@@ -110,5 +126,19 @@ def test_audit_reports_full_volume_agreement(tmp_path: Path):
     (volumes / "KR3g0018_000.md").write_text("# 唐開元占經 目錄/議語\n目錄\n", encoding="utf-8")
     (volumes / "KR3g0018_001.md").write_text("# 唐開元占經 卷1\n卷一\n", encoding="utf-8")
     report = audit_kaiyuan_corpus(fulltext, volumes)
+    assert report["schema_version"] == "kaiyuan-corpus-audit/v2"
     assert report["section_count"] == 2
+    assert report["volume_file_count"] == 2
+    assert report["substantive_difference_count"] == 0
     assert report["different_volumes"] == []
+
+
+def test_split_refuses_to_overwrite_without_force(tmp_path: Path):
+    fulltext = tmp_path / "full.md"
+    out = tmp_path / "volumes"
+    fulltext.write_text("# 唐開元占經 目錄/議語\n目錄\n", encoding="utf-8")
+    write_split_volumes(fulltext, out)
+    with pytest.raises(FileExistsError):
+        write_split_volumes(fulltext, out)
+    result = write_split_volumes(fulltext, out, force=True)
+    assert result["written"] == 1
