@@ -50,6 +50,30 @@ class TransportMixin:
             )
         return {"Authorization": f"Bearer {key}", "X-API-Key": key}
 
+    @staticmethod
+    def _wire_payload(json_payload: dict[str, Any] | None) -> dict[str, Any] | None:
+        """Return the canonical HTTP representation without mutating callers.
+
+        `book_id` remains accepted by in-process v1 integrations, but the wire
+        contract emits only `kb_book_id`.  Sending both keys to older generic
+        Qdrant filter builders can turn an alias into two AND-ed conditions and
+        incorrectly produce zero hits.
+        """
+        if json_payload is None:
+            return None
+        payload = dict(json_payload)
+        filters = payload.get("filters")
+        if isinstance(filters, dict):
+            canonical_filters = dict(filters)
+            if "kb_book_id" not in canonical_filters and "book_id" in canonical_filters:
+                canonical_filters["kb_book_id"] = canonical_filters["book_id"]
+            canonical_filters.pop("book_id", None)
+            payload["filters"] = canonical_filters
+        if "kb_book_id" not in payload and "book_id" in payload:
+            payload["kb_book_id"] = payload["book_id"]
+        payload.pop("book_id", None)
+        return payload
+
     def _request(
         self,
         method: str,
@@ -60,16 +84,17 @@ class TransportMixin:
     ) -> dict[str, Any]:
         url = f"{self.base_url}{path}"
         headers = self._auth_headers() if use_auth else {}
+        wire_payload = self._wire_payload(json_payload)
         try:
             if httpx is not None:
                 with httpx.Client(timeout=self.timeout) as client:
-                    response = client.request(method, url, json=json_payload, headers=headers)
+                    response = client.request(method, url, json=wire_payload, headers=headers)
                     response.raise_for_status()
                     return response.json()
 
             import urllib.request
 
-            data = json.dumps(json_payload).encode("utf-8") if json_payload is not None else None
+            data = json.dumps(wire_payload).encode("utf-8") if wire_payload is not None else None
             request = urllib.request.Request(
                 url,
                 data=data,
