@@ -46,6 +46,7 @@ def overlay_hits(root: Path, query: str, *, book_id: str | None = None, limit: i
             haystack = f"{meta.get('term','')} {meta.get('anchor_text','')} {body}".replace(" ", "")
             if not any(v.replace(" ", "") in haystack for v in variants if v):
                 continue
+            kb_book_id = meta.get("kb_book_id") or manifest.get("book_id")
             hits.append({
                 "chunk_id": f"candidate-overlay:{item.get('id')}",
                 "score": 0.5,
@@ -53,7 +54,8 @@ def overlay_hits(root: Path, query: str, *, book_id: str | None = None, limit: i
                 "snippet": str(meta.get("anchor_text") or body[:200]),
                 "title": str(meta.get("term") or item.get("term")),
                 "book_title": meta.get("book_title"),
-                "book_id": meta.get("kb_book_id") or manifest.get("book_id"),
+                "kb_book_id": kb_book_id,
+                "book_id": kb_book_id,
                 "card_type": "extract_card",
                 "evidence_level": "candidate",
                 "source_namespace": "downstream_generated",
