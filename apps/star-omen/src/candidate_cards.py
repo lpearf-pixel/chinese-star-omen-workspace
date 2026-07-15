@@ -52,42 +52,6 @@ def _volume(locator: str) -> str:
     return f"卷{int(m.group(1))}" if m else "unknown"
 
 
-def _compact_with_index(text: str) -> tuple[str, list[int]]:
-    chars: list[str] = []
-    index_map: list[int] = []
-    for idx, ch in enumerate(text):
-        if ch.isspace():
-            continue
-        chars.append(ch)
-        index_map.append(idx)
-    return "".join(chars), index_map
-
-
-def _find_exact_phrase_span(text: str, variants: list[str]) -> tuple[int, int, str] | None:
-    compact_text, index_map = _compact_with_index(text)
-    for variant in variants:
-        compact_variant = "".join(str(variant).split())
-        if not compact_variant:
-            continue
-        compact_offset = compact_text.find(compact_variant)
-        if compact_offset < 0:
-            continue
-        start = index_map[compact_offset]
-        end = index_map[compact_offset + len(compact_variant) - 1] + 1
-        return start, end, compact_variant
-    return None
-
-
-def _anchor(text: str, start_offset: int, end_offset: int, window: int = 40) -> str:
-    start = max(start_offset - window, 0)
-    end = min(end_offset + window, len(text))
-    return text[start:end].replace("\n", " ")
-
-
-def _paragraph_index(text: str, offset: int) -> int:
-    return len([p for p in text[:offset].split("\n\n") if p.strip()])
-
-
 def _rel_source(path: str) -> str:
     marker = "/古籍/"
     normalized = path.replace("\\", "/")
@@ -104,29 +68,76 @@ def _write_card(path: Path, meta: dict[str, Any], body: str) -> None:
 
 def generate_candidate_cards(query: str, book_id: str, out_dir: Path, *, base_url: str | None = None) -> dict[str, Any]:
     retriever = KBSearchRetriever(base_url=base_url)
-    meta = retriever.get_upstream_meta()
+    upstream_meta = retriever.get_upstream_meta()
     variants = retriever._query_variants(query)
-    hits, _stats = retriever._scan_primary_files(query, book_id=book_id, mode="evidence", limit=20, query_variants=variants)
-    hits = sorted(hits, key=lambda h: 0 if h.get("card_type") == "fenjuan" else 1)
+    hits, scan_stats = retriever._scan_primary_files(
+        query,
+        book_id=book_id,
+        mode="evidence",
+        limit=100,
+        query_variants=variants,
+    )
+    hits = [
+        hit for hit in hits
+        if hit.get("card_type") in {"fenjuan", "fulltext"}
+        and hit.get("match_type") in {"exact_raw", "exact_normalized"}
+    ]
+    if hits:
+        max_heading_hits = max(int(hit.get("heading_term_hits") or 0) for hit in hits)
+        if max_heading_hits > 0:
+            hits = [hit for hit in hits if int(hit.get("heading_term_hits") or 0) == max_heading_hits]
+        else:
+            source_counts: dict[str, int] = {}
+            for hit in hits:
+                locator = str(hit.get("source_locator") or "")
+                source_counts[locator] = source_counts.get(locator, 0) + int(hit.get("match_count") or 1)
+            best_count = max(source_counts.values())
+            best_sources = {locator for locator, count in source_counts.items() if count == best_count}
+            hits = [hit for hit in hits if str(hit.get("source_locator") or "") in best_sources]
+        hits.sort(key=lambda hit: (str(hit.get("source_locator") or ""), int(hit.get("match_offset") or 0)))
+
     out_dir.mkdir(parents=True, exist_ok=True)
     manifest_path = out_dir / "candidate_manifest.json"
-    manifest = load_candidate_manifest(manifest_path) if manifest_path.exists() else new_candidate_manifest(book_id, base_corpus_version=meta.get("corpus_version", "unknown"), base_ingest_run_id=meta.get("ingest_run_id", "unknown"))
-    generated = []
+    manifest = (
+        load_candidate_manifest(manifest_path)
+        if manifest_path.exists()
+        else new_candidate_manifest(
+            book_id,
+            base_corpus_version=upstream_meta.get("corpus_version", "unknown"),
+            base_ingest_run_id=upstream_meta.get("ingest_run_id", "unknown"),
+        )
+    )
+
+    generated: list[str] = []
     for hit in hits:
-        source_path = Path(str(hit.get("path")))
+        source_path = Path(str(hit.get("path") or ""))
         if not source_path.exists():
             continue
-        text = source_path.read_text(encoding="utf-8", errors="ignore")
-        span = _find_exact_phrase_span(text, variants)
-        if span is None:
+        match_offset = hit.get("match_offset")
+        if not isinstance(match_offset, int):
             continue
-        offset, match_end, match_term = span
-        source_locator = _source_locator(str(source_path))
-        anchor_text = _anchor(text, offset, match_end)
+
+        source_locator = str(hit.get("source_locator") or _source_locator(str(source_path)))
+        source_volume = str(hit.get("source_volume") or _volume(source_locator))
+        page_marker = hit.get("page_marker")
+        anchor_text = str(hit.get("anchor_text") or hit.get("excerpt") or hit.get("snippet") or "").strip()
+        if not anchor_text:
+            continue
+
         content_hash = sha256_text(anchor_text)
-        candidate_id = stable_candidate_id(book_id, query, source_locator, offset)
-        file_name = f"{candidate_id.split(':')[1]}.{_safe_file_part(source_locator)}.{offset}.md"
+        candidate_id = stable_candidate_id(book_id, query, source_locator, match_offset)
+        page_part = _safe_file_part(str(page_marker or "no-page"))
+        file_name = (
+            f"{candidate_id.split(':')[1]}."
+            f"{_safe_file_part(source_locator)}.{page_part}.{match_offset}.md"
+        )
         card_path = out_dir / file_name
+        aliases = _aliases(query)
+        heading_path = hit.get("heading_path") if isinstance(hit.get("heading_path"), list) else []
+        paragraph_index = hit.get("paragraph_index")
+        if not isinstance(paragraph_index, int):
+            paragraph_index = 0
+
         card_meta = {
             "schema_version": "candidate-card/v1",
             "kb_book_id": book_id,
@@ -139,29 +150,42 @@ def generate_candidate_cards(query: str, book_id: str, out_dir: Path, *, base_ur
             "review_status": "pending",
             "sync_status": "pending",
             "term": query,
-            "aliases": _aliases(query),
+            "aliases": aliases,
             "source_file": _rel_source(str(source_path)),
             "source_locator": source_locator,
-            "source_volume": _volume(source_locator),
-            "page_marker": source_locator,
-            "heading_path": [str(hit.get("title") or source_locator)],
-            "paragraph_index": _paragraph_index(text, offset),
+            "source_volume": source_volume,
+            "page_marker": page_marker,
+            "heading_path": heading_path,
+            "paragraph_index": paragraph_index,
             "match_type": "exact_phrase",
-            "match_offset": offset,
+            "source_match_type": hit.get("match_type"),
+            "match_offset": match_offset,
+            "match_end": hit.get("match_end"),
+            "match_count": int(hit.get("match_count") or 1),
+            "matched_variants": hit.get("matched_variants") or [],
             "anchor_text": anchor_text,
             "content_hash": content_hash,
-            "base_corpus_version": meta.get("corpus_version", "unknown"),
-            "base_ingest_run_id": meta.get("ingest_run_id", "unknown"),
+            "base_corpus_version": upstream_meta.get("corpus_version", "unknown"),
+            "base_ingest_run_id": upstream_meta.get("ingest_run_id", "unknown"),
         }
-        body = f"# {query} / {_aliases(query)[0]}\n\n## 原文证据\n\n{anchor_text}\n\n## 来源\n\n- 书名：{card_meta['book_title']}\n- 卷次：{card_meta['source_volume']}\n- 文件：{card_meta['source_file']}\n- offset：{offset}\n- page_marker：{card_meta['page_marker']}\n"
+        body = (
+            f"# {query} / {aliases[0] if aliases else query}\n\n"
+            f"## 原文证据\n\n{anchor_text}\n\n"
+            "## 来源\n\n"
+            f"- 书名：{card_meta['book_title']}\n"
+            f"- 卷次：{source_volume}\n"
+            f"- 文件：{card_meta['source_file']}\n"
+            f"- offset：{match_offset}\n"
+            f"- page_marker：{page_marker}\n"
+        )
         _write_card(card_path, card_meta, body)
         item = {
             "id": candidate_id,
             "file": file_name,
             "term": query,
             "source_locator": source_locator,
-            "source_volume": card_meta["source_volume"],
-            "match_offset": offset,
+            "source_volume": source_volume,
+            "match_offset": match_offset,
             "content_hash": content_hash,
             "anchor_text": anchor_text,
             "review_status": "pending",
@@ -169,8 +193,14 @@ def generate_candidate_cards(query: str, book_id: str, out_dir: Path, *, base_ur
         }
         merge_candidate_item(manifest, item)
         generated.append(str(card_path))
+
     save_candidate_manifest(manifest_path, manifest)
-    return {"generated": generated, "manifest": str(manifest_path), "message": "candidate cards generated; submit to upstream Local-KB-Unified after review."}
+    return {
+        "generated": generated,
+        "manifest": str(manifest_path),
+        "scan_stats": scan_stats,
+        "message": "candidate cards generated; submit to upstream Local-KB-Unified after review.",
+    }
 
 
 def _retrieve_hits(base_url: str, term: str) -> list[dict[str, Any]]:
