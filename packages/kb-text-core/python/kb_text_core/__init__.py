@@ -8,7 +8,13 @@ from .normalization import (
     query_variants,
     split_loose_terms,
 )
-from .parser import audit_kaiyuan_corpus, compare_volume_text, split_kaiyuan_fulltext, write_split_volumes
+from .parser import (
+    audit_kaiyuan_corpus,
+    audit_page_markers,
+    compare_volume_text,
+    split_kaiyuan_fulltext,
+    write_split_volumes,
+)
 from .ranking import dedupe_primary_hits, fallback_score, fallback_sort_key, normalized_anchor_hash
 
 __all__ = [
@@ -17,6 +23,7 @@ __all__ = [
     "MatchSpan",
     "NormalizedText",
     "audit_kaiyuan_corpus",
+    "audit_page_markers",
     "build_anchor_context",
     "cluster_match_spans",
     "compact_with_index_map",
