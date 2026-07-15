@@ -2,6 +2,7 @@ from pathlib import Path
 
 from kb_text_core import (
     audit_kaiyuan_corpus,
+    audit_page_markers,
     build_anchor_context,
     cluster_match_spans,
     dedupe_primary_hits,
@@ -74,6 +75,19 @@ def test_split_fulltext_recognizes_directory_and_volumes():
     text = "# 唐開元占經 目錄/議語\n目錄\n\n# 唐開元占經 卷1\n卷一\n\n# 唐開元占經 卷2\n卷二\n"
     sections = split_kaiyuan_fulltext(text)
     assert list(sections) == ["KR3g0018_000", "KR3g0018_001", "KR3g0018_002"]
+
+
+def test_page_audit_detects_volume_mismatch_and_reverse_order():
+    report = audit_page_markers(
+        {
+            "KR3g0018_031": (
+                "<pb:KR3g0018_WYG_031-2b>\n"
+                "<pb:KR3g0018_WYG_030-2a>\n"
+            )
+        }
+    )
+    assert report["page_marker_volume_mismatches"]
+    assert report["non_monotonic_page_markers"]
 
 
 def test_normalize_search_text_preserves_entities_and_normalizes_variant():
