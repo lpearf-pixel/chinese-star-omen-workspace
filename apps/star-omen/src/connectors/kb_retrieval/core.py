@@ -186,8 +186,9 @@ class RetrievalCoreMixin:
         cls,
         query: str,
         inferred_hits: list[dict[str, Any]],
+        mode: str | None = None,
     ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], str]:
-        mode = cls._query_mode(query)
+        mode = mode or cls._query_mode(query)
         ranked = [{**hit, "_rank": cls._rank_hit(query, hit, mode)} for hit in inferred_hits]
         ranked.sort(key=lambda item: item.get("_rank", 0), reverse=True)
         if mode == "knowledge":
@@ -295,7 +296,7 @@ class RetrievalCoreMixin:
         raw_result = self._request("POST", "/v1/retrieve", json_payload=payload, use_auth=True)
         raw_hits = raw_result.get("hits", [])
         inferred_hits = self._normalize_hits(raw_hits)
-        reranked, _, _, mode = self._rerank_hits(query, inferred_hits)
+        reranked, _, _, mode = self._rerank_hits(query, inferred_hits, mode=effective_query_mode)
         filtered_hits = reranked
         normalized_query = self._normalize_query(query)
         variants = self._query_variants(query)
