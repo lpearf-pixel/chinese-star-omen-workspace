@@ -151,9 +151,11 @@ def infer_card_type_from_path(path: str | None) -> str | None:
 
 def infer_metadata_from_path(path: str | None) -> dict[str, str | None]:
     card_type = infer_card_type_from_path(path)
+    book_id = infer_book_id_from_path(path)
     return {
         "book_title": infer_book_title_from_path(path),
-        "book_id": infer_book_id_from_path(path),
+        "kb_book_id": book_id,
+        "book_id": book_id,
         "card_type": card_type,
         "evidence_level": resolve_evidence_level(card_type) if card_type else None,
     }
