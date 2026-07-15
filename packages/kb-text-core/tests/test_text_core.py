@@ -81,8 +81,8 @@ def test_normalize_search_text_preserves_entities_and_normalizes_variant():
 
 
 def test_normalize_search_text_does_not_rewrite_ambiguous_common_characters():
-    assert normalize_search_text("千里臺下") == "千里台下"
-    assert "裏" not in normalize_search_text("千里")
+    assert normalize_search_text("千里臺下") == "千里臺下"
+    assert normalize_search_text("千里") == "千里"
 
 
 def test_audit_reports_full_volume_agreement(tmp_path: Path):
