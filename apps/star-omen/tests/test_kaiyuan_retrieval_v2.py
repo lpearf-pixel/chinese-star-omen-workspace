@@ -48,6 +48,27 @@ def test_wire_payload_removes_legacy_book_id_alias():
     assert payload["filters"] == {"kb_book_id": "kaiyuan_zhanjing"}
 
 
+def test_explicit_query_mode_controls_reranking(monkeypatch):
+    def fake_request(self, method, path, **kwargs):
+        return {
+            "hits": [
+                {
+                    "chunk_id": "e1",
+                    "title": "荧惑",
+                    "path": "/docs/古籍/唐開元占經/术语卡片/熒惑.md",
+                    "snippet": "荧惑",
+                    "card_type": "term_card",
+                }
+            ]
+        }
+
+    monkeypatch.setattr(KBSearchRetriever, "_request", fake_request)
+    retriever = KBSearchRetriever(base_url="http://127.0.0.1:8008", api_key="k")
+    result = retriever.retrieve("荧惑", query_mode="evidence")
+    assert result["query_mode"] == "evidence"
+    assert result["exact_hits"][0]["chunk_id"] == "e1"
+
+
 def test_filesystem_fallback_returns_match_excerpt_and_fenjuan_first(monkeypatch, tmp_path):
     corpus = tmp_path / "古籍" / "唐開元占經"
     volume = corpus / "分卷" / "KR3g0018_031.md"
