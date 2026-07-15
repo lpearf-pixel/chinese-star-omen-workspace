@@ -14,6 +14,19 @@ if str(TEXT_CORE) not in sys.path:
 from kb_text_core import audit_kaiyuan_corpus  # noqa: E402
 
 
+FAIL_FIELDS = (
+    "missing_sections",
+    "extra_sections",
+    "missing_volume_files",
+    "extra_volume_files",
+    "different_volumes",
+    "duplicate_page_markers",
+    "invalid_page_markers",
+    "page_marker_volume_mismatches",
+    "non_monotonic_page_markers",
+)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit the immutable Kaiyuan fulltext against derived volume files.")
     parser.add_argument("--fulltext", type=Path, required=True)
@@ -27,7 +40,10 @@ def main() -> int:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(rendered, encoding="utf-8")
     print(rendered, end="")
-    return 0 if not report["different_volumes"] and not report["missing_volume_files"] else 1
+    failed = any(report.get(field) for field in FAIL_FIELDS)
+    failed = failed or report.get("section_count") != report.get("expected_section_count")
+    failed = failed or bool(report.get("replacement_character_count"))
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
