@@ -31,7 +31,21 @@ def test_retrieve_payload_carries_v2_limit_and_canonical_book_id(monkeypatch):
     assert captured["top_k"] == 8
     assert captured["limit"] == 8
     assert captured["filters"]["kb_book_id"] == "kaiyuan_zhanjing"
-    assert "book_id" not in captured["filters"]
+    assert captured["filters"]["book_id"] == "kaiyuan_zhanjing"
+
+
+def test_wire_payload_removes_legacy_book_id_alias():
+    payload = KBSearchRetriever._wire_payload(
+        {
+            "query": "荧惑守心",
+            "filters": {
+                "book_id": "kaiyuan_zhanjing",
+                "kb_book_id": "kaiyuan_zhanjing",
+            },
+        }
+    )
+    assert payload is not None
+    assert payload["filters"] == {"kb_book_id": "kaiyuan_zhanjing"}
 
 
 def test_filesystem_fallback_returns_match_excerpt_and_fenjuan_first(monkeypatch, tmp_path):
