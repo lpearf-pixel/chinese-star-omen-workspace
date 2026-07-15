@@ -54,6 +54,22 @@ def test_dedupe_prefers_fenjuan_over_fulltext():
     assert hits[0]["card_type"] == "fenjuan"
 
 
+def test_normalized_fenjuan_ranks_before_raw_fulltext():
+    common = {
+        "kb_book_id": "kaiyuan_zhanjing",
+        "page_marker": "KR3g0018_WYG_031-17a",
+        "anchor_text": "石氏曰熒惑守心",
+        "match_offset": 10,
+    }
+    hits = dedupe_primary_hits([
+        {**common, "match_type": "exact_raw", "card_type": "fulltext", "score": 0.85, "path": "full.md"},
+        {**common, "match_type": "exact_normalized", "card_type": "fenjuan", "score": 0.95, "path": "KR3g0018_031.md"},
+    ])
+    assert len(hits) == 1
+    assert hits[0]["card_type"] == "fenjuan"
+    assert hits[0]["match_type"] == "exact_normalized"
+
+
 def test_split_fulltext_recognizes_directory_and_volumes():
     text = "# 唐開元占經 目錄/議語\n目錄\n\n# 唐開元占經 卷1\n卷一\n\n# 唐開元占經 卷2\n卷二\n"
     sections = split_kaiyuan_fulltext(text)
@@ -62,6 +78,11 @@ def test_split_fulltext_recognizes_directory_and_volumes():
 
 def test_normalize_search_text_preserves_entities_and_normalizes_variant():
     assert normalize_search_text("熒 惑 &KR2343;") == "荧惑&KR2343;"
+
+
+def test_normalize_search_text_does_not_rewrite_ambiguous_common_characters():
+    assert normalize_search_text("千里臺下") == "千里台下"
+    assert "裏" not in normalize_search_text("千里")
 
 
 def test_audit_reports_full_volume_agreement(tmp_path: Path):
