@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import StrEnum
+from enum import Enum
 from typing import Any
 
 
-class ReviewStatus(StrEnum):
+class ReviewStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
 
 
-class SyncStatus(StrEnum):
+class SyncStatus(str, Enum):
     PENDING = "pending"
     MERGED = "merged"
     NEEDS_REVIEW = "needs_review"

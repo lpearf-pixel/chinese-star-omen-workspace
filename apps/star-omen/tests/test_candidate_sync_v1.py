@@ -119,8 +119,10 @@ def test_generate_candidate_fulltext_filename_is_ascii_safe(monkeypatch, tmp_pat
 
     result = generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
 
-    assert result["generated"] == [str(out_dir / "yinghuo_shouxin.fulltext.0.md")]
-    fm = yaml.safe_load((out_dir / "yinghuo_shouxin.fulltext.0.md").read_text(encoding="utf-8").split("---", 2)[1])
+    assert len(result["generated"]) == 1
+    generated = Path(result["generated"][0])
+    assert generated.name == "yinghuo_shouxin.fulltext.no-page.0.md"
+    fm = yaml.safe_load(generated.read_text(encoding="utf-8").split("---", 2)[1])
     assert fm["source_locator"] == "fulltext"
     assert fm["source_file"].endswith("唐開元占經/唐開元占經-全文合併版.md")
 
@@ -142,3 +144,30 @@ def test_generate_candidate_match_offset_uses_original_text_index(monkeypatch, t
     fm = yaml.safe_load(card.read_text(encoding="utf-8").split("---", 2)[1])
     assert fm["match_offset"] == text.index("熒")
     assert "熒 惑 守 心" in fm["anchor_text"]
+
+
+def test_generate_candidate_clusters_exact_matches_by_page(monkeypatch, tmp_path):
+    source = tmp_path / "古籍" / "唐開元占經" / "分卷" / "KR3g0018_031.md"
+    source.parent.mkdir(parents=True)
+    source.write_text(
+        "# 唐開元占經 卷31\n\n　　　熒惑犯心五\n"
+        "<pb:KR3g0018_WYG_031-17a>\n熒惑守心，一。又曰熒惑守心，二。\n"
+        "<pb:KR3g0018_WYG_031-17b>\n熒惑守心，三。\n",
+        encoding="utf-8",
+    )
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    monkeypatch.setenv("KB_SOURCES_ROOT", str(tmp_path))
+    monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
+    reload_settings()
+    out_dir = tmp_path / "generated_candidates" / "extract_cards" / "kaiyuan_zhanjing"
+
+    result = generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
+
+    assert len(result["generated"]) == 2
+    cards = [yaml.safe_load(Path(path).read_text(encoding="utf-8").split("---", 2)[1]) for path in result["generated"]]
+    assert [card["page_marker"] for card in cards] == [
+        "KR3g0018_WYG_031-17a",
+        "KR3g0018_WYG_031-17b",
+    ]
+    assert cards[0]["match_count"] == 2
+    assert cards[0]["heading_path"][-1] == "熒惑犯心五"
