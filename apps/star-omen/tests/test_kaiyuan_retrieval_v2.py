@@ -31,7 +31,7 @@ def test_retrieve_payload_carries_v2_limit_and_canonical_book_id(monkeypatch):
     assert captured["top_k"] == 8
     assert captured["limit"] == 8
     assert captured["filters"]["kb_book_id"] == "kaiyuan_zhanjing"
-    assert captured["filters"]["book_id"] == "kaiyuan_zhanjing"
+    assert "book_id" not in captured["filters"]
 
 
 def test_filesystem_fallback_returns_match_excerpt_and_fenjuan_first(monkeypatch, tmp_path):
