@@ -8,6 +8,9 @@ on:
       - "apps/local-kb-unified/**"
       - "packages/kb-contracts/**"
       - "packages/kb-text-core/**"
+      - ".env.workspace"
+      - ".env.workspace.example"
+      - ".gitignore"
       - ".github/workflows/kaiyuan-upstream-runtime.yml"
       - "Makefile"
   push:
@@ -46,6 +49,7 @@ jobs:
 
       - name: Reject machine-local and secret artifacts
         run: |
+          test ! -e .env.workspace
           if find apps/local-kb-unified -type f \( \
             -name '.env' -o \
             -name '.DS_Store' -o \
