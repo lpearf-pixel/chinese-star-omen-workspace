@@ -1,0 +1,61 @@
+name: Kaiyuan Upstream Runtime
+
+on:
+  pull_request:
+    branches:
+      - "stable/kaiyuan-v2"
+    paths:
+      - "apps/local-kb-unified/**"
+      - "packages/kb-contracts/**"
+      - "packages/kb-text-core/**"
+      - ".github/workflows/kaiyuan-upstream-runtime.yml"
+      - "Makefile"
+  push:
+    branches:
+      - "codex/kaiyuan-upstream-runtime-v2"
+      - "stable/kaiyuan-v2"
+
+jobs:
+  upstream-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            apps/local-kb-unified/kb-search/requirements.txt
+            apps/local-kb-unified/index-jobs/requirements.txt
+
+      - name: Install runtime and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+          python -m pip install -r apps/local-kb-unified/kb-search/requirements.txt
+          python -m pip install -r apps/local-kb-unified/index-jobs/requirements.txt
+
+      - name: Upstream unit tests
+        run: make upstream-test
+
+      - name: Validate Docker Compose configuration
+        working-directory: apps/local-kb-unified
+        run: docker compose --env-file .env.example -f docker-compose.yml config --quiet
+
+      - name: Reject machine-local and secret artifacts
+        run: |
+          if find apps/local-kb-unified -type f \( \
+            -name '.env' -o \
+            -name '.DS_Store' -o \
+            -name '*.gguf' -o \
+            -name '*.safetensors' \
+          \) -print | grep -q .; then
+            echo 'forbidden runtime artifact found' >&2
+            exit 1
+          fi
+          if grep -R -n --exclude='.env.example' '/Users/' apps/local-kb-unified; then
+            echo 'machine-local absolute path found' >&2
+            exit 1
+          fi
