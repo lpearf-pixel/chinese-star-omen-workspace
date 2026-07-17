@@ -45,9 +45,10 @@ def compare_baseline(
         "match": expected_volume_count == actual_volume_count,
     }
 
+    kb_book_id = baseline.get("kb_book_id") or baseline.get("book_id")
     return {
         "schema_version": "kaiyuan-corpus-baseline-check/v1",
-        "book_id": baseline.get("book_id"),
+        "kb_book_id": kb_book_id,
         "audit_ok": bool(audit.get("ok")),
         "baseline_matches": all(check["match"] for check in checks.values()),
         "checks": checks,
