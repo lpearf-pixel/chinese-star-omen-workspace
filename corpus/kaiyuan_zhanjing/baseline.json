@@ -11,5 +11,6 @@
   "volume_text_policy": "equal_after_trimming_outer_whitespace",
   "raw_text_policy": "immutable",
   "kr_entity_policy": "preserve_until_mapping_is_supplied",
-  "provenance_status": "pending_source_and_license_metadata"
+  "provenance_status": "public_source_recorded_user_authorized_unproofread",
+  "provenance_file": "corpus/kaiyuan_zhanjing/provenance.json"
 }
