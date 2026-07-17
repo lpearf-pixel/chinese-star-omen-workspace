@@ -7,19 +7,21 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from kb_contracts import SyncErrorCode
+from kb_contracts import SyncErrorCode, sha256_text
 from src.candidate_sync import sync_candidate_manifests
 from src.connectors.kb_search_retriever import KBSearchError
 
 
 BOOK_ID = "kaiyuan_zhanjing"
+ANCHOR = "石氏曰熒惑守心，天下兵起。"
+ANCHOR_HASH = sha256_text(ANCHOR)
 
 
 def _fixture(tmp_path: Path, *, item_count: int = 1) -> tuple[Path, Path, Path]:
     sources = tmp_path / "sources"
     source = sources / "古籍" / "唐開元占經" / "分卷" / "KR3g0018_031.md"
     source.parent.mkdir(parents=True)
-    source.write_text("# 卷三十一\n\n石氏曰熒惑守心，天下兵起。\n", encoding="utf-8")
+    source.write_text(f"# 卷三十一\n\n{ANCHOR}\n", encoding="utf-8")
 
     root = tmp_path / "generated_candidates"
     inbox = root / "extract_cards" / BOOK_ID
@@ -27,7 +29,6 @@ def _fixture(tmp_path: Path, *, item_count: int = 1) -> tuple[Path, Path, Path]:
     items = []
     for index in range(item_count):
         file_name = f"candidate-{index}.md"
-        anchor = "石氏曰熒惑守心，天下兵起。"
         metadata = {
             "schema_version": "candidate-card/v1",
             "kb_book_id": BOOK_ID,
@@ -37,14 +38,14 @@ def _fixture(tmp_path: Path, *, item_count: int = 1) -> tuple[Path, Path, Path]:
             "term": "荧惑守心",
             "source_file": "古籍/唐開元占經/分卷/KR3g0018_031.md",
             "source_locator": "KR3g0018_031",
-            "anchor_text": anchor,
-            "content_hash": f"sha256:hash-{index}",
+            "anchor_text": ANCHOR,
+            "content_hash": ANCHOR_HASH,
         }
         (inbox / file_name).write_text(
             "---\n"
             + yaml.safe_dump(metadata, allow_unicode=True, sort_keys=False)
             + "---\n\n"
-            + anchor
+            + ANCHOR
             + "\n",
             encoding="utf-8",
         )
@@ -54,8 +55,8 @@ def _fixture(tmp_path: Path, *, item_count: int = 1) -> tuple[Path, Path, Path]:
                 "file": file_name,
                 "term": "荧惑守心",
                 "source_locator": "KR3g0018_031",
-                "content_hash": f"sha256:hash-{index}",
-                "anchor_text": anchor,
+                "content_hash": ANCHOR_HASH,
+                "anchor_text": ANCHOR,
                 "review_status": "pending",
                 "sync_status": "pending" if index == 0 else "needs_review",
             }
@@ -115,21 +116,18 @@ def _hits(*rows: dict) -> dict:
 
 def test_successful_sync_classifies_merged_review_pending_and_stale(tmp_path: Path):
     root, sources, manifest_path = _fixture(tmp_path, item_count=4)
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    for index, item in enumerate(manifest["items"]):
-        item["content_hash"] = f"sha256:hash-{index}"
-        item["file"] = f"candidate-{index}.md"
-    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    # Make the fourth local card stale before any upstream query.
     stale_card = manifest_path.parent / "candidate-3.md"
     stale_text = stale_card.read_text(encoding="utf-8")
-    stale_card.write_text(stale_text.replace("石氏曰熒惑守心，天下兵起。", "本地锚点已移除。"), encoding="utf-8")
+    stale_card.write_text(
+        stale_text.replace(ANCHOR, "本地锚点已移除。"),
+        encoding="utf-8",
+    )
 
     retriever = FakeRetriever(
         sources,
         [
-            _hits({"card_type": "extract_card", "content_hash": "sha256:hash-0", "snippet": "same"}),
+            _hits({"card_type": "extract_card", "content_hash": ANCHOR_HASH, "snippet": "same"}),
             _hits({"card_type": "extract_card", "content_hash": "sha256:different", "snippet": "other"}),
             _hits(),
         ],
@@ -198,7 +196,7 @@ def test_item_failure_after_prior_success_does_not_partially_write(tmp_path: Pat
     retriever = FakeRetriever(
         sources,
         [
-            _hits({"card_type": "extract_card", "content_hash": "sha256:hash-0"}),
+            _hits({"card_type": "extract_card", "content_hash": ANCHOR_HASH}),
             KBSearchError(
                 "timeout after first item",
                 code=SyncErrorCode.TIMEOUT,
