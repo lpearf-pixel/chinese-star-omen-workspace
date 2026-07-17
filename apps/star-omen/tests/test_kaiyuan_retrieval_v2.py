@@ -12,7 +12,7 @@ def _configure_sources(monkeypatch, root: Path) -> None:
     reload_settings()
 
 
-def test_retrieve_payload_carries_v2_limit_and_canonical_book_id(monkeypatch):
+def test_retrieve_payload_carries_v2_contract_and_canonical_book_id(monkeypatch):
     captured = {}
 
     def fake_request(self, method, path, **kwargs):
@@ -26,13 +26,17 @@ def test_retrieve_payload_carries_v2_limit_and_canonical_book_id(monkeypatch):
         top_k=8,
         filters={"book_id": "kaiyuan_zhanjing"},
         query_mode="evidence",
+        retrieval_stage="primary_evidence",
+        card_types=["fenjuan", "fulltext"],
         literal_first=True,
     )
 
+    assert captured["schema_version"] == "kb-retrieve/v2"
     assert captured["top_k"] == 8
-    assert captured["limit"] == 8
-    assert captured["filters"]["kb_book_id"] == "kaiyuan_zhanjing"
-    assert captured["filters"]["book_id"] == "kaiyuan_zhanjing"
+    assert captured["retrieval_stage"] == "primary_evidence"
+    assert captured["card_types"] == ["fenjuan", "fulltext"]
+    assert captured["filters"] == {"kb_book_id": "kaiyuan_zhanjing"}
+    assert "limit" not in captured
 
 
 def test_wire_payload_removes_legacy_book_id_alias():
