@@ -40,8 +40,14 @@ PROOF_PRIORITY: list[CardType] = [
     CardType.QA_EXAMPLE,
 ]
 
-FINAL_CITABLE_CARD_TYPES: set[CardType] = {CardType.FENJUAN, CardType.FULLTEXT}
-NON_FACTUAL_CARD_TYPES: set[CardType] = {CardType.PROMPT_ASSET, CardType.QA_EXAMPLE}
+FINAL_CITABLE_CARD_TYPES: set[CardType] = {
+    CardType.FENJUAN,
+    CardType.FULLTEXT,
+}
+NON_FACTUAL_CARD_TYPES: set[CardType] = {
+    CardType.PROMPT_ASSET,
+    CardType.QA_EXAMPLE,
+}
 
 STAGE1_RECALL_CARD_TYPES: list[CardType] = [
     CardType.XINGGUAN_CARD,
@@ -52,7 +58,10 @@ STAGE1_RECALL_CARD_TYPES: list[CardType] = [
     CardType.CHAPTER_SUMMARY,
 ]
 
-STAGE2_PRIMARY_CARD_TYPES: list[CardType] = [CardType.FENJUAN, CardType.FULLTEXT]
+STAGE2_PRIMARY_CARD_TYPES: list[CardType] = [
+    CardType.FENJUAN,
+    CardType.FULLTEXT,
+]
 
 CARD_TYPE_TO_EVIDENCE_LEVEL: dict[CardType, EvidenceLevel] = {
     CardType.FENJUAN: EvidenceLevel.PRIMARY,
@@ -67,7 +76,6 @@ CARD_TYPE_TO_EVIDENCE_LEVEL: dict[CardType, EvidenceLevel] = {
     CardType.PROMPT_ASSET: EvidenceLevel.PROMPT,
     CardType.QA_EXAMPLE: EvidenceLevel.EXAMPLE,
 }
-
 
 PATH_CARD_TYPE_RULES: list[tuple[str, str]] = [
     ("/分卷/", CardType.FENJUAN.value),
@@ -87,12 +95,24 @@ PATH_CARD_TYPE_RULES: list[tuple[str, str]] = [
     ("/问答样例库/", CardType.QA_EXAMPLE.value),
 ]
 
-
 BOOK_TITLE_TO_ID: dict[str, str] = {
     "唐開元占經": "kaiyuan_zhanjing",
     "唐开元占经": "kaiyuan_zhanjing",
     "開元占經": "kaiyuan_zhanjing",
     "开元占经": "kaiyuan_zhanjing",
+}
+
+CITABLE_VALIDATION_VERSION = "citable-evidence/v2"
+CITABLE_REQUIRED_CHECKS = {
+    "path",
+    "card_type",
+    "book",
+    "locator",
+    "page",
+    "paragraph",
+    "heading",
+    "anchor",
+    "hash",
 }
 
 
@@ -112,22 +132,29 @@ def resolve_evidence_level(card_type: str) -> str | None:
 
 def can_be_final_fact(card_type: str) -> bool:
     try:
-        ct = CardType(card_type)
+        resolved = CardType(card_type)
     except ValueError:
         return False
-    return ct in FINAL_CITABLE_CARD_TYPES and ct not in NON_FACTUAL_CARD_TYPES
+    return (
+        resolved in FINAL_CITABLE_CARD_TYPES
+        and resolved not in NON_FACTUAL_CARD_TYPES
+    )
 
 
 def infer_book_title_from_path(path: str | None) -> str | None:
     if not path:
         return None
     normalized = path.replace("\\", "/")
-    parts = [p for p in normalized.split("/") if p]
-    for idx, token in enumerate(parts):
-        if token == "古籍" and idx + 1 < len(parts):
-            return parts[idx + 1]
+    parts = [part for part in normalized.split("/") if part]
+    for index, token in enumerate(parts):
+        if token == "古籍" and index + 1 < len(parts):
+            return parts[index + 1]
     lowered = normalized.lower()
-    if "kaiyuanzhanjin" in lowered or "唐開元占經" in normalized or "唐开元占经" in normalized:
+    if (
+        "kaiyuanzhanjin" in lowered
+        or "唐開元占經" in normalized
+        or "唐开元占经" in normalized
+    ):
         return "唐開元占經"
     return None
 
@@ -157,18 +184,53 @@ def infer_metadata_from_path(path: str | None) -> dict[str, str | None]:
         "kb_book_id": book_id,
         "book_id": book_id,
         "card_type": card_type,
-        "evidence_level": resolve_evidence_level(card_type) if card_type else None,
+        "evidence_level": (
+            resolve_evidence_level(card_type) if card_type else None
+        ),
     }
 
 
 def is_citable_evidence(evidence: dict[str, Any]) -> bool:
+    """Return true only for source-verified passage evidence.
+
+    A primary card label or an existing path alone is not sufficient.  The
+    evidence resolver must have produced a complete v2 validation trace whose
+    source, locator, page, passage, anchor and hashes all passed.
+    """
+
     card_type = str(evidence.get("card_type") or "")
-    evidence_level = str(evidence.get("evidence_level") or "")
-    relative_path = evidence.get("relative_path")
-    if not relative_path:
+    if not can_be_final_fact(card_type):
+        return False
+    if evidence.get("status") != "citable":
+        return False
+    if evidence.get("final_citable") is not True:
+        return False
+    if not evidence.get("relative_path"):
+        return False
+    if evidence.get("path_exists") is not True:
+        return False
+    if not evidence.get("source_locator") or not evidence.get("page_marker"):
+        return False
+    if not evidence.get("anchor_text"):
         return False
 
-    if evidence_level == EvidenceLevel.PRIMARY.value:
-        return True
-
-    return card_type in {CardType.FENJUAN.value, CardType.FULLTEXT.value}
+    trace = evidence.get("trace")
+    if not isinstance(trace, dict):
+        return False
+    if trace.get("validation_version") != CITABLE_VALIDATION_VERSION:
+        return False
+    checks = trace.get("checks")
+    if not isinstance(checks, dict):
+        return False
+    if not CITABLE_REQUIRED_CHECKS.issubset(checks):
+        return False
+    if not all(checks.get(name) is True for name in CITABLE_REQUIRED_CHECKS):
+        return False
+    matched = trace.get("matched_passage")
+    if not isinstance(matched, dict):
+        return False
+    return (
+        matched.get("source_locator") == evidence.get("source_locator")
+        and matched.get("page_marker") == evidence.get("page_marker")
+        and matched.get("paragraph_index") == evidence.get("paragraph_index")
+    )
