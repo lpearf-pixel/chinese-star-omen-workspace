@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Callable, Sequence
 
 MANAGED_BY = "local-kb-unified/v2"
 COLLECTION_SCHEMA = "passage-v2"
@@ -138,3 +138,60 @@ def plan_reconciliation(
         stale_ids=stale_ids,
         desired_by_id=desired_by_id,
     )
+
+
+def execute_reconciliation(
+    plan: ReconciliationPlan,
+    *,
+    embed_item: Callable[[dict[str, Any]], Sequence[float]],
+    upsert_batch: Callable[[list[dict[str, Any]]], None],
+    delete_points: Callable[[Sequence[str]], None],
+    batch_size: int = 32,
+) -> dict[str, int]:
+    """Embed/upsert planned items and delete stale IDs only after success.
+
+    Callback-based execution keeps the ordering rule independently testable and
+    prevents Qdrant-specific code from obscuring the stale-delete safety gate.
+    Exceptions intentionally propagate; the caller may report them, but this
+    function never invokes ``delete_points`` after an embedding/upsert failure.
+    """
+
+    if batch_size < 1:
+        raise ValueError("batch_size must be at least 1")
+
+    batch: list[dict[str, Any]] = []
+    upserted = 0
+
+    def flush() -> None:
+        nonlocal batch, upserted
+        if not batch:
+            return
+        upsert_batch(batch)
+        upserted += len(batch)
+        batch = []
+
+    for item in plan.upserts:
+        vector = list(embed_item(item))
+        if not vector:
+            raise RuntimeError(
+                f"embedding returned an empty vector for {point_id_for_item(item)}"
+            )
+        batch.append(
+            {
+                "point_id": point_id_for_item(item),
+                "item": item,
+                "vector": vector,
+            }
+        )
+        if len(batch) >= batch_size:
+            flush()
+
+    flush()
+    if plan.stale_ids:
+        delete_points(plan.stale_ids)
+
+    return {
+        "upserted": upserted,
+        "deleted": len(plan.stale_ids),
+        "errors": 0,
+    }
