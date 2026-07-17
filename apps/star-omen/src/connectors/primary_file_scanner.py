@@ -22,6 +22,8 @@ from kb_text_core import (  # noqa: E402
 )
 
 PRIMARY_CARD_TYPES = {"fenjuan", "fulltext"}
+VOLUME_PATH_RE = re.compile(r"(KR[0-9A-Za-z]+_\d{3})(?:\.md|$)")
+PAGE_VOLUME_RE = re.compile(r"^(KR[0-9A-Za-z]+)(?:_[A-Za-z0-9]+)*_(\d{3})(?:-|$)")
 
 
 def basename(path: str | None) -> str:
@@ -29,28 +31,43 @@ def basename(path: str | None) -> str:
 
 
 def source_locator(path: str, page_marker: str | None = None) -> str:
+    """Return the canonical volume locator, including for fulltext page markers.
+
+    A fulltext page marker such as ``KR3g0018_WYG_031-17a`` belongs to
+    ``KR3g0018_031``.  The old generic regex returned
+    ``KR3g0018_WYG_031``, which made fulltext and fenjuan provenance disagree.
+    """
+
     normalized = path.replace("\\", "/")
-    match = re.search(r"(KR\w+_\d+)", normalized)
-    if match:
-        return match.group(1)
-    if page_marker:
-        page_match = re.search(r"(KR\w+_\d+)", page_marker)
-        if page_match:
-            return page_match.group(1)
+    path_match = VOLUME_PATH_RE.search(normalized)
+    if path_match:
+        return path_match.group(1)
+
+    marker = str(page_marker or "")
+    marker_match = PAGE_VOLUME_RE.search(marker)
+    if marker_match:
+        return f"{marker_match.group(1)}_{marker_match.group(2)}"
+
     if "全文合併版" in normalized or "全文合并版" in normalized:
         return "fulltext"
     return Path(normalized).stem
 
 
 def source_volume(locator: str, page_marker: str | None = None) -> str | None:
-    match = re.search(r"_(\d+)(?:-|$)", page_marker or locator)
-    return f"卷{int(match.group(1))}" if match else None
+    marker = str(page_marker or "")
+    marker_match = PAGE_VOLUME_RE.search(marker)
+    if marker_match:
+        return f"卷{int(marker_match.group(2))}"
+
+    locator_match = re.search(r"_(\d{3})(?:-|$)", locator)
+    return f"卷{int(locator_match.group(1))}" if locator_match else None
 
 
 def _unique_roots(settings: Any) -> list[Path]:
     roots = [Path(settings.kb_sources_root)]
     if settings.kb_enable_obsidian_source:
         roots.append(Path(settings.kb_obsidian_root))
+
     out: list[Path] = []
     seen: set[str] = set()
     for root in roots:
@@ -62,6 +79,13 @@ def _unique_roots(settings: Any) -> list[Path]:
     return out
 
 
+def _display_heading(hit: dict[str, Any]) -> str:
+    heading_path = hit.get("heading_path")
+    if isinstance(heading_path, list) and heading_path:
+        return str(heading_path[-1])
+    return str(hit.get("title") or "")
+
+
 def scan_primary_files(
     settings: Any,
     query: str,
@@ -71,8 +95,19 @@ def scan_primary_files(
     limit: int,
     query_variants: list[str],
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Scan all eligible primary files, then rank, deduplicate and truncate.
+
+    The scan deliberately does not return early at ``limit``: a more relevant
+    fenjuan match may appear after a fulltext file in filesystem order.
+    """
+
     roots = _unique_roots(settings)
-    debug_enabled = os.getenv("KB_DEBUG_SCAN", "").strip().lower() in {"1", "true", "yes", "on"}
+    debug_enabled = os.getenv("KB_DEBUG_SCAN", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
     hits: list[dict[str, Any]] = []
     files_scanned = 0
     debug_matches: list[dict[str, Any]] = []
@@ -83,14 +118,20 @@ def scan_primary_files(
             continue
         for path in sorted(root.rglob("*.md")):
             normalized_path = str(path).replace("\\", "/")
-            if "/分卷/" not in normalized_path and "全文合併版" not in normalized_path and "全文合并版" not in normalized_path:
+            if (
+                "/分卷/" not in normalized_path
+                and "全文合併版" not in normalized_path
+                and "全文合并版" not in normalized_path
+            ):
                 continue
+
             meta = infer_metadata_from_path(normalized_path)
             if meta.get("card_type") not in PRIMARY_CARD_TYPES:
                 continue
             kb_book_id = meta.get("kb_book_id") or meta.get("book_id")
             if book_id and kb_book_id != book_id:
                 continue
+
             files_scanned += 1
             try:
                 text = path.read_text(encoding="utf-8")
@@ -112,7 +153,19 @@ def scan_primary_files(
                 context = cluster.context
                 if context is None:
                     continue
-                best = min(cluster.spans, key=lambda span: (0 if span.match_type == "exact_raw" else 1, span.start))
+
+                best = min(
+                    cluster.spans,
+                    key=lambda span: (
+                        {
+                            "exact_raw": 0,
+                            "exact_normalized": 1,
+                            "loose_window": 2,
+                            "heading_only": 3,
+                        }.get(span.match_type, 99),
+                        span.start,
+                    ),
+                )
                 locator = source_locator(normalized_path, context.page_marker)
                 volume = source_volume(locator, context.page_marker)
                 heading_text = normalize_search_text(" ".join(context.heading_path))
@@ -123,8 +176,14 @@ def scan_primary_files(
                 )
                 anchor = context.anchor_text
                 hit = {
-                    "chunk_id": f"fallback:{path.name}:{context.page_marker or locator}:{cluster.start}",
-                    "score": fallback_score(best.match_type, str(meta.get("card_type") or "")),
+                    "chunk_id": (
+                        f"fallback:{path.name}:"
+                        f"{context.page_marker or locator}:{cluster.start}"
+                    ),
+                    "score": fallback_score(
+                        best.match_type,
+                        str(meta.get("card_type") or ""),
+                    ),
                     "path": normalized_path,
                     "snippet": anchor[:300],
                     "excerpt": anchor,
@@ -144,7 +203,9 @@ def scan_primary_files(
                     "anchor_text": anchor,
                     "match_type": best.match_type,
                     "matched_variant": best.matched_variant,
-                    "matched_variants": list(dict.fromkeys(span.matched_variant for span in cluster.spans)),
+                    "matched_variants": list(
+                        dict.fromkeys(span.matched_variant for span in cluster.spans)
+                    ),
                     "match_offset": cluster.start,
                     "match_end": cluster.end,
                     "match_count": len(cluster.spans),
@@ -152,22 +213,28 @@ def scan_primary_files(
                 }
                 hits.append(hit)
                 if debug_enabled:
-                    debug_matches.append({
-                        "path": normalized_path,
-                        "page_marker": context.page_marker,
-                        "heading_path": context.heading_path,
-                        "match_type": best.match_type,
-                        "match_offset": cluster.start,
-                        "match_count": len(cluster.spans),
-                        "excerpt": anchor,
-                    })
+                    debug_matches.append(
+                        {
+                            "path": normalized_path,
+                            "source_locator": locator,
+                            "page_marker": context.page_marker,
+                            "heading_path": context.heading_path,
+                            "match_type": best.match_type,
+                            "match_offset": cluster.start,
+                            "match_count": len(cluster.spans),
+                            "excerpt": anchor,
+                        }
+                    )
 
     final_hits = dedupe_primary_hits(hits)[: max(limit, 0)]
     stats: dict[str, Any] = {
         "files_scanned": files_scanned,
         "matched_files": [str(hit.get("path") or "") for hit in final_hits],
-        "matched_headings": [str(hit.get("title") or "") for hit in final_hits],
-        "matched_quotes": [str(hit.get("excerpt") or hit.get("snippet") or "") for hit in final_hits],
+        "matched_headings": [_display_heading(hit) for hit in final_hits],
+        "matched_quotes": [
+            str(hit.get("excerpt") or hit.get("snippet") or "")
+            for hit in final_hits
+        ],
     }
     if debug_enabled:
         stats["debug_scan"] = {
@@ -175,9 +242,18 @@ def scan_primary_files(
             "root_exists": {str(root): root.exists() for root in roots},
             "files_scanned": files_scanned,
             "raw_match_clusters": len(hits),
-            "final_sorted_files": [str(hit.get("path") or "") for hit in final_hits],
-            "final_sorted_match_types": [str(hit.get("match_type") or "") for hit in final_hits],
-            "final_sorted_scores": [float(hit.get("score") or 0.0) for hit in final_hits],
+            "final_sorted_files": [
+                str(hit.get("path") or "") for hit in final_hits
+            ],
+            "final_sorted_headings": [
+                _display_heading(hit) for hit in final_hits
+            ],
+            "final_sorted_match_types": [
+                str(hit.get("match_type") or "") for hit in final_hits
+            ],
+            "final_sorted_scores": [
+                float(hit.get("score") or 0.0) for hit in final_hits
+            ],
             "matched_files": debug_matches,
             "read_errors": read_errors,
         }
