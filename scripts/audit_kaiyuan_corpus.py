@@ -14,24 +14,15 @@ if str(TEXT_CORE) not in sys.path:
 from kb_text_core import audit_kaiyuan_corpus  # noqa: E402
 
 
-FAIL_FIELDS = (
-    "missing_sections",
-    "extra_sections",
-    "missing_volume_files",
-    "extra_volume_files",
-    "different_volumes",
-    "duplicate_page_markers",
-    "invalid_page_markers",
-    "page_marker_volume_mismatches",
-    "non_monotonic_page_markers",
-)
+DEFAULT_ROOT = ROOT / "apps" / "local-kb-unified" / "data" / "sources" / "古籍" / "唐開元占經"
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit the immutable Kaiyuan fulltext against derived volume files.")
-    parser.add_argument("--fulltext", type=Path, required=True)
-    parser.add_argument("--volumes-dir", type=Path, required=True)
+    parser.add_argument("--fulltext", type=Path, default=DEFAULT_ROOT / "唐開元占經-全文合併版.md")
+    parser.add_argument("--volumes-dir", type=Path, default=DEFAULT_ROOT / "分卷")
     parser.add_argument("--out", type=Path)
+    parser.add_argument("--strict", action="store_true", help="Fail on corpus, volume, or page-marker integrity errors")
     args = parser.parse_args()
 
     report = audit_kaiyuan_corpus(args.fulltext, args.volumes_dir)
@@ -40,9 +31,25 @@ def main() -> int:
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(rendered, encoding="utf-8")
     print(rendered, end="")
-    failed = any(report.get(field) for field in FAIL_FIELDS)
-    failed = failed or report.get("section_count") != report.get("expected_section_count")
-    failed = failed or bool(report.get("replacement_character_count"))
+
+    failed = bool(
+        report["different_volumes"]
+        or report["duplicate_section_headings"]
+        or report["empty_sections"]
+        or report["missing_sections"]
+        or report["missing_volume_files"]
+        or report["extra_sections"]
+        or report["extra_volume_files"]
+        or report["empty_volume_files"]
+        or report["replacement_character_count"]
+    )
+    if args.strict:
+        failed = failed or bool(
+            report["duplicate_page_markers"]
+            or report["invalid_page_markers"]
+            or report["page_marker_volume_mismatches"]
+            or report["non_monotonic_page_markers"]
+        )
     return 1 if failed else 0
 
 
