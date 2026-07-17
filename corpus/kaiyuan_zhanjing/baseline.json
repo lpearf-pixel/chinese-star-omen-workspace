@@ -1,6 +1,6 @@
 {
   "schema_version": "kaiyuan-corpus-baseline/v1",
-  "book_id": "kaiyuan_zhanjing",
+  "kb_book_id": "kaiyuan_zhanjing",
   "book_title": "唐開元占經",
   "fulltext_sha256": "071ce775343c2f5fb8080c15ca0f5d980330232afe87aa89d64f18b3b3319503",
   "section_count": 121,
