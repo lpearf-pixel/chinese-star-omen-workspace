@@ -21,29 +21,60 @@ class TwoStageMixin:
         effective_query_mode = query_mode or self._query_mode(query)
         effective_limit = top_k if top_k is not None else self.default_limit
         canonical_filters = self._canonicalize_filters(filters) or {}
-        stage1_filters = {
-            **canonical_filters,
-            "card_type": list(
-                self.RETRIEVAL_POOL_SPEC.get(
-                    effective_query_mode,
-                    self.RETRIEVAL_POOL_SPEC["knowledge"],
-                )["stage1"]
-            ),
-        }
+        pool_spec = self.RETRIEVAL_POOL_SPEC.get(
+            effective_query_mode,
+            self.RETRIEVAL_POOL_SPEC["knowledge"],
+        )
+
+        stage1_types = list(pool_spec["stage1"])
         stage1 = self.retrieve(
             query,
             top_k=effective_limit,
             collection=collection,
-            filters=stage1_filters,
+            filters=canonical_filters,
             query_mode=effective_query_mode,
+            retrieval_stage="structured_recall",
+            card_types=stage1_types,
             literal_first=literal_first,
             literal_pool_factor=literal_pool_factor,
         )
 
         mode = stage1.get("query_mode") or effective_query_mode
         variants = stage1.get("query_variants") or self._query_variants(query)
-        book_id = canonical_filters.get("kb_book_id") or canonical_filters.get("book_id")
-        primary_candidates: list[dict[str, Any]] = []
+        book_id = canonical_filters.get("kb_book_id")
+        official_result: dict[str, Any] = {
+            "schema_version": "kb-retrieve/v2",
+            "query_mode": mode,
+            "retrieval_stage": "primary_evidence",
+            "card_types": list(pool_spec["stage2"]),
+            "collection": collection or self.default_collection,
+            "hits": [],
+            "exact_hits": [],
+            "related_hits": [],
+            "raw_hits": [],
+            "inferred_hits": [],
+        }
+        official_candidates: list[dict[str, Any]] = []
+
+        if mode != "support":
+            official_result = self.retrieve(
+                query,
+                top_k=effective_limit,
+                collection=collection,
+                filters=canonical_filters,
+                query_mode=mode,
+                retrieval_stage="primary_evidence",
+                card_types=list(pool_spec["stage2"]),
+                literal_first=True if literal_first is None else literal_first,
+                literal_pool_factor=literal_pool_factor,
+            )
+            official_candidates = [
+                hit
+                for hit in official_result.get("hits", [])
+                if hit.get("card_type") in self.PRIMARY_CARD_TYPES
+            ][:effective_limit]
+
+        primary_candidates = list(official_candidates)
         scan_stats: dict[str, Any] = {
             "files_scanned": 0,
             "matched_files": [],
@@ -51,8 +82,9 @@ class TwoStageMixin:
             "matched_quotes": [],
         }
         fallback_used = False
+        fallback_reason: str | None = None
 
-        if mode != "support":
+        if mode != "support" and not primary_candidates:
             primary_candidates, scan_stats = self._scan_primary_files(
                 query,
                 book_id=str(book_id) if book_id else None,
@@ -60,38 +92,57 @@ class TwoStageMixin:
                 limit=effective_limit,
                 query_variants=variants,
             )
-            fallback_used = bool(primary_candidates) or scan_stats.get("files_scanned", 0) > 0
+            fallback_used = True
+            fallback_reason = "official_primary_empty"
             primary_candidates = [
                 hit
                 for hit in primary_candidates
                 if hit.get("card_type") in self.PRIMARY_CARD_TYPES
             ][:effective_limit]
+        elif mode == "support":
+            fallback_reason = "support_mode"
 
-        exact_types = {"exact_raw", "exact_normalized"}
-        stage2_exact = [
-            hit
-            for hit in primary_candidates
-            if hit.get("card_type") in self.PRIMARY_CARD_TYPES
-            and hit.get("match_type") in exact_types
-        ][:effective_limit]
-        stage2_related = [
-            hit for hit in primary_candidates if hit not in stage2_exact
-        ][:effective_limit]
-
-        if self.settings.kb_enable_candidate_overlay and mode != "support":
-            candidate_hits = overlay_hits(
-                Path(self.settings.kb_candidate_overlay_root),
-                query,
-                book_id=str(book_id) if book_id else None,
-                limit=effective_limit,
-            )
-            primary_candidates.extend(
-                hit for hit in candidate_hits if hit not in primary_candidates
-            )
-            primary_candidates = primary_candidates[:effective_limit]
+        if official_candidates:
+            official_exact = [
+                hit
+                for hit in official_result.get("exact_hits", [])
+                if hit.get("card_type") in self.PRIMARY_CARD_TYPES
+            ]
+            stage2_exact = [
+                hit for hit in primary_candidates if hit in official_exact
+            ][:effective_limit]
             stage2_related = [
                 hit for hit in primary_candidates if hit not in stage2_exact
             ][:effective_limit]
+        else:
+            exact_types = {"exact_raw", "exact_normalized"}
+            stage2_exact = [
+                hit
+                for hit in primary_candidates
+                if hit.get("card_type") in self.PRIMARY_CARD_TYPES
+                and hit.get("match_type") in exact_types
+            ][:effective_limit]
+            stage2_related = [
+                hit for hit in primary_candidates if hit not in stage2_exact
+            ][:effective_limit]
+
+        candidate_overlay_hits: list[dict[str, Any]] = []
+        if self.settings.kb_enable_candidate_overlay and mode != "support":
+            candidate_overlay_hits = [
+                {**hit, "status": "candidate_only"}
+                for hit in overlay_hits(
+                    Path(self.settings.kb_candidate_overlay_root),
+                    query,
+                    book_id=str(book_id) if book_id else None,
+                    limit=effective_limit,
+                )
+            ][:effective_limit]
+            stage2_related.extend(
+                hit
+                for hit in candidate_overlay_hits
+                if hit not in stage2_related
+            )
+            stage2_related = stage2_related[:effective_limit]
 
         structured_fallbacks: list[dict[str, Any]] = []
         if mode == "evidence" and not primary_candidates:
@@ -105,9 +156,20 @@ class TwoStageMixin:
             ][:effective_limit]
 
         stage2 = {
-            "raw_hits": [],
+            "schema_version": "kb-two-stage/v2",
+            "source": (
+                "official_qdrant"
+                if official_candidates
+                else "filesystem"
+                if primary_candidates and fallback_used
+                else "none"
+            ),
+            "official_result": official_result,
+            "raw_hits": official_result.get("raw_hits", []),
             "inferred_hits": primary_candidates,
             "query_mode": mode,
+            "retrieval_stage": "primary_evidence",
+            "card_types": list(pool_spec["stage2"]),
             "normalized_query": stage1.get(
                 "normalized_query",
                 self._normalize_query(query),
@@ -117,13 +179,18 @@ class TwoStageMixin:
             "related_hits": stage2_related,
             "hits": primary_candidates[:effective_limit],
             "primary_candidates": primary_candidates[:effective_limit],
+            "candidate_overlay_hits": candidate_overlay_hits,
             "structured_fallbacks": structured_fallbacks,
+            "official_primary_used": bool(official_candidates),
+            "official_primary_empty": mode != "support" and not bool(official_candidates),
             "fallback_used": fallback_used,
+            "fallback_reason": fallback_reason,
             "files_scanned": scan_stats.get("files_scanned", 0),
             "matched_files": scan_stats.get("matched_files", []),
             "matched_headings": scan_stats.get("matched_headings", []),
             "matched_quotes": scan_stats.get("matched_quotes", []),
-            "only_structured_no_primary": bool(stage1.get("hits")) and not bool(primary_candidates),
+            "only_structured_no_primary": bool(stage1.get("hits"))
+            and not bool(primary_candidates),
         }
         if "debug_scan" in scan_stats:
             stage2["debug_scan"] = scan_stats["debug_scan"]
