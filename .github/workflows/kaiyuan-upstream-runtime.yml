@@ -9,6 +9,8 @@ on:
       - "apps/star-omen/**"
       - "packages/kb-contracts/**"
       - "packages/kb-text-core/**"
+      - "corpus/kaiyuan_zhanjing/**"
+      - "scripts/**"
       - ".env.workspace"
       - ".env.workspace.example"
       - ".gitignore"
@@ -19,6 +21,7 @@ on:
       - "codex/kaiyuan-upstream-runtime-v2"
       - "codex/kaiyuan-passage-ingest-v2"
       - "codex/kaiyuan-retrieval-contract-v2"
+      - "codex/kaiyuan-citable-sync-v2"
       - "stable/kaiyuan-v2"
 
 jobs:
