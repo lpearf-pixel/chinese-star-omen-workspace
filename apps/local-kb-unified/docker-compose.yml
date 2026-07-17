@@ -1,0 +1,91 @@
+# Apple Silicon: run Ollama on the host for Metal acceleration.
+# Containers reach it through host.docker.internal:11434.
+
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: local-kb-open-webui
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+      - postgres
+      - kb-search
+    ports:
+      - "${OPENWEBUI_PORT:-3000}:8080"
+    environment:
+      OLLAMA_BASE_URL: http://host.docker.internal:${OLLAMA_PORT:-11434}
+      WEBUI_SECRET_KEY: ${WEBUI_SECRET_KEY}
+    volumes:
+      - openwebui_data:/app/backend/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - kb_net
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: local-kb-qdrant
+    restart: unless-stopped
+    ports:
+      - "${QDRANT_HTTP_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - kb_net
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: local-kb-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kb_net
+
+  kb-search:
+    build:
+      context: ./kb-search
+      dockerfile: Dockerfile
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-}
+    container_name: local-kb-kb-search
+    restart: unless-stopped
+    depends_on:
+      - qdrant
+    ports:
+      - "${KB_SEARCH_API_PORT:-8008}:8008"
+    environment:
+      OLLAMA_HOST: host.docker.internal
+      OLLAMA_PORT: "${OLLAMA_PORT:-11434}"
+      QDRANT_HOST: qdrant
+      QDRANT_HTTP_PORT: "6333"
+      CHAT_MODEL: ${CHAT_MODEL}
+      EMBED_MODEL: ${EMBED_MODEL}
+      KB_SEARCH_API_KEY: ${KB_SEARCH_API_KEY}
+      KB_SEARCH_DEFAULT_COLLECTION: ${KB_SEARCH_DEFAULT_COLLECTION:-local_kb_kaiyuan_v2}
+      KB_QUERY_STELLAR_NORMALIZE: ${KB_QUERY_STELLAR_NORMALIZE:-1}
+      KB_OPENCC_CONFIG: ${KB_OPENCC_CONFIG:-s2t}
+      KB_QUERY_DUAL_SCRIPT: ${KB_QUERY_DUAL_SCRIPT:-0}
+      KB_LITERAL_POOL_FACTOR: ${KB_LITERAL_POOL_FACTOR:-12}
+      KB_LITERAL_POOL_CAP: ${KB_LITERAL_POOL_CAP:-120}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - kb_net
+
+volumes:
+  openwebui_data:
+  qdrant_data:
+  postgres_data:
+
+networks:
+  kb_net:
+    driver: bridge
