@@ -22,6 +22,7 @@ from .passages import (
     source_volume_for_locator,
 )
 from .ranking import dedupe_primary_hits, fallback_score, fallback_sort_key, normalized_anchor_hash
+from .spot_checks import audit_ctext_spot_checks
 
 __all__ = [
     "AnchorContext",
@@ -29,6 +30,7 @@ __all__ = [
     "MatchCluster",
     "MatchSpan",
     "NormalizedText",
+    "audit_ctext_spot_checks",
     "audit_kaiyuan_corpus",
     "audit_page_markers",
     "build_anchor_context",
