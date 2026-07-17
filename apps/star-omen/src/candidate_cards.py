@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import json
 import re
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -15,8 +13,17 @@ except ModuleNotFoundError:  # pragma: no cover
 CONTRACTS = Path(__file__).resolve().parents[3] / "packages" / "kb-contracts" / "python"
 if str(CONTRACTS) not in sys.path:
     sys.path.insert(0, str(CONTRACTS))
-from kb_contracts import load_candidate_manifest, merge_candidate_item, new_candidate_manifest, save_candidate_manifest, sha256_text, stable_candidate_id  # noqa: E402
+from kb_contracts import (  # noqa: E402
+    SyncErrorCode,
+    load_candidate_manifest,
+    merge_candidate_item,
+    new_candidate_manifest,
+    save_candidate_manifest,
+    sha256_text,
+    stable_candidate_id,
+)
 
+from src.candidate_sync import sync_candidate_manifests
 from src.connectors.kb_search_retriever import KBSearchError, KBSearchRetriever
 
 BOOK_TITLES = {"kaiyuan_zhanjing": "唐開元占經"}
@@ -28,9 +35,9 @@ def _aliases(term: str) -> list[str]:
     simp = compact.translate(str.maketrans({"熒": "荧"}))
     vals = [trad, simp, f"{simp[:2]} {simp[2:]}", f"{trad[:2]} {trad[2:]}"]
     out: list[str] = []
-    for v in vals:
-        if v and v not in out:
-            out.append(v)
+    for value in vals:
+        if value and value not in out:
+            out.append(value)
     return out
 
 
@@ -43,13 +50,13 @@ def _source_locator(path: str) -> str:
     normalized = path.replace("\\", "/")
     if "全文合併版" in normalized or "全文合并版" in normalized:
         return "fulltext"
-    m = re.search(r"(KR\w+_\d+)", normalized)
-    return m.group(1) if m else _safe_file_part(Path(normalized).stem)
+    match = re.search(r"(KR\w+_\d+)", normalized)
+    return match.group(1) if match else _safe_file_part(Path(normalized).stem)
 
 
 def _volume(locator: str) -> str:
-    m = re.search(r"_(\d+)$", locator)
-    return f"卷{int(m.group(1))}" if m else "unknown"
+    match = re.search(r"_(\d+)$", locator)
+    return f"卷{int(match.group(1))}" if match else "unknown"
 
 
 def _rel_source(path: str) -> str:
@@ -73,12 +80,7 @@ def _write_card(path: Path, meta: dict[str, Any], body: str) -> None:
 
 
 def _candidate_upstream_meta(retriever: KBSearchRetriever) -> dict[str, Any]:
-    """Read upstream metadata when available without making local extraction depend on it.
-
-    Candidate extraction is a read-only filesystem operation and must remain usable
-    offline.  Transport failures are recorded explicitly rather than converted into
-    a successful-looking ``unknown`` corpus version.
-    """
+    """Read upstream metadata without making local extraction depend on it."""
 
     try:
         metadata = retriever.get_upstream_meta()
@@ -288,31 +290,24 @@ def generate_candidate_cards(
 
 
 def _retrieve_hits(base_url: str, term: str) -> list[dict[str, Any]]:
-    import urllib.request
+    """Authenticated official extract-card lookup retained as a test seam."""
 
-    payload = json.dumps(
-        {
-            "query": term,
-            "top_k": 8,
-            "query_mode": "evidence",
-            "retrieval_stage": "primary_evidence",
-            "card_types": ["fenjuan", "fulltext"],
-            "literal_first": True,
-        }
-    ).encode("utf-8")
-    req = urllib.request.Request(
-        f"{base_url.rstrip('/')}/v1/retrieve",
-        data=payload,
-        method="POST",
-        headers={"Content-Type": "application/json"},
+    retriever = KBSearchRetriever(base_url=base_url)
+    result = retriever.retrieve(
+        term,
+        top_k=20,
+        query_mode="evidence",
+        retrieval_stage="structured_recall",
+        card_types=["extract_card"],
+        literal_first=True,
     )
-    try:
-        with urllib.request.urlopen(req, timeout=10) as resp:  # noqa: S310
-            data = json.loads(resp.read().decode("utf-8"))
-    except Exception:
-        return []
-    hits = data.get("hits") or data.get("results") or []
-    return hits if isinstance(hits, list) else []
+    hits = result.get("hits")
+    if not isinstance(hits, list):
+        raise KBSearchError(
+            "retrieve response field 'hits' must be a list",
+            code=SyncErrorCode.INVALID_RESPONSE,
+        )
+    return [hit for hit in hits if isinstance(hit, dict)]
 
 
 def sync_upstream_status(
@@ -321,96 +316,12 @@ def sync_upstream_status(
     base_url: str,
 ) -> dict[str, Any]:
     retriever = KBSearchRetriever(base_url=base_url)
-    upstream_meta = retriever.get_upstream_meta()
-    now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    updated = {"merged": 0, "needs_review": 0, "pending": 0, "stale": 0}
-    manifests = sorted(
-        candidate_root.glob(
-            f"extract_cards/{book_id}/candidate_manifest.json"
-        )
+    return sync_candidate_manifests(
+        book_id,
+        candidate_root,
+        retriever=retriever,
+        retrieve_hits=lambda item: _retrieve_hits(
+            base_url,
+            str(item.get("term") or item.get("anchor_text") or ""),
+        ),
     )
-    for manifest_path in manifests:
-        manifest = load_candidate_manifest(manifest_path)
-        manifest["current_upstream_corpus_version"] = upstream_meta.get(
-            "corpus_version",
-            upstream_meta.get("meta_status", "unavailable"),
-        )
-        manifest["last_synced_at"] = now
-        for item in manifest.get("items", []):
-            card_path = manifest_path.parent / str(item.get("file"))
-            local_stale = False
-            if card_path.exists() and yaml is not None:
-                text = card_path.read_text(encoding="utf-8")
-                try:
-                    _, fm, _body = text.split("---", 2)
-                    card_meta = yaml.safe_load(fm) or {}
-                    source_value = str(card_meta.get("source_file") or "")
-                    source_candidates = [
-                        Path(source_value),
-                        Path(retriever.settings.kb_sources_root) / source_value,
-                    ]
-                    source_file = next(
-                        (
-                            candidate
-                            for candidate in source_candidates
-                            if candidate.exists()
-                        ),
-                        None,
-                    )
-                    if source_value and source_file is None:
-                        local_stale = True
-                    elif source_file is not None:
-                        source_text = source_file.read_text(
-                            encoding="utf-8",
-                            errors="ignore",
-                        )
-                        anchor_compact = "".join(
-                            str(item.get("anchor_text") or "").split()
-                        )
-                        if anchor_compact and anchor_compact not in "".join(
-                            source_text.split()
-                        ):
-                            local_stale = True
-                except Exception:
-                    pass
-            else:
-                local_stale = True
-            if local_stale:
-                item["sync_status"] = "stale"
-            else:
-                hits = _retrieve_hits(base_url, str(item.get("term") or ""))
-                same_hash = any(
-                    h.get("content_hash") == item.get("content_hash")
-                    or (
-                        isinstance(h.get("metadata"), dict)
-                        and h["metadata"].get("content_hash")
-                        == item.get("content_hash")
-                    )
-                    for h in hits
-                )
-                anchor = str(item.get("anchor_text") or "")
-                strong_anchor = bool(anchor) and any(
-                    anchor
-                    in str(
-                        h.get("snippet")
-                        or h.get("anchor_text")
-                        or h.get("text")
-                        or h.get("content")
-                        or ""
-                    )
-                    for h in hits
-                )
-                if same_hash or strong_anchor:
-                    item["sync_status"] = "merged"
-                elif hits:
-                    item["sync_status"] = "needs_review"
-                else:
-                    item["sync_status"] = "pending"
-            updated[item["sync_status"]] += 1
-        save_candidate_manifest(manifest_path, manifest)
-    return {
-        "book_id": book_id,
-        "upstream_meta": upstream_meta,
-        "manifests": [str(path) for path in manifests],
-        "updated": updated,
-    }
