@@ -18,7 +18,7 @@ Feature work targets short-lived `codex/*` branches and pull requests into `stab
 ## Shared Packages
 
 - `packages/kb-contracts`: candidate/corpus schemas, states, hashes, stable IDs and manifest helpers.
-- `packages/kb-text-core`: immutable Kaiyuan parsing, conservative normalization, raw-offset matching, page/heading anchors, ranking and primary-evidence deduplication.
+- `packages/kb-text-core`: immutable Kaiyuan parsing, conservative normalization, raw-offset matching, page/heading anchors, passage identity, ranking and primary-evidence deduplication.
 
 ## Upstream Runtime
 
@@ -44,13 +44,22 @@ make ingest-dry-run
 make ingest
 ```
 
-Destructive collection recreation is explicit:
+`make ingest` performs passage-level incremental reconciliation:
+
+```text
+unchanged → no embedding
+new/changed → embed + upsert
+stale v2-managed → delete only after all required upserts succeed
+```
+
+Additional modes:
 
 ```bash
+make ingest-full
 make ingest-recreate
 ```
 
-Runtime source provenance is recorded in `apps/local-kb-unified/RUNTIME_BASELINE.json`.
+Destructive recreation is explicit. Runtime source provenance is recorded in `apps/local-kb-unified/RUNTIME_BASELINE.json`.
 
 ## Kaiyuan Corpus Audit and Retrieval
 
@@ -64,7 +73,7 @@ make compare-kaiyuan-volumes
 make inspect-kaiyuan
 ```
 
-The fallback scans the full primary pool before applying limits, preserves original offsets, returns the real excerpt, extracts page markers and nested headings, and ranks `fenjuan` ahead of duplicate `fulltext` evidence.
+The same `kb-text-core` page/heading/offset semantics are used by official Qdrant ingest and filesystem fallback. `fenjuan` evidence is retained ahead of duplicate `fulltext` evidence while duplicate provenance remains traceable.
 
 ## Candidate Workflow
 
@@ -78,7 +87,7 @@ make ingest
 make sync
 ```
 
-Pending candidates are never official evidence and never enter exact primary hits.
+Pending candidates are never official evidence and never enter exact primary hits. Under the upstream `data/generated` tree, only approved/official cards enter the desired ingest corpus.
 
 ## Test Targets
 
@@ -89,11 +98,14 @@ make downstream-test
 make upstream-test
 ```
 
+CI also runs an ephemeral Qdrant reconciliation test for insert, unchanged skip, changed update and stale deletion.
+
 ## Invariants
 
 1. Only upstream performs official ingest.
 2. The downstream app remains read-only with respect to Qdrant.
-3. Incoming candidates are excluded from ingest.
+3. Incoming and pending candidates are excluded from ingest.
 4. Raw corpus text and `&KRxxxx;` entities are never guessed or rewritten.
-5. Secrets, model files and database/vector data are never committed.
-6. Release work targets `stable/kaiyuan-v2`, not `main`.
+5. Only `managed_by=local-kb-unified/v2` points are eligible for incremental stale deletion.
+6. Secrets, model files and database/vector data are never committed.
+7. Release work targets `stable/kaiyuan-v2`, not `main`.

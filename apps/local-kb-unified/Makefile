@@ -3,7 +3,7 @@ ROOT := $(shell pwd)
 INDEX_PY := $(ROOT)/index-jobs/.venv/bin/python
 COLLECTION ?= $${KB_SEARCH_DEFAULT_COLLECTION:-local_kb_kaiyuan_v2}
 
-.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest
+.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest
 
 setup:
 	bash $(ROOT)/index-jobs/setup_env.sh
@@ -38,8 +38,12 @@ health:
 kb-search:
 	docker compose --env-file $(ROOT)/.env -f $(ROOT)/docker-compose.yml up -d --build kb-search
 
-# Non-destructive default: import/upsert into the trial collection without deleting it.
+# Default: skip unchanged managed points, upsert changed/new passages, delete stale managed points after success.
 ingest:
+	cd $(ROOT)/index-jobs && $(INDEX_PY) ingest.py --mode incremental --collection "$(COLLECTION)"
+
+# Re-embed every desired managed point without deleting the collection first.
+ingest-full:
 	cd $(ROOT)/index-jobs && $(INDEX_PY) ingest.py --mode full --collection "$(COLLECTION)"
 
 # Destructive recreation is always explicit.
@@ -47,7 +51,7 @@ ingest-recreate:
 	cd $(ROOT)/index-jobs && $(INDEX_PY) ingest.py --mode full --collection "$(COLLECTION)" --recreate
 
 ingest-dry-run:
-	cd $(ROOT)/index-jobs && $(INDEX_PY) ingest.py --mode full --collection "$(COLLECTION)" --dry-run
+	cd $(ROOT)/index-jobs && $(INDEX_PY) ingest.py --mode incremental --collection "$(COLLECTION)" --dry-run
 
 corpus-manifest:
 	python scripts/corpus_manifest.py --collection "$(COLLECTION)" --out data/corpus_manifest.json
