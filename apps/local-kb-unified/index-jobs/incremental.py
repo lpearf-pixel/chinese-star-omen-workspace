@@ -62,7 +62,9 @@ def stable_point_key(item: dict[str, Any]) -> str:
             )
         )
 
-    path = item.get("path") or item.get("source_path")
+    relative_path = item.get("relative_path")
+    source_root_label = item.get("source_root_label") or "primary"
+    path = relative_path or item.get("path") or item.get("source_path")
     chunk_index = item.get("chunk_index", item.get("paragraph_index", 0))
     content_hash = item.get("content_hash") or item.get("raw_content_hash")
     if not path or content_hash is None:
@@ -70,6 +72,7 @@ def stable_point_key(item: dict[str, Any]) -> str:
     return "\0".join(
         (
             "generic-v2",
+            str(source_root_label),
             str(path),
             str(chunk_index),
             str(content_hash),
