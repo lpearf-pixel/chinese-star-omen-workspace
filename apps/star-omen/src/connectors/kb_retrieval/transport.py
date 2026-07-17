@@ -52,25 +52,33 @@ class TransportMixin:
 
     @staticmethod
     def _wire_payload(json_payload: dict[str, Any] | None) -> dict[str, Any] | None:
-        """Return the canonical HTTP representation without mutating callers.
+        """Return the canonical HTTP representation without mutating callers."""
 
-        `book_id` remains accepted by in-process v1 integrations, but the wire
-        contract emits only `kb_book_id`.  Sending both keys to older generic
-        Qdrant filter builders can turn an alias into two AND-ed conditions and
-        incorrectly produce zero hits.
-        """
         if json_payload is None:
             return None
         payload = dict(json_payload)
         filters = payload.get("filters")
         if isinstance(filters, dict):
             canonical_filters = dict(filters)
-            if "kb_book_id" not in canonical_filters and "book_id" in canonical_filters:
-                canonical_filters["kb_book_id"] = canonical_filters["book_id"]
+            legacy = canonical_filters.get("book_id")
+            current = canonical_filters.get("kb_book_id")
+            if legacy is not None and current is not None and str(legacy) != str(current):
+                raise KBSearchError(
+                    "conflicting book identifiers in filters: book_id and kb_book_id"
+                )
+            if current is None and legacy is not None:
+                canonical_filters["kb_book_id"] = legacy
             canonical_filters.pop("book_id", None)
             payload["filters"] = canonical_filters
-        if "kb_book_id" not in payload and "book_id" in payload:
-            payload["kb_book_id"] = payload["book_id"]
+
+        legacy_top = payload.get("book_id")
+        current_top = payload.get("kb_book_id")
+        if legacy_top is not None and current_top is not None and str(legacy_top) != str(current_top):
+            raise KBSearchError(
+                "conflicting top-level book identifiers: book_id and kb_book_id"
+            )
+        if current_top is None and legacy_top is not None:
+            payload["kb_book_id"] = legacy_top
         payload.pop("book_id", None)
         return payload
 
@@ -104,6 +112,8 @@ class TransportMixin:
             with urllib.request.urlopen(request, timeout=self.timeout) as response:  # noqa: S310
                 raw = response.read().decode("utf-8")
                 return json.loads(raw) if raw else {}
+        except KBSearchError:
+            raise
         except Exception as exc:  # pragma: no cover
             logger.error(
                 "kb-search request failed method=%s url=%s api_key=%s error=%s",
@@ -120,21 +130,6 @@ class TransportMixin:
         return self._request("GET", "/v1/health", use_auth=False)
 
     def get_upstream_meta(self) -> dict[str, Any]:
-        for path in ("/v1/meta", "/v1/health"):
-            try:
-                data = self._request("GET", path, use_auth=False)
-                if data.get("corpus_version") or data.get("ingest_run_id"):
-                    return {
-                        "corpus_version": data.get("corpus_version", "unknown"),
-                        "ingest_run_id": data.get("ingest_run_id", "unknown"),
-                        "source_manifest_hash": data.get("source_manifest_hash", "unknown"),
-                        "collection": data.get("collection", self.default_collection),
-                    }
-            except Exception:
-                continue
-        return {
-            "corpus_version": "unknown",
-            "ingest_run_id": "unknown",
-            "source_manifest_hash": "unknown",
-            "collection": self.default_collection,
-        }
+        """Return the explicit `/v1/meta` status without inventing unknown values."""
+
+        return self._request("GET", "/v1/meta", use_auth=False)
