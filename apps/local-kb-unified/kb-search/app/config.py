@@ -29,6 +29,11 @@ KB_SEARCH_DEFAULT_COLLECTION = os.environ.get(
     "KB_SEARCH_DEFAULT_COLLECTION", "local_kb_kaiyuan_v2"
 )
 
+_manifest_default = _repo_root / "data" / "corpus_manifest.json"
+KB_CORPUS_MANIFEST_PATH = Path(
+    os.environ.get("KB_CORPUS_MANIFEST_PATH", str(_manifest_default))
+).expanduser()
+
 
 def _env_truthy(key: str, default: str = "1") -> bool:
     return os.environ.get(key, default).strip().lower() not in (
