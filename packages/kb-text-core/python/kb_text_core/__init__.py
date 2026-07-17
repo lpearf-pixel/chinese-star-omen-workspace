@@ -1,5 +1,5 @@
 from .anchors import build_anchor_context, extract_anchor, heading_path_at, nearest_page_marker, paragraph_index_at
-from .matching import cluster_match_spans, find_exact_spans, find_loose_window_spans, find_match_spans
+from .matching import cluster_match_spans, find_exact_spans, find_heading_only_spans, find_loose_window_spans, find_match_spans
 from .models import AnchorContext, MatchCluster, MatchSpan, NormalizedText
 from .normalization import (
     compact_with_index_map,
@@ -33,6 +33,7 @@ __all__ = [
     "fallback_score",
     "fallback_sort_key",
     "find_exact_spans",
+    "find_heading_only_spans",
     "find_loose_window_spans",
     "find_match_spans",
     "heading_path_at",

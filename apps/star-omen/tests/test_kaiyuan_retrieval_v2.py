@@ -2,6 +2,7 @@ from pathlib import Path
 
 from src.config.settings import reload_settings
 from src.connectors.kb_search_retriever import KBSearchRetriever
+from src.connectors.primary_file_scanner import source_locator
 
 
 def _configure_sources(monkeypatch, root: Path) -> None:
@@ -69,6 +70,13 @@ def test_explicit_query_mode_controls_reranking(monkeypatch):
     assert result["exact_hits"][0]["chunk_id"] == "e1"
 
 
+def test_fulltext_page_marker_maps_to_canonical_volume_locator():
+    assert source_locator(
+        "/docs/古籍/唐開元占經/唐開元占經-全文合併版.md",
+        "KR3g0018_WYG_031-17a",
+    ) == "KR3g0018_031"
+
+
 def test_filesystem_fallback_returns_match_excerpt_and_fenjuan_first(monkeypatch, tmp_path):
     corpus = tmp_path / "古籍" / "唐開元占經"
     volume = corpus / "分卷" / "KR3g0018_031.md"
@@ -98,9 +106,10 @@ def test_filesystem_fallback_returns_match_excerpt_and_fenjuan_first(monkeypatch
     assert hits[0]["card_type"] == "fenjuan"
     assert hits[0]["match_type"] == "exact_normalized"
     assert hits[0]["page_marker"] == "KR3g0018_WYG_031-17a"
+    assert hits[0]["source_locator"] == "KR3g0018_031"
     assert hits[0]["heading_path"][-1] == "熒惑犯心五"
     assert "熒 惑 守 心" in hits[0]["snippet"]
-    assert stats["matched_headings"] == ["KR3g0018_031"]
+    assert stats["matched_headings"] == ["熒惑犯心五"]
 
 
 def test_filesystem_fallback_scans_all_candidates_before_limit(monkeypatch, tmp_path):

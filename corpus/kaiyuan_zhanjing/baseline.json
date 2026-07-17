@@ -1,0 +1,15 @@
+{
+  "schema_version": "kaiyuan-corpus-baseline/v1",
+  "kb_book_id": "kaiyuan_zhanjing",
+  "book_title": "唐開元占經",
+  "fulltext_sha256": "071ce775343c2f5fb8080c15ca0f5d980330232afe87aa89d64f18b3b3319503",
+  "section_count": 121,
+  "volume_file_count": 121,
+  "page_marker_count": 3435,
+  "kr_entity_count": 29,
+  "replacement_character_count": 0,
+  "volume_text_policy": "equal_after_trimming_outer_whitespace",
+  "raw_text_policy": "immutable",
+  "kr_entity_policy": "preserve_until_mapping_is_supplied",
+  "provenance_status": "pending_source_and_license_metadata"
+}
