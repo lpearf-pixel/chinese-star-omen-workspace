@@ -1,0 +1,34 @@
+{
+  "schema_version": "kaiyuan-corpus-provenance/v1",
+  "kb_book_id": "kaiyuan_zhanjing",
+  "book_title": "唐開元占經",
+  "public_source": {
+    "platform": "Chinese Text Project",
+    "platform_name_zh": "中國哲學書電子化計劃",
+    "title_on_source": "開元占經",
+    "url": "https://ctext.org/wiki.pl?if=gb&res=348345&remap=gb",
+    "urn": "ctp:wb348345",
+    "data_project": "ctext:252606",
+    "version_on_source": "unspecified",
+    "accessed_on": "2026-07-17"
+  },
+  "permission": {
+    "derivative_development": "user_confirmed",
+    "confirmed_on": "2026-07-17",
+    "site_license_independently_verified": false,
+    "note": "The project records the user's authorization for derivative development without representing it as a site-wide license grant."
+  },
+  "editorial_status": {
+    "proofread": false,
+    "human_collation_completed": false,
+    "verification_reference": "ctext_wiki",
+    "raw_text_policy": "immutable",
+    "comparison_policy": "manual_or_targeted_excerpt_comparison",
+    "automatic_bulk_download": false,
+    "note": "Differences found during targeted comparison are reported; raw corpus text is not silently rewritten."
+  },
+  "citation_policy": {
+    "source_link_required": true,
+    "source_name_required": true
+  }
+}
