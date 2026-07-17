@@ -1,0 +1,17 @@
+{
+  "schema_version": "local-kb-runtime-baseline/v1",
+  "source_repository": "lpearf-pixel/Local-KB-Unified",
+  "source_branch": "main",
+  "source_commit": "62cb52f314a8424713a605bda2fb6dab3c5bdbb5",
+  "archive_sha256": "1b8d26df4ebbbdeff3a02c6cbf672cfba0ad086bf629b4bcf29439d7a76023de",
+  "default_collection": "local_kb_kaiyuan_v2",
+  "import_policy": "sanitized_snapshot",
+  "excluded": [
+    ".env",
+    ".DS_Store",
+    "model_files",
+    "qdrant_data",
+    "postgres_data",
+    "caches"
+  ]
+}
