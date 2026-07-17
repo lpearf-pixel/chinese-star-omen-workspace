@@ -164,8 +164,8 @@ jobs:
 
       - name: Install downstream project
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -e apps/star-omen
+          python -m pip install --upgrade pip --quiet
+          python -m pip install -e apps/star-omen --quiet
 
       - name: Shared contracts
         run: make contracts-test
@@ -174,6 +174,23 @@ jobs:
         run: make text-core-test
 
       - name: Downstream regression
+        id: downstream-regression
+        continue-on-error: true
         env:
           KB_SEARCH_API_KEY: ""
-        run: make downstream-test
+        run: |
+          set -o pipefail
+          make downstream-test 2>&1 | tee downstream-test.log
+
+      - name: Upload downstream regression log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: downstream-test-log-${{ github.run_id }}
+          path: downstream-test.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Fail when downstream regression failed
+        if: steps.downstream-regression.outcome == 'failure'
+        run: exit 1
