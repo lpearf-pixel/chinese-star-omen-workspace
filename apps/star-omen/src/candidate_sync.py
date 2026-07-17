@@ -107,10 +107,18 @@ def _hit_content_hash(hit: dict[str, Any]) -> str:
 
 
 def _classify_hits(item: dict[str, Any], hits: list[dict[str, Any]]) -> str:
+    """Classify results from an extract-card-scoped official retrieval call.
+
+    The v2 request explicitly supplies ``card_types=["extract_card"]``.  Older
+    test doubles and pre-v2 responses may omit the echoed ``card_type`` field;
+    those untyped rows are therefore accepted for compatibility.  A row that
+    explicitly declares a different card type remains excluded.
+    """
+
     relevant = [
         hit
         for hit in hits
-        if str(hit.get("card_type") or "") == "extract_card"
+        if str(hit.get("card_type") or "") in {"", "extract_card"}
     ]
     expected_hash = str(item.get("content_hash") or "")
     if expected_hash and any(_hit_content_hash(hit) == expected_hash for hit in relevant):
