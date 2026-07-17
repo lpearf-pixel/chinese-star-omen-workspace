@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from src.connectors.evidence_resolver import resolve_evidence
+from src.connectors.kb_contract import is_citable_evidence
 from src.rule_engine.match_result import RuleMatchResult
 from src.rule_engine.scoring import compute_match_score
 from src.rule_engine.thresholds import load_event_thresholds
@@ -18,7 +19,7 @@ def _target_match(trigger_target: str | None, event: dict[str, Any]) -> bool:
     if not trigger_target:
         return True
     target_asterism = str(event.get("target_asterism") or "")
-    related = [str(x) for x in (event.get("related_asterisms") or [])]
+    related = [str(value) for value in (event.get("related_asterisms") or [])]
     notes = str(event.get("notes") or "")
 
     if trigger_target == "multi_planet":
@@ -42,24 +43,52 @@ def match_event_to_rules(
         trigger_event_type = str(trigger.get("event_type") or "")
         trigger_target = trigger.get("target")
 
-        body_ok = trigger_body == str(event.get("body") or "") or (trigger_body == "other" and str(event.get("body") or "") == "other")
+        body_ok = trigger_body == str(event.get("body") or "") or (
+            trigger_body == "other" and str(event.get("body") or "") == "other"
+        )
         event_type_ok = trigger_event_type == str(event.get("event_type") or "")
-        target_ok = _target_match(str(trigger_target) if trigger_target is not None else None, event)
+        target_ok = _target_match(
+            str(trigger_target) if trigger_target is not None else None,
+            event,
+        )
 
         angular_threshold = event_thresholds.get("angular_distance_threshold_deg")
         angular_value = event.get("angular_distance_deg")
-        angular_ok = True if angular_threshold is None or angular_value is None else float(angular_value) <= float(angular_threshold)
+        angular_ok = (
+            True
+            if angular_threshold is None or angular_value is None
+            else float(angular_value) <= float(angular_threshold)
+        )
 
         min_duration = event_thresholds.get("min_duration_days")
         duration_value = event.get("duration_days")
-        duration_ok = True if min_duration is None or duration_value is None else float(duration_value) >= float(min_duration)
+        duration_ok = (
+            True
+            if min_duration is None or duration_value is None
+            else float(duration_value) >= float(min_duration)
+        )
 
-        visibility_required = bool(event_thresholds.get("visibility_required", False))
-        visibility_flag = ((event.get("visibility") or {}).get("is_visible") if isinstance(event.get("visibility"), dict) else None)
+        visibility_required = bool(
+            event_thresholds.get("visibility_required", False)
+        )
+        visibility_flag = (
+            (event.get("visibility") or {}).get("is_visible")
+            if isinstance(event.get("visibility"), dict)
+            else None
+        )
         visibility_ok = True if not visibility_required else bool(visibility_flag)
 
-        trigger_conditions = [body_ok, event_type_ok, target_ok, angular_ok, duration_ok, visibility_ok]
-        trigger_ratio = sum(1 for x in trigger_conditions if x) / len(trigger_conditions)
+        trigger_conditions = [
+            body_ok,
+            event_type_ok,
+            target_ok,
+            angular_ok,
+            duration_ok,
+            visibility_ok,
+        ]
+        trigger_ratio = sum(1 for value in trigger_conditions if value) / len(
+            trigger_conditions
+        )
         missing_conditions: list[str] = []
         if not body_ok:
             missing_conditions.append("body")
@@ -75,15 +104,37 @@ def match_event_to_rules(
             missing_conditions.append("visibility")
 
         evidence_obj = rule.get("evidence")
-        resolved_evidence = resolve_evidence(evidence_obj, kb_root=kb_root) if isinstance(evidence_obj, dict) else None
-        primary_evidence_found = bool(resolved_evidence and resolved_evidence.get("status") == "citable")
-        used_structured_fallback = bool(resolved_evidence and resolved_evidence.get("status") == "candidate_only")
+        resolved_evidence = (
+            resolve_evidence(evidence_obj, kb_root=kb_root)
+            if isinstance(evidence_obj, dict)
+            else None
+        )
+        evidence_status = (resolved_evidence or {}).get("status", "missing")
+        primary_evidence_found = bool(
+            resolved_evidence and is_citable_evidence(resolved_evidence)
+        )
+        used_structured_fallback = evidence_status == "candidate_only"
 
         if not (body_ok and event_type_ok and target_ok):
             match_status = "not_matched"
-        elif body_ok and event_type_ok and target_ok and angular_ok and duration_ok and visibility_ok and primary_evidence_found:
+        elif (
+            body_ok
+            and event_type_ok
+            and target_ok
+            and angular_ok
+            and duration_ok
+            and visibility_ok
+            and primary_evidence_found
+        ):
             match_status = "matched"
-        elif body_ok and event_type_ok and target_ok and angular_ok and duration_ok and visibility_ok:
+        elif (
+            body_ok
+            and event_type_ok
+            and target_ok
+            and angular_ok
+            and duration_ok
+            and visibility_ok
+        ):
             match_status = "candidate_only"
         else:
             match_status = "partial_match"
@@ -92,6 +143,12 @@ def match_event_to_rules(
             trigger_ratio=trigger_ratio,
             primary_evidence_found=primary_evidence_found,
             used_structured_fallback=used_structured_fallback,
+        )
+        trace = (
+            resolved_evidence.get("trace")
+            if isinstance(resolved_evidence, dict)
+            and isinstance(resolved_evidence.get("trace"), dict)
+            else {}
         )
 
         result = RuleMatchResult(
@@ -110,21 +167,42 @@ def match_event_to_rules(
             severity=rule.get("severity"),
             time_window=rule.get("time_window"),
             evidence_summary={
-                "status": (resolved_evidence or {}).get("status", "missing"),
+                "status": evidence_status,
+                "candidate_reason": (resolved_evidence or {}).get(
+                    "candidate_reason"
+                ),
                 "card_type": (resolved_evidence or {}).get("card_type"),
-                "source_locator": (resolved_evidence or {}).get("source_locator"),
+                "source_locator": (resolved_evidence or {}).get(
+                    "source_locator"
+                ),
+                "page_marker": (resolved_evidence or {}).get("page_marker"),
+                "paragraph_index": (resolved_evidence or {}).get(
+                    "paragraph_index"
+                ),
                 "anchor_text": (resolved_evidence or {}).get("anchor_text"),
+                "validation_version": trace.get("validation_version"),
+                "checks": trace.get("checks", {}),
             },
             primary_evidence_found=primary_evidence_found,
             candidate_only=not primary_evidence_found,
             rule_priority=int(rule.get("rule_priority", 100)),
             conflict_group=rule.get("conflict_group"),
-            resolution_policy=str(rule.get("resolution_policy", "highest_score")),
+            resolution_policy=str(
+                rule.get("resolution_policy", "highest_score")
+            ),
         )
         matches.append(result.to_dict())
 
-    ranked_matches = [m for m in matches if m.get("match_status") != "not_matched"]
-    ranked_matches.sort(key=lambda m: (m.get("rule_priority", 100), -float(m.get("match_score", 0))), reverse=False)
+    ranked_matches = [
+        match for match in matches if match.get("match_status") != "not_matched"
+    ]
+    ranked_matches.sort(
+        key=lambda match: (
+            match.get("rule_priority", 100),
+            -float(match.get("match_score", 0)),
+        ),
+        reverse=False,
+    )
 
     conflict_happened = False
     conflict_reasons: list[str] = []
@@ -137,14 +215,16 @@ def match_event_to_rules(
     for group, rows in groups.items():
         if len(rows) > 1:
             conflict_happened = True
-            conflict_reasons.append(f"conflict_group={group} has {len(rows)} rules")
+            conflict_reasons.append(
+                f"conflict_group={group} has {len(rows)} rules"
+            )
             for row in rows:
                 row["conflicting_conditions"] = conflict_reasons
 
     recommended = ranked_matches[0] if ranked_matches else {}
     return {
         "event_id": event.get("id"),
-        "matched_rule_ids": [m["rule_id"] for m in ranked_matches],
+        "matched_rule_ids": [match["rule_id"] for match in ranked_matches],
         "match_status": recommended.get("match_status", "not_matched"),
         "match_score": recommended.get("match_score", 0.0),
         "trigger_match_reason": recommended.get("trigger_match_reason", {}),
@@ -155,7 +235,10 @@ def match_event_to_rules(
         "severity": recommended.get("severity"),
         "time_window": recommended.get("time_window"),
         "evidence_summary": recommended.get("evidence_summary", {}),
-        "primary_evidence_found": recommended.get("primary_evidence_found", False),
+        "primary_evidence_found": recommended.get(
+            "primary_evidence_found",
+            False,
+        ),
         "candidate_only": recommended.get("candidate_only", True),
         "matches": ranked_matches,
         "conflict_detected": conflict_happened,
