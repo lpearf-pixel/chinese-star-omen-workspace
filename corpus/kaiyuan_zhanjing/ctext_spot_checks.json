@@ -1,0 +1,54 @@
+{
+  "schema_version": "kaiyuan-ctext-spot-checks/v1",
+  "kb_book_id": "kaiyuan_zhanjing",
+  "source": {
+    "platform": "Chinese Text Project",
+    "platform_name_zh": "中國哲學書電子化計劃",
+    "title_on_source": "開元占經",
+    "url": "https://ctext.org/wiki.pl?if=gb&res=348345&remap=gb",
+    "urn": "ctp:wb348345",
+    "data_project": "ctext:252606",
+    "accessed_on": "2026-07-17",
+    "comparison_method": "manual_or_targeted_excerpt_only",
+    "automatic_bulk_download": false,
+    "raw_text_rewrite_allowed": false
+  },
+  "checks": [
+    {
+      "id": "directory-opening",
+      "local_relative_path": "分卷/KR3g0018_000.md",
+      "source_locator": "KR3g0018_000",
+      "page_marker": "KR3g0018_WYG_000-1a",
+      "reference_text": "欽定四庫全書 子部七 唐開元占經目錄 術數類二",
+      "reference_kind": "ctext_wiki_excerpt",
+      "review_status": "targeted_reference_recorded"
+    },
+    {
+      "id": "volume-one-opening",
+      "local_relative_path": "分卷/KR3g0018_001.md",
+      "source_locator": "KR3g0018_001",
+      "page_marker": "KR3g0018_WYG_001-1a",
+      "reference_text": "欽定四庫全書 唐開元占經卷一 唐 瞿曇悉達 撰 天地名體 天體渾宗",
+      "reference_kind": "ctext_wiki_excerpt",
+      "review_status": "targeted_reference_recorded"
+    },
+    {
+      "id": "mars-heart-cross-reference",
+      "local_relative_path": "分卷/KR3g0018_005.md",
+      "source_locator": "KR3g0018_005",
+      "page_marker": "KR3g0018_WYG_005-14a",
+      "reference_text": "其三月彗星如房后百二十日名山崩熒惑守心",
+      "reference_kind": "ctext_wiki_excerpt",
+      "review_status": "targeted_reference_recorded"
+    },
+    {
+      "id": "moon-heart-section",
+      "local_relative_path": "分卷/KR3g0018_013.md",
+      "source_locator": "KR3g0018_013",
+      "page_marker": "KR3g0018_WYG_013-7b",
+      "reference_text": "班固天文志曰月犯心其國有憂若有大喪",
+      "reference_kind": "ctext_wiki_excerpt",
+      "review_status": "targeted_reference_recorded"
+    }
+  ]
+}
