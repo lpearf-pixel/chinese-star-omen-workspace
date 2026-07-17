@@ -6,6 +6,7 @@ on:
       - "stable/kaiyuan-v2"
     paths:
       - "apps/local-kb-unified/**"
+      - "apps/star-omen/**"
       - "packages/kb-contracts/**"
       - "packages/kb-text-core/**"
       - ".env.workspace"
@@ -63,3 +64,31 @@ jobs:
             echo 'machine-local absolute path found' >&2
             exit 1
           fi
+
+  workspace-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/star-omen/pyproject.toml
+
+      - name: Install downstream project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e apps/star-omen
+
+      - name: Shared contracts
+        run: make contracts-test
+
+      - name: Shared text core
+        run: make text-core-test
+
+      - name: Downstream regression
+        env:
+          KB_SEARCH_API_KEY: ""
+        run: make downstream-test
