@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus compare-kaiyuan-volumes
+.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes
 
 status:
 	git status --short
@@ -72,6 +72,12 @@ audit-kaiyuan-corpus:
 	  --volumes-dir "$(UPSTREAM_DIR)/data/sources/古籍/唐開元占經/分卷" \
 	  --out "$(UPSTREAM_DIR)/data/reports/kaiyuan_zhanjing/corpus_audit.json" \
 	  --strict
+
+audit-kaiyuan-baseline:
+	PYTHONPATH=packages/kb-text-core/python python scripts/audit_kaiyuan_baseline.py \
+	  --fulltext "$(UPSTREAM_DIR)/data/sources/古籍/唐開元占經/唐開元占經-全文合併版.md" \
+	  --volumes-dir "$(UPSTREAM_DIR)/data/sources/古籍/唐開元占經/分卷" \
+	  --baseline corpus/kaiyuan_zhanjing/baseline.json
 
 compare-kaiyuan-volumes:
 	PYTHONPATH=packages/kb-text-core/python python scripts/compare_kaiyuan_volumes.py --strict
