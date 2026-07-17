@@ -9,8 +9,9 @@ This app is the upstream source of truth for the Chinese Star Omen workspace. It
 - Existing `local_kb_default` is not deleted or recreated by default.
 - Downstream `apps/star-omen` remains read-only with respect to Qdrant.
 - Candidate cards enter through `incoming/downstream_candidates`, require validation and approval, and are promoted before ingest.
+- Kaiyuan v2 release work is not merged into `main`.
 
-The imported runtime provenance is recorded in `RUNTIME_BASELINE.json`.
+The imported runtime provenance is recorded in `RUNTIME_BASELINE.json`. Corpus source and editorial status are recorded under `corpus/kaiyuan_zhanjing/` at the workspace root.
 
 ## Stack
 
@@ -114,7 +115,7 @@ run_stats: desired/new/changed/unchanged/stale/upserted/deleted/errors/elapsed_m
 
 Failed embedding/upsert runs do not publish a successful manifest and do not delete stale points.
 
-## API
+## Retrieval API v2
 
 The Compose stack exposes the KB Search service at `http://127.0.0.1:8008` by default.
 
@@ -122,15 +123,34 @@ The Compose stack exposes the KB Search service at `http://127.0.0.1:8008` by de
 bash scripts/kb_retrieve_smoke.sh
 ```
 
-Current runtime endpoints:
+Endpoints:
 
 ```text
 GET  /v1/health
+GET  /v1/meta
 POST /v1/retrieve
 POST /v1/rag/query
 ```
 
-The final v2 retrieval-stage contract and `/v1/meta` integration are completed in B3.
+The contract separates:
+
+```text
+query_mode      = evidence | knowledge | support
+retrieval_stage = auto | structured_recall | primary_evidence | support_context
+card_types      = explicit Qdrant pool
+```
+
+Downstream retrieval order is:
+
+```text
+official structured Qdrant
+→ official primary Qdrant
+→ filesystem primary fallback only when official primary is empty
+```
+
+`/v1/health` returns ready only when Ollama, the embedding model, Qdrant, the default collection and a matching valid corpus manifest are all available. `/v1/meta` never disguises missing metadata as `corpus_version=unknown`.
+
+Detailed requests, response provenance fields and error semantics are documented in `docs/agent-search-api.md`.
 
 ## Tests
 
@@ -138,6 +158,17 @@ From the workspace root:
 
 ```bash
 make upstream-test
+make downstream-test
+make text-core-test
+make contracts-test
 ```
 
-CI additionally runs an ephemeral Qdrant integration test covering initial insert, unchanged second reconciliation, changed passage update and stale passage deletion. It also validates Docker Compose and rejects `.env`, model files, database/vector data, `.DS_Store` and machine-specific absolute paths.
+CI validates:
+
+- upstream unit tests and Docker Compose configuration;
+- incremental Qdrant insert/skip/update/delete reconciliation;
+- Qdrant structured/primary card-pool separation;
+- no-hit versus missing-collection error semantics;
+- downstream two-stage retrieval and filesystem fallback order;
+- Python 3.9/3.12 text-core compatibility;
+- absence of secrets, model files, database/vector data and machine-specific paths.

@@ -28,6 +28,18 @@ def _response_json(response) -> dict:
     return json.loads(response.body.decode("utf-8"))
 
 
+def _manifest() -> dict:
+    return {
+        "meta_status": "ok",
+        "schema_version": "corpus-manifest/v1",
+        "corpus_version": "20260717T120000Z",
+        "ingest_run_id": "ingest_20260717T120000Z",
+        "source_manifest_hash": "sha256:abc",
+        "collection": "local_kb_kaiyuan_v2",
+        "created_at": "2026-07-17T12:00:00Z",
+    }
+
+
 def test_api_key_accepts_x_api_key_and_rejects_missing(monkeypatch):
     main = _load_main(monkeypatch)
     asyncio.run(main.require_api_key(authorization=None, x_api_key="unit-test-key"))
@@ -38,36 +50,47 @@ def test_api_key_accepts_x_api_key_and_rejects_missing(monkeypatch):
 
 def test_health_degrades_instead_of_crashing_on_runtime_dependency_errors(monkeypatch):
     main = _load_main(monkeypatch)
-
-    class Response:
-        ok = True
-
-    class BrokenQdrant:
-        def get_collections(self):
-            raise RuntimeError("qdrant unavailable")
-
-    monkeypatch.setattr(main.requests, "get", lambda *args, **kwargs: Response())
-    monkeypatch.setattr(main, "_qdrant_client", lambda: BrokenQdrant())
+    monkeypatch.setattr(main, "load_corpus_meta", _manifest)
+    monkeypatch.setattr(
+        main,
+        "_ollama_readiness",
+        lambda: {
+            "ollama": True,
+            "embedding_model": True,
+            "models": ["nomic-embed-text:latest"],
+        },
+    )
+    monkeypatch.setattr(
+        main,
+        "_qdrant_readiness",
+        lambda collection: {
+            "qdrant": False,
+            "default_collection": False,
+            "collections": [],
+        },
+    )
 
     response = main.health()
+    body = _response_json(response)
     assert response.status_code == 503
-    assert _response_json(response) == {
-        "status": "degraded",
-        "ollama": True,
-        "qdrant": False,
-    }
+    assert body["status"] == "degraded"
+    assert body["ready"] is False
+    assert body["checks"]["ollama"] is True
+    assert body["checks"]["qdrant"] is False
 
 
-def test_unknown_collection_returns_empty_retrieval_result(monkeypatch):
+def test_unknown_collection_returns_structured_not_found(monkeypatch):
     main = _load_main(monkeypatch)
-    monkeypatch.setattr(main.ollama_client, "embed_text", lambda text: [0.1, 0.2])
 
     class MissingCollectionClient:
-        def query_points(self, **kwargs):
-            raise RuntimeError("collection not found")
+        def collection_exists(self, collection):
+            return False
 
     monkeypatch.setattr(main, "_qdrant_client", lambda: MissingCollectionClient())
     request = main.RetrieveRequest(query="荧惑守心", top_k=3)
-    response = main.retrieve(request)
-    assert response.retrieved_count == 0
-    assert response.hits == []
+
+    with pytest.raises(HTTPException) as exc:
+        main.retrieve(request)
+
+    assert exc.value.status_code == 404
+    assert exc.value.detail["error"]["code"] == "COLLECTION_NOT_FOUND"

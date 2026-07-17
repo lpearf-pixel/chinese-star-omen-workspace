@@ -48,15 +48,47 @@ def test_overlay_default_and_enabled(monkeypatch, tmp_path):
     monkeypatch.setenv("KB_ENABLE_CANDIDATE_OVERLAY", "false")
     monkeypatch.setenv("KB_CANDIDATE_OVERLAY_ROOT", str(root))
     reload_settings()
-    monkeypatch.setattr(KBSearchRetriever, "retrieve", lambda self, *args, **kwargs: {"hits": [], "exact_hits": [], "related_hits": [], "query_variants": self._query_variants(args[0]), "query_mode": "evidence"})
-    off = KBSearchRetriever().two_stage_retrieve("荧惑守心", filters={"book_id": "kaiyuan_zhanjing"})
-    assert all(h.get("source_namespace") != "downstream_generated" for h in off["stage2"].get("primary_candidates", []))
+    monkeypatch.setattr(
+        KBSearchRetriever,
+        "retrieve",
+        lambda self, *args, **kwargs: {
+            "hits": [],
+            "exact_hits": [],
+            "related_hits": [],
+            "query_variants": self._query_variants(args[0]),
+            "query_mode": "evidence",
+        },
+    )
+    off = KBSearchRetriever().two_stage_retrieve(
+        "荧惑守心",
+        filters={"book_id": "kaiyuan_zhanjing"},
+    )
+    assert off["stage2"].get("candidate_overlay_hits", []) == []
+    assert all(
+        hit.get("source_namespace") != "downstream_generated"
+        for hit in off["stage2"].get("primary_candidates", [])
+    )
+
     monkeypatch.setenv("KB_ENABLE_CANDIDATE_OVERLAY", "true")
     reload_settings()
-    on = KBSearchRetriever().two_stage_retrieve("荧惑守心", filters={"book_id": "kaiyuan_zhanjing"})
-    candidates = on["stage2"].get("primary_candidates", [])
-    assert any(h.get("source_namespace") == "downstream_generated" for h in candidates)
-    assert all(h.get("evidence_level") != "candidate" for h in on["stage2"].get("exact_hits", []))
+    on = KBSearchRetriever().two_stage_retrieve(
+        "荧惑守心",
+        filters={"book_id": "kaiyuan_zhanjing"},
+    )
+    overlay = on["stage2"].get("candidate_overlay_hits", [])
+    assert any(
+        hit.get("source_namespace") == "downstream_generated"
+        for hit in overlay
+    )
+    assert all(hit.get("status") == "candidate_only" for hit in overlay)
+    assert all(
+        hit.get("source_namespace") != "downstream_generated"
+        for hit in on["stage2"].get("primary_candidates", [])
+    )
+    assert all(
+        hit.get("evidence_level") != "candidate"
+        for hit in on["stage2"].get("exact_hits", [])
+    )
     monkeypatch.setenv("KB_ENABLE_CANDIDATE_OVERLAY", "false")
     reload_settings()
 
@@ -71,26 +103,61 @@ def test_sync_status_marks_merged_needs_review_and_stale(monkeypatch, tmp_path):
     out_dir = root / "extract_cards" / "kaiyuan_zhanjing"
     generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
     import src.candidate_cards as cc
+
     manifest_path = out_dir / "candidate_manifest.json"
     import json
+
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     item = manifest["items"][0]
-    monkeypatch.setattr(cc.KBSearchRetriever, "get_upstream_meta", lambda self: {"corpus_version": "v", "ingest_run_id": "run", "source_manifest_hash": "sha256:" + "b"*64})
-    monkeypatch.setattr(cc, "_retrieve_hits", lambda base_url, term: [{"content_hash": item["content_hash"]}])
-    out = cc.sync_upstream_status("kaiyuan_zhanjing", root, "http://upstream")
+    monkeypatch.setattr(
+        cc.KBSearchRetriever,
+        "get_upstream_meta",
+        lambda self: {
+            "corpus_version": "v",
+            "ingest_run_id": "run",
+            "source_manifest_hash": "sha256:" + "b" * 64,
+        },
+    )
+    monkeypatch.setattr(
+        cc,
+        "_retrieve_hits",
+        lambda base_url, term: [{"content_hash": item["content_hash"]}],
+    )
+    out = cc.sync_upstream_status(
+        "kaiyuan_zhanjing",
+        root,
+        "http://upstream",
+    )
     assert out["updated"]["merged"] == 1
-    monkeypatch.setattr(cc, "_retrieve_hits", lambda base_url, term: [{"content_hash": "sha256:" + "c"*64, "snippet": "other"}])
-    out = cc.sync_upstream_status("kaiyuan_zhanjing", root, "http://upstream")
+    monkeypatch.setattr(
+        cc,
+        "_retrieve_hits",
+        lambda base_url, term: [
+            {"content_hash": "sha256:" + "c" * 64, "snippet": "other"}
+        ],
+    )
+    out = cc.sync_upstream_status(
+        "kaiyuan_zhanjing",
+        root,
+        "http://upstream",
+    )
     assert out["updated"]["needs_review"] == 1
     source.write_text("卷三十一\n\n不含原锚点。\n", encoding="utf-8")
-    out = cc.sync_upstream_status("kaiyuan_zhanjing", root, "http://upstream")
+    out = cc.sync_upstream_status(
+        "kaiyuan_zhanjing",
+        root,
+        "http://upstream",
+    )
     assert out["updated"]["stale"] == 1
 
 
 def test_generate_candidate_from_direct_kaiyuanzhanjin_repo_layout(monkeypatch, tmp_path):
     source = tmp_path / "kaiyuanzhanjin"
     (source / "分卷").mkdir(parents=True)
-    (source / "分卷" / "KR3g0018_031.md").write_text("卷三十一\n\n熒惑守心，天下兵起。\n", encoding="utf-8")
+    (source / "分卷" / "KR3g0018_031.md").write_text(
+        "卷三十一\n\n熒惑守心，天下兵起。\n",
+        encoding="utf-8",
+    )
     monkeypatch.chdir(Path(__file__).resolve().parents[1])
     monkeypatch.setenv("KB_SOURCES_ROOT", str(source))
     monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
@@ -103,14 +170,19 @@ def test_generate_candidate_from_direct_kaiyuanzhanjin_repo_layout(monkeypatch, 
     card = next(out_dir.glob("*.md"))
     fm = yaml.safe_load(card.read_text(encoding="utf-8").split("---", 2)[1])
     assert fm["source_locator"] == "KR3g0018_031"
-    assert fm["source_file"].endswith("kaiyuanzhanjin/分卷/KR3g0018_031.md")
+    assert fm["source_file"].endswith(
+        "kaiyuanzhanjin/分卷/KR3g0018_031.md"
+    )
     assert fm["kb_book_id"] == "kaiyuan_zhanjing"
 
 
 def test_generate_candidate_fulltext_filename_is_ascii_safe(monkeypatch, tmp_path):
     source = tmp_path / "古籍" / "唐開元占經"
     source.mkdir(parents=True)
-    (source / "唐開元占經-全文合併版.md").write_text("熒惑守心，天下兵起。\n", encoding="utf-8")
+    (source / "唐開元占經-全文合併版.md").write_text(
+        "熒惑守心，天下兵起。\n",
+        encoding="utf-8",
+    )
     monkeypatch.chdir(Path(__file__).resolve().parents[1])
     monkeypatch.setenv("KB_SOURCES_ROOT", str(tmp_path))
     monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
@@ -124,7 +196,9 @@ def test_generate_candidate_fulltext_filename_is_ascii_safe(monkeypatch, tmp_pat
     assert generated.name == "yinghuo_shouxin.fulltext.no-page.0.md"
     fm = yaml.safe_load(generated.read_text(encoding="utf-8").split("---", 2)[1])
     assert fm["source_locator"] == "fulltext"
-    assert fm["source_file"].endswith("唐開元占經/唐開元占經-全文合併版.md")
+    assert fm["source_file"].endswith(
+        "唐開元占經/唐開元占經-全文合併版.md"
+    )
 
 
 def test_generate_candidate_match_offset_uses_original_text_index(monkeypatch, tmp_path):
@@ -164,7 +238,12 @@ def test_generate_candidate_clusters_exact_matches_by_page(monkeypatch, tmp_path
     result = generate_candidate_cards("荧惑守心", "kaiyuan_zhanjing", out_dir)
 
     assert len(result["generated"]) == 2
-    cards = [yaml.safe_load(Path(path).read_text(encoding="utf-8").split("---", 2)[1]) for path in result["generated"]]
+    cards = [
+        yaml.safe_load(
+            Path(path).read_text(encoding="utf-8").split("---", 2)[1]
+        )
+        for path in result["generated"]
+    ]
     assert [card["page_marker"] for card in cards] == [
         "KR3g0018_WYG_031-17a",
         "KR3g0018_WYG_031-17b",

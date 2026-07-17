@@ -7,6 +7,16 @@
 - 原文展示永远使用 raw text；简繁和 Unicode 空白规范化只用于检索。
 - `&KRxxxx;` 字形实体保持原样，未提供映射表前不猜测替换。
 
+## 来源、授权与校勘状态
+
+- 公开比对来源：中国哲学书电子化计划（Chinese Text Project）《开元占经》Wiki：`https://ctext.org/wiki.pl?if=gb&res=348345&remap=gb`。
+- CText 标识：`ctp:wb348345`；数据项目：`ctext:252606`。
+- 二次开发许可依据记录为用户确认；不把该确认表述成 CText 全站许可。
+- 当前语料未经人工校订，也未完成逐卷校勘。
+- CText 仅用于人工或定点片段比对；不使用自动化工具批量下载站点页面。
+- 比对发现的差异进入审计报告，不静默改写不可变 raw corpus。
+- 结构化记录见 `corpus/kaiyuan_zhanjing/provenance.json`。
+
 ## 当前基线审计
 
 - 全文 SHA-256：`071ce775343c2f5fb8080c15ca0f5d980330232afe87aa89d64f18b3b3319503`

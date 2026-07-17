@@ -47,7 +47,17 @@ class RetrievalCoreMixin:
     @staticmethod
     def _query_mode(query: str) -> str:
         value = query.strip()
-        support_markers = {"如何", "怎么", "為何", "为何", "解释", "背景", "來源", "来源", "依据"}
+        support_markers = {
+            "如何",
+            "怎么",
+            "為何",
+            "为何",
+            "解释",
+            "背景",
+            "來源",
+            "来源",
+            "依据",
+        }
         if any(marker in value for marker in support_markers):
             return "support"
         phrase_markers = {"守", "犯", "合", "聚", "逆", "留", "蚀", "蝕", "入"}
@@ -67,7 +77,11 @@ class RetrievalCoreMixin:
     def _normalize_hits(raw_hits: list[dict[str, Any]]) -> list[dict[str, Any]]:
         inferred_hits: list[dict[str, Any]] = []
         for hit in raw_hits:
-            upstream_meta = hit.get("metadata") if isinstance(hit.get("metadata"), dict) else {}
+            upstream_meta = (
+                hit.get("metadata")
+                if isinstance(hit.get("metadata"), dict)
+                else {}
+            )
             inferred = infer_metadata_from_path(hit.get("path"))
             path = str(hit.get("path") or "")
             title = str(hit.get("title") or "")
@@ -76,11 +90,13 @@ class RetrievalCoreMixin:
                 or upstream_meta.get("heading_path")
                 or ([title] if title else [])
             )
+            if not isinstance(heading_path, list):
+                heading_path = [str(heading_path)]
             volume = (
-                hit.get("volume")
-                or hit.get("source_volume")
-                or upstream_meta.get("volume")
+                hit.get("source_volume")
+                or hit.get("volume")
                 or upstream_meta.get("source_volume")
+                or upstream_meta.get("volume")
             )
             if not volume and "卷" in title:
                 volume = title
@@ -89,7 +105,10 @@ class RetrievalCoreMixin:
                 or upstream_meta.get("section")
                 or (heading_path[-1] if heading_path else title or None)
             )
-            source_locator = hit.get("source_locator") or upstream_meta.get("source_locator")
+            source_locator = (
+                hit.get("source_locator")
+                or upstream_meta.get("source_locator")
+            )
             if not source_locator:
                 source_locator = (
                     f"{volume}/{section}"
@@ -128,10 +147,10 @@ class RetrievalCoreMixin:
                         or inferred.get("evidence_level")
                     ),
                     "volume": volume,
-                    "source_volume": hit.get("source_volume") or upstream_meta.get("source_volume") or volume,
+                    "source_volume": volume,
                     "section": section,
                     "source_locator": source_locator,
-                    "heading_path": heading_path if isinstance(heading_path, list) else [str(heading_path)],
+                    "heading_path": heading_path,
                     "anchor_text": anchor_text,
                     "path": path,
                 }
@@ -176,7 +195,11 @@ class RetrievalCoreMixin:
                 for keyword in ["荧惑", "熒惑", "守", "心", "月", "犯", "五星", "聚"]
                 if keyword in query_value
             ]
-            score += sum(1 for keyword in keywords if keyword in snippet or keyword in title) * 15
+            score += sum(
+                1
+                for keyword in keywords
+                if keyword in snippet or keyword in title
+            ) * 15
             if query_value and query_value not in snippet and query_value not in title:
                 score -= 10
         return score
@@ -187,9 +210,17 @@ class RetrievalCoreMixin:
         query: str,
         inferred_hits: list[dict[str, Any]],
         mode: str | None = None,
-    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], str]:
+    ) -> tuple[
+        list[dict[str, Any]],
+        list[dict[str, Any]],
+        list[dict[str, Any]],
+        str,
+    ]:
         mode = mode or cls._query_mode(query)
-        ranked = [{**hit, "_rank": cls._rank_hit(query, hit, mode)} for hit in inferred_hits]
+        ranked = [
+            {**hit, "_rank": cls._rank_hit(query, hit, mode)}
+            for hit in inferred_hits
+        ]
         ranked.sort(key=lambda item: item.get("_rank", 0), reverse=True)
         if mode == "knowledge":
             exact_hits = [
@@ -203,8 +234,13 @@ class RetrievalCoreMixin:
             exact_hits = [
                 hit
                 for hit in ranked
-                if normalized_query in normalize_search_text(str(hit.get("snippet") or ""))
-                or normalized_query in normalize_search_text(str(hit.get("title") or ""))
+                if normalized_query
+                and (
+                    normalized_query
+                    in normalize_search_text(str(hit.get("snippet") or ""))
+                    or normalized_query
+                    in normalize_search_text(str(hit.get("title") or ""))
+                )
             ]
         related_hits = [hit for hit in ranked if hit not in exact_hits]
         ordered = exact_hits[:3] + related_hits[:3] if exact_hits else ranked[:6]
@@ -220,21 +256,34 @@ class RetrievalCoreMixin:
     ) -> list[dict[str, Any]]:
         out = inferred_hits
         if book_id:
-            out = [hit for hit in out if (hit.get("kb_book_id") or hit.get("book_id")) == book_id]
+            out = [
+                hit
+                for hit in out
+                if (hit.get("kb_book_id") or hit.get("book_id")) == book_id
+            ]
         if card_types:
             allowed = set(card_types)
             out = [hit for hit in out if hit.get("card_type") in allowed]
         if evidence_level:
-            out = [hit for hit in out if hit.get("evidence_level") == evidence_level]
+            out = [
+                hit for hit in out if hit.get("evidence_level") == evidence_level
+            ]
         return out
 
     @staticmethod
-    def _canonicalize_filters(filters: dict[str, Any] | None) -> dict[str, Any] | None:
+    def _canonicalize_filters(
+        filters: dict[str, Any] | None,
+    ) -> dict[str, Any] | None:
         if not filters:
             return None
         canonical = dict(filters)
-        if "book_id" in canonical and "kb_book_id" not in canonical:
-            canonical["kb_book_id"] = canonical.pop("book_id")
+        legacy = canonical.get("book_id")
+        current = canonical.get("kb_book_id")
+        if legacy is not None and current is not None and str(legacy) != str(current):
+            raise ValueError("conflicting book identifiers: book_id and kb_book_id")
+        if current is None and legacy is not None:
+            canonical["kb_book_id"] = legacy
+        canonical.pop("book_id", None)
         return canonical
 
     def _scan_primary_files(
@@ -263,10 +312,13 @@ class RetrievalCoreMixin:
         collection: str | None = None,
         filters: dict[str, Any] | None = None,
         query_mode: str | None = None,
+        retrieval_stage: str | None = None,
+        card_types: list[str] | None = None,
         literal_first: bool | None = None,
         literal_pool_factor: int | None = None,
     ) -> dict[str, Any]:
         effective_query_mode = query_mode or self._query_mode(query)
+        effective_stage = retrieval_stage or "auto"
         effective_literal_first = literal_first
         if effective_literal_first is None:
             effective_literal_first = effective_query_mode == "evidence"
@@ -275,38 +327,50 @@ class RetrievalCoreMixin:
             self.RETRIEVAL_POOL_SPEC["knowledge"],
         )
         effective_top_k = top_k if top_k is not None else self.default_limit
+        canonical_filters = self._canonicalize_filters(filters) or {}
         payload: dict[str, Any] = {
+            "schema_version": "kb-retrieve/v2",
             "query": query,
             "top_k": effective_top_k,
-            "limit": effective_top_k,
             "collection": collection or self.default_collection,
             "query_mode": effective_query_mode,
+            "retrieval_stage": effective_stage,
             "literal_first": effective_literal_first,
-            "retrieval_pool": retrieval_pool,
-            "query_normalize": self.settings.kb_search_query_normalize,
-            "query_s2t": self.settings.kb_search_query_s2t,
-            "query_t2s": self.settings.kb_search_query_t2s,
         }
-        canonical_filters = self._canonicalize_filters(filters)
+        if card_types:
+            payload["card_types"] = list(card_types)
         if canonical_filters:
             payload["filters"] = canonical_filters
         if literal_pool_factor is not None:
             payload["literal_pool_factor"] = literal_pool_factor
 
-        raw_result = self._request("POST", "/v1/retrieve", json_payload=payload, use_auth=True)
+        raw_result = self._request(
+            "POST",
+            "/v1/retrieve",
+            json_payload=payload,
+            use_auth=True,
+        )
         raw_hits = raw_result.get("hits", [])
         inferred_hits = self._normalize_hits(raw_hits)
-        reranked, _, _, mode = self._rerank_hits(query, inferred_hits, mode=effective_query_mode)
+        reranked, _, _, mode = self._rerank_hits(
+            query,
+            inferred_hits,
+            mode=effective_query_mode,
+        )
         filtered_hits = reranked
         normalized_query = self._normalize_query(query)
         variants = self._query_variants(query)
         if mode in {"knowledge", "evidence"}:
             filtered_hits = [
-                hit for hit in filtered_hits if hit.get("card_type") not in self.FACT_EXCLUDED_CARD_TYPES
+                hit
+                for hit in filtered_hits
+                if hit.get("card_type") not in self.FACT_EXCLUDED_CARD_TYPES
             ]
         if mode == "evidence":
             filtered_hits = [
-                hit for hit in filtered_hits if hit.get("card_type") not in self.EVIDENCE_EXCLUDED_CARD_TYPES
+                hit
+                for hit in filtered_hits
+                if hit.get("card_type") not in self.EVIDENCE_EXCLUDED_CARD_TYPES
             ]
 
         if mode == "knowledge":
@@ -317,34 +381,53 @@ class RetrievalCoreMixin:
                 or str(hit.get("title") or "") == query
             ]
         else:
-            normalized_variants = [normalize_search_text(value) for value in variants]
+            normalized_variants = [
+                normalize_search_text(value) for value in variants
+            ]
             exact_hits = [
                 hit
                 for hit in filtered_hits
                 if any(
-                    value and value in normalize_search_text(str(hit.get("snippet") or ""))
+                    value
+                    and value
+                    in normalize_search_text(str(hit.get("snippet") or ""))
                     for value in normalized_variants
                 )
                 or any(
-                    value and value in normalize_search_text(str(hit.get("title") or ""))
+                    value
+                    and value
+                    in normalize_search_text(str(hit.get("title") or ""))
                     for value in normalized_variants
                 )
             ]
         related_hits = [hit for hit in filtered_hits if hit not in exact_hits]
+        effective_card_types = list(
+            raw_result.get("card_types") or card_types or []
+        )
         return {
             **raw_result,
-            "query_mode": mode,
+            "schema_version": raw_result.get(
+                "schema_version",
+                "kb-retrieve/v2",
+            ),
+            "query_mode": raw_result.get("query_mode") or mode,
+            "retrieval_stage": raw_result.get("retrieval_stage") or effective_stage,
+            "card_types": effective_card_types,
+            "collection": raw_result.get("collection")
+            or collection
+            or self.default_collection,
+            "filters": raw_result.get("filters") or canonical_filters,
             "literal_first": effective_literal_first,
             "literal_pool_factor": literal_pool_factor,
-            "payload_contract_version": "v2",
+            "payload_contract_version": "kb-retrieve/v2",
             "retrieval_pool_spec": retrieval_pool,
             "normalized_query": normalized_query,
             "query_variants": variants,
             "raw_hits": raw_hits,
             "inferred_hits": inferred_hits,
-            "exact_hits": exact_hits[:3],
-            "related_hits": related_hits[:3],
-            "hits": filtered_hits[:6],
+            "exact_hits": exact_hits[:effective_top_k],
+            "related_hits": related_hits[:effective_top_k],
+            "hits": filtered_hits[:effective_top_k],
         }
 
     def rag_query(
@@ -354,15 +437,46 @@ class RetrievalCoreMixin:
         book_id: str | None = None,
         limit: int | None = None,
         collection: str | None = None,
+        filters: dict[str, Any] | None = None,
+        query_mode: str | None = None,
+        retrieval_stage: str | None = None,
+        card_types: list[str] | None = None,
+        generate: bool = True,
+        literal_first: bool | None = None,
+        literal_pool_factor: int | None = None,
     ) -> dict[str, Any]:
-        payload: dict[str, Any] = {
-            "query": query,
-            "limit": limit if limit is not None else self.default_limit,
-            "collection": collection or self.default_collection,
-        }
+        canonical_filters = self._canonicalize_filters(filters) or {}
         if book_id:
-            payload["kb_book_id"] = book_id
-        return self._request("POST", "/v1/rag/query", json_payload=payload, use_auth=True)
+            existing = canonical_filters.get("kb_book_id")
+            if existing is not None and str(existing) != str(book_id):
+                raise ValueError("conflicting book identifiers")
+            canonical_filters["kb_book_id"] = book_id
+        effective_mode = query_mode or self._query_mode(query)
+        effective_literal_first = literal_first
+        if effective_literal_first is None:
+            effective_literal_first = effective_mode == "evidence"
+        payload: dict[str, Any] = {
+            "schema_version": "kb-rag/v2",
+            "question": query,
+            "top_k": limit if limit is not None else self.default_limit,
+            "collection": collection or self.default_collection,
+            "query_mode": effective_mode,
+            "retrieval_stage": retrieval_stage or "auto",
+            "generate": generate,
+            "literal_first": effective_literal_first,
+        }
+        if canonical_filters:
+            payload["filters"] = canonical_filters
+        if card_types:
+            payload["card_types"] = list(card_types)
+        if literal_pool_factor is not None:
+            payload["literal_pool_factor"] = literal_pool_factor
+        return self._request(
+            "POST",
+            "/v1/rag/query",
+            json_payload=payload,
+            use_auth=True,
+        )
 
     def search(
         self,
@@ -372,6 +486,8 @@ class RetrievalCoreMixin:
         collection: str | None = None,
         filters: dict[str, Any] | None = None,
         query_mode: str | None = None,
+        retrieval_stage: str | None = None,
+        card_types: list[str] | None = None,
         literal_first: bool | None = None,
         literal_pool_factor: int | None = None,
     ) -> dict[str, Any]:
@@ -381,6 +497,8 @@ class RetrievalCoreMixin:
             collection=collection,
             filters=filters,
             query_mode=query_mode,
+            retrieval_stage=retrieval_stage,
+            card_types=card_types,
             literal_first=literal_first,
             literal_pool_factor=literal_pool_factor,
         )
