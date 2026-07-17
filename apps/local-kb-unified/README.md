@@ -34,30 +34,49 @@ make up
 make health
 ```
 
-## Ingest Safety
+## Passage-Level Ingest
 
-The default target is `local_kb_kaiyuan_v2`.
+The default target is `local_kb_kaiyuan_v2`. Kaiyuan `fenjuan` and `fulltext` are parsed through `packages/kb-text-core` into page/paragraph evidence passages. Split-volume evidence wins over duplicate fulltext passages while retaining duplicate provenance.
 
 ```bash
-# inspect configured sources without embedding
+# calculate desired/current reconciliation without embedding or mutation
 make ingest-dry-run
 
-# non-destructive collection create/upsert
+# default: skip unchanged, upsert new/changed, then delete stale v2-managed points
 make ingest
+
+# re-embed all desired v2-managed points without collection recreation
+make ingest-full
 
 # destructive recreation, only when explicitly intended
 make ingest-recreate
 ```
 
-B1 restores the real runtime but does not claim true hash-based incremental insert/update/delete semantics. That behavior is implemented in the following B2 phase.
+Each v2-managed point carries:
+
+```text
+managed_by=local-kb-unified/v2
+collection_schema=passage-v2
+```
+
+Primary passage UUIDv5 identity is based on:
+
+```text
+kb_book_id + source_locator + page_marker + paragraph_index + normalized_content_hash
+```
+
+Incremental deletion is scoped to the managed marker. Empty desired corpora abort. Stale IDs are deleted only after every required embedding/upsert succeeds.
 
 ## Knowledge Sources
 
-The primary source is configured with:
+Official roots are configured with:
 
 ```env
 KB_SOURCES_ROOT=./data/sources
+KB_GENERATED_ROOT=./data/generated
 ```
+
+Only approved/official cards under `data/generated` are collected. Pending candidates are excluded.
 
 An optional Obsidian source can be enabled locally:
 
@@ -78,6 +97,22 @@ make ingest
 ```
 
 Promotion preserves provenance while changing candidate evidence into approved official evidence. Promotion never triggers ingest automatically.
+
+## Corpus Manifest
+
+A successful reconciliation atomically updates `data/corpus_manifest.json` with:
+
+```text
+corpus_version
+ingest_run_id
+source_manifest_hash
+collection
+managed_by
+collection_schema
+run_stats: desired/new/changed/unchanged/stale/upserted/deleted/errors/elapsed_ms
+```
+
+Failed embedding/upsert runs do not publish a successful manifest and do not delete stale points.
 
 ## API
 
@@ -105,4 +140,4 @@ From the workspace root:
 make upstream-test
 ```
 
-The upstream runtime CI also validates Docker Compose configuration and rejects `.env`, model files, database/vector data, `.DS_Store` and machine-specific absolute paths.
+CI additionally runs an ephemeral Qdrant integration test covering initial insert, unchanged second reconciliation, changed passage update and stale passage deletion. It also validates Docker Compose and rejects `.env`, model files, database/vector data, `.DS_Store` and machine-specific absolute paths.
