@@ -18,6 +18,7 @@ on:
     branches:
       - "codex/kaiyuan-upstream-runtime-v2"
       - "codex/kaiyuan-passage-ingest-v2"
+      - "codex/kaiyuan-retrieval-contract-v2"
       - "stable/kaiyuan-v2"
 
 jobs:
