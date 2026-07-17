@@ -21,6 +21,7 @@ on:
       - "stable/kaiyuan-v2"
       - "codex/kaiyuan-corpus-retrieval-v2"
       - "codex/kaiyuan-corpus-hardening-v2"
+      - "codex/kaiyuan-citable-sync-v2"
 
 jobs:
   text-core-compat:
