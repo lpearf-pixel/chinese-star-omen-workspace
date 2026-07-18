@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pytest
 
+import src.connectors.evidence_resolver as resolver_module
+import src.connectors.primary_passage_cache as cache_module
 from kb_text_core import parse_kaiyuan_passages
 from src.connectors.evidence_resolver import resolve_evidence
 from src.connectors.kb_contract import is_citable_evidence
+from src.connectors.primary_passage_cache import PrimaryPassageCache
 
 
 RAW_PASSAGE = "石氏曰熒惑守心，天下兵起。"
@@ -188,3 +192,40 @@ def test_missing_and_outside_root_sources_fail_closed(tmp_path: Path):
     outside = dict(evidence)
     outside["relative_path"] = "../outside-KR3g0018_031.md"
     assert resolve_evidence(outside, tmp_path)["status"] == "source_outside_root"
+
+
+def test_repeated_resolution_reuses_parse_but_revalidates_changed_bytes(
+    monkeypatch, tmp_path: Path
+):
+    path, evidence = _write_volume(tmp_path)
+    original_stat = path.stat()
+    isolated_cache = PrimaryPassageCache()
+    monkeypatch.setattr(resolver_module, "primary_passage_cache", isolated_cache)
+    real_parser = cache_module.parse_kaiyuan_passages
+    calls = 0
+
+    def counting_parser(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return real_parser(*args, **kwargs)
+
+    monkeypatch.setattr(cache_module, "parse_kaiyuan_passages", counting_parser)
+
+    first = resolve_evidence(evidence, tmp_path)
+    second = resolve_evidence(evidence, tmp_path)
+    assert first["status"] == second["status"] == "citable"
+    assert calls == 1
+
+    changed = path.read_text(encoding="utf-8").replace("天下兵起", "天下兵止")
+    path.write_text(changed, encoding="utf-8")
+    os.utime(path, ns=(original_stat.st_atime_ns, original_stat.st_mtime_ns))
+    assert path.stat().st_size == original_stat.st_size
+    assert path.stat().st_mtime_ns == original_stat.st_mtime_ns
+
+    invalidated = resolve_evidence(evidence, tmp_path)
+    assert invalidated["status"] == "anchor_mismatch"
+    assert invalidated["final_citable"] is False
+    assert calls == 2
+
+    path.unlink()
+    assert resolve_evidence(evidence, tmp_path)["status"] == "missing_source"
