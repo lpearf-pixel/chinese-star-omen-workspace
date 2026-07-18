@@ -2,6 +2,45 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T02 implementation verifying
+
+### TDD evidence
+
+```text
+RED 1: ModuleNotFoundError: src.observability
+GREEN 1: helper contract 16 passed
+
+RED 2: retrieval modules had no monotonic timing seam or observability envelope
+GREEN 2: official/fallback/error two-stage tests 7 passed
+
+RED 3: candidate_sync had no monotonic seam or returned observability
+GREEN 3: candidate sync v1/v2 20 passed
+
+RED 4: nested NaN/Infinity remained in an observability error copy
+GREEN focused: observability/retrieval/transport/sync 47 passed
+```
+
+### Implementation
+
+- Added additive `kb-observability/v1` envelopes with monotonic, finite, non-negative latency.
+- Official retrieval records requested/raw/returned pools, collection, optional upstream latency and corpus version.
+- Two-stage retrieval records ordered structured, official-primary, and filesystem fallback stages plus explicit fallback reason.
+- Official errors still raise `KBSearchError`; safe trace is attached only under `details.observability`, and errors never trigger fallback.
+- Candidate sync reports total latency, collection/corpus provenance, checked/lookups/hits and structured `run_error`; failed manifests remain byte-identical and latency is not persisted into manifests.
+- Nested non-finite values are converted to null only in the copied trace, preserving caller/error inputs.
+
+### Local verification
+
+```text
+focused: 47 passed
+contracts: 6 passed
+text-core: 22 passed
+downstream: 217 passed
+upstream: 49 passed, 3 skipped
+```
+
+B6-T02 is `VERIFYING`, not `DONE`. Draft PR #17 targets only `stable/kaiyuan-v2`. Remaining: publish, exact-head governance and three workflows, independent review, review-fix RED/GREEN if needed, ready and squash merge. No corpus, candidate content, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
+
 ## 2026-07-18 — B6-T02 observability design and plan
 
 - Inventory confirmed upstream retrieve already returns some `latency_ms`, collection, and optional corpus metadata, but downstream two-stage results have no uniform stage trace and candidate sync reports expose errors without timing/count provenance.
