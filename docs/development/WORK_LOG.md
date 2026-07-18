@@ -41,6 +41,17 @@ upstream: 49 passed, 3 skipped
 
 B6-T02 is `VERIFYING`, not `DONE`. Draft PR #17 targets only `stable/kaiyuan-v2`. Remaining: publish, exact-head governance and three workflows, independent review, review-fix RED/GREEN if needed, ready and squash merge. No corpus, candidate content, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
 
+### Independent review fixes
+
+Review reported no Critical, two Important, and one Minor issue. Four new/updated assertions reproduced all failures:
+
+- top-level two-stage collection ignored effective response collection;
+- conflicting stage collection/corpus versions were silently guessed;
+- sync telemetry duplicated upstream message/details containing simulated secret/raw content;
+- injected non-official hit providers increased `official_hit_count`.
+
+Fixes now promote collection/corpus provenance only on official-stage consensus, expose deterministic `provenance_conflicts`, allowlist sync telemetry errors to code/status/retryable, and count official hits only on the official retriever path. The authoritative top-level sync error and atomic manifest behavior remain unchanged. Fresh focused/full gates and a new exact-head CI run are required.
+
 ## 2026-07-18 — B6-T02 observability design and plan
 
 - Inventory confirmed upstream retrieve already returns some `latency_ms`, collection, and optional corpus metadata, but downstream two-stage results have no uniform stage trace and candidate sync reports expose errors without timing/count provenance.
