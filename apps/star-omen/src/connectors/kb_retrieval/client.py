@@ -34,11 +34,15 @@ class KBSearchRetriever(TwoStageMixin, RetrievalCoreMixin, TransportMixin):
         """Run v2 retrieval while preserving legacy *in-process* diagnostics.
 
         Older downstream tests and smoke tooling intercepted ``_request`` before
-        the transport canonicalized the wire body.  For implicit/legacy calls we
+        the transport canonicalized the wire body. For implicit/legacy calls we
         provide those diagnostic aliases on a shallow proxy only. Explicit v2
         calls (stage or card pool supplied) remain canonical, and the transport
         still removes aliases before a real HTTP request.
         """
+
+        limit = kwargs.pop("limit", None)
+        if kwargs.get("top_k") is None and limit is not None:
+            kwargs["top_k"] = limit
 
         explicit_v2 = (
             kwargs.get("retrieval_stage") is not None
@@ -85,6 +89,42 @@ class KBSearchRetriever(TwoStageMixin, RetrievalCoreMixin, TransportMixin):
             "kb-retrieve/v2",
         )
         return result
+
+    def search(
+        self,
+        query: str,
+        *,
+        top_k: int | None = None,
+        limit: int | None = None,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        """Search with a transitional ``limit`` alias for ``top_k``."""
+
+        effective_top_k = top_k if top_k is not None else limit
+        return RetrievalCoreMixin.search(
+            self,
+            query,
+            top_k=effective_top_k,
+            **kwargs,
+        )
+
+    def two_stage_retrieve(
+        self,
+        query: str,
+        *,
+        top_k: int | None = None,
+        limit: int | None = None,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        """Two-stage retrieval with the same ``top_k``/``limit`` contract."""
+
+        effective_top_k = top_k if top_k is not None else limit
+        return TwoStageMixin.two_stage_retrieve(
+            self,
+            query,
+            top_k=effective_top_k,
+            **kwargs,
+        )
 
 
 __all__ = ["KBSearchError", "KBSearchRetriever"]

@@ -113,35 +113,57 @@ def test_sync_status_marks_merged_needs_review_and_stale(monkeypatch, tmp_path):
         cc.KBSearchRetriever,
         "get_upstream_meta",
         lambda self: {
+            "meta_status": "ok",
             "corpus_version": "v",
             "ingest_run_id": "run",
             "source_manifest_hash": "sha256:" + "b" * 64,
+            "collection": "local_kb_kaiyuan_v2",
         },
     )
-    monkeypatch.setattr(
-        cc,
-        "_retrieve_hits",
-        lambda base_url, term: [{"content_hash": item["content_hash"]}],
-    )
+
+    response = {
+        "hits": [
+            {
+                "card_type": "extract_card",
+                "content_hash": item["content_hash"],
+                "source_locator": item["source_locator"],
+            }
+        ]
+    }
+    calls = []
+
+    def fake_retrieve(self, query, **kwargs):
+        calls.append({"query": query, **kwargs})
+        return response
+
+    monkeypatch.setattr(cc.KBSearchRetriever, "retrieve", fake_retrieve)
+
     out = cc.sync_upstream_status(
         "kaiyuan_zhanjing",
         root,
         "http://upstream",
     )
     assert out["updated"]["merged"] == 1
-    monkeypatch.setattr(
-        cc,
-        "_retrieve_hits",
-        lambda base_url, term: [
-            {"content_hash": "sha256:" + "c" * 64, "snippet": "other"}
-        ],
-    )
+    assert calls[-1]["filters"] == {"kb_book_id": "kaiyuan_zhanjing"}
+    assert calls[-1]["retrieval_stage"] == "structured_recall"
+    assert calls[-1]["card_types"] == ["extract_card"]
+
+    response["hits"] = [
+        {
+            "card_type": "extract_card",
+            "content_hash": "sha256:" + "c" * 64,
+            "source_locator": item["source_locator"],
+            "snippet": "other",
+        }
+    ]
     out = cc.sync_upstream_status(
         "kaiyuan_zhanjing",
         root,
         "http://upstream",
     )
     assert out["updated"]["needs_review"] == 1
+
+    call_count = len(calls)
     source.write_text("卷三十一\n\n不含原锚点。\n", encoding="utf-8")
     out = cc.sync_upstream_status(
         "kaiyuan_zhanjing",
@@ -149,6 +171,7 @@ def test_sync_status_marks_merged_needs_review_and_stale(monkeypatch, tmp_path):
         "http://upstream",
     )
     assert out["updated"]["stale"] == 1
+    assert len(calls) == call_count
 
 
 def test_generate_candidate_from_direct_kaiyuanzhanjin_repo_layout(monkeypatch, tmp_path):

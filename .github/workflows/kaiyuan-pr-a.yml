@@ -12,8 +12,11 @@ on:
       - "corpus/kaiyuan_zhanjing/**"
       - "scripts/audit_kaiyuan_baseline.py"
       - "scripts/audit_kaiyuan_corpus.py"
+      - "scripts/audit_kaiyuan_spot_checks.py"
       - "scripts/compare_kaiyuan_volumes.py"
       - "scripts/split_kaiyuan_fulltext.py"
+      - "docs/development/**"
+      - "AGENTS.md"
       - "Makefile"
       - ".github/workflows/kaiyuan-pr-a.yml"
   push:
@@ -21,6 +24,7 @@ on:
       - "stable/kaiyuan-v2"
       - "codex/kaiyuan-corpus-retrieval-v2"
       - "codex/kaiyuan-corpus-hardening-v2"
+      - "codex/kaiyuan-citable-sync-v2"
 
 jobs:
   text-core-compat:
@@ -65,6 +69,13 @@ jobs:
 
       - name: Shared contract tests
         run: make contracts-test
+
+      - name: Targeted CText spot-check audit
+        run: |
+          python scripts/audit_kaiyuan_spot_checks.py \
+            --strict \
+            --out /tmp/kaiyuan-ctext-spot-check-report.json
+          cat /tmp/kaiyuan-ctext-spot-check-report.json
 
       - name: Downstream tests
         env:
