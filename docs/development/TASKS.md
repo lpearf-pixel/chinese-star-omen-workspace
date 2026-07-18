@@ -19,7 +19,7 @@
 ```text
 Stable base: stable/kaiyuan-v2
 Current feature: codex/kaiyuan-rule-semantics-v2
-Current PR: not opened yet
+Current PR: #13
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -123,18 +123,22 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 - **Status:** `IN_PROGRESS`
 - **Goal:** 缺失的角距、持续时间、可见性等必要输入必须成为 `unknown`，不能自动当作通过。
-- **Scope:** `minimal_matcher.py`, `match_result.py`, focused tests, design/plan and user-facing reports.
+- **Scope:** `conditions.py`, `minimal_matcher.py`, `match_result.py`, focused tests, design/plan and user-facing reports.
 - **Acceptance:**
   - 条件状态使用 `pass | fail | unknown`；未配置的可选条件不进入分母；
   - `body`, `event_type`, `target` 等核心身份条件失败时为 `not_matched`；
+  - rule `trigger.body` 与 `trigger.event_type` 必须是非空字符串，配置错误需明确失败；
   - 已提供且不满足的非核心条件为 `partial_match`；
   - 没有已知失败、但至少一个必要条件为 `unknown` 时为 `insufficient_data`；
   - 全部适用条件通过且 primary evidence 可引用时为 `matched`；
   - 全部适用条件通过但只有候选/缺失证据时为 `candidate_only`；
   - `trigger_ratio` 只把 `pass` 计入分子，`unknown` 进入适用条件分母，未配置条件不进入分母；
-  - 输出新增 `condition_states`、`unknown_conditions`，保留 `missing_conditions` 兼容字段；
+  - 输出新增 `condition_states`、`unknown_conditions`、`failed_conditions`、`trigger_ratio`，保留 `missing_conditions` 兼容字段；
   - 数值缺失、空字符串、非有限数和类型错误都归为 `unknown`，不得抛出未分类异常；
-  - visibility required 且字段缺失为 `unknown`，显式 false 为 `fail`；
+  - 非有限数的 condition trace 必须可用严格 JSON 序列化，不得输出裸 `NaN`/`Infinity`；
+  - visibility required 且字段缺失为 `unknown`，显式 false 为 `fail`，`visibility_required=false` 时条件不适用；
+  - rule 未配置 target 时 target 不适用且不进入分母；
+  - 非法 numeric threshold 或非法 `visibility_required` 配置需明确失败，不能变成 event-level unknown；
   - scoring 不得给 unknown 条件通过分；
   - 旧 matched/candidate/not_matched 行为在数据完整时保持兼容；
   - focused tests、downstream regression 和治理门禁通过。
@@ -170,9 +174,8 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 ## 当前执行顺序
 
 ```text
-B5-T01 design/spec
-→ B5-T01 failing tests
-→ B5-T01 implementation and full gates
+B5-T01 hardening tests
+→ B5-T01 final implementation and full gates
 → B5-T02
 → B5-T03
 → B6
