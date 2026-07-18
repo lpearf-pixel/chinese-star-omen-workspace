@@ -139,8 +139,13 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(
     )
     assert any(item.get("card_type") == "fenjuan" for item in desired)
     extract_items = [item for item in desired if item.get("card_type") == "extract_card"]
-    assert len(extract_items) == 1
-    assert extract_items[0]["review_status"] == "approved"
+    # A single reviewed Markdown card may produce multiple heading-level
+    # retrieval records. They must all carry the same official approval and
+    # candidate provenance; the roundtrip invariant is the card/hash, not one
+    # Qdrant point per Markdown file.
+    assert extract_items
+    assert all(item["review_status"] == "approved" for item in extract_items)
+    assert all(item["source_namespace"] == "official" for item in extract_items)
 
     client = QdrantClient(
         url=os.environ.get("QDRANT_URL", "http://127.0.0.1:6333"),
@@ -192,11 +197,12 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(
                 literal_first=True,
             )
         )
-        assert response.retrieved_count == 1
-        assert response.hits[0].card_type == "extract_card"
-        assert response.hits[0].content_hash == json.loads(
+        expected_hash = json.loads(
             (candidate_out / "candidate_manifest.json").read_text(encoding="utf-8")
         )["items"][0]["content_hash"]
+        assert response.retrieved_count >= 1
+        assert all(hit.card_type == "extract_card" for hit in response.hits)
+        assert any(hit.content_hash == expected_hash for hit in response.hits)
 
         class RoundtripRetriever:
             settings = SimpleNamespace(kb_sources_root=str(sources))
