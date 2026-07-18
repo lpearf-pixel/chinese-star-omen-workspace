@@ -19,7 +19,7 @@
 ```text
 Stable base: stable/kaiyuan-v2
 Current feature: codex/kaiyuan-retrieval-observability-v2
-Current PR: pending
+Current PR: #17 (draft)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -182,7 +182,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T02 — 检索与同步可观察性
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Goal:** 记录 stage latency、pool size、fallback reason、sync run error、corpus version 和 collection。
 - **Base evidence:** B6-T01 PR #16 squash merged as `0632c0a87515b4b6d33ea2476630d62e2b3321d7`.
 - **Branch:** `codex/kaiyuan-retrieval-observability-v2`.
