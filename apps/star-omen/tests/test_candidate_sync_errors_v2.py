@@ -300,6 +300,57 @@ def test_meta_failure_preserves_manifest_bytes(tmp_path: Path, code, status_code
     assert manifest_path.read_bytes() == before
 
 
+def test_sync_observability_redacts_upstream_error_details(tmp_path: Path):
+    root, sources, manifest_path = _fixture(tmp_path)
+    before = manifest_path.read_bytes()
+    retriever = FakeRetriever(sources, [])
+    retriever.get_upstream_meta = lambda: (_ for _ in ()).throw(
+        KBSearchError(
+            "upstream included content",
+            code=SyncErrorCode.CONTRACT_ERROR,
+            status_code=422,
+            details={"api_key": "secret", "raw_content": "古籍原文"},
+        )
+    )
+
+    report = sync_candidate_manifests(BOOK_ID, root, retriever=retriever)
+
+    assert report["error"]["details"] == {
+        "api_key": "secret",
+        "raw_content": "古籍原文",
+    }
+    assert report["observability"]["run_error"] == {
+        "code": "contract_error",
+        "status_code": 422,
+        "retryable": False,
+    }
+    assert "secret" not in json.dumps(report["observability"], ensure_ascii=False)
+    assert "古籍原文" not in json.dumps(report["observability"], ensure_ascii=False)
+    assert manifest_path.read_bytes() == before
+
+
+def test_custom_sync_hit_provider_is_not_counted_as_official(tmp_path: Path):
+    root, sources, _manifest_path = _fixture(tmp_path)
+    retriever = FakeRetriever(sources, [])
+
+    report = sync_candidate_manifests(
+        BOOK_ID,
+        root,
+        retriever=retriever,
+        retrieve_hits=lambda _item: [
+            {
+                "card_type": "extract_card",
+                "content_hash": ANCHOR_HASH,
+                "source_locator": LOCATOR,
+            }
+        ],
+    )
+
+    assert report["run_status"] == "ok"
+    assert report["observability"]["lookup_count"] == 1
+    assert report["observability"]["official_hit_count"] == 0
+
+
 def test_item_failure_after_prior_success_does_not_partially_write(tmp_path: Path):
     root, sources, manifest_path = _fixture(tmp_path, item_count=2)
     before = manifest_path.read_bytes()
@@ -327,7 +378,11 @@ def test_item_failure_after_prior_success_does_not_partially_write(tmp_path: Pat
     assert report["error"]["code"] == "timeout"
     assert report["checked"] == 1
     assert report["preserved"] == 2
-    assert report["observability"]["run_error"] == report["error"]
+    assert report["observability"]["run_error"] == {
+        "code": "timeout",
+        "status_code": 408,
+        "retryable": True,
+    }
     assert report["observability"]["lookup_count"] == 2
     assert report["observability"]["official_hit_count"] == 1
     assert report["observability"]["collection"] == "local_kb_kaiyuan_v2"
