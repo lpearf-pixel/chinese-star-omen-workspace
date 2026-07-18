@@ -105,7 +105,10 @@ def _code_from_status(status: int | None, raw_code: str | None) -> SyncErrorCode
     if status in {401, 403}:
         return SyncErrorCode.AUTHENTICATION_FAILED
     if status == 404:
-        return SyncErrorCode.COLLECTION_NOT_FOUND
+        # Only an explicit upstream COLLECTION_NOT_FOUND code proves that the
+        # Qdrant collection is absent. A generic 404 commonly means an old or
+        # missing route and is therefore a non-retryable contract mismatch.
+        return SyncErrorCode.CONTRACT_ERROR
     if status in {408, 504}:
         return SyncErrorCode.TIMEOUT
     if status == 422:
@@ -166,13 +169,15 @@ def classify_transport_exception(exc: Exception) -> KBSearchError:
                     if isinstance(error, dict):
                         raw_code = str(error.get("code") or "") or None
                         message = str(error.get("message") or message)
+                elif detail is not None:
+                    message = str(detail)
             return KBSearchError(
                 message,
                 code=_code_from_status(status, raw_code),
                 status_code=status,
                 details=details,
             )
-        if isinstance(exc, (TimeoutError,)):
+        if isinstance(exc, TimeoutError):
             return KBSearchError(
                 str(exc) or "upstream request timed out",
                 code=SyncErrorCode.TIMEOUT,
@@ -325,7 +330,11 @@ class TransportMixin:
 
             import urllib.request
 
-            data = json.dumps(wire_payload).encode("utf-8") if wire_payload is not None else None
+            data = (
+                json.dumps(wire_payload).encode("utf-8")
+                if wire_payload is not None
+                else None
+            )
             request = urllib.request.Request(
                 url,
                 data=data,
