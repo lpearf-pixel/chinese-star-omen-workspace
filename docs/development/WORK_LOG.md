@@ -2,6 +2,102 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
+
+### Scope
+
+- 把规则条件从隐式布尔值升级为 `pass | fail | unknown`。
+- 缺失角距、持续时间和必需可见性不再自动视为通过。
+- 新增 `insufficient_data`，不改变 B4 citable evidence、candidate、语料或 Qdrant 行为。
+
+### TDD RED evidence
+
+```text
+Initial failing-test head: c85e32d704b5bfb42ac75c52aa77e720da259141
+Kaiyuan Stable Core run: 29624857624
+Observed failure: ModuleNotFoundError: src.rule_engine.conditions
+```
+
+新测试先定义了 condition contract、numeric/visibility unknown 语义、聚合状态和输出字段；在实现模块不存在时 downstream job 明确失败。
+
+第二轮回归发现两个旧 fixture 仍编码“缺失测量不影响完整匹配”的旧语义：
+
+```text
+Intermediate head: f452aee538bc7c2b07c7a82c377c396328c6c43e
+Result: 2 failed, 149 passed
+```
+
+根因与处理：
+
+1. page mismatch 规则事件没有 angle/duration。证据仍保持 `page_mismatch`，但 trigger 正确改为 `insufficient_data`。
+2. `structured_only_demo` 缺少 angle/duration/visibility。旧 `candidate_only/partial` 期望改为 `insufficient_data`，并断言 unknown condition 列表。
+
+没有降低 B4 evidence mismatch 断言。
+
+### Implementation
+
+- 新增 `src/rule_engine/conditions.py`：
+  - `ConditionState`；
+  - `ConditionEvaluation`；
+  - exact、max numeric、min numeric、required visibility evaluator；
+  - missing/empty/bool/nonnumeric/NaN/infinity 的明确 unknown reason；
+  - invalid configured threshold 的 deterministic ValueError；
+  - 非有限 actual 转为严格 JSON-safe 字符串。
+- 扩展 `RuleMatchResult`：
+  - `condition_states`；
+  - `unknown_conditions`；
+  - `failed_conditions`；
+  - `trigger_ratio`。
+- 重构 `minimal_matcher.py`：
+  - 核心 identity fail → `not_matched`；
+  - 已知非核心 fail → `partial_match`；
+  - 无已知 fail 但存在 unknown → `insufficient_data`；
+  - 全部适用条件 pass 后依据 B4 citable evidence 判定 `matched` 或 `candidate_only`；
+  - 未配置 target/visibility/threshold 不进入条件集合与分母；
+  - unknown 进入分母但不进入 pass 分子；
+  - rule trigger body/event_type 必须是非空字符串；
+  - malformed related asterism data 不产生未分类异常。
+
+### Implementation verification
+
+```text
+Verified implementation head: da007704c7b11a0ed90241f57a4e02062f57a191
+
+Development Governance
+run 29625394299
+conclusion: success
+
+Kaiyuan Stable Core
+run 29625394306
+conclusion: success
+
+Kaiyuan Upstream Runtime
+run 29625394314
+conclusion: success
+```
+
+覆盖：
+
+- focused three-valued condition tests；
+- strict JSON-safe condition trace；
+- invalid trigger/threshold/visibility configuration；
+- optional target and `visibility_required=false` omission；
+- full downstream regression；
+- Python 3.9/3.12 text-core；
+- shared contracts；
+- strict CText spot checks；
+- upstream unit and safety gates；
+- Qdrant incremental/retrieval contract；
+- B4 candidate roundtrip regression。
+
+### Review status
+
+- D-011 已记录三值聚合决策。
+- B5-T01 进入 `VERIFYING`。
+- PR #13 仍为 draft。
+- 本日志和任务状态提交后必须重新运行 final-head 门禁，才能标记 ready 或合并。
+- `main`、raw corpus、candidate flow、Qdrant schema 和 `local_kb_default` 未修改。
+
 ## 2026-07-18 — B4-R01 pre-merge integrity review verified
 
 ### Verified head
@@ -29,7 +125,7 @@ conclusion: success
 ### Review findings and fixes
 
 1. **真实 CLI sync 绕过 canonical book filter**
-   - Finding: `candidate_cards.sync_upstream_status()` 为每个 item 调用 legacy helper，新建 retriever 且未传 `kb_book_id`。
+   - Finding: `candidate_cards.sync_upstream_status()` 为每个 item 调用 legacy helper，新建 retriever且未传 `kb_book_id`。
    - Fix: 真实入口只创建一个结构化 `KBSearchRetriever`，直接交给 `sync_candidate_manifests()`；official lookup 统一传 `filters={"kb_book_id": book_id}`、`structured_recall` 和 `extract_card`。
    - Test: legacy CLI sync test 改为拦截 canonical `retrieve()`，验证 filter/stage/card pool。
 
