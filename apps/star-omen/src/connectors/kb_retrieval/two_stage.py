@@ -8,6 +8,20 @@ from src.connectors.candidate_overlay import overlay_hits
 from src.observability import base_observability, elapsed_ms
 
 
+def _consensus_provenance(
+    stages: list[dict[str, Any]],
+    field: str,
+    *,
+    fallback: Any = None,
+) -> tuple[Any, bool]:
+    values = {stage.get(field) for stage in stages if stage.get(field) is not None}
+    if len(values) > 1:
+        return None, True
+    if values:
+        return next(iter(values)), False
+    return fallback, False
+
+
 class TwoStageMixin:
     def two_stage_retrieve(
         self,
@@ -240,16 +254,29 @@ class TwoStageMixin:
         if fallback_observability is not None:
             stages.append(fallback_observability)
 
-        corpus_version = None
-        for stage in reversed(stages):
-            if stage.get("corpus_version") is not None:
-                corpus_version = stage["corpus_version"]
-                break
+        official_stages = [
+            stage for stage in stages if stage.get("source") == "official_qdrant"
+        ]
+        effective_collection, collection_conflict = _consensus_provenance(
+            official_stages,
+            "collection",
+            fallback=collection or self.default_collection,
+        )
+        corpus_version, corpus_conflict = _consensus_provenance(
+            official_stages,
+            "corpus_version",
+        )
+        provenance_conflicts = []
+        if collection_conflict:
+            provenance_conflicts.append("collection")
+        if corpus_conflict:
+            provenance_conflicts.append("corpus_version")
         observability = base_observability(
             "two_stage_retrieve",
             total_latency_ms=elapsed_ms(total_started_ns, monotonic_ns()),
-            collection=collection or self.default_collection,
+            collection=effective_collection,
             corpus_version=corpus_version,
+            provenance_conflicts=provenance_conflicts,
             fallback_reason=fallback_reason,
             stages=stages,
         )
