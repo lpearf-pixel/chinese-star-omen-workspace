@@ -186,6 +186,9 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 - **Goal:** 记录 stage latency、pool size、fallback reason、sync run error、corpus version 和 collection。
 - **Base evidence:** B6-T01 PR #16 squash merged as `0632c0a87515b4b6d33ea2476630d62e2b3321d7`.
 - **Branch:** `codex/kaiyuan-retrieval-observability-v2`.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-retrieval-sync-observability-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-retrieval-sync-observability.md`.
+- **Acceptance:** additive strict-JSON trace; client stage/total latency; requested/raw/returned pools; fallback reason; collection/corpus provenance; structured sync run error; unchanged exception and atomic manifest semantics; full gates and independent review.
 
 ### B6-T03 — Stable release runbook and rollback drill
 
