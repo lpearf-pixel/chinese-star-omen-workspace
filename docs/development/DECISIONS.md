@@ -84,3 +84,13 @@
 - **Reason:** 古代与现代天象研究资料常存在测量缺口。把缺失值当通过会制造虚假的完整匹配；把缺失值当失败又会伪造负面观测。三值状态能同时保持 fail-closed 和研究可解释性。
 - **Compatibility:** 保留 `missing_conditions`、旧状态和旧输出字段，新增 `condition_states`、`unknown_conditions`、`failed_conditions`、`trigger_ratio` 与 `insufficient_data`。
 - **Consequence:** 非有限数必须输出严格 JSON-safe trace；非法阈值和非法 rule trigger 配置明确失败；B5-T02 再单独实现冲突组 resolution policy。
+
+## D-012 — 冲突解析采用确定性分组策略并区分正式与临时推荐
+
+- **Status:** Accepted
+- **Decision:** 同一 `conflict_group` 由单一 `resolution_policy` 解析；支持 `highest_score`, `highest_priority`, `prefer_primary_evidence`, `manual_review`。同组 policy 不一致或未知 policy 明确失败。
+- **Ordering:** 各 policy 先按其主维度排序，再按其余 score/priority/evidence 维度排序，最终统一以升序 `rule_id` 打破完全相同的 tie。
+- **Manual review:** 多候选 `manual_review` group 不产生正式 selected rule；仅暴露 deterministic provisional id。只有没有正式推荐时，top-level 才暴露 `provisional_recommended_rule_id`，并保持 `recommended_rule_id=null`。
+- **Auditability:** suppressed rule 不从 `matches` 删除；每行保存 selected/suppressed/manual 状态，group trace 保存候选、顺序、选择、临时选择和抑制原因。
+- **Reason:** 冲突解析既要可复现，又不能把人工复核候选静默升级为研究结论。独立纯 resolver 使 policy 可单测且不污染条件、证据或检索边界。
+- **Compatibility:** 无冲突和默认 `highest_score` 保留旧的 priority/score 全局推荐边界；保留 `conflict_detected`, `conflict_reasons`, `recommended_rule_id`，新增 provisional/status/trace 字段。
