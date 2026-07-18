@@ -94,7 +94,10 @@ def test_audit_rules_counts_every_validation_status_and_includes_trace(tmp_path:
     }
     by_id = {row["rule_id"]: row for row in body["details"]}
     assert by_id["r-hash"]["status"] == "hash_mismatch"
-    assert by_id["r-hash"]["candidate_reason"] == "content_hash_does_not_match_anchor_or_passage"
+    assert (
+        by_id["r-hash"]["candidate_reason"]
+        == "content_hash_does_not_match_anchor_or_passage"
+    )
     assert by_id["r-hash"]["trace"]["validation_version"] == "citable-evidence/v2"
 
 
@@ -123,9 +126,18 @@ def test_rule_matcher_surfaces_mismatch_and_never_promotes_it_to_primary(tmp_pat
 
     result = match_event_to_rules(event=event, rules=rules, kb_root=tmp_path)
 
-    assert result["match_status"] == "candidate_only"
+    # Evidence mismatch and missing event measurements are independent axes:
+    # the rule remains non-primary, while the trigger cannot be fully evaluated.
+    assert result["match_status"] == "insufficient_data"
+    assert result["unknown_conditions"] == ["angular_distance", "duration"]
     assert result["primary_evidence_found"] is False
     assert result["candidate_only"] is True
     assert result["evidence_summary"]["status"] == "page_mismatch"
-    assert result["evidence_summary"]["candidate_reason"] == "page_marker_not_found_in_source_locator"
-    assert result["evidence_summary"]["validation_version"] == "citable-evidence/v2"
+    assert (
+        result["evidence_summary"]["candidate_reason"]
+        == "page_marker_not_found_in_source_locator"
+    )
+    assert (
+        result["evidence_summary"]["validation_version"]
+        == "citable-evidence/v2"
+    )
