@@ -284,7 +284,7 @@ def match_event_to_rules(
             },
             primary_evidence_found=primary_evidence_found,
             candidate_only=not primary_evidence_found,
-            rule_priority=int(rule.get("rule_priority", 100)),
+            rule_priority=rule.get("rule_priority", 100),
             conflict_group=rule.get("conflict_group"),
             resolution_policy=str(rule.get("resolution_policy", "highest_score")),
             condition_states=condition_states,
@@ -307,9 +307,19 @@ def match_event_to_rules(
 
     resolution = resolve_rule_conflicts(ranked_matches)
     ranked_matches = resolution.matches
+    conflict_reasons_by_group = {
+        item["conflict_group"]: [
+            f"conflict_group={item['conflict_group']} has "
+            f"{len(item['candidate_rule_ids'])} rules; "
+            f"policy={item['resolution_policy']}"
+        ]
+        for item in resolution.conflict_trace
+        if len(item["candidate_rule_ids"]) > 1
+    }
     for row in ranked_matches:
-        if row.get("conflict_group") and resolution.conflict_detected:
-            row["conflicting_conditions"] = list(resolution.conflict_reasons)
+        group = row.get("conflict_group")
+        if group in conflict_reasons_by_group:
+            row["conflicting_conditions"] = conflict_reasons_by_group[group]
     recommended = next(
         (
             row
