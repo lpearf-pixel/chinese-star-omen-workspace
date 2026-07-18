@@ -175,6 +175,9 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 - **Base evidence:** B5-T03 PR #15 squash merged as `6dd0910a2d6b825904ae8e0dcc7d3f1a75557775`.
 - **Branch:** `codex/kaiyuan-primary-passage-cache-v2`.
 - **Goal:** 基于 path/mtime/hash 的只读 passage index，避免每次查询全量解析所有 Markdown。
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-primary-passage-cache-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-primary-passage-cache.md`.
+- **Acceptance:** exact-byte hash invalidation; bounded thread-safe LRU; no stale-on-error result; scanner/resolver/migration reuse; unchanged retrieval/citation semantics; full gates and independent review.
 
 ### B6-T02 — 检索与同步可观察性
 
