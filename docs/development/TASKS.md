@@ -35,7 +35,7 @@ Kaiyuan Stable Core run: 29623960806 — success
 Kaiyuan Upstream Runtime run: 29623960814 — success
 ```
 
-该 head 已包含开发治理、严格 CText 定点比对、下游全回归、上游单元测试、Qdrant 增量、Qdrant 检索契约和 candidate roundtrip。后续文档状态更新会再次触发最终门禁；不得以该历史 head 代替最终 merge head。
+该 head 已包含开发治理、严格 CText 定点比对、下游全回归、上游单元测试、Qdrant 增量、Qdrant 检索契约和 candidate roundtrip。后续 review hardening 与文档状态更新必须再次通过最终门禁；不得以该历史 head 代替最终 merge head。
 
 ## Governance
 
@@ -164,7 +164,22 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - PR 从 draft 转为 ready；
   - squash 只合入 `stable/kaiyuan-v2`；
   - `main` 和 `local_kb_default` 无变化。
-- **Current state:** 运行手册和治理文件已完成；等待本次状态/日志提交后的最终 head 门禁，再更新 PR 并合入稳定分支。
+- **Current state:** 运行手册和治理文件已完成；pre-merge review 新发现的 hardening 项完成后再跑最终 head 门禁。
+
+### B4-R01 — Pre-merge sync/transport integrity review
+
+- **Status:** `IN_PROGRESS`
+- **Origin:** 合并前静态 code review。
+- **Scope:** 真实 CLI sync 路径、candidate card 完整性、official source identity、generic 404 分类。
+- **Acceptance:**
+  - `sync-upstream-status` 复用同一个结构化 `KBSearchRetriever`，并传 `filters={"kb_book_id": book_id}`；
+  - 不再为每个 item 通过 legacy helper 新建无 book filter 的 retriever；
+  - candidate card frontmatter 缺失 `anchor_text` 或 `content_hash` 时必须标为 `stale`；
+  - official hit 只有 hash 与 source locator 同时匹配时才可标为 `merged`；
+  - 同 hash 但 locator 不同或 locator 缺失时为 `needs_review`；
+  - 只有显式 `COLLECTION_NOT_FOUND` 的 404 才分类为 `collection_not_found`，generic 404 分类为非重试 `contract_error`；
+  - 添加失败测试，确认 RED 后实施；
+  - focused、downstream、candidate roundtrip 与全部最终门禁通过。
 
 ## B5 — 规则引擎语义收口
 
@@ -205,7 +220,8 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
 ## 当前执行顺序
 
 ```text
-B4-T09 最终 head 全门禁
+B4-R01
+→ B4-T09 最终 head 全门禁
 → PR #12 ready/review/squash 到 stable/kaiyuan-v2
 → 从稳定分支开始 B5-T01
 → B5-T02
