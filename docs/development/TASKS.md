@@ -193,12 +193,13 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T03 — Stable release runbook and rollback drill
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Goal:** 验证 `local_kb_kaiyuan_v2` 切换、回滚、manifest 对账和旧 collection 保护。
 - **Base evidence:** B6-T02 PR #17 squash merged as `af3f80d8b415f98825a0516fbbce7890e134a90c`.
 - **Branch:** `codex/kaiyuan-stable-release-rollback-v2`.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-stable-release-rollback-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-stable-release-rollback.md`.
+- **PR:** #18, draft, base `stable/kaiyuan-v2`.
 - **Acceptance:** pure non-mutating three-phase verifier; exact release/rollback manifest reconciliation; healthy structured and primary smoke; exact prior-routing restoration; invariant `local_kb_default` fingerprint; explicit failed report/exit semantics; synthetic CI drill; operator runbook; full gates and independent review.
 
 ## 当前执行顺序

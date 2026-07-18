@@ -21,6 +21,39 @@ B6-T03 started from the actual merge SHA on `codex/kaiyuan-stable-release-rollba
 
 Selected a pure three-phase snapshot verifier over a live mutating switch script or documentation-only checklist. The design records exact release and rollback manifest identities, healthy structured/primary smoke results, the prior read route, and an invariant fingerprint for `local_kb_default`. It explicitly permits restoring read routing to a previously active legacy collection while never authorizing writes, ingest, recreation, deletion, or migration. Decision `D-016` and the design spec are the durable source of truth. Next action: write the implementation plan, publish the design checkpoint, and open a draft PR targeting only `stable/kaiyuan-v2`.
 
+### B6-T03 implementation verifying
+
+Draft PR #18 targets only `stable/kaiyuan-v2`; first implementation head is `0d4ba53a02a86eaf85ea6eaddc398b5ee9c08bb5`. Added the pure `kaiyuan-release-drill/v1` verifier, strict CLI exit semantics, synthetic fixture, Make/CI gate, operator runbook, design, plan, and decision D-016. No command connects to Qdrant or changes routing; no corpus, candidate, ingest, Qdrant schema/data, `main`, or `local_kb_default` change.
+
+TDD evidence:
+
+```text
+RED  PYTHONPATH=. pytest -q tests/test_release_drill_v1.py
+     ModuleNotFoundError: release_drill
+GREEN 2 passed, then 14 passed
+
+RED  PYTHONPATH=. pytest -q tests/test_release_drill_v1.py -k cli
+     3 failed because CLI and fixture were absent
+GREEN 17 passed
+
+RED  test_release_target_must_exist_in_observed_collection_snapshot
+     expected failed, got passed
+GREEN 18 passed
+```
+
+Related regression on the same local implementation tree:
+
+```text
+make release-drill   passed, status=passed, all 12 checks true
+make contracts-test  6 passed
+make text-core-test  22 passed
+make downstream-test 220 passed
+make upstream-test   67 passed, 3 skipped
+git diff --check     passed
+```
+
+B6-T03 is `VERIFYING`, not `DONE`. Remaining: publish this evidence update, run governance and all required workflows for the resulting exact head, inspect the complete PR diff and unresolved review threads, perform independent review, resolve findings with RED/GREEN evidence, mark ready, and squash merge only to `stable/kaiyuan-v2`.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence
