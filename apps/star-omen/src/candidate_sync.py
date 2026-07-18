@@ -72,7 +72,7 @@ def _local_candidate_is_stale(
         return True, "missing_candidate_card"
     try:
         metadata = _parse_card_metadata(card_path)
-    except (OSError, ValueError) as exc:
+    except (OSError, UnicodeError, ValueError) as exc:
         return True, f"invalid_candidate_card:{exc}"
 
     item_anchor = str(item.get("anchor_text") or "")
@@ -81,12 +81,19 @@ def _local_candidate_is_stale(
     card_hash = str(metadata.get("content_hash") or "")
     if not item_anchor or not item_hash:
         return True, "missing_manifest_anchor_or_hash"
-    if card_anchor and _normalize_anchor(card_anchor) != _normalize_anchor(item_anchor):
+    if not card_anchor or not card_hash:
+        return True, "missing_candidate_anchor_or_hash"
+    if _normalize_anchor(card_anchor) != _normalize_anchor(item_anchor):
         return True, "candidate_anchor_mismatch"
-    if card_hash and card_hash != item_hash:
+    if card_hash != item_hash:
         return True, "candidate_hash_mismatch"
     if sha256_text(item_anchor) != item_hash:
         return True, "manifest_hash_mismatch"
+
+    item_locator = str(item.get("source_locator") or "")
+    card_locator = str(metadata.get("source_locator") or "")
+    if item_locator and card_locator != item_locator:
+        return True, "candidate_source_locator_mismatch"
 
     source_value = str(metadata.get("source_file") or "")
     source_path = _resolve_source_file(source_value, sources_root)
@@ -94,34 +101,48 @@ def _local_candidate_is_stale(
         return True, "missing_source"
     try:
         source_text = source_path.read_text(encoding="utf-8", errors="strict")
-    except OSError as exc:
+    except (OSError, UnicodeError) as exc:
         return True, f"source_read_error:{exc}"
     if _normalize_anchor(item_anchor) not in _normalize_anchor(source_text):
         return True, "source_anchor_mismatch"
     return False, None
 
 
+def _hit_metadata(hit: dict[str, Any]) -> dict[str, Any]:
+    metadata = hit.get("metadata")
+    return metadata if isinstance(metadata, dict) else {}
+
+
+def _hit_card_type(hit: dict[str, Any]) -> str:
+    metadata = _hit_metadata(hit)
+    return str(hit.get("card_type") or metadata.get("card_type") or "")
+
+
 def _hit_content_hash(hit: dict[str, Any]) -> str:
-    metadata = hit.get("metadata") if isinstance(hit.get("metadata"), dict) else {}
+    metadata = _hit_metadata(hit)
     return str(hit.get("content_hash") or metadata.get("content_hash") or "")
 
 
-def _classify_hits(item: dict[str, Any], hits: list[dict[str, Any]]) -> str:
-    """Classify results from an extract-card-scoped official retrieval call.
+def _hit_source_locator(hit: dict[str, Any]) -> str:
+    metadata = _hit_metadata(hit)
+    return str(hit.get("source_locator") or metadata.get("source_locator") or "")
 
-    The v2 request explicitly supplies ``card_types=["extract_card"]``.  Older
-    test doubles and pre-v2 responses may omit the echoed ``card_type`` field;
-    those untyped rows are therefore accepted for compatibility.  A row that
-    explicitly declares a different card type remains excluded.
-    """
+
+def _classify_hits(item: dict[str, Any], hits: list[dict[str, Any]]) -> str:
+    """Classify official extract-card hits using content and source identity."""
 
     relevant = [
         hit
         for hit in hits
-        if str(hit.get("card_type") or "") in {"", "extract_card"}
+        if _hit_card_type(hit) in {"", "extract_card"}
     ]
     expected_hash = str(item.get("content_hash") or "")
-    if expected_hash and any(_hit_content_hash(hit) == expected_hash for hit in relevant):
+    expected_locator = str(item.get("source_locator") or "")
+    if expected_hash and expected_locator and any(
+        _hit_content_hash(hit) == expected_hash
+        and _hit_source_locator(hit) == expected_locator
+        for hit in relevant
+    ):
         return "merged"
     if relevant:
         return "needs_review"
@@ -148,7 +169,9 @@ def _official_extract_hits(
         raise KBSearchError(
             "retrieve response field 'hits' must be a list",
             code=SyncErrorCode.INVALID_RESPONSE,
-            details={"response_keys": sorted(result) if isinstance(result, dict) else []},
+            details={
+                "response_keys": sorted(result) if isinstance(result, dict) else []
+            },
         )
     return [hit for hit in hits if isinstance(hit, dict)]
 
@@ -163,7 +186,8 @@ def _atomic_write_manifests(planned: list[tuple[Path, dict[str, Any]]]) -> None:
             originals[path] = path.read_bytes() if path.exists() else None
             temporary = path.with_suffix(path.suffix + ".sync.tmp")
             temporary.write_text(
-                json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=False) + "\n",
+                json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=False)
+                + "\n",
                 encoding="utf-8",
             )
             staged.append((temporary, path))
@@ -225,7 +249,10 @@ def sync_candidate_manifests(
 
     try:
         upstream_meta = retriever.get_upstream_meta()
-        if not isinstance(upstream_meta, dict) or upstream_meta.get("meta_status", "ok") != "ok":
+        if (
+            not isinstance(upstream_meta, dict)
+            or upstream_meta.get("meta_status", "ok") != "ok"
+        ):
             raise KBSearchError(
                 "upstream corpus metadata is not ready",
                 code=SyncErrorCode.INVALID_RESPONSE,
@@ -249,7 +276,9 @@ def sync_candidate_manifests(
     try:
         for manifest_path, original in loaded:
             manifest = copy.deepcopy(original)
-            manifest["current_upstream_corpus_version"] = upstream_meta.get("corpus_version")
+            manifest["current_upstream_corpus_version"] = upstream_meta.get(
+                "corpus_version"
+            )
             manifest["last_synced_at"] = timestamp
             for item in manifest.get("items", []):
                 card_path = manifest_path.parent / str(item.get("file") or "")
@@ -260,7 +289,10 @@ def sync_candidate_manifests(
                 )
                 if stale:
                     status = "stale"
-                    item["sync_validation"] = {"local_status": "stale", "reason": reason}
+                    item["sync_validation"] = {
+                        "local_status": "stale",
+                        "reason": reason,
+                    }
                 else:
                     hits = (
                         retrieve_hits(item)
@@ -280,6 +312,7 @@ def sync_candidate_manifests(
                     item["sync_validation"] = {
                         "local_status": "current",
                         "official_hit_count": len(hits),
+                        "source_locator": item.get("source_locator"),
                     }
                 item["sync_status"] = status
                 counts[status] += 1
