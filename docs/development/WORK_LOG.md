@@ -2,6 +2,15 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T01 design and implementation plan
+
+- Hot paths confirmed in `primary_file_scanner`, `evidence_resolver`, and rule-evidence migration: unchanged primary Markdown was decoded and/or parsed repeatedly.
+- Selected a bounded process-local cache of exact-byte source snapshots and immutable `kb-text-core` passages. Each load hashes strict UTF-8 bytes, so preserved mtime/size cannot hide content changes.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-primary-passage-cache-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-primary-passage-cache.md`.
+- Decision: D-014.
+- No implementation or completion claim yet. Next exact action: create draft PR, add `tests/test_primary_passage_cache_v2.py`, run focused pytest, and record the expected RED before implementing the cache module.
+
 ## 2026-07-18 — B5-T03 merged; B6-T01 started
 
 ```text
