@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 
 import pytest
@@ -64,6 +65,18 @@ def test_condition_contract_serializes_stable_states():
         "actual": None,
         "reason": "missing_value",
     }
+
+
+def test_non_finite_condition_trace_is_strict_json_safe():
+    evaluation = evaluate_max_numeric(
+        "angular_distance",
+        math.nan,
+        threshold=1.2,
+        expected_key="max_deg",
+    )
+    payload = evaluation.to_dict()
+    assert payload["actual"] == "nan"
+    json.dumps(payload, allow_nan=False)
 
 
 @pytest.mark.parametrize(
@@ -138,7 +151,14 @@ def test_invalid_configured_numeric_threshold_is_a_configuration_error():
         )
 
 
-def _run(monkeypatch, event, *, thresholds=THRESHOLDS, citable=False):
+def _run(
+    monkeypatch,
+    event,
+    *,
+    thresholds=THRESHOLDS,
+    citable=False,
+    rule=RULE,
+):
     monkeypatch.setattr(
         "src.rule_engine.minimal_matcher.load_event_thresholds",
         lambda: thresholds,
@@ -156,7 +176,7 @@ def _run(monkeypatch, event, *, thresholds=THRESHOLDS, citable=False):
         "src.rule_engine.minimal_matcher.is_citable_evidence",
         lambda evidence: citable,
     )
-    return match_event_to_rules(event=event, rules=[RULE])
+    return match_event_to_rules(event=event, rules=[rule])
 
 
 def _match(result):
@@ -198,6 +218,7 @@ def test_missing_or_invalid_required_measurement_is_unknown(
     assert result["match_status"] == "insufficient_data"
     assert match["condition_states"][condition]["state"] == "unknown"
     assert condition in match["unknown_conditions"]
+    json.dumps(match["condition_states"], allow_nan=False)
 
 
 def test_known_threshold_failure_is_partial_match(monkeypatch):
@@ -268,3 +289,60 @@ def test_unconfigured_optional_conditions_do_not_enter_ratio(monkeypatch):
     assert set(match["condition_states"]) == {"body", "event_type", "target"}
     assert match["trigger_ratio"] == 1.0
     assert result["match_status"] == "candidate_only"
+
+
+def test_rule_without_target_omits_target_condition(monkeypatch):
+    rule = {**RULE, "trigger": {"body": "Mars", "event_type": "guarding"}}
+    event = {"id": "e", "body": "Mars", "event_type": "guarding"}
+    result = _run(
+        monkeypatch,
+        event,
+        thresholds={"guarding": {}},
+        rule=rule,
+    )
+    match = _match(result)
+    assert set(match["condition_states"]) == {"body", "event_type"}
+    assert match["trigger_ratio"] == 1.0
+
+
+def test_visibility_required_false_omits_visibility_condition(monkeypatch):
+    event = {key: value for key, value in COMPLETE_EVENT.items() if key != "visibility"}
+    result = _run(
+        monkeypatch,
+        event,
+        thresholds={"guarding": {"visibility_required": False}},
+    )
+    match = _match(result)
+    assert "visibility" not in match["condition_states"]
+    assert match["trigger_ratio"] == 1.0
+
+
+@pytest.mark.parametrize("field", ["body", "event_type"])
+def test_rule_requires_non_empty_core_trigger_strings(monkeypatch, field):
+    trigger = dict(RULE["trigger"])
+    trigger[field] = "   "
+    rule = {**RULE, "trigger": trigger}
+    with pytest.raises(ValueError, match=rf"trigger\.{field}.*non-empty string"):
+        _run(monkeypatch, COMPLETE_EVENT, rule=rule)
+
+
+def test_matcher_rejects_invalid_numeric_threshold_configuration(monkeypatch):
+    with pytest.raises(ValueError, match="angular_distance.*finite numeric threshold"):
+        _run(
+            monkeypatch,
+            COMPLETE_EVENT,
+            thresholds={
+                "guarding": {
+                    "angular_distance_threshold_deg": "broken",
+                }
+            },
+        )
+
+
+def test_matcher_rejects_invalid_visibility_required_configuration(monkeypatch):
+    with pytest.raises(ValueError, match="visibility_required must be a boolean"):
+        _run(
+            monkeypatch,
+            COMPLETE_EVENT,
+            thresholds={"guarding": {"visibility_required": "yes"}},
+        )
