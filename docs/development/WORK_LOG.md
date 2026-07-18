@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T03 merged; B6-T01 started
+
+```text
+PR: #15
+Final head: dcea5ac9b58cb9621307104b18ea49c4caa2f10b
+Governance: 29640418519 — success
+Stable Core: 29640418556 — success
+Upstream Runtime: 29640418531 — success
+Squash merge: 6dd0910a2d6b825904ae8e0dcc7d3f1a75557775
+```
+
+B5-T03 merged only to `stable/kaiyuan-v2`. Repository audit kept the legacy primary reference ambiguous and created no migrated evidence or raw-corpus change.
+
+B6-T01 started on `codex/kaiyuan-primary-passage-cache-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory filesystem parse hot paths and define path/mtime/hash invalidation semantics.
+
 ## 2026-07-18 — B5-T03 evidence migration implementation verifying
 
 ### TDD and implementation
