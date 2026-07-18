@@ -2,6 +2,50 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T01 implementation verifying
+
+### TDD evidence
+
+```text
+RED 1: test_primary_passage_cache_v2.py collection failed with
+ModuleNotFoundError: src.connectors.primary_passage_cache
+GREEN 1: 9 passed
+
+RED 2: scanner integration failed because primary_file_scanner had no
+primary_passage_cache injection point
+GREEN 2: cache + filesystem retrieval 16 passed
+
+RED 3: resolver and migration integration failed because both modules had no
+primary_passage_cache injection point
+GREEN 3: cache + retrieval + resolver + migration 37 passed
+```
+
+### Implementation
+
+- Added a bounded, thread-safe process-local LRU of immutable strict-UTF-8 source snapshots and `kb-text-core` passages.
+- Each load reads and hashes exact bytes; a content change invalidates parsing even when mtime and byte length are preserved.
+- Missing, invalid UTF-8, or unstable sources never return a stale snapshot. Parser errors propagate.
+- Filesystem fallback, citable resolver, and rule-evidence migration reuse snapshots. Resolver still performs every B4 validation on every call; migration fingerprint keeps its exact raw-byte algorithm.
+- Draft PR #16 targets only `stable/kaiyuan-v2`.
+
+### Local verification
+
+```text
+PATH=/tmp/kaiyuan-b5/bin:$PATH make contracts-test
+6 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make text-core-test
+22 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make downstream-test
+195 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make upstream-test
+49 passed, 3 skipped
+```
+
+B6-T01 is `VERIFYING`, not `DONE`. Remaining: publish implementation, run governance and all three exact-head GitHub workflows, independent review, fix any Critical/Important finding with RED tests, then ready/squash merge. No raw corpus, candidate, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
+
 ## 2026-07-18 — B6-T01 design and implementation plan
 
 - Hot paths confirmed in `primary_file_scanner`, `evidence_resolver`, and rule-evidence migration: unchanged primary Markdown was decoded and/or parsed repeatedly.
