@@ -2,6 +2,99 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T01 merged; B5-T02 started
+
+### B5-T01 merge evidence
+
+```text
+PR: #13
+Final feature head: 5e4ef05a3e4c4bfa02334676ef877f1bf1eccc8d
+Development Governance: 29625533123 — success
+Kaiyuan Stable Core: 29625533107 — success
+Kaiyuan Upstream Runtime: 29625533117 — success
+Squash merge commit: e4e25ba39d43270b1d2ac54ae3057eb741161b38
+Base: stable/kaiyuan-v2
+```
+
+GitHub returned `merged=true` for the expected feature head. PR #13 did not target `main`; its changed-file audit contained only rule engine, related tests, and development/spec/plan documents. It did not change raw corpus, candidate flow, ingest, retrieval, Qdrant schema, or `local_kb_default`.
+
+### B5-T02 start
+
+- Branch: `codex/kaiyuan-conflict-resolution-v2` from the actual merged stable commit above.
+- Task moved to `IN_PROGRESS` before behavior implementation.
+- Selected design: a pure conflict resolver module with deterministic policy keys, explicit manual-review withholding, retained suppressed rows, and group trace.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-conflict-resolution-policy-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-conflict-resolution-policy.md`.
+- Decision: D-012.
+- Remaining risk: no B5-T02 behavior has been implemented or verified yet; TDD RED is the next gate.
+
+## 2026-07-18 — B5-T02 conflict resolution implementation verifying
+
+### TDD evidence
+
+```text
+RED 1:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_conflict_resolution_policy_v2.py
+result: collection error, ModuleNotFoundError: src.rule_engine.conflict_resolution
+
+GREEN 1:
+same command
+result: 14 passed
+
+RED 2:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_rule_matcher.py
+result: 2 failed, 4 passed
+failures: recommendation_status absent; manual_review still returned a formal recommended_rule_id
+
+GREEN 2:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_conflict_resolution_policy_v2.py tests/test_rule_matcher.py
+result: 20 passed
+
+RED 3 (compatibility self-review):
+minimal legacy row without explicit score/priority/evidence raised KeyError: rule_priority
+
+GREEN 3:
+normalized compatible defaults onto the copied row before ordering
+focused result: 21 passed
+```
+
+### Implementation
+
+- Added pure `resolve_rule_conflicts()` with fail-closed row validation.
+- Executed `highest_score`, `highest_priority`, `prefer_primary_evidence`, and `manual_review`.
+- Added stable rule-id tie-breaking, group-policy consistency checks, suppression metadata, formal/provisional recommendation separation, and group trace.
+- Replaced the matcher's report-only conflict block with resolver output while preserving all eligible rows.
+
+### Local regression evidence
+
+```text
+downstream: 174 passed
+contracts: 6 passed
+text-core: 22 passed
+upstream: 49 passed, 3 skipped
+```
+
+The initial upstream collection failure was environmental: the fresh isolated venv lacked declared upstream dependencies (`qdrant_client`, `requests`, `fastapi`). Installing both repository requirements files resolved collection without code or assertion changes.
+
+### Pre-merge review fixes
+
+Independent review found three Important issues. Each received an observed failing regression test before the fix:
+
+1. `minimal_matcher` coerced `rule_priority` with `int()`, allowing bool/string/float configuration to bypass resolver validation. The matcher now passes the raw value and the resolver alone validates it.
+2. The resolver stripped `conflict_group`, incorrectly merging distinct exact strings such as `group-a` and ` group-a`. It now only uses whitespace to recognize an empty group and otherwise preserves the exact string.
+3. The matcher attached all conflict reasons to every grouped row. It now maps each multi-row trace to only that exact group, so singleton groups and their top-level recommendation remain clean.
+
+Review-fix RED: 3 failed. Review-fix GREEN: focused 24 passed; downstream 177 passed; contracts 6 passed; text-core 22 passed; upstream 49 passed, 3 skipped.
+
+### Status
+
+- Task is `VERIFYING`, not `DONE`.
+- Draft PR: #14, base `stable/kaiyuan-v2`.
+- Previous verified implementation head: `fbc114b6ec7841918f8ca041cd6372d429e3fce6`; its three workflows passed before review fixes.
+- Changed-file audit is limited to rule engine, focused tests, conflict documentation, task/decision/work log, design and plan. Review threads: 0.
+- Remaining: publish review fixes and require fresh final-head workflows; after they pass, re-check threads/diff, mark ready and squash merge.
+- No corpus, CText, candidate, ingest, retrieval, Qdrant schema, `main`, or `local_kb_default` change.
+
 ## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
 
 ### Scope

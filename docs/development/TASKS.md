@@ -146,9 +146,18 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T02 — 冲突组 resolution policy
 
-- **Status:** `READY`
+- **Status:** `VERIFYING`
 - **Goal:** 实际执行 `resolution_policy`, `conflict_group`, `rule_priority`，而非只报告冲突存在。
-- **Start condition:** B5-T01 合入稳定分支或作为同一 B5 PR 的下一独立、已验证任务。
+- **Base evidence:** B5-T01 PR #13 squash merged to `stable/kaiyuan-v2` as `e4e25ba39d43270b1d2ac54ae3057eb741161b38`.
+- **Branch:** `codex/kaiyuan-conflict-resolution-v2`.
+- **Acceptance:**
+  - 执行 `highest_score`, `highest_priority`, `prefer_primary_evidence`, `manual_review`；
+  - 每种 policy 使用确定性排序和稳定 `rule_id` tie-breaker；
+  - 同组 policy 不一致、未知 policy、空/重复 rule id 明确失败；
+  - `manual_review` 不产生该组正式 recommendation，但保留 provisional recommendation；
+  - suppressed rule 保留在完整 `matches`，并携带 suppression trace；
+  - 输出 group-level conflict trace 和用户可见 summary；
+  - 无冲突和默认 `highest_score` 的旧行为保持兼容。
 
 ### B5-T03 — 规则证据批量审计与迁移
 

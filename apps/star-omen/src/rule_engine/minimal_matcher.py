@@ -14,6 +14,7 @@ from src.rule_engine.conditions import (
     evaluate_min_numeric,
     evaluate_required_visibility,
 )
+from src.rule_engine.conflict_resolution import resolve_rule_conflicts
 from src.rule_engine.match_result import RuleMatchResult
 from src.rule_engine.scoring import compute_match_score
 from src.rule_engine.thresholds import load_event_thresholds
@@ -283,7 +284,7 @@ def match_event_to_rules(
             },
             primary_evidence_found=primary_evidence_found,
             candidate_only=not primary_evidence_found,
-            rule_priority=int(rule.get("rule_priority", 100)),
+            rule_priority=rule.get("rule_priority", 100),
             conflict_group=rule.get("conflict_group"),
             resolution_policy=str(rule.get("resolution_policy", "highest_score")),
             condition_states=condition_states,
@@ -304,24 +305,29 @@ def match_event_to_rules(
         reverse=False,
     )
 
-    conflict_happened = False
-    conflict_reasons: list[str] = []
-    groups: dict[str, list[dict[str, Any]]] = {}
+    resolution = resolve_rule_conflicts(ranked_matches)
+    ranked_matches = resolution.matches
+    conflict_reasons_by_group = {
+        item["conflict_group"]: [
+            f"conflict_group={item['conflict_group']} has "
+            f"{len(item['candidate_rule_ids'])} rules; "
+            f"policy={item['resolution_policy']}"
+        ]
+        for item in resolution.conflict_trace
+        if len(item["candidate_rule_ids"]) > 1
+    }
     for row in ranked_matches:
-        group = str(row.get("conflict_group") or "")
-        if not group:
-            continue
-        groups.setdefault(group, []).append(row)
-    for group, rows in groups.items():
-        if len(rows) > 1:
-            conflict_happened = True
-            conflict_reasons.append(
-                f"conflict_group={group} has {len(rows)} rules"
-            )
-            for row in rows:
-                row["conflicting_conditions"] = list(conflict_reasons)
-
-    recommended = ranked_matches[0] if ranked_matches else {}
+        group = row.get("conflict_group")
+        if group in conflict_reasons_by_group:
+            row["conflicting_conditions"] = conflict_reasons_by_group[group]
+    recommended = next(
+        (
+            row
+            for row in ranked_matches
+            if row.get("rule_id") == resolution.recommended_rule_id
+        ),
+        {},
+    )
     return {
         "event_id": event.get("id"),
         "matched_rule_ids": [match["rule_id"] for match in ranked_matches],
@@ -345,9 +351,14 @@ def match_event_to_rules(
         ),
         "candidate_only": recommended.get("candidate_only", True),
         "matches": ranked_matches,
-        "conflict_detected": conflict_happened,
-        "conflict_reasons": conflict_reasons,
-        "recommended_rule_id": recommended.get("rule_id"),
+        "conflict_detected": resolution.conflict_detected,
+        "conflict_reasons": resolution.conflict_reasons,
+        "conflict_trace": resolution.conflict_trace,
+        "recommended_rule_id": resolution.recommended_rule_id,
+        "provisional_recommended_rule_id": (
+            resolution.provisional_recommended_rule_id
+        ),
+        "recommendation_status": resolution.recommendation_status,
     }
 
 
