@@ -46,6 +46,21 @@ PATH=/tmp/kaiyuan-b5/bin:$PATH make upstream-test
 
 B6-T01 is `VERIFYING`, not `DONE`. Remaining: publish implementation, run governance and all three exact-head GitHub workflows, independent review, fix any Critical/Important finding with RED tests, then ready/squash merge. No raw corpus, candidate, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
 
+### Independent review fix
+
+Review found one Important issue and no Critical issues: `KaiyuanPassage` is frozen but its `heading_path` was a mutable list, so returning the cached parser object allowed a consumer to poison later resolver/migration loads without changing source bytes.
+
+```text
+RED: cached heading_path was ['唐開元占經', '熒惑占'] rather than an immutable tuple
+GREEN focused: 38 passed
+GREEN downstream: 196 passed
+GREEN contracts: 6 passed
+GREEN text-core: 22 passed
+GREEN upstream: 49 passed, 3 skipped
+```
+
+The cache now defensively converts every cached passage heading path to a tuple. The regression attempts mutation and proves a later unchanged-byte load remains source-derived. Publishing this fix creates a new head and requires all exact-head CI again.
+
 ## 2026-07-18 — B6-T01 design and implementation plan
 
 - Hot paths confirmed in `primary_file_scanner`, `evidence_resolver`, and rule-evidence migration: unchanged primary Markdown was decoded and/or parsed repeatedly.
