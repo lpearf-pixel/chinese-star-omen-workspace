@@ -103,3 +103,12 @@
 - **Write policy:** audit 默认只读；apply 必须写调用方指定的独立输出 JSON，拒绝覆盖输入；全计划验证成功后才原子替换输出。
 - **Provenance:** 每项保留 before/after、match type、passage trace 和状态；原始规则与 raw corpus 均不静默改写。
 - **Reason:** 批量补字段若依赖模糊匹配会把错误卷页固化成正式证据。唯一精确命中加 resolver 二次验证能够复用既有 citation 边界并保持可审计回滚。
+
+## D-014 — Primary passage cache 只缓存原文快照与解析结果
+
+- **Status:** Accepted
+- **Decision:** `apps/star-omen` 使用进程内、容量受限、线程安全的 LRU，按 resolved path、parser identity 和 exact-byte SHA-256 复用严格 UTF-8 source snapshot 与 `kb-text-core` passage；不缓存查询结果或 `citable` 结论。
+- **Invalidation:** 每次加载读取并 hash exact bytes；content hash 或 parser identity 变化即重新解析。`mtime_ns` 与 size 保留为指纹/观测字段，但不得替代 hash，因此即使时间戳与长度被保留也不会返回陈旧 passage。
+- **Failure:** missing、unreadable、invalid UTF-8、unstable read 或 parse error 不得回退到旧 entry，也不得转换为健康空结果。
+- **Reason:** filesystem fallback、resolver 与 migration 重复解析相同 Markdown；共享只读 passage snapshot 可以降低解析成本，同时不改变检索顺序、证据校验或原始语料。
+- **Consequence:** cache 仅存在于下游进程内，不写磁盘、corpus、candidate 或 Qdrant；正式 evidence 每次仍执行 B4 全部 fail-closed checks。
