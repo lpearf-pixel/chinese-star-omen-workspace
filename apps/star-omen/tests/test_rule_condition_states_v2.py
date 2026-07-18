@@ -152,6 +152,10 @@ def _run(monkeypatch, event, *, thresholds=THRESHOLDS, citable=False):
             "anchor_text": "熒惑守心" if citable else None,
         },
     )
+    monkeypatch.setattr(
+        "src.rule_engine.minimal_matcher.is_citable_evidence",
+        lambda evidence: citable,
+    )
     return match_event_to_rules(event=event, rules=[RULE])
 
 
