@@ -7,10 +7,11 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from kb_text_core import normalize_search_text, parse_kaiyuan_passages
+from kb_text_core import normalize_search_text
 
 from src.connectors.evidence_resolver import resolve_evidence
 from src.connectors.kb_contract import infer_metadata_from_path, is_citable_evidence
+from src.connectors.primary_passage_cache import primary_passage_cache
 
 PRIMARY_CARD_TYPES = {"fenjuan", "fulltext"}
 
@@ -26,20 +27,16 @@ def _load_primary_passages(kb_root: Path) -> tuple[list[Any], str]:
         card_type = str(inferred.get("card_type") or "")
         if card_type not in PRIMARY_CARD_TYPES:
             continue
-        raw = path.read_bytes()
+        snapshot = primary_passage_cache.load(
+            path,
+            card_type=card_type,
+            kb_book_id=str(inferred.get("kb_book_id") or "kaiyuan_zhanjing"),
+            book_title=str(inferred.get("book_title") or "唐開元占經"),
+        )
         digest.update(path.relative_to(root).as_posix().encode("utf-8"))
         digest.update(b"\0")
-        digest.update(raw)
-        text = raw.decode("utf-8", errors="strict")
-        passages.extend(
-            parse_kaiyuan_passages(
-                text,
-                source_path=str(path.resolve()),
-                card_type=card_type,
-                kb_book_id=str(inferred.get("kb_book_id") or "kaiyuan_zhanjing"),
-                book_title=str(inferred.get("book_title") or "唐開元占經"),
-            )
-        )
+        digest.update(snapshot.text.encode("utf-8"))
+        passages.extend(snapshot.passages)
     if not passages:
         raise ValueError("kb_root contains no recognized primary passages")
     return passages, "sha256:" + digest.hexdigest()
