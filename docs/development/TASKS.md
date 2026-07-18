@@ -26,11 +26,22 @@ Protected legacy collection: local_kb_default
 V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
 ```
 
+## 最新验证基线
+
+```text
+Verified head: 6152acc6bd9e3dbb07af97b10df42577ff87af54
+Development Governance run: 29623960771 — success
+Kaiyuan Stable Core run: 29623960806 — success
+Kaiyuan Upstream Runtime run: 29623960814 — success
+```
+
+该 head 已包含开发治理、严格 CText 定点比对、下游全回归、上游单元测试、Qdrant 增量、Qdrant 检索契约和 candidate roundtrip。后续文档状态更新会再次触发最终门禁；不得以该历史 head 代替最终 merge head。
+
 ## Governance
 
 ### GOV-T01 — 建立强制开发手册、任务台账、工作日志和决策记录
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** `AGENTS.md`, `docs/development/*`, governance checker and CI.
 - **Acceptance:**
   - 开发前阅读顺序写入根目录入口文件；
@@ -39,7 +50,7 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - 代码 PR 必须更新 `TASKS.md` 或 `WORK_LOG.md`；
   - governance checker 有独立单元测试；
   - CI 对 `stable/kaiyuan-v2` PR 生效。
-- **Evidence:** 待本批 CI 完成后写入 `WORK_LOG.md`。
+- **Evidence:** `Development Governance` run `29623960771` 通过；详情见 `WORK_LOG.md`。
 
 ## B4 — Candidate sync、可引用证据与黄金评测
 
@@ -47,29 +58,31 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
 
 计划：`docs/superpowers/plans/2026-07-17-kaiyuan-citable-sync-and-golden-eval.md`
 
+运行手册：`docs/development/B4_RELEASE_RUNBOOK.md`
+
 ### B4-T01 — Shared sync error contract
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Scope:** 共享错误码、run status、序列化与 retryable 语义。
 - **Acceptance:**
   - 支持 `authentication_failed`, `upstream_unavailable`, `timeout`, `contract_error`, `collection_not_found`, `invalid_response`；
   - 上下游引用同一契约；
   - contracts test 通过。
-- **Current evidence:** `packages/kb-contracts/python/kb_contracts/sync.py` 和对应测试已存在；等待本 PR 最新 head 全门禁。
+- **Evidence:** shared contract tests 在 Stable Core 和 workspace regression 中通过。
 
 ### B4-T02 — Structured downstream transport errors
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Scope:** `KBSearchError` 结构化错误和 HTTP/transport 分类。
 - **Acceptance:**
   - 401/403、404、408/timeout、422、429/5xx、连接错误、invalid JSON/shape 均有明确分类；
   - 旧字符串异常使用方式保持兼容；
   - 不再将错误转换为空命中。
-- **Current evidence:** 实现和测试已提交；等待最新 downstream CI。
+- **Evidence:** transport taxonomy tests 和下游全回归在 run `29623960806`/`29623960814` 通过。
 
 ### B4-T03 — Atomic candidate sync
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** 全 manifest 内存规划、run-level error、原子替换与旧入口兼容。
 - **Acceptance:**
   - 健康无命中为 `pending`；
@@ -79,11 +92,11 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - 任一上游错误时所有 manifest byte-for-byte 不变；
   - 多 item 中途失败不产生部分写入；
   - `sync-upstream-status` CLI 使用新执行器。
-- **Current blocker:** 下游回归仍有旧测试与 fail-closed 新语义不一致，需要按根因更新 fixture/兼容层，不能降低新验证要求。
+- **Evidence:** atomic sync unit tests、workspace regression 和 candidate roundtrip 均通过。
 
 ### B4-T04 — Strong citable evidence resolver
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** source、book、locator、page、paragraph、heading、anchor、hash 的 passage-backed 校验。
 - **Acceptance:**
   - 只有完整验证结果可为 `citable`；
@@ -91,33 +104,33 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - `is_citable_evidence` 对 v2 只接受 `status=citable`；
   - legacy 最小引用保持可加载但默认 `candidate_only`；
   - resolver 返回 checks 和 matched passage trace。
-- **Current blocker:** 旧 `test_cli_audit.py` 仍假设不存在的 primary 文件可引用，必须更新为真实 passage fixture。
+- **Evidence:** legacy audit fixture 已改为真实 passage；resolver、rule matcher 和 roundtrip citable checks 通过。
 
 ### B4-T05 — Rule audit and strict CLI reporting
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** `resolve-evidence --strict`、`audit-rules`、规则引擎证据状态。
 - **Acceptance:**
   - strict 模式报告精确失败状态；
   - audit 按全部验证状态计数并输出 trace；
   - mismatch 状态永不设置 primary evidence；
   - 旧命令名保持兼容。
-- **Dependency:** B4-T04。
+- **Evidence:** CLI evidence audit、legacy CLI audit 和 rule matcher 回归在下游套件通过。
 
 ### B4-T06 — Golden retrieval evaluation v2
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** 两阶段池、正式 primary、fallback policy、locator/page/heading/citable fields 和污染检测。
 - **Acceptance:**
   - 每个 case 输出 pool、official primary、fallback、locator、page、heading、citable 和 pollution 指标；
   - “荧惑守心”“月犯心宿”等有明确卷页标题预期；
   - pending candidate、prompt/nav/example 污染导致失败；
   - 兼容旧 eval case 字段。
-- **Current evidence:** evaluator 和测试已加入；等待 downstream 全回归。
+- **Evidence:** golden retrieval evaluator tests 与下游回归通过。
 
 ### B4-T07 — Promotion/ingest/retrieve/sync roundtrip
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** 临时 Qdrant 端到端 candidate 工作流。
 - **Acceptance:**
   - generate → approve → promote → desired corpus → ingest → structured retrieve → sync merged；
@@ -126,12 +139,11 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - linked primary passage 通过 citable 校验；
   - 使用 deterministic fake embedding 和随机 ephemeral collection；
   - 专用 CI job 通过。
-- **Current evidence:** `apps/local-kb-unified/tests/test_candidate_roundtrip_v2.py` 已加入。
-- **Remaining:** 接入并稳定专用 CI job。
+- **Evidence:** `candidate-roundtrip` job 在 `Kaiyuan Upstream Runtime` run `29623960814` 通过；未访问 `local_kb_default`。
 
 ### B4-T08 — Targeted CText spot-check audit
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Scope:** 无网络定点片段比对和来源记录。
 - **Acceptance:**
   - 只读取人工记录的 CText 片段；
@@ -140,10 +152,11 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - strict audit 在正式 121 卷目录运行；
   - 结果写入 release 文档，不修改 raw corpus。
 - **Source:** Chinese Text Project Wiki《開元占經》，用户确认本项目可二次开发；文本未经校订。
+- **Evidence:** strict spot-check 在 Stable Core run `29623960806` 通过。
 
 ### B4-T09 — Documentation and release gates
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Scope:** runbook、PR 状态、全部 CI 和稳定分支合并。
 - **Acceptance:**
   - 同步错误、原子性、citation statuses、修复流程、黄金指标、CText policy 文档完整；
@@ -151,14 +164,16 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
   - PR 从 draft 转为 ready；
   - squash 只合入 `stable/kaiyuan-v2`；
   - `main` 和 `local_kb_default` 无变化。
+- **Current state:** 运行手册和治理文件已完成；等待本次状态/日志提交后的最终 head 门禁，再更新 PR 并合入稳定分支。
 
 ## B5 — 规则引擎语义收口
 
 ### B5-T01 — 三值阈值判断
 
-- **Status:** `BACKLOG`
+- **Status:** `READY`
 - **Goal:** 角距、持续时间、可见性缺失时使用 `unknown`，不得自动视为通过。
 - **Expected statuses:** `not_matched`, `insufficient_data`, `partial_match`, `candidate_only`, `matched`。
+- **Start condition:** B4 PR #12 合入 `stable/kaiyuan-v2` 后，从稳定分支建立新 feature branch。
 
 ### B5-T02 — 冲突组 resolution policy
 
@@ -190,11 +205,10 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
 ## 当前执行顺序
 
 ```text
-GOV-T01
-→ 修复 B4-T04 触发的 legacy audit fixture 回归
-→ 完成 B4-T03 兼容与原子同步回归
-→ 接入 B4-T07 candidate roundtrip CI
-→ 运行 B4-T08 正式定点比对
-→ 完成 B4-T05/B4-T06 文档和回归
-→ B4-T09 全门禁与合并
+B4-T09 最终 head 全门禁
+→ PR #12 ready/review/squash 到 stable/kaiyuan-v2
+→ 从稳定分支开始 B5-T01
+→ B5-T02
+→ B5-T03
+→ B6
 ```
