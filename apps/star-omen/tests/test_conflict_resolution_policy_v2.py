@@ -125,6 +125,18 @@ def test_ungrouped_rows_remain_independent_candidates():
     assert result.conflict_detected is False
 
 
+def test_legacy_minimal_row_uses_compatible_ranking_defaults():
+    result = resolve_rule_conflicts(
+        [{"rule_id": "legacy", "conflict_group": None}]
+    )
+
+    assert result.recommended_rule_id == "legacy"
+    assert result.matches[0]["rule_priority"] == 100
+    assert result.matches[0]["match_score"] == 0.0
+    assert result.matches[0]["primary_evidence_found"] is False
+    assert result.matches[0]["resolution_policy"] == "highest_score"
+
+
 @pytest.mark.parametrize(
     ("rows", "message"),
     [
