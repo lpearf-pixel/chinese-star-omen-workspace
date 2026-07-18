@@ -5,6 +5,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from time import monotonic_ns
 from typing import Any, Callable
 
 try:
@@ -23,6 +24,7 @@ from kb_contracts import (  # noqa: E402
     sha256_text,
 )
 from src.connectors.kb_search_retriever import KBSearchError, KBSearchRetriever  # noqa: E402
+from src.observability import base_observability, elapsed_ms  # noqa: E402
 
 SYNC_STATUSES = ("merged", "needs_review", "pending", "stale")
 
@@ -217,8 +219,12 @@ def _error_report(
     checked: int,
     exc: KBSearchError,
     upstream_meta: dict[str, Any] | None = None,
+    started_ns: int,
+    lookup_count: int,
+    official_hit_count: int,
 ) -> dict[str, Any]:
-    return {
+    error = exc.to_dict()
+    report = {
         "schema_version": "candidate-sync-report/v2",
         "run_status": SyncRunStatus.ERROR.value,
         "book_id": book_id,
@@ -227,8 +233,19 @@ def _error_report(
         "checked": checked,
         "preserved": total_items,
         "updated": _empty_counts(),
-        "error": exc.to_dict(),
+        "error": error,
     }
+    report["observability"] = base_observability(
+        "candidate_sync",
+        latency_ms=elapsed_ms(started_ns, monotonic_ns()),
+        collection=(upstream_meta or {}).get("collection"),
+        corpus_version=(upstream_meta or {}).get("corpus_version"),
+        checked=checked,
+        lookup_count=lookup_count,
+        official_hit_count=official_hit_count,
+        run_error=error,
+    )
+    return report
 
 
 def sync_candidate_manifests(
@@ -241,6 +258,9 @@ def sync_candidate_manifests(
 ) -> dict[str, Any]:
     """Plan all item statuses, then atomically write manifests on full success."""
 
+    started_ns = monotonic_ns()
+    lookup_count = 0
+    official_hit_count = 0
     manifest_paths = sorted(
         candidate_root.glob(f"extract_cards/{book_id}/candidate_manifest.json")
     )
@@ -265,6 +285,9 @@ def sync_candidate_manifests(
             total_items=total_items,
             checked=0,
             exc=exc,
+            started_ns=started_ns,
+            lookup_count=lookup_count,
+            official_hit_count=official_hit_count,
         )
 
     timestamp = now or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -294,6 +317,7 @@ def sync_candidate_manifests(
                         "reason": reason,
                     }
                 else:
+                    lookup_count += 1
                     hits = (
                         retrieve_hits(item)
                         if retrieve_hits is not None
@@ -308,6 +332,7 @@ def sync_candidate_manifests(
                             "candidate sync hit provider must return a list",
                             code=SyncErrorCode.INVALID_RESPONSE,
                         )
+                    official_hit_count += len(hits)
                     status = _classify_hits(item, hits)
                     item["sync_validation"] = {
                         "local_status": "current",
@@ -332,10 +357,13 @@ def sync_candidate_manifests(
             checked=checked,
             exc=exc,
             upstream_meta=upstream_meta,
+            started_ns=started_ns,
+            lookup_count=lookup_count,
+            official_hit_count=official_hit_count,
         )
 
     _atomic_write_manifests(planned)
-    return {
+    report = {
         "schema_version": "candidate-sync-report/v2",
         "run_status": SyncRunStatus.OK.value,
         "book_id": book_id,
@@ -346,3 +374,14 @@ def sync_candidate_manifests(
         "updated": counts,
         "error": None,
     }
+    report["observability"] = base_observability(
+        "candidate_sync",
+        latency_ms=elapsed_ms(started_ns, monotonic_ns()),
+        collection=upstream_meta.get("collection"),
+        corpus_version=upstream_meta.get("corpus_version"),
+        checked=checked,
+        lookup_count=lookup_count,
+        official_hit_count=official_hit_count,
+        run_error=None,
+    )
+    return report
