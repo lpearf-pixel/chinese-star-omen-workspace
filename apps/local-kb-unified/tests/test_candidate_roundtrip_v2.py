@@ -26,12 +26,12 @@ from desired_items import collect_desired_items  # noqa: E402
 from import_candidate_cards import promote_mode  # noqa: E402
 from incremental import execute_reconciliation, plan_reconciliation  # noqa: E402
 from ingest import build_payload  # noqa: E402
+from kb_contracts import SyncErrorCode  # noqa: E402
 from src.candidate_cards import generate_candidate_cards  # noqa: E402
 from src.candidate_sync import sync_candidate_manifests  # noqa: E402
 from src.config.settings import reload_settings  # noqa: E402
 from src.connectors.evidence_resolver import resolve_evidence  # noqa: E402
 from src.connectors.kb_search_retriever import KBSearchError, KBSearchRetriever  # noqa: E402
-from kb_contracts import SyncErrorCode  # noqa: E402
 
 pytestmark = pytest.mark.skipif(
     os.environ.get("RUN_CANDIDATE_ROUNDTRIP") != "1",
@@ -78,7 +78,10 @@ def _approve_candidate(out_dir: Path) -> None:
     )
 
 
-def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(monkeypatch, tmp_path: Path):
+def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(
+    monkeypatch,
+    tmp_path: Path,
+):
     sources = tmp_path / "sources"
     volume = sources / "古籍" / "唐開元占經" / "分卷" / "KR3g0018_031.md"
     volume.parent.mkdir(parents=True)
@@ -90,6 +93,9 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(mon
         encoding="utf-8",
     )
 
+    # The integration test runs from the workspace root, while the downstream
+    # application intentionally keeps its config inside apps/star-omen.
+    monkeypatch.setenv("APP_CONFIG_PATH", str(DOWNSTREAM / "config" / "config.yaml"))
     monkeypatch.setenv("KB_SOURCES_ROOT", str(sources))
     monkeypatch.setenv("KB_ENABLE_OBSIDIAN_SOURCE", "false")
     reload_settings()
@@ -205,17 +211,20 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(mon
                 }
 
             def retrieve(self, query, **kwargs):
-                req = main.RetrieveRequest(
+                request = main.RetrieveRequest(
                     query=query,
                     top_k=kwargs.get("top_k", 20),
                     collection=collection,
                     filters=kwargs.get("filters"),
                     query_mode=kwargs.get("query_mode"),
-                    retrieval_stage=kwargs.get("retrieval_stage", "structured_recall"),
+                    retrieval_stage=kwargs.get(
+                        "retrieval_stage",
+                        "structured_recall",
+                    ),
                     card_types=kwargs.get("card_types"),
                     literal_first=kwargs.get("literal_first", True),
                 )
-                return main.retrieve(req).model_dump()
+                return main.retrieve(request).model_dump()
 
         sync_report = sync_candidate_manifests(
             BOOK_ID,
@@ -226,7 +235,9 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(mon
         assert sync_report["run_status"] == "ok"
         assert sync_report["updated"]["merged"] == 1
         manifest_path = candidate_out / "candidate_manifest.json"
-        assert json.loads(manifest_path.read_text(encoding="utf-8"))["items"][0]["sync_status"] == "merged"
+        assert json.loads(manifest_path.read_text(encoding="utf-8"))["items"][0][
+            "sync_status"
+        ] == "merged"
 
         before_error = manifest_path.read_bytes()
 
@@ -247,7 +258,9 @@ def test_candidate_roundtrip_promotes_retrieves_syncs_and_validates_citation(mon
         assert error_report["error"]["code"] == "timeout"
         assert manifest_path.read_bytes() == before_error
 
-        primary_item = next(item for item in desired if item.get("card_type") == "fenjuan")
+        primary_item = next(
+            item for item in desired if item.get("card_type") == "fenjuan"
+        )
         resolved = resolve_evidence(
             {
                 "kb_book_id": BOOK_ID,
