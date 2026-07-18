@@ -224,6 +224,10 @@ def _error_report(
     official_hit_count: int,
 ) -> dict[str, Any]:
     error = exc.to_dict()
+    observable_error = {
+        key: error.get(key)
+        for key in ("code", "status_code", "retryable")
+    }
     report = {
         "schema_version": "candidate-sync-report/v2",
         "run_status": SyncRunStatus.ERROR.value,
@@ -243,7 +247,7 @@ def _error_report(
         checked=checked,
         lookup_count=lookup_count,
         official_hit_count=official_hit_count,
-        run_error=error,
+        run_error=observable_error,
     )
     return report
 
@@ -332,7 +336,8 @@ def sync_candidate_manifests(
                             "candidate sync hit provider must return a list",
                             code=SyncErrorCode.INVALID_RESPONSE,
                         )
-                    official_hit_count += len(hits)
+                    if retrieve_hits is None:
+                        official_hit_count += len(hits)
                     status = _classify_hits(item, hits)
                     item["sync_validation"] = {
                         "local_status": "current",
