@@ -48,7 +48,9 @@ Forbidden release branch: main
 1. `structured_recall`：official structured pool，至少一个可核验 hit；
 2. `primary_evidence`：official primary pool，至少一个可核验 hit。
 
-记录服务实际返回的 `collection` 和 hit count。两阶段都必须命中当前 phase 的 `active_collection`。primary hit 的最终引用仍须通过 B4 resolver `status=citable`；演练的正 hit 计数不会自行提升证据等级。
+记录 HTTP 200、服务实际返回的 `collection`、exact `retrieval_stage`、effective `card_types` 和 hit count。structured pool 必须是六类 v2 structured cards，primary pool 必须严格为 `fenjuan|fulltext`；两阶段都必须命中当前 phase 的 `active_collection`。
+
+primary hit 的最终引用仍须另行通过 B4 resolver `status=citable`；这是人工保存的附加 release evidence，不是本演练 JSON 验证器声称完成的检查。正 hit 计数不会自行提升证据等级。
 
 ## 5. 切换与 manifest 对账
 
@@ -67,7 +69,7 @@ python scripts/verify_release_drill.py --input /path/to/release-drill.actual.jso
 
 ## 6. 回滚触发与执行
 
-以下任一情况立即恢复 `before_switch.active_collection`：health degraded、meta mismatch、任一 smoke 运行错误或零命中、citable evidence 回归、protected fingerprint 漂移、未知 collection/schema、或观测缺失。
+以下任一情况立即恢复 `before_switch.active_collection`：health degraded、meta mismatch、任一 smoke 运行错误或零命中、人工 B4 citable evidence 检查回归、protected fingerprint 漂移、未知 collection/schema、或观测缺失。
 
 回滚步骤：
 

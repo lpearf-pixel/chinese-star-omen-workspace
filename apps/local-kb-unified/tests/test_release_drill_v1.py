@@ -62,8 +62,29 @@ def _phase(collection: str, manifest: dict, protected_count: int = 41) -> dict:
         },
         "meta": copy.deepcopy(manifest),
         "smoke": {
-            "structured_recall": {"status": "ok", "collection": collection, "hits_count": 2},
-            "primary_evidence": {"status": "ok", "collection": collection, "hits_count": 1},
+            "structured_recall": {
+                "status": "ok",
+                "http_status": 200,
+                "retrieval_stage": "structured_recall",
+                "card_types": [
+                    "xingguan_card",
+                    "zhusu_card",
+                    "term_card",
+                    "extract_card",
+                    "topic_index",
+                    "chapter_summary",
+                ],
+                "collection": collection,
+                "hits_count": 2,
+            },
+            "primary_evidence": {
+                "status": "ok",
+                "http_status": 200,
+                "retrieval_stage": "primary_evidence",
+                "card_types": ["fenjuan", "fulltext"],
+                "collection": collection,
+                "hits_count": 1,
+            },
         },
         "collections": collections,
     }
@@ -217,3 +238,84 @@ def test_release_target_must_exist_in_observed_collection_snapshot():
 
     assert report["status"] == "failed"
     assert "RELEASE_COLLECTION_UNAVAILABLE" in {error["code"] for error in report["errors"]}
+
+
+def test_all_phase_meta_require_explicit_ok_status():
+    document = _document()
+    for phase in ("before_switch", "after_switch", "after_rollback"):
+        document[phase]["meta"].pop("meta_status")
+
+    assert validate_release_drill(document)["status"] == "failed"
+
+
+def test_manifest_identity_rejects_bool_integer_aliasing():
+    document = _document()
+    document["expected_release_manifest"]["corpus_version"] = True
+    document["after_switch"]["meta"]["corpus_version"] = 1
+
+    assert validate_release_drill(document)["status"] == "failed"
+
+
+def test_protected_fingerprint_requires_existing_collection_and_typed_values():
+    document = _document()
+    for phase in ("before_switch", "after_switch", "after_rollback"):
+        document[phase]["collections"][PROTECTED] = {
+            "exists": False,
+            "points_count": 0,
+            "config_hash": "",
+        }
+
+    assert validate_release_drill(document)["status"] == "failed"
+
+
+def test_cli_nan_is_invalid_input_exit_two(tmp_path: Path):
+    path = tmp_path / "nan.json"
+    path.write_text('{"schema_version": NaN}', encoding="utf-8")
+
+    result = _run_cli(path)
+
+    assert result.returncode == 2
+    assert result.stdout == ""
+    assert "release drill input error" in result.stderr
+
+
+def test_before_switch_must_differ_from_release_target():
+    document = _document(TARGET)
+
+    report = validate_release_drill(document)
+
+    assert report["status"] == "failed"
+    assert "NO_COLLECTION_TRANSITION" in {error["code"] for error in report["errors"]}
+
+
+def test_smoke_requires_http_and_exact_official_stage_pool_provenance():
+    document = _document()
+    document["after_switch"]["smoke"]["structured_recall"].update(
+        http_status=503,
+        retrieval_stage="primary_evidence",
+        card_types=["fenjuan"],
+    )
+
+    report = validate_release_drill(document)
+
+    assert report["status"] == "failed"
+    assert "RELEASE_SMOKE_FAILED" in {error["code"] for error in report["errors"]}
+
+
+def test_cli_duplicate_keys_are_invalid_input(tmp_path: Path):
+    path = tmp_path / "duplicate.json"
+    path.write_text('{"schema_version": "one", "schema_version": "two"}', encoding="utf-8")
+
+    result = _run_cli(path)
+
+    assert result.returncode == 2
+    assert "duplicate JSON key" in result.stderr
+
+
+def test_rollback_collection_rejects_untrusted_report_text():
+    document = _document("unsafe collection\nsecret")
+
+    report = validate_release_drill(document)
+
+    assert report["status"] == "failed"
+    assert report["rollback_collection"] is None

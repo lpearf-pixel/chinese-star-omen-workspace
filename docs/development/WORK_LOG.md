@@ -54,6 +54,8 @@ git diff --check     passed
 
 B6-T03 is `VERIFYING`, not `DONE`. Remaining: publish this evidence update, run governance and all required workflows for the resulting exact head, inspect the complete PR diff and unresolved review threads, perform independent review, resolve findings with RED/GREEN evidence, mark ready, and squash merge only to `stable/kaiyuan-v2`.
 
+Independent review of `a5271684d3e629b119402ba3dccfda97d7633773` found six Important fail-closed/proof-boundary defects and one Minor report-safety issue. All five validator/CLI counterexamples were reproduced together as RED (`5 failed`): missing `meta_status`, bool/int manifest equality, invalid protected fingerprint, non-finite JSON, and a no-op transition. A sixth RED proved arbitrary HTTP/stage/pool smoke data passed. Fixes require observed `meta_status=ok`, non-empty string manifest identities, typed existing protected fingerprints, strict finite/unique-key JSON, a distinct safe previous collection, HTTP 200 plus exact official stage pools, and redaction of unsafe rollback names. The runbook now labels B4 citable resolution as separate manual release evidence rather than executable drill proof. Focused result after fixes: `26 passed`. Required full regressions and exact-head CI must be rerun after publishing; prior run IDs `29647515047`, `29647515058`, and `29647515057` are stale evidence for the superseded head.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence

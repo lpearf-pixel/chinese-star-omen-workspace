@@ -19,14 +19,14 @@ Each observation records:
 - `active_collection`;
 - `health` with `status`, `ready`, and named boolean checks;
 - `meta` with `meta_status` and the successful corpus manifest identity;
-- `smoke` with a successful structured and primary retrieval result;
+- `smoke` with HTTP 200, the exact official retrieval stage/card pool, and a positive structured and primary retrieval result;
 - `collections`, mapping collection names to immutable observed fingerprints.
 
 A collection fingerprint contains `exists`, `points_count`, and `config_hash`. The protected collection's entire fingerprint must be identical in all three observations. The verifier never accepts credentials, Qdrant clients, mutation commands, source content, or raw response bodies.
 
 ## Transition semantics
 
-The only release target is `local_kb_kaiyuan_v2`. Before switch, the recorded active collection may be another non-protected v2/ephemeral collection or `local_kb_default`; this is routing provenance, not authorization to write the legacy collection. After switch, the active collection, healthy default check, meta collection, and both smoke responses must all name `local_kb_kaiyuan_v2`.
+The only release target is `local_kb_kaiyuan_v2`. Before switch, the recorded active collection must be a different safe collection identifier and may be another non-protected v2/ephemeral collection or `local_kb_default`; this is routing provenance, not authorization to write the legacy collection. After switch, the active collection, healthy default check, meta collection, and both smoke responses must all name `local_kb_kaiyuan_v2`.
 
 Rollback must restore exactly the `before_switch.active_collection`. Its health, meta, and smoke observations must agree with that collection. If the previous active collection is `local_kb_default`, rollback may restore read routing to it, but the drill still requires an unchanged protected fingerprint and never writes, recreates, migrates, or ingests it.
 
@@ -34,7 +34,7 @@ Manifest reconciliation is identity-based. A successful observation requires `me
 
 ## Fail-closed validation
 
-The verifier accumulates stable error codes but never converts invalid or missing observations into a healthy empty result. It rejects malformed roots, missing phases, wrong target, unready health, false required checks, collection/meta/smoke disagreement, empty smoke hits, manifest mismatch, missing protected snapshots, protected fingerprint drift, and rollback to anything other than the recorded prior collection.
+The verifier accumulates stable error codes but never converts invalid or missing observations into a healthy empty result. It rejects malformed or ambiguous JSON, non-finite values, missing phases, no-op transitions, unsafe collection identifiers, wrong target, unready health, false required checks, collection/meta/smoke disagreement, non-200 smoke responses, wrong stage/card pools, empty smoke hits, typed manifest mismatch, missing protected snapshots, invalid/drifting protected fingerprints, and rollback to anything other than the recorded prior collection.
 
 The report contains `status=passed|failed`, `target_collection`, `rollback_collection`, `checks`, and `errors`. `checks` is an explicit boolean map; `errors` contains only stable code, phase, and field values safe for logs. No stack trace or secret-bearing response content is copied into the report. CLI input/JSON/contract failures are explicit stderr errors and exit code 2; a valid failed drill exits 1; a passed drill exits 0.
 

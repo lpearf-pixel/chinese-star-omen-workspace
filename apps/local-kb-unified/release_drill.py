@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+import re
 from typing import Any
 
 TARGET_COLLECTION = "local_kb_kaiyuan_v2"
@@ -12,6 +13,18 @@ REPORT_SCHEMA = "kaiyuan-release-drill/v1"
 MANIFEST_SCHEMA = "corpus-manifest/v1"
 MANAGED_BY = "local-kb-unified/v2"
 COLLECTION_SCHEMA = "passage-v2"
+COLLECTION_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$")
+STAGE_CARD_TYPES = {
+    "structured_recall": (
+        "xingguan_card",
+        "zhusu_card",
+        "term_card",
+        "extract_card",
+        "topic_index",
+        "chapter_summary",
+    ),
+    "primary_evidence": ("fenjuan", "fulltext"),
+}
 
 MANIFEST_IDENTITY_FIELDS = (
     "schema_version",
@@ -37,14 +50,17 @@ def _mapping(value: Any) -> Mapping[str, Any] | None:
     return value if isinstance(value, Mapping) else None
 
 
-def _manifest_identity(value: Any) -> dict[str, Any] | None:
+def _manifest_identity(value: Any, *, observed: bool) -> dict[str, str] | None:
     manifest = _mapping(value)
     if manifest is None:
         return None
-    if any(manifest.get(field) in (None, "") for field in MANIFEST_IDENTITY_FIELDS):
+    if any(
+        not isinstance(manifest.get(field), str) or not manifest[field].strip()
+        for field in MANIFEST_IDENTITY_FIELDS
+    ):
         return None
     if (
-        manifest.get("meta_status") not in (None, "ok")
+        (observed and manifest.get("meta_status") != "ok")
         or manifest.get("schema_version") != MANIFEST_SCHEMA
         or manifest.get("managed_by") != MANAGED_BY
         or manifest.get("collection_schema") != COLLECTION_SCHEMA
@@ -80,6 +96,10 @@ def _smoke_ok(phase: Mapping[str, Any] | None, collection: Any) -> bool:
         hits_count = result.get("hits_count")
         if (
             result.get("status") != "ok"
+            or result.get("http_status") != 200
+            or isinstance(result.get("http_status"), bool)
+            or result.get("retrieval_stage") != stage
+            or tuple(result.get("card_types", ())) != STAGE_CARD_TYPES[stage]
             or result.get("collection") != collection
             or isinstance(hits_count, bool)
             or not isinstance(hits_count, int)
@@ -98,6 +118,16 @@ def _protected_fingerprint(phase: Mapping[str, Any] | None) -> dict[str, Any] | 
         return None
     required = ("exists", "points_count", "config_hash")
     if any(field not in fingerprint for field in required):
+        return None
+    points_count = fingerprint.get("points_count")
+    if (
+        fingerprint.get("exists") is not True
+        or isinstance(points_count, bool)
+        or not isinstance(points_count, int)
+        or points_count < 0
+        or not isinstance(fingerprint.get("config_hash"), str)
+        or not fingerprint["config_hash"].strip()
+    ):
         return None
     return {field: fingerprint[field] for field in required}
 
@@ -125,25 +155,35 @@ def validate_release_drill(document: Mapping[str, object]) -> dict[str, object]:
     after = _mapping(document.get("after_switch"))
     rollback = _mapping(document.get("after_rollback"))
     previous = before.get("active_collection") if before else None
+    previous_is_safe = bool(
+        isinstance(previous, str)
+        and COLLECTION_NAME_RE.fullmatch(previous)
+        and previous != TARGET_COLLECTION
+    )
 
     phase_contracts = (
         document.get("schema_version") == INPUT_SCHEMA
         and before is not None
         and after is not None
         and rollback is not None
-        and isinstance(previous, str)
-        and bool(previous)
+        and previous_is_safe
     )
     target_allowed = target == TARGET_COLLECTION
 
-    expected_release = _manifest_identity(document.get("expected_release_manifest"))
-    release_meta = _manifest_identity(after.get("meta") if after else None)
-    before_meta = _manifest_identity(before.get("meta") if before else None)
-    rollback_meta = _manifest_identity(rollback.get("meta") if rollback else None)
+    expected_release = _manifest_identity(document.get("expected_release_manifest"), observed=False)
+    release_meta = _manifest_identity(after.get("meta") if after else None, observed=True)
+    before_meta = _manifest_identity(before.get("meta") if before else None, observed=True)
+    rollback_meta = _manifest_identity(rollback.get("meta") if rollback else None, observed=True)
 
     checks = {
         "target_allowed": record("target_allowed", target_allowed, "TARGET_COLLECTION_FORBIDDEN"),
         "phase_contracts": record("phase_contracts", phase_contracts, "PHASE_CONTRACT_INVALID"),
+        "collection_transition": record(
+            "collection_transition",
+            previous_is_safe,
+            "NO_COLLECTION_TRANSITION" if previous == TARGET_COLLECTION else "ROLLBACK_COLLECTION_INVALID",
+            "before_switch",
+        ),
         "release_collection": record(
             "release_collection",
             _collection_exists(after, target),
@@ -197,7 +237,7 @@ def validate_release_drill(document: Mapping[str, object]) -> dict[str, object]:
         "schema_version": REPORT_SCHEMA,
         "status": "passed" if all(checks.values()) else "failed",
         "target_collection": target if isinstance(target, str) else None,
-        "rollback_collection": previous if isinstance(previous, str) else None,
+        "rollback_collection": previous if previous_is_safe else None,
         "checks": checks,
         "errors": errors,
     }

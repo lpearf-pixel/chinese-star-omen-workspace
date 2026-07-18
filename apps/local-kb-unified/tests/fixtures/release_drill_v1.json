@@ -15,21 +15,21 @@
     "active_collection": "local_kb_previous_v2",
     "health": {"status": "ok", "ready": true, "checks": {"ollama": true, "embedding_model": true, "qdrant": true, "default_collection": true, "corpus_manifest": true, "manifest_collection_match": true}},
     "meta": {"meta_status": "ok", "schema_version": "corpus-manifest/v1", "corpus_version": "previous", "ingest_run_id": "ingest_previous", "source_manifest_hash": "sha256:previous", "collection": "local_kb_previous_v2", "created_at": "2026-07-17T12:00:00Z", "managed_by": "local-kb-unified/v2", "collection_schema": "passage-v2"},
-    "smoke": {"structured_recall": {"status": "ok", "collection": "local_kb_previous_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "collection": "local_kb_previous_v2", "hits_count": 1}},
+    "smoke": {"structured_recall": {"status": "ok", "http_status": 200, "retrieval_stage": "structured_recall", "card_types": ["xingguan_card", "zhusu_card", "term_card", "extract_card", "topic_index", "chapter_summary"], "collection": "local_kb_previous_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "http_status": 200, "retrieval_stage": "primary_evidence", "card_types": ["fenjuan", "fulltext"], "collection": "local_kb_previous_v2", "hits_count": 1}},
     "collections": {"local_kb_default": {"exists": true, "points_count": 41, "config_hash": "sha256:protected-config"}, "local_kb_previous_v2": {"exists": true, "points_count": 52, "config_hash": "sha256:previous-config"}}
   },
   "after_switch": {
     "active_collection": "local_kb_kaiyuan_v2",
     "health": {"status": "ok", "ready": true, "checks": {"ollama": true, "embedding_model": true, "qdrant": true, "default_collection": true, "corpus_manifest": true, "manifest_collection_match": true}},
     "meta": {"meta_status": "ok", "schema_version": "corpus-manifest/v1", "corpus_version": "release", "ingest_run_id": "ingest_release", "source_manifest_hash": "sha256:release", "collection": "local_kb_kaiyuan_v2", "created_at": "2026-07-18T12:00:00Z", "managed_by": "local-kb-unified/v2", "collection_schema": "passage-v2"},
-    "smoke": {"structured_recall": {"status": "ok", "collection": "local_kb_kaiyuan_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "collection": "local_kb_kaiyuan_v2", "hits_count": 1}},
+    "smoke": {"structured_recall": {"status": "ok", "http_status": 200, "retrieval_stage": "structured_recall", "card_types": ["xingguan_card", "zhusu_card", "term_card", "extract_card", "topic_index", "chapter_summary"], "collection": "local_kb_kaiyuan_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "http_status": 200, "retrieval_stage": "primary_evidence", "card_types": ["fenjuan", "fulltext"], "collection": "local_kb_kaiyuan_v2", "hits_count": 1}},
     "collections": {"local_kb_default": {"exists": true, "points_count": 41, "config_hash": "sha256:protected-config"}, "local_kb_kaiyuan_v2": {"exists": true, "points_count": 57, "config_hash": "sha256:release-config"}}
   },
   "after_rollback": {
     "active_collection": "local_kb_previous_v2",
     "health": {"status": "ok", "ready": true, "checks": {"ollama": true, "embedding_model": true, "qdrant": true, "default_collection": true, "corpus_manifest": true, "manifest_collection_match": true}},
     "meta": {"meta_status": "ok", "schema_version": "corpus-manifest/v1", "corpus_version": "previous", "ingest_run_id": "ingest_previous", "source_manifest_hash": "sha256:previous", "collection": "local_kb_previous_v2", "created_at": "2026-07-17T12:00:00Z", "managed_by": "local-kb-unified/v2", "collection_schema": "passage-v2"},
-    "smoke": {"structured_recall": {"status": "ok", "collection": "local_kb_previous_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "collection": "local_kb_previous_v2", "hits_count": 1}},
+    "smoke": {"structured_recall": {"status": "ok", "http_status": 200, "retrieval_stage": "structured_recall", "card_types": ["xingguan_card", "zhusu_card", "term_card", "extract_card", "topic_index", "chapter_summary"], "collection": "local_kb_previous_v2", "hits_count": 2}, "primary_evidence": {"status": "ok", "http_status": 200, "retrieval_stage": "primary_evidence", "card_types": ["fenjuan", "fulltext"], "collection": "local_kb_previous_v2", "hits_count": 1}},
     "collections": {"local_kb_default": {"exists": true, "points_count": 41, "config_hash": "sha256:protected-config"}, "local_kb_previous_v2": {"exists": true, "points_count": 52, "config_hash": "sha256:previous-config"}}
   }
 }
