@@ -6,9 +6,19 @@ from typing import Any
 
 from src.connectors.evidence_resolver import resolve_evidence
 from src.connectors.kb_contract import is_citable_evidence
+from src.rule_engine.conditions import (
+    ConditionEvaluation,
+    ConditionState,
+    evaluate_exact,
+    evaluate_max_numeric,
+    evaluate_min_numeric,
+    evaluate_required_visibility,
+)
 from src.rule_engine.match_result import RuleMatchResult
 from src.rule_engine.scoring import compute_match_score
 from src.rule_engine.thresholds import load_event_thresholds
+
+CORE_CONDITIONS = {"body", "event_type", "target"}
 
 
 def load_json(path: Path) -> Any:
@@ -27,6 +37,109 @@ def _target_match(trigger_target: str | None, event: dict[str, Any]) -> bool:
     return trigger_target == target_asterism or trigger_target in related
 
 
+def _target_actual(event: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "target_asterism": event.get("target_asterism"),
+        "related_asterisms": list(event.get("related_asterisms") or []),
+    }
+
+
+def _rule_thresholds(
+    all_thresholds: dict[str, Any],
+    event_type: str,
+) -> dict[str, Any]:
+    configured = all_thresholds.get(event_type, {})
+    if configured is None:
+        return {}
+    if not isinstance(configured, dict):
+        raise ValueError(
+            f"event threshold configuration for {event_type!r} must be a mapping"
+        )
+    return configured
+
+
+def _build_condition_evaluations(
+    *,
+    event: dict[str, Any],
+    trigger_body: str,
+    trigger_event_type: str,
+    trigger_target: Any,
+    event_thresholds: dict[str, Any],
+) -> list[ConditionEvaluation]:
+    event_body = str(event.get("body") or "")
+    event_type = str(event.get("event_type") or "")
+    evaluations = [
+        evaluate_exact("body", event_body, expected=trigger_body),
+        evaluate_exact("event_type", event_type, expected=trigger_event_type),
+    ]
+
+    if trigger_target is not None and str(trigger_target) != "":
+        expected_target = str(trigger_target)
+        evaluations.append(
+            evaluate_exact(
+                "target",
+                _target_actual(event),
+                expected=expected_target,
+                passed=_target_match(expected_target, event),
+                pass_reason="target_match",
+                fail_reason="target_mismatch",
+            )
+        )
+
+    if "angular_distance_threshold_deg" in event_thresholds:
+        evaluations.append(
+            evaluate_max_numeric(
+                "angular_distance",
+                event.get("angular_distance_deg"),
+                threshold=event_thresholds.get("angular_distance_threshold_deg"),
+                expected_key="max_deg",
+            )
+        )
+
+    if "min_duration_days" in event_thresholds:
+        evaluations.append(
+            evaluate_min_numeric(
+                "duration",
+                event.get("duration_days"),
+                threshold=event_thresholds.get("min_duration_days"),
+                expected_key="min_days",
+            )
+        )
+
+    if "visibility_required" in event_thresholds:
+        visibility_required = event_thresholds.get("visibility_required")
+        if not isinstance(visibility_required, bool):
+            raise ValueError("visibility_required must be a boolean")
+        if visibility_required:
+            evaluations.append(evaluate_required_visibility(event.get("visibility")))
+
+    return evaluations
+
+
+def _aggregate_status(
+    evaluations: list[ConditionEvaluation],
+    *,
+    primary_evidence_found: bool,
+) -> str:
+    if any(
+        evaluation.name in CORE_CONDITIONS
+        and evaluation.state is ConditionState.FAIL
+        for evaluation in evaluations
+    ):
+        return "not_matched"
+    if any(
+        evaluation.name not in CORE_CONDITIONS
+        and evaluation.state is ConditionState.FAIL
+        for evaluation in evaluations
+    ):
+        return "partial_match"
+    if any(
+        evaluation.state is ConditionState.UNKNOWN for evaluation in evaluations
+    ):
+        return "insufficient_data"
+    return "matched" if primary_evidence_found else "candidate_only"
+
+
 def match_event_to_rules(
     *,
     event: dict[str, Any],
@@ -35,73 +148,47 @@ def match_event_to_rules(
 ) -> dict[str, Any]:
     matches: list[dict[str, Any]] = []
     thresholds = load_event_thresholds()
-    event_thresholds = thresholds.get(str(event.get("event_type") or ""), {})
+    if not isinstance(thresholds, dict):
+        raise ValueError("event threshold configuration must be a mapping")
 
     for rule in rules:
         trigger = rule.get("trigger") or {}
+        if not isinstance(trigger, dict):
+            raise ValueError("rule trigger must be a mapping")
         trigger_body = str(trigger.get("body") or "")
         trigger_event_type = str(trigger.get("event_type") or "")
         trigger_target = trigger.get("target")
+        event_thresholds = _rule_thresholds(thresholds, trigger_event_type)
 
-        body_ok = trigger_body == str(event.get("body") or "") or (
-            trigger_body == "other" and str(event.get("body") or "") == "other"
+        evaluations = _build_condition_evaluations(
+            event=event,
+            trigger_body=trigger_body,
+            trigger_event_type=trigger_event_type,
+            trigger_target=trigger_target,
+            event_thresholds=event_thresholds,
         )
-        event_type_ok = trigger_event_type == str(event.get("event_type") or "")
-        target_ok = _target_match(
-            str(trigger_target) if trigger_target is not None else None,
-            event,
-        )
-
-        angular_threshold = event_thresholds.get("angular_distance_threshold_deg")
-        angular_value = event.get("angular_distance_deg")
-        angular_ok = (
-            True
-            if angular_threshold is None or angular_value is None
-            else float(angular_value) <= float(angular_threshold)
-        )
-
-        min_duration = event_thresholds.get("min_duration_days")
-        duration_value = event.get("duration_days")
-        duration_ok = (
-            True
-            if min_duration is None or duration_value is None
-            else float(duration_value) >= float(min_duration)
-        )
-
-        visibility_required = bool(
-            event_thresholds.get("visibility_required", False)
-        )
-        visibility_flag = (
-            (event.get("visibility") or {}).get("is_visible")
-            if isinstance(event.get("visibility"), dict)
-            else None
-        )
-        visibility_ok = True if not visibility_required else bool(visibility_flag)
-
-        trigger_conditions = [
-            body_ok,
-            event_type_ok,
-            target_ok,
-            angular_ok,
-            duration_ok,
-            visibility_ok,
+        condition_states = {
+            evaluation.name: evaluation.to_dict() for evaluation in evaluations
+        }
+        failed_conditions = [
+            evaluation.name
+            for evaluation in evaluations
+            if evaluation.state is ConditionState.FAIL
         ]
-        trigger_ratio = sum(1 for value in trigger_conditions if value) / len(
-            trigger_conditions
+        unknown_conditions = [
+            evaluation.name
+            for evaluation in evaluations
+            if evaluation.state is ConditionState.UNKNOWN
+        ]
+        missing_conditions = [
+            evaluation.name
+            for evaluation in evaluations
+            if evaluation.state is not ConditionState.PASS
+        ]
+        pass_count = sum(
+            1 for evaluation in evaluations if evaluation.state is ConditionState.PASS
         )
-        missing_conditions: list[str] = []
-        if not body_ok:
-            missing_conditions.append("body")
-        if not event_type_ok:
-            missing_conditions.append("event_type")
-        if not target_ok:
-            missing_conditions.append("target")
-        if not angular_ok:
-            missing_conditions.append("angular_distance")
-        if not duration_ok:
-            missing_conditions.append("duration")
-        if not visibility_ok:
-            missing_conditions.append("visibility")
+        trigger_ratio = pass_count / len(evaluations) if evaluations else 0.0
 
         evidence_obj = rule.get("evidence")
         resolved_evidence = (
@@ -114,30 +201,10 @@ def match_event_to_rules(
             resolved_evidence and is_citable_evidence(resolved_evidence)
         )
         used_structured_fallback = evidence_status == "candidate_only"
-
-        if not (body_ok and event_type_ok and target_ok):
-            match_status = "not_matched"
-        elif (
-            body_ok
-            and event_type_ok
-            and target_ok
-            and angular_ok
-            and duration_ok
-            and visibility_ok
-            and primary_evidence_found
-        ):
-            match_status = "matched"
-        elif (
-            body_ok
-            and event_type_ok
-            and target_ok
-            and angular_ok
-            and duration_ok
-            and visibility_ok
-        ):
-            match_status = "candidate_only"
-        else:
-            match_status = "partial_match"
+        match_status = _aggregate_status(
+            evaluations,
+            primary_evidence_found=primary_evidence_found,
+        )
 
         match_score = compute_match_score(
             trigger_ratio=trigger_ratio,
@@ -157,7 +224,9 @@ def match_event_to_rules(
             match_score=match_score,
             trigger_match_reason={
                 "body": f"{event.get('body')} == {trigger_body}",
-                "event_type": f"{event.get('event_type')} == {trigger_event_type}",
+                "event_type": (
+                    f"{event.get('event_type')} == {trigger_event_type}"
+                ),
                 "target": trigger_target,
             },
             missing_conditions=missing_conditions,
@@ -187,9 +256,11 @@ def match_event_to_rules(
             candidate_only=not primary_evidence_found,
             rule_priority=int(rule.get("rule_priority", 100)),
             conflict_group=rule.get("conflict_group"),
-            resolution_policy=str(
-                rule.get("resolution_policy", "highest_score")
-            ),
+            resolution_policy=str(rule.get("resolution_policy", "highest_score")),
+            condition_states=condition_states,
+            unknown_conditions=unknown_conditions,
+            failed_conditions=failed_conditions,
+            trigger_ratio=round(trigger_ratio, 4),
         )
         matches.append(result.to_dict())
 
@@ -219,7 +290,7 @@ def match_event_to_rules(
                 f"conflict_group={group} has {len(rows)} rules"
             )
             for row in rows:
-                row["conflicting_conditions"] = conflict_reasons
+                row["conflicting_conditions"] = list(conflict_reasons)
 
     recommended = ranked_matches[0] if ranked_matches else {}
     return {
@@ -228,6 +299,10 @@ def match_event_to_rules(
         "match_status": recommended.get("match_status", "not_matched"),
         "match_score": recommended.get("match_score", 0.0),
         "trigger_match_reason": recommended.get("trigger_match_reason", {}),
+        "condition_states": recommended.get("condition_states", {}),
+        "unknown_conditions": recommended.get("unknown_conditions", []),
+        "failed_conditions": recommended.get("failed_conditions", []),
+        "trigger_ratio": recommended.get("trigger_ratio", 0.0),
         "missing_conditions": recommended.get("missing_conditions", []),
         "conflicting_conditions": recommended.get("conflicting_conditions", []),
         "thresholds_used": recommended.get("thresholds_used", {}),
