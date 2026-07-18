@@ -137,6 +137,21 @@ def test_legacy_minimal_row_uses_compatible_ranking_defaults():
     assert result.matches[0]["resolution_policy"] == "highest_score"
 
 
+def test_conflict_groups_preserve_exact_nonempty_strings():
+    rows = [
+        _row("plain", group="group-a"),
+        _row("leading-space", group=" group-a"),
+    ]
+
+    result = resolve_rule_conflicts(rows)
+
+    assert result.conflict_detected is False
+    assert [item["conflict_group"] for item in result.conflict_trace] == [
+        "group-a",
+        " group-a",
+    ]
+
+
 @pytest.mark.parametrize(
     ("rows", "message"),
     [
