@@ -25,11 +25,22 @@ def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _related_asterisms(event: dict[str, Any]) -> list[str]:
+    value = event.get("related_asterisms")
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value else []
+    if isinstance(value, (list, tuple, set)):
+        return [str(item) for item in value]
+    return []
+
+
 def _target_match(trigger_target: str | None, event: dict[str, Any]) -> bool:
     if not trigger_target:
         return True
     target_asterism = str(event.get("target_asterism") or "")
-    related = [str(value) for value in (event.get("related_asterisms") or [])]
+    related = _related_asterisms(event)
     notes = str(event.get("notes") or "")
 
     if trigger_target == "multi_planet":
@@ -40,8 +51,25 @@ def _target_match(trigger_target: str | None, event: dict[str, Any]) -> bool:
 def _target_actual(event: dict[str, Any]) -> dict[str, Any]:
     return {
         "target_asterism": event.get("target_asterism"),
-        "related_asterisms": list(event.get("related_asterisms") or []),
+        "related_asterisms": _related_asterisms(event),
     }
+
+
+def _required_trigger_string(trigger: dict[str, Any], field: str) -> str:
+    value = trigger.get(field)
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(f"rule trigger.{field} must be a non-empty string")
+    return value.strip()
+
+
+def _optional_trigger_target(trigger: dict[str, Any]) -> str | None:
+    value = trigger.get("target")
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError("rule trigger.target must be a string when provided")
+    stripped = value.strip()
+    return stripped or None
 
 
 def _rule_thresholds(
@@ -63,7 +91,7 @@ def _build_condition_evaluations(
     event: dict[str, Any],
     trigger_body: str,
     trigger_event_type: str,
-    trigger_target: Any,
+    trigger_target: str | None,
     event_thresholds: dict[str, Any],
 ) -> list[ConditionEvaluation]:
     event_body = str(event.get("body") or "")
@@ -73,14 +101,13 @@ def _build_condition_evaluations(
         evaluate_exact("event_type", event_type, expected=trigger_event_type),
     ]
 
-    if trigger_target is not None and str(trigger_target) != "":
-        expected_target = str(trigger_target)
+    if trigger_target is not None:
         evaluations.append(
             evaluate_exact(
                 "target",
                 _target_actual(event),
-                expected=expected_target,
-                passed=_target_match(expected_target, event),
+                expected=trigger_target,
+                passed=_target_match(trigger_target, event),
                 pass_reason="target_match",
                 fail_reason="target_mismatch",
             )
@@ -152,12 +179,14 @@ def match_event_to_rules(
         raise ValueError("event threshold configuration must be a mapping")
 
     for rule in rules:
-        trigger = rule.get("trigger") or {}
+        if not isinstance(rule, dict):
+            raise ValueError("each rule must be a mapping")
+        trigger = rule.get("trigger")
         if not isinstance(trigger, dict):
             raise ValueError("rule trigger must be a mapping")
-        trigger_body = str(trigger.get("body") or "")
-        trigger_event_type = str(trigger.get("event_type") or "")
-        trigger_target = trigger.get("target")
+        trigger_body = _required_trigger_string(trigger, "body")
+        trigger_event_type = _required_trigger_string(trigger, "event_type")
+        trigger_target = _optional_trigger_target(trigger)
         event_thresholds = _rule_thresholds(thresholds, trigger_event_type)
 
         evaluations = _build_condition_evaluations(
