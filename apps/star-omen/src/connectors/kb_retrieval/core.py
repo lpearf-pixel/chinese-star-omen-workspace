@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from time import monotonic_ns
 from typing import Any
 
 from src.connectors.kb_contract import infer_metadata_from_path
+from src.connectors.kb_retrieval.transport import KBSearchError
 from src.connectors.primary_file_scanner import scan_primary_files
+from src.observability import base_observability, elapsed_ms, optional_ms
 
 TEXT_CORE = Path(__file__).resolve().parents[5] / "packages" / "kb-text-core" / "python"
 if str(TEXT_CORE) not in sys.path:
@@ -344,12 +347,28 @@ class RetrievalCoreMixin:
         if literal_pool_factor is not None:
             payload["literal_pool_factor"] = literal_pool_factor
 
-        raw_result = self._request(
-            "POST",
-            "/v1/retrieve",
-            json_payload=payload,
-            use_auth=True,
-        )
+        started_ns = monotonic_ns()
+        try:
+            raw_result = self._request(
+                "POST",
+                "/v1/retrieve",
+                json_payload=payload,
+                use_auth=True,
+            )
+        except KBSearchError as exc:
+            exc.details["observability"] = base_observability(
+                "retrieve",
+                stage=effective_stage,
+                latency_ms=elapsed_ms(started_ns, monotonic_ns()),
+                upstream_latency_ms=None,
+                requested_top_k=effective_top_k,
+                raw_pool_size=None,
+                returned_pool_size=None,
+                card_types=list(card_types or []),
+                collection=collection or self.default_collection,
+                corpus_version=None,
+            )
+            raise
         raw_hits = raw_result.get("hits", [])
         inferred_hits = self._normalize_hits(raw_hits)
         reranked, _, _, mode = self._rerank_hits(
@@ -404,7 +423,7 @@ class RetrievalCoreMixin:
         effective_card_types = list(
             raw_result.get("card_types") or card_types or []
         )
-        return {
+        result = {
             **raw_result,
             "schema_version": raw_result.get(
                 "schema_version",
@@ -429,6 +448,19 @@ class RetrievalCoreMixin:
             "related_hits": related_hits[:effective_top_k],
             "hits": filtered_hits[:effective_top_k],
         }
+        result["observability"] = base_observability(
+            "retrieve",
+            stage=result["retrieval_stage"],
+            latency_ms=elapsed_ms(started_ns, monotonic_ns()),
+            upstream_latency_ms=optional_ms(raw_result.get("latency_ms")),
+            requested_top_k=effective_top_k,
+            raw_pool_size=len(raw_hits),
+            returned_pool_size=len(result["hits"]),
+            card_types=list(effective_card_types),
+            collection=result["collection"],
+            corpus_version=raw_result.get("corpus_version"),
+        )
+        return result
 
     def rag_query(
         self,

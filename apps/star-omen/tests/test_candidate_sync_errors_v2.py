@@ -7,6 +7,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
+import src.candidate_sync as sync_module
 from kb_contracts import SyncErrorCode, sha256_text
 from src.candidate_sync import sync_candidate_manifests
 from src.connectors.kb_search_retriever import KBSearchError
@@ -194,6 +195,32 @@ def test_successful_sync_classifies_merged_review_pending_and_stale(tmp_path: Pa
     assert all(call["filters"] == {"kb_book_id": BOOK_ID} for call in retriever.calls)
 
 
+def test_successful_sync_observability_has_meta_and_lookup_provenance(
+    monkeypatch, tmp_path: Path
+):
+    root, sources, _manifest_path = _fixture(tmp_path)
+    retriever = FakeRetriever(
+        sources,
+        [_hits({"card_type": "extract_card", "content_hash": ANCHOR_HASH, "source_locator": LOCATOR})],
+    )
+    ticks = iter([0, 5_000_000])
+    monkeypatch.setattr(sync_module, "monotonic_ns", lambda: next(ticks))
+
+    report = sync_candidate_manifests(BOOK_ID, root, retriever=retriever)
+
+    trace = report["observability"]
+    assert trace["schema_version"] == "kb-observability/v1"
+    assert trace["operation"] == "candidate_sync"
+    assert trace["latency_ms"] == 5.0
+    assert trace["collection"] == "local_kb_kaiyuan_v2"
+    assert trace["corpus_version"] == "upstream-v2"
+    assert trace["checked"] == 1
+    assert trace["lookup_count"] == 1
+    assert trace["official_hit_count"] == 1
+    assert trace["run_error"] is None
+    json.dumps(report, allow_nan=False)
+
+
 @pytest.mark.parametrize("missing_field", ["anchor_text", "content_hash"])
 def test_missing_candidate_card_integrity_field_marks_stale(
     tmp_path: Path,
@@ -273,6 +300,57 @@ def test_meta_failure_preserves_manifest_bytes(tmp_path: Path, code, status_code
     assert manifest_path.read_bytes() == before
 
 
+def test_sync_observability_redacts_upstream_error_details(tmp_path: Path):
+    root, sources, manifest_path = _fixture(tmp_path)
+    before = manifest_path.read_bytes()
+    retriever = FakeRetriever(sources, [])
+    retriever.get_upstream_meta = lambda: (_ for _ in ()).throw(
+        KBSearchError(
+            "upstream included content",
+            code=SyncErrorCode.CONTRACT_ERROR,
+            status_code=422,
+            details={"api_key": "secret", "raw_content": "古籍原文"},
+        )
+    )
+
+    report = sync_candidate_manifests(BOOK_ID, root, retriever=retriever)
+
+    assert report["error"]["details"] == {
+        "api_key": "secret",
+        "raw_content": "古籍原文",
+    }
+    assert report["observability"]["run_error"] == {
+        "code": "contract_error",
+        "status_code": 422,
+        "retryable": False,
+    }
+    assert "secret" not in json.dumps(report["observability"], ensure_ascii=False)
+    assert "古籍原文" not in json.dumps(report["observability"], ensure_ascii=False)
+    assert manifest_path.read_bytes() == before
+
+
+def test_custom_sync_hit_provider_is_not_counted_as_official(tmp_path: Path):
+    root, sources, _manifest_path = _fixture(tmp_path)
+    retriever = FakeRetriever(sources, [])
+
+    report = sync_candidate_manifests(
+        BOOK_ID,
+        root,
+        retriever=retriever,
+        retrieve_hits=lambda _item: [
+            {
+                "card_type": "extract_card",
+                "content_hash": ANCHOR_HASH,
+                "source_locator": LOCATOR,
+            }
+        ],
+    )
+
+    assert report["run_status"] == "ok"
+    assert report["observability"]["lookup_count"] == 1
+    assert report["observability"]["official_hit_count"] == 0
+
+
 def test_item_failure_after_prior_success_does_not_partially_write(tmp_path: Path):
     root, sources, manifest_path = _fixture(tmp_path, item_count=2)
     before = manifest_path.read_bytes()
@@ -300,4 +378,14 @@ def test_item_failure_after_prior_success_does_not_partially_write(tmp_path: Pat
     assert report["error"]["code"] == "timeout"
     assert report["checked"] == 1
     assert report["preserved"] == 2
+    assert report["observability"]["run_error"] == {
+        "code": "timeout",
+        "status_code": 408,
+        "retryable": True,
+    }
+    assert report["observability"]["lookup_count"] == 2
+    assert report["observability"]["official_hit_count"] == 1
+    assert report["observability"]["collection"] == "local_kb_kaiyuan_v2"
+    assert report["observability"]["corpus_version"] == "upstream-v2"
+    json.dumps(report, allow_nan=False)
     assert manifest_path.read_bytes() == before
