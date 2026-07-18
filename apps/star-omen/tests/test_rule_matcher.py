@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from src.rule_engine.minimal_matcher import run_match_rule
@@ -49,6 +50,42 @@ def test_match_rule_conflict_resolution_and_sorting():
     assert out["conflict_detected"] is True
     assert out["recommended_rule_id"] == "rule_mars_guarding_xin_high_priority"
     assert out["matched_rule_ids"][0] == "rule_mars_guarding_xin_high_priority"
+    assert out["recommendation_status"] == "selected"
+    assert out["provisional_recommended_rule_id"] is None
+    assert out["conflict_trace"][0]["selected_rule_id"] == (
+        "rule_mars_guarding_xin_high_priority"
+    )
+    suppressed = next(
+        row
+        for row in out["matches"]
+        if row["rule_id"] == "rule_mars_guarding_xin_low_priority"
+    )
+    assert suppressed["suppressed"] is True
+    assert suppressed["resolution_status"] == "suppressed"
+
+
+def test_match_rule_manual_review_withholds_recommendation(tmp_path):
+    rules = json.loads(
+        Path("data/examples/rules/conflict_rules_demo.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    for rule in rules:
+        rule["resolution_policy"] = "manual_review"
+    rules_path = tmp_path / "rules.json"
+    rules_path.write_text(json.dumps(rules, ensure_ascii=False), encoding="utf-8")
+
+    out = run_match_rule(
+        event_path=Path("data/examples/events/mars_guarding_xin_demo.json"),
+        rules_path=rules_path,
+    )
+
+    assert out["conflict_detected"] is True
+    assert out["recommended_rule_id"] is None
+    assert out["provisional_recommended_rule_id"] is not None
+    assert out["recommendation_status"] == "manual_review"
+    assert all(row["suppressed"] is False for row in out["matches"])
+    assert all(row["resolution_status"] == "manual_review" for row in out["matches"])
 
 
 def test_match_rule_structured_only_event_is_insufficient_data():
