@@ -3,6 +3,10 @@ from pathlib import Path
 
 import pytest
 
+import src.connectors.evidence_resolver as resolver_module
+import src.connectors.primary_passage_cache as cache_module
+import src.rule_engine.rule_evidence_migration as migration_module
+from src.connectors.primary_passage_cache import PrimaryPassageCache
 from src.rule_engine.rule_evidence_migration import (
     apply_rule_evidence_migration,
     plan_rule_evidence_migration,
@@ -44,6 +48,34 @@ def test_unique_exact_primary_match_produces_revalidated_citable_proposal(tmp_pa
     assert after["raw_content_hash"].startswith("sha256:")
     assert after["normalized_content_hash"].startswith("sha256:")
     assert source.read_bytes() == before
+
+
+def test_repeated_migration_plans_reuse_parse_and_keep_exact_fingerprint(
+    monkeypatch, tmp_path
+):
+    root = tmp_path / "kb"
+    _source(root, "KR3g0018_031.md", "KR3g0018_WYG_031-17a", "石氏曰熒惑守心。")
+    rules = [_rule("mars-xin", {"card_type": "fenjuan", "quote": "熒惑守心"})]
+    isolated_cache = PrimaryPassageCache()
+    monkeypatch.setattr(migration_module, "primary_passage_cache", isolated_cache)
+    monkeypatch.setattr(resolver_module, "primary_passage_cache", isolated_cache)
+    real_parser = cache_module.parse_kaiyuan_passages
+    calls = 0
+
+    def counting_parser(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return real_parser(*args, **kwargs)
+
+    monkeypatch.setattr(cache_module, "parse_kaiyuan_passages", counting_parser)
+
+    first = plan_rule_evidence_migration(rules, kb_root=root)
+    second = plan_rule_evidence_migration(rules, kb_root=root)
+
+    assert calls == 1
+    assert first["source_fingerprint"] == second["source_fingerprint"]
+    assert first["source_fingerprint"].startswith("sha256:")
+    assert first["details"][0]["validation_status"] == "citable"
 
 
 def test_ambiguous_exact_match_never_produces_after(tmp_path):
