@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-primary-passage-cache-v2
-Current PR: #16 (draft)
+Current feature: codex/kaiyuan-retrieval-observability-v2
+Current PR: pending
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -171,18 +171,21 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T01 — Filesystem primary passage cache
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base evidence:** B5-T03 PR #15 squash merged as `6dd0910a2d6b825904ae8e0dcc7d3f1a75557775`.
 - **Branch:** `codex/kaiyuan-primary-passage-cache-v2`.
 - **Goal:** 基于 path/mtime/hash 的只读 passage index，避免每次查询全量解析所有 Markdown。
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-primary-passage-cache-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-primary-passage-cache.md`.
 - **Acceptance:** exact-byte hash invalidation; bounded thread-safe LRU; no stale-on-error result; scanner/resolver/migration reuse; unchanged retrieval/citation semantics; full gates and independent review.
+- **Merge evidence:** PR #16 final head `9a395ac8bacb1ab0464b584a8e9ef31f5f5d42cb` squash merged to `stable/kaiyuan-v2` as `0632c0a87515b4b6d33ea2476630d62e2b3321d7`.
 
 ### B6-T02 — 检索与同步可观察性
 
-- **Status:** `BACKLOG`
+- **Status:** `IN_PROGRESS`
 - **Goal:** 记录 stage latency、pool size、fallback reason、sync run error、corpus version 和 collection。
+- **Base evidence:** B6-T01 PR #16 squash merged as `0632c0a87515b4b6d33ea2476630d62e2b3321d7`.
+- **Branch:** `codex/kaiyuan-retrieval-observability-v2`.
 
 ### B6-T03 — Stable release runbook and rollback drill
 
