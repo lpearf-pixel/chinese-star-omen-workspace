@@ -2,6 +2,28 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T02 merged; B5-T03 started
+
+### B5-T02 final evidence
+
+```text
+PR: #14
+Final feature head: 05cdf6271b73284e943e357df754292ebc31ade1
+Development Governance: 29631008326 — success
+Kaiyuan Stable Core: 29631008308 — success
+Kaiyuan Upstream Runtime: 29631008338 — success
+Squash merge commit: 57da1a8b9afb994b3f3ef0ac1714d14fd4a3d37b
+Base: stable/kaiyuan-v2
+```
+
+GitHub returned `merged=true` for the expected head after independent review fixes and fresh final-head gates. PR #14 did not target `main` and did not change corpus, candidate, ingest, retrieval, Qdrant schema, or `local_kb_default`.
+
+### B5-T03 start
+
+- Branch: `codex/kaiyuan-rule-evidence-migration-v2` from the actual B5-T02 stable merge commit.
+- Task moved to `IN_PROGRESS` before design or implementation.
+- Next: inventory legacy rule evidence states, define fail-closed audit/migration design, write implementation plan, and open a draft PR to `stable/kaiyuan-v2` before behavior changes.
+
 ## 2026-07-18 — B5-T01 merged; B5-T02 started
 
 ### B5-T01 merge evidence
