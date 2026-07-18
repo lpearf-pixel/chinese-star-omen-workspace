@@ -146,7 +146,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T02 — 冲突组 resolution policy
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Goal:** 实际执行 `resolution_policy`, `conflict_group`, `rule_priority`，而非只报告冲突存在。
 - **Base evidence:** B5-T01 PR #13 squash merged to `stable/kaiyuan-v2` as `e4e25ba39d43270b1d2ac54ae3057eb741161b38`.
 - **Branch:** `codex/kaiyuan-conflict-resolution-v2`.
