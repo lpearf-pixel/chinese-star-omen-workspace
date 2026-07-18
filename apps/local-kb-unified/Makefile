@@ -3,7 +3,7 @@ ROOT := $(shell pwd)
 INDEX_PY := $(ROOT)/index-jobs/.venv/bin/python
 COLLECTION ?= $${KB_SEARCH_DEFAULT_COLLECTION:-local_kb_kaiyuan_v2}
 
-.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest
+.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest release-drill
 
 setup:
 	bash $(ROOT)/index-jobs/setup_env.sh
@@ -55,6 +55,9 @@ ingest-dry-run:
 
 corpus-manifest:
 	python scripts/corpus_manifest.py --collection "$(COLLECTION)" --out data/corpus_manifest.json
+
+release-drill:
+	python scripts/verify_release_drill.py --input tests/fixtures/release_drill_v1.json
 
 validate-candidates:
 	python scripts/import_candidate_cards.py --inbox incoming/downstream_candidates/codex-ready --book-id kaiyuan_zhanjing --mode validate

@@ -51,6 +51,9 @@ jobs:
       - name: Upstream unit tests
         run: make upstream-test
 
+      - name: Non-mutating release rollback drill
+        run: make release-drill
+
       - name: Validate Docker Compose configuration
         working-directory: apps/local-kb-unified
         run: docker compose --env-file .env.example -f docker-compose.yml config --quiet

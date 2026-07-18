@@ -17,6 +17,10 @@ GitHub returned `merged=true`, and `refs/heads/stable/kaiyuan-v2` independently 
 
 B6-T03 started from the actual merge SHA on `codex/kaiyuan-stable-release-rollback-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory release scripts, manifest/meta health checks, collection configuration, and existing B4 runbook; define a non-destructive ephemeral rollback drill that proves `local_kb_default` protection.
 
+### B6-T03 design
+
+Selected a pure three-phase snapshot verifier over a live mutating switch script or documentation-only checklist. The design records exact release and rollback manifest identities, healthy structured/primary smoke results, the prior read route, and an invariant fingerprint for `local_kb_default`. It explicitly permits restoring read routing to a previously active legacy collection while never authorizing writes, ingest, recreation, deletion, or migration. Decision `D-016` and the design spec are the durable source of truth. Next action: write the implementation plan, publish the design checkpoint, and open a draft PR targeting only `stable/kaiyuan-v2`.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence

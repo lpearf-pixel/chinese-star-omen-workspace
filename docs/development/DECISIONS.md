@@ -121,3 +121,13 @@
 - **Provenance:** collection 来自 effective response/request/meta；corpus version 只来自 upstream response/meta。两阶段 official 值必须一致才提升到顶层，冲突时为 null 并记录 `provenance_conflicts`，不伪造或猜测。
 - **Safety:** trace 严格 JSON-safe，不记录 secret、anchor、source content 或 raw error body；成功 manifest 不持久化 nondeterministic latency。
 - **Reason:** in-band versioned trace 能被 CLI、测试与报告共同消费，同时避免引入外部 telemetry 服务或改变 B4 的健康空结果、运行错误和 candidate 状态边界。
+
+## D-016 — Stable 发布演练采用只读三阶段快照对账
+
+- **Status:** Accepted
+- **Decision:** B6-T03 使用 `before_switch → after_switch → after_rollback` 三阶段 JSON 观测和纯验证器演练切换；验证器不连接或修改 Qdrant，不执行 ingest，也不更改服务配置。
+- **Manifest:** 切换后的 `/v1/meta` 必须与期望 release manifest identity 完全一致；回滚后的 meta 必须恢复到切换前记录的 manifest identity。missing、invalid 或 mismatch 均 fail-closed。
+- **Rollback:** 回滚只恢复切换前记录的 read routing。若原路由为 `local_kb_default`，允许恢复读取，但任何阶段都不得写入、删除、重建或迁移该 collection。
+- **Protection:** `local_kb_default` 的 `exists`、`points_count` 和 `config_hash` 指纹在三个阶段必须完全一致；缺少快照也视为失败。
+- **Reason:** 直接自动切换生产服务需要环境权限且带来数据风险；只写手册又无法提供可重复证据。纯验证器可在 CI 使用 synthetic fixture，并让生产操作保存同一契约的审计 artifact。
+- **Consequence:** CI 通过仅证明验证器和演练契约有效，不等同于生产已发布；生产证据必须另行记录实际 artifact hash、release head、workflow 和操作者。
