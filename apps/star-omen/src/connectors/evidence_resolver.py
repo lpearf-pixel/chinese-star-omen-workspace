@@ -7,7 +7,6 @@ from typing import Any
 from kb_text_core import (
     canonical_source_locator,
     normalize_search_text,
-    parse_kaiyuan_passages,
     source_volume_for_locator,
 )
 
@@ -16,6 +15,10 @@ from src.connectors.kb_contract import (
     can_be_final_fact,
     infer_metadata_from_path,
     resolve_evidence_level,
+)
+from src.connectors.primary_passage_cache import (
+    PrimarySourceReadError,
+    primary_passage_cache,
 )
 
 VALIDATION_VERSION = "citable-evidence/v2"
@@ -273,8 +276,13 @@ def resolve_evidence(
     checks["locator"] = True
 
     try:
-        source_text = full_path.read_text(encoding="utf-8", errors="strict")
-    except (OSError, UnicodeError) as exc:
+        snapshot = primary_passage_cache.load(
+            full_path,
+            card_type=card_type,
+            kb_book_id=effective_book,
+            book_title=str(resolved.get("book_title") or "唐開元占經"),
+        )
+    except PrimarySourceReadError as exc:
         return _finish(
             resolved,
             status="missing_source",
@@ -283,13 +291,7 @@ def resolve_evidence(
             root_label=root_label,
         )
 
-    passages = parse_kaiyuan_passages(
-        source_text,
-        source_path=str(full_path),
-        card_type=card_type,
-        kb_book_id=effective_book,
-        book_title=str(resolved.get("book_title") or "唐開元占經"),
-    )
+    passages = snapshot.passages
     page_passages = [
         passage
         for passage in passages
