@@ -56,6 +56,24 @@ B6-T03 is `VERIFYING`, not `DONE`. Remaining: publish this evidence update, run 
 
 Independent review of `a5271684d3e629b119402ba3dccfda97d7633773` found six Important fail-closed/proof-boundary defects and one Minor report-safety issue. All five validator/CLI counterexamples were reproduced together as RED (`5 failed`): missing `meta_status`, bool/int manifest equality, invalid protected fingerprint, non-finite JSON, and a no-op transition. A sixth RED proved arbitrary HTTP/stage/pool smoke data passed. Fixes require observed `meta_status=ok`, non-empty string manifest identities, typed existing protected fingerprints, strict finite/unique-key JSON, a distinct safe previous collection, HTTP 200 plus exact official stage pools, and redaction of unsafe rollback names. The runbook now labels B4 citable resolution as separate manual release evidence rather than executable drill proof. Focused result after fixes: `26 passed`. Required full regressions and exact-head CI must be rerun after publishing; prior run IDs `29647515047`, `29647515058`, and `29647515057` are stale evidence for the superseded head.
 
+Review fixes were published as head `714280b90cd7dd2c68de14f0a0a3570278f494b3`. Fresh post-fix verification:
+
+```text
+PYTHONPATH=. pytest -q tests/test_release_drill_v1.py  26 passed
+make release-drill                                      passed, 13 checks true
+make contracts-test                                     6 passed
+make text-core-test                                     22 passed
+make downstream-test                                    220 passed
+make upstream-test                                      75 passed, 3 skipped
+governance af3f80d..714280b                             passed, 13 changed / 6 code files
+git diff --check af3f80d..714280b                       passed
+Development Governance 29647704022                     success
+Kaiyuan Stable Core 29647704011                        success
+Kaiyuan Upstream Runtime 29647703977                    success (all 5 jobs)
+```
+
+The GitHub thread-aware API returned zero review threads and zero submitted reviews; the independent review findings above were all resolved and independently covered by focused tests. PR #18 remained draft, mergeable, and targeted only `stable/kaiyuan-v2`; its 13-file diff contains no raw corpus, candidate content, ingest implementation, Qdrant schema/data, `main`, or `local_kb_default` mutation. This evidence update changes the head, so these run IDs are an intermediate reviewed checkpoint, not final merge evidence. Next operation: publish this log-only commit, wait for every required workflow on the resulting exact head, mark ready, verify metadata/threads/diff once more, and squash merge.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence
