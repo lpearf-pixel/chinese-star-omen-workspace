@@ -36,16 +36,37 @@ def test_http_status_errors_preserve_upstream_code_and_retryability():
     missing = classify_transport_exception(
         _status_error(
             404,
-            {"detail": {"error": {"code": "COLLECTION_NOT_FOUND", "message": "missing"}}},
+            {
+                "detail": {
+                    "error": {
+                        "code": "COLLECTION_NOT_FOUND",
+                        "message": "missing",
+                    }
+                }
+            },
         )
     )
     assert missing.code == SyncErrorCode.COLLECTION_NOT_FOUND
     assert missing.retryable is False
 
+    # A route/contract 404 must not pretend that a Qdrant collection is absent.
+    generic_not_found = classify_transport_exception(
+        _status_error(404, {"detail": "Not Found"})
+    )
+    assert generic_not_found.code == SyncErrorCode.CONTRACT_ERROR
+    assert generic_not_found.retryable is False
+
     contract = classify_transport_exception(
         _status_error(
             422,
-            {"detail": {"error": {"code": "CONTRACT_ERROR", "message": "bad filter"}}},
+            {
+                "detail": {
+                    "error": {
+                        "code": "CONTRACT_ERROR",
+                        "message": "bad filter",
+                    }
+                }
+            },
         )
     )
     assert contract.code == SyncErrorCode.CONTRACT_ERROR
@@ -54,7 +75,14 @@ def test_http_status_errors_preserve_upstream_code_and_retryability():
     unavailable = classify_transport_exception(
         _status_error(
             503,
-            {"detail": {"error": {"code": "UPSTREAM_UNAVAILABLE", "message": "qdrant down"}}},
+            {
+                "detail": {
+                    "error": {
+                        "code": "UPSTREAM_UNAVAILABLE",
+                        "message": "qdrant down",
+                    }
+                }
+            },
         )
     )
     assert unavailable.code == SyncErrorCode.UPSTREAM_UNAVAILABLE
