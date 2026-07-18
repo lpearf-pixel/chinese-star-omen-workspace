@@ -94,6 +94,7 @@ def test_apply_writes_separate_atomic_output_and_preserves_input(tmp_path):
         plan=plan,
         input_path=rules_path,
         output_path=output,
+        kb_root=root,
     )
 
     migrated = json.loads(output.read_text(encoding="utf-8"))
@@ -107,4 +108,45 @@ def test_apply_writes_separate_atomic_output_and_preserves_input(tmp_path):
             plan=plan,
             input_path=rules_path,
             output_path=rules_path,
+            kb_root=root,
         )
+
+
+def test_apply_rejects_tampered_plan_and_raw_corpus_output(tmp_path):
+    root = tmp_path / "kb"
+    source = _source(root, "KR3g0018_031.md", "KR3g0018_WYG_031-17a", "熒惑守心。")
+    rules_path = tmp_path / "rules.json"
+    rules = [_rule("mars-xin", {"card_type": "fenjuan", "quote": "熒惑守心"})]
+    rules_path.write_text(json.dumps(rules, ensure_ascii=False), encoding="utf-8")
+    plan = plan_rule_evidence_migration(rules, kb_root=root)
+    plan["details"][0]["after"]["page_marker"] = "tampered"
+
+    with pytest.raises(ValueError, match="planned evidence is not currently citable"):
+        apply_rule_evidence_migration(
+            rules=rules,
+            plan=plan,
+            input_path=rules_path,
+            output_path=tmp_path / "out.json",
+            kb_root=root,
+        )
+    clean = plan_rule_evidence_migration(rules, kb_root=root)
+    with pytest.raises(ValueError, match="output path must be outside kb_root"):
+        apply_rule_evidence_migration(
+            rules=rules,
+            plan=clean,
+            input_path=rules_path,
+            output_path=source,
+            kb_root=root,
+        )
+
+
+def test_malformed_evidence_is_invalid_and_missing_root_fails(tmp_path):
+    root = tmp_path / "kb"
+    _source(root, "KR3g0018_031.md", "KR3g0018_WYG_031-17a", "熒惑守心。")
+    plan = plan_rule_evidence_migration(
+        [{"id": "bad", "evidence": []}],
+        kb_root=root,
+    )
+    assert plan["details"][0]["status"] == "invalid_rule"
+    with pytest.raises(ValueError, match="kb_root must be an existing directory"):
+        plan_rule_evidence_migration([], kb_root=tmp_path / "missing")
