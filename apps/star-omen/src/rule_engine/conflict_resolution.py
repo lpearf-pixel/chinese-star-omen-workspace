@@ -43,16 +43,19 @@ def _validated_rows(matches: list[dict[str, Any]]) -> list[dict[str, Any]]:
         priority = row.get("rule_priority", 100)
         if isinstance(priority, bool) or not isinstance(priority, int):
             raise ValueError(f"rule {rule_id!r} rule_priority must be an integer")
+        row["rule_priority"] = priority
         score = row.get("match_score", 0.0)
         if isinstance(score, bool) or not isinstance(score, (int, float)):
             raise ValueError(f"rule {rule_id!r} match_score must be finite numeric")
         if not math.isfinite(float(score)):
             raise ValueError(f"rule {rule_id!r} match_score must be finite numeric")
+        row["match_score"] = float(score)
         evidence = row.get("primary_evidence_found", False)
         if not isinstance(evidence, bool):
             raise ValueError(
                 f"rule {rule_id!r} primary_evidence_found must be boolean"
             )
+        row["primary_evidence_found"] = evidence
 
         policy = row.get("resolution_policy") or "highest_score"
         if not isinstance(policy, str):
