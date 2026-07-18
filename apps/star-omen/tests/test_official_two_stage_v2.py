@@ -4,7 +4,11 @@ from types import SimpleNamespace
 
 import pytest
 
+import src.connectors.kb_retrieval.core as core_module
+import src.connectors.kb_retrieval.two_stage as two_stage_module
+from kb_contracts import SyncErrorCode
 from src.connectors.kb_search_retriever import KBSearchRetriever
+from src.connectors.kb_search_retriever import KBSearchError
 
 
 def _settings(**overrides):
@@ -253,3 +257,111 @@ def test_meta_client_preserves_explicit_missing_status(monkeypatch):
     assert result["meta_status"] == "missing"
     assert result["error_code"] == "CORPUS_MANIFEST_MISSING"
     assert "corpus_version" not in result
+
+
+def test_two_stage_observability_records_ordered_official_stages(monkeypatch):
+    retriever = _retriever()
+    core_ticks = iter([0, 2_000_000, 2_000_000, 5_000_000])
+    total_ticks = iter([0, 8_000_000])
+    monkeypatch.setattr(core_module, "monotonic_ns", lambda: next(core_ticks))
+    monkeypatch.setattr(two_stage_module, "monotonic_ns", lambda: next(total_ticks))
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        response = _structured_response() if stage == "structured_recall" else _primary_response()
+        return {**response, "corpus_version": "corpus-v2"}
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(
+        retriever,
+        "_scan_primary_files",
+        lambda *args, **kwargs: pytest.fail("filesystem fallback must not run"),
+    )
+
+    result = retriever.two_stage_retrieve("荧惑守心", query_mode="evidence", top_k=8)
+
+    trace = result["observability"]
+    assert trace["schema_version"] == "kb-observability/v1"
+    assert trace["operation"] == "two_stage_retrieve"
+    assert trace["total_latency_ms"] == 8.0
+    assert trace["collection"] == "local_kb_kaiyuan_v2"
+    assert trace["corpus_version"] == "corpus-v2"
+    assert [stage["stage"] for stage in trace["stages"]] == [
+        "structured_recall",
+        "primary_evidence",
+    ]
+    assert [stage["latency_ms"] for stage in trace["stages"]] == [2.0, 3.0]
+    assert trace["stages"][0]["requested_top_k"] == 8
+    assert trace["stages"][0]["raw_pool_size"] == 1
+    assert trace["stages"][0]["returned_pool_size"] == 1
+    assert trace["stages"][0]["upstream_latency_ms"] == 1.0
+
+
+def test_filesystem_fallback_observability_records_reason_and_pool(monkeypatch):
+    retriever = _retriever()
+    core_ticks = iter([0, 1_000_000, 1_000_000, 3_000_000])
+    total_ticks = iter([0, 4_000_000, 7_000_000, 10_000_000])
+    monkeypatch.setattr(core_module, "monotonic_ns", lambda: next(core_ticks))
+    monkeypatch.setattr(two_stage_module, "monotonic_ns", lambda: next(total_ticks))
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        if stage == "structured_recall":
+            return _structured_response()
+        return {**_primary_response(), "hits": [], "retrieved_count": 0}
+
+    fallback_hit = {
+        "chunk_id": "fallback:31",
+        "path": "/local/KR3g0018_031.md",
+        "snippet": "熒惑守心",
+        "card_type": "fenjuan",
+        "match_type": "exact_raw",
+    }
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(
+        retriever,
+        "_scan_primary_files",
+        lambda *args, **kwargs: (
+            [fallback_hit],
+            {"files_scanned": 122, "matched_files": [], "matched_headings": [], "matched_quotes": []},
+        ),
+    )
+
+    result = retriever.two_stage_retrieve("荧惑守心", query_mode="evidence", top_k=3)
+
+    trace = result["observability"]
+    fallback = trace["stages"][-1]
+    assert fallback["operation"] == "filesystem_fallback"
+    assert fallback["fallback_reason"] == "official_primary_empty"
+    assert fallback["latency_ms"] == 3.0
+    assert fallback["raw_pool_size"] == 122
+    assert fallback["returned_pool_size"] == 1
+    assert result["stage2"]["fallback_reason"] == "official_primary_empty"
+
+
+def test_official_primary_error_carries_trace_and_never_falls_back(monkeypatch):
+    retriever = _retriever()
+    core_ticks = iter([0, 1_000_000, 1_000_000, 5_000_000])
+    monkeypatch.setattr(core_module, "monotonic_ns", lambda: next(core_ticks))
+
+    def fake_request(method, path, **kwargs):
+        if kwargs["json_payload"]["retrieval_stage"] == "structured_recall":
+            return _structured_response()
+        raise KBSearchError("timed out", code=SyncErrorCode.TIMEOUT, retryable=True)
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(
+        retriever,
+        "_scan_primary_files",
+        lambda *args, **kwargs: pytest.fail("error must not become filesystem fallback"),
+    )
+
+    with pytest.raises(KBSearchError) as caught:
+        retriever.two_stage_retrieve("荧惑守心", query_mode="evidence", top_k=5)
+
+    assert caught.value.code is SyncErrorCode.TIMEOUT
+    trace = caught.value.details["observability"]
+    assert trace["stage"] == "primary_evidence"
+    assert trace["latency_ms"] == 4.0
+    assert trace["requested_top_k"] == 5
+    assert trace["collection"] == "local_kb_kaiyuan_v2"
