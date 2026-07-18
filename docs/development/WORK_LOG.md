@@ -41,6 +41,18 @@ upstream: 49 passed, 3 skipped
 
 B5-T03 is `VERIFYING`, not `DONE`. Draft PR #15 targets `stable/kaiyuan-v2`. Remaining work is exact-head CI, independent review, ready and squash merge. No `main`, raw corpus, candidate, ingest, retrieval, Qdrant, or `local_kb_default` change.
 
+### Independent review fixes
+
+Review found one Critical and three Important issues. New tests first reproduced three failures, then fixes:
+
+- apply now binds every plan detail to current index/rule id/before evidence, verifies source fingerprint, rejects duplicate/out-of-range indices, and re-runs the resolver before any write;
+- plan/apply output must differ from input and remain outside `kb_root`; plan output is atomic too;
+- malformed evidence is `invalid_rule`, while only absent evidence is `missing_evidence`;
+- missing/empty primary `kb_root` fails clearly instead of returning healthy unresolved;
+- restored candidate-generation CLI message to its original command.
+
+Post-review verification: focused 6 passed; downstream 183 passed; contracts 6 passed; text-core 22 passed; upstream 49 passed, 3 skipped. A new exact-head CI run is required after publishing these fixes.
+
 ## 2026-07-18 — B5-T02 merged; B5-T03 started
 
 ### B5-T02 final evidence
