@@ -14,7 +14,6 @@ CONTRACTS = Path(__file__).resolve().parents[3] / "packages" / "kb-contracts" / 
 if str(CONTRACTS) not in sys.path:
     sys.path.insert(0, str(CONTRACTS))
 from kb_contracts import (  # noqa: E402
-    SyncErrorCode,
     load_candidate_manifest,
     merge_candidate_item,
     new_candidate_manifest,
@@ -289,39 +288,16 @@ def generate_candidate_cards(
     }
 
 
-def _retrieve_hits(base_url: str, term: str) -> list[dict[str, Any]]:
-    """Authenticated official extract-card lookup retained as a test seam."""
-
-    retriever = KBSearchRetriever(base_url=base_url)
-    result = retriever.retrieve(
-        term,
-        top_k=20,
-        query_mode="evidence",
-        retrieval_stage="structured_recall",
-        card_types=["extract_card"],
-        literal_first=True,
-    )
-    hits = result.get("hits")
-    if not isinstance(hits, list):
-        raise KBSearchError(
-            "retrieve response field 'hits' must be a list",
-            code=SyncErrorCode.INVALID_RESPONSE,
-        )
-    return [hit for hit in hits if isinstance(hit, dict)]
-
-
 def sync_upstream_status(
     book_id: str,
     candidate_root: Path,
     base_url: str,
 ) -> dict[str, Any]:
+    """Reconcile candidates through one authenticated, book-scoped retriever."""
+
     retriever = KBSearchRetriever(base_url=base_url)
     return sync_candidate_manifests(
         book_id,
         candidate_root,
         retriever=retriever,
-        retrieve_hits=lambda item: _retrieve_hits(
-            base_url,
-            str(item.get("term") or item.get("anchor_text") or ""),
-        ),
     )
