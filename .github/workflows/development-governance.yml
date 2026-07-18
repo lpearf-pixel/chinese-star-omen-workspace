@@ -1,0 +1,31 @@
+name: Development Governance
+
+on:
+  pull_request:
+    branches:
+      - "stable/kaiyuan-v2"
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Unit test governance checker
+        run: python -m unittest discover -s scripts/tests -p 'test_*.py' -v
+
+      - name: Require task or work-log update for code changes
+        run: |
+          python scripts/check_development_governance.py \
+            --base "${{ github.event.pull_request.base.sha }}" \
+            --head "${{ github.event.pull_request.head.sha }}"
