@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T01 merged; B6-T02 started
+
+```text
+PR: #16
+Final head: 9a395ac8bacb1ab0464b584a8e9ef31f5f5d42cb
+Development Governance: 29644669300 — success
+Kaiyuan Stable Core: 29644669317 — success
+Kaiyuan Upstream Runtime: 29644669313 — success
+Squash merge: 0632c0a87515b4b6d33ea2476630d62e2b3321d7
+```
+
+GitHub returned `merged=true`, and `refs/heads/stable/kaiyuan-v2` independently resolved to the same squash SHA. PR #16 targeted only `stable/kaiyuan-v2`; no corpus, candidate, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
+
+B6-T02 started from the actual merge SHA on `codex/kaiyuan-retrieval-observability-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory retrieval/sync result schemas and error boundaries, then define additive JSON-safe observability fields for stage latency, pool size, fallback reason, sync run error, corpus version, and collection.
+
 ## 2026-07-18 — B6-T01 implementation verifying
 
 ### TDD evidence
