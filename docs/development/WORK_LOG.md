@@ -8,6 +8,8 @@ Started `codex/kaiyuan-release-observation-capture-v2` from the independently ve
 
 Selected a local direct-read CLI over a new inspection endpoint or operator-supplied fingerprints. Health/meta and exact-stage smoke use existing KB Search contracts; active/protected fingerprints use Qdrant read-only collection metadata and exact counts. Secrets, hits, raw bodies, payloads, and source content are excluded. Design and D-017 are now the durable source; next action is the detailed TDD plan and draft PR.
 
+Draft PR #20 targets only `stable/kaiyuan-v2`. Task 1 TDD began with an observed import RED (`ModuleNotFoundError: release_observation`), followed by a minimal content-free builder GREEN (`1 passed`). A second RED proved whole-config hashing changed when non-allowlisted simulated payload/status secrets changed; projecting to the explicit schema allowlist restored GREEN (`2 passed`). No live adapter, network call, output write, Qdrant mutation, corpus, candidate, or collection change has occurred. Next action: add fail-closed builder cases, then HTTP/Qdrant read-adapter RED tests.
+
 ## 2026-07-18 — B6-T03 merged and release line complete
 
 ```text
