@@ -33,6 +33,10 @@ from src.connectors.manifest_reader import ManifestReader
 from src.eval.corpus_eval import run_corpus_eval
 from src.research import build_case_report, build_research_index, validate_research_data
 from src.rule_engine.minimal_matcher import run_match_rule
+from src.rule_engine.rule_evidence_migration import (
+    apply_rule_evidence_migration,
+    plan_rule_evidence_migration,
+)
 
 app = typer.Typer(help="Chinese astro model CLI") if typer else None
 
@@ -358,6 +362,31 @@ def audit_rules_impl(
     return report
 
 
+def audit_rule_evidence_migration_impl(
+    rules_path: Path,
+    kb_root: Path,
+    plan_out: Path | None = None,
+    apply_out: Path | None = None,
+) -> dict[str, Any]:
+    rules = _load_json(rules_path)
+    plan = plan_rule_evidence_migration(rules, kb_root=kb_root)
+    if plan_out is not None:
+        plan_out.parent.mkdir(parents=True, exist_ok=True)
+        plan_out.write_text(
+            json.dumps(plan, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    if apply_out is not None:
+        applied = apply_rule_evidence_migration(
+            rules=rules,
+            plan=plan,
+            input_path=rules_path,
+            output_path=apply_out,
+        )
+        plan = {**plan, **applied}
+    return plan
+
+
 if typer:
 
     @app.command("validate-data")
@@ -483,6 +512,21 @@ if typer:
         base_url: str | None = typer.Option(None, "--base-url"),
     ):
         out = generate_candidate_card_impl(query, book_id, out_dir, base_url)
+        typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+
+    @app.command("audit-rule-evidence-migration")
+    def audit_rule_evidence_migration_cmd(
+        rules_path: Path = typer.Option(..., "--rules"),
+        kb_root: Path = typer.Option(..., "--kb-root"),
+        plan_out: Path | None = typer.Option(None, "--plan-out"),
+        apply_out: Path | None = typer.Option(None, "--apply-out"),
+    ):
+        out = audit_rule_evidence_migration_impl(
+            rules_path=rules_path,
+            kb_root=kb_root,
+            plan_out=plan_out,
+            apply_out=apply_out,
+        )
         typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
         typer.echo(
             "candidate cards generated; submit to upstream "
@@ -661,6 +705,12 @@ def _main_fallback():  # pragma: no cover
     )
     audit_parser.add_argument("--kb-root")
 
+    migration_parser = sub.add_parser("audit-rule-evidence-migration")
+    migration_parser.add_argument("--rules", required=True)
+    migration_parser.add_argument("--kb-root", required=True)
+    migration_parser.add_argument("--plan-out")
+    migration_parser.add_argument("--apply-out")
+
     eval_parser = sub.add_parser("eval-corpus")
     eval_parser.add_argument("--eval-path", default="eval/corpus_eval_cases.yaml")
     eval_parser.add_argument("--collection")
@@ -733,6 +783,14 @@ def _main_fallback():  # pragma: no cover
         out = audit_rules_impl(
             Path(args.rules_path),
             Path(args.kb_root) if args.kb_root else None,
+        )
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+    elif args.cmd == "audit-rule-evidence-migration":
+        out = audit_rule_evidence_migration_impl(
+            rules_path=Path(args.rules),
+            kb_root=Path(args.kb_root),
+            plan_out=Path(args.plan_out) if args.plan_out else None,
+            apply_out=Path(args.apply_out) if args.apply_out else None,
         )
         print(json.dumps(out, ensure_ascii=False, indent=2))
     elif args.cmd == "eval-corpus":
