@@ -12,6 +12,25 @@ class ConditionState(str, Enum):
     UNKNOWN = "unknown"
 
 
+def _json_safe(value: Any) -> Any:
+    """Return a trace value accepted by strict JSON encoders.
+
+    Event measurements may contain NaN or infinities. They remain auditable as
+    explicit strings, but never leak non-standard JSON constants into CLI or
+    report output.
+    """
+
+    if isinstance(value, float) and not math.isfinite(value):
+        if math.isnan(value):
+            return "nan"
+        return "infinity" if value > 0 else "-infinity"
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return value
+
+
 @dataclass(frozen=True)
 class ConditionEvaluation:
     name: str
@@ -25,8 +44,8 @@ class ConditionEvaluation:
         return {
             "state": self.state.value,
             "required": self.required,
-            "expected": self.expected,
-            "actual": self.actual,
+            "expected": _json_safe(self.expected),
+            "actual": _json_safe(self.actual),
             "reason": self.reason,
         }
 
