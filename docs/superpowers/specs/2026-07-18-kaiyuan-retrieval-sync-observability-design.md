@@ -55,7 +55,7 @@ Returned `candidate-sync-report/v2` values add:
 - total `latency_ms`;
 - `collection` and `corpus_version` copied from healthy upstream meta when available;
 - `checked`, `lookup_count`, and `official_hit_count`;
-- `run_error`, equal to the existing structured `error` payload on failure and `null` on success.
+- `run_error`, an allowlisted projection of the existing structured error (`code`, `status_code`, `retryable`) on failure and `null` on success. The authoritative top-level `error` remains unchanged; message/details are excluded from telemetry because upstream response bodies may contain secrets or source content.
 
 The envelope is returned to the caller. Successful manifests may retain their existing compact `last_sync_report`; no nondeterministic latency is persisted into manifests. On any run error, manifest bytes remain unchanged.
 
@@ -73,7 +73,7 @@ Tests inject or monkeypatch the monotonic clock. No production clock value is as
 - All existing fields and schemas remain present; `observability` is additive.
 - Structured runtime errors are never converted to `hits=[]`, `pending`, or success.
 - `run_error` is not a business status and never appears in candidate item `sync_status`.
-- Collection and corpus version come only from effective request/upstream response/meta. Conflicting or missing data is not guessed.
+- Collection and corpus version come only from effective request/upstream response/meta. Two-stage provenance is promoted only when official stages agree; conflicts produce a null top-level value and name the field in `provenance_conflicts`.
 - Envelopes must serialize with `json.dumps(..., allow_nan=False)`.
 - No secret, API key, raw response body, machine-local source content, or candidate anchor is recorded.
 
