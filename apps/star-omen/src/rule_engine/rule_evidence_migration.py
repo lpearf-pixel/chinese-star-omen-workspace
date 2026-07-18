@@ -17,6 +17,8 @@ PRIMARY_CARD_TYPES = {"fenjuan", "fulltext"}
 
 def _load_primary_passages(kb_root: Path) -> tuple[list[Any], str]:
     root = kb_root.expanduser().resolve()
+    if not root.is_dir():
+        raise ValueError("kb_root must be an existing directory")
     passages: list[Any] = []
     digest = hashlib.sha256()
     for path in sorted(root.rglob("*.md"), key=lambda item: item.as_posix()):
@@ -38,6 +40,8 @@ def _load_primary_passages(kb_root: Path) -> tuple[list[Any], str]:
                 book_title=str(inferred.get("book_title") or "唐開元占經"),
             )
         )
+    if not passages:
+        raise ValueError("kb_root contains no recognized primary passages")
     return passages, "sha256:" + digest.hexdigest()
 
 
@@ -115,8 +119,11 @@ def plan_rule_evidence_migration(
             "validation_status": None,
             "candidates": [],
         }
-        if not isinstance(evidence, dict):
+        if "evidence" not in rule:
             details.append({**base, "status": "missing_evidence", "reason": "rule_has_no_evidence"})
+            continue
+        if not isinstance(evidence, dict):
+            details.append({**base, "status": "invalid_rule", "reason": "evidence_must_be_mapping"})
             continue
         resolved = resolve_evidence(evidence, root)
         if is_citable_evidence(resolved):
@@ -224,28 +231,61 @@ def apply_rule_evidence_migration(
     plan: dict[str, Any],
     input_path: str | Path,
     output_path: str | Path,
+    kb_root: str | Path,
 ) -> dict[str, Any]:
     source = Path(input_path).expanduser().resolve()
     output = Path(output_path).expanduser().resolve()
+    root = Path(kb_root).expanduser().resolve()
     if source == output:
         raise ValueError("output path must differ from input path")
+    try:
+        output.relative_to(root)
+    except ValueError:
+        pass
+    else:
+        raise ValueError("output path must be outside kb_root")
     details = plan.get("details")
     if not isinstance(details, list) or len(details) != len(rules):
         raise ValueError("migration plan does not match rules")
+    _, current_fingerprint = _load_primary_passages(root)
+    if plan.get("source_fingerprint") != current_fingerprint:
+        raise ValueError("migration plan source fingerprint is stale")
     migrated = [dict(rule) for rule in rules]
     applied_count = 0
-    for detail in details:
-        if detail.get("status") != "migratable":
-            continue
+    seen_indices: set[int] = set()
+    for expected_index, detail in enumerate(details):
+        if not isinstance(detail, dict):
+            raise ValueError("migration plan detail must be a mapping")
         index = detail.get("rule_index")
+        if index != expected_index or index in seen_indices:
+            raise ValueError("migration plan rule index mismatch")
+        seen_indices.add(index)
+        rule = rules[index]
+        expected_id = rule.get("id") if isinstance(rule, dict) else None
+        if detail.get("rule_id") != expected_id:
+            raise ValueError("migration plan rule id mismatch")
+        before = rule.get("evidence") if isinstance(rule, dict) else None
+        if detail.get("before") != before:
+            raise ValueError("migration plan before evidence mismatch")
+        if detail.get("status") != "migratable":
+            if detail.get("after") is not None:
+                raise ValueError("non-migratable plan item must not contain after")
+            continue
         after = detail.get("after")
-        if not isinstance(index, int) or not isinstance(after, dict):
+        if not isinstance(after, dict):
             raise ValueError("invalid migratable plan item")
+        if not is_citable_evidence(resolve_evidence(after, root)):
+            raise ValueError("planned evidence is not currently citable")
         migrated[index] = dict(migrated[index])
         migrated[index]["evidence"] = dict(after)
         applied_count += 1
+    _atomic_json_write(output, migrated)
+    return {"applied": True, "applied_count": applied_count, "output_path": str(output)}
+
+
+def _atomic_json_write(output: Path, value: Any) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(migrated, ensure_ascii=False, indent=2) + "\n"
+    payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
     handle = tempfile.NamedTemporaryFile(
         mode="w",
         encoding="utf-8",
@@ -264,4 +304,24 @@ def apply_rule_evidence_migration(
     finally:
         if temp_path.exists():
             temp_path.unlink()
-    return {"applied": True, "applied_count": applied_count, "output_path": str(output)}
+
+
+def write_migration_plan(
+    plan: dict[str, Any],
+    *,
+    input_path: str | Path,
+    output_path: str | Path,
+    kb_root: str | Path,
+) -> None:
+    source = Path(input_path).expanduser().resolve()
+    output = Path(output_path).expanduser().resolve()
+    root = Path(kb_root).expanduser().resolve()
+    if source == output:
+        raise ValueError("plan output path must differ from input path")
+    try:
+        output.relative_to(root)
+    except ValueError:
+        pass
+    else:
+        raise ValueError("plan output path must be outside kb_root")
+    _atomic_json_write(output, plan)
