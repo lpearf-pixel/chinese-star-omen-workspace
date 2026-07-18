@@ -7,6 +7,10 @@ from pathlib import Path
 from typing import Any
 
 from src.connectors.kb_contract import infer_metadata_from_path
+from src.connectors.primary_passage_cache import (
+    PrimarySourceReadError,
+    primary_passage_cache,
+)
 
 TEXT_CORE = Path(__file__).resolve().parents[4] / "packages" / "kb-text-core" / "python"
 if str(TEXT_CORE) not in sys.path:
@@ -134,8 +138,14 @@ def scan_primary_files(
 
             files_scanned += 1
             try:
-                text = path.read_text(encoding="utf-8")
-            except Exception as exc:
+                snapshot = primary_passage_cache.load(
+                    path,
+                    card_type=str(meta.get("card_type") or ""),
+                    kb_book_id=str(kb_book_id or ""),
+                    book_title=str(meta.get("book_title") or "唐開元占經"),
+                )
+                text = snapshot.text
+            except PrimarySourceReadError as exc:
                 if debug_enabled:
                     read_errors.append({"path": normalized_path, "error": str(exc)})
                 continue
