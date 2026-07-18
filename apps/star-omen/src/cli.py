@@ -36,6 +36,7 @@ from src.rule_engine.minimal_matcher import run_match_rule
 from src.rule_engine.rule_evidence_migration import (
     apply_rule_evidence_migration,
     plan_rule_evidence_migration,
+    write_migration_plan,
 )
 
 app = typer.Typer(help="Chinese astro model CLI") if typer else None
@@ -371,10 +372,11 @@ def audit_rule_evidence_migration_impl(
     rules = _load_json(rules_path)
     plan = plan_rule_evidence_migration(rules, kb_root=kb_root)
     if plan_out is not None:
-        plan_out.parent.mkdir(parents=True, exist_ok=True)
-        plan_out.write_text(
-            json.dumps(plan, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
+        write_migration_plan(
+            plan,
+            input_path=rules_path,
+            output_path=plan_out,
+            kb_root=kb_root,
         )
     if apply_out is not None:
         applied = apply_rule_evidence_migration(
@@ -382,6 +384,7 @@ def audit_rule_evidence_migration_impl(
             plan=plan,
             input_path=rules_path,
             output_path=apply_out,
+            kb_root=kb_root,
         )
         plan = {**plan, **applied}
     return plan
@@ -513,6 +516,10 @@ if typer:
     ):
         out = generate_candidate_card_impl(query, book_id, out_dir, base_url)
         typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
+        typer.echo(
+            "candidate cards generated; submit to upstream "
+            "Local-KB-Unified after review."
+        )
 
     @app.command("audit-rule-evidence-migration")
     def audit_rule_evidence_migration_cmd(
@@ -528,10 +535,6 @@ if typer:
             apply_out=apply_out,
         )
         typer.echo(json.dumps(out, ensure_ascii=False, indent=2))
-        typer.echo(
-            "candidate cards generated; submit to upstream "
-            "Local-KB-Unified after review."
-        )
 
     @app.command("sync-upstream-status")
     def sync_upstream_status_cmd(
