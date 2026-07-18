@@ -49,6 +49,13 @@ failures: recommendation_status absent; manual_review still returned a formal re
 GREEN 2:
 PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_conflict_resolution_policy_v2.py tests/test_rule_matcher.py
 result: 20 passed
+
+RED 3 (compatibility self-review):
+minimal legacy row without explicit score/priority/evidence raised KeyError: rule_priority
+
+GREEN 3:
+normalized compatible defaults onto the copied row before ordering
+focused result: 21 passed
 ```
 
 ### Implementation
@@ -61,7 +68,7 @@ result: 20 passed
 ### Local regression evidence
 
 ```text
-downstream: 173 passed
+downstream: 174 passed
 contracts: 6 passed
 text-core: 22 passed
 upstream: 49 passed, 3 skipped
