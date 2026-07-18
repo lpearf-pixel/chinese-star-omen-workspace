@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T03 merged and release line complete
+
+```text
+PR: #18
+Final head: 4f403682d8d39860b383d9483446704d82a85029
+Development Governance: 29647775680 — success
+Kaiyuan Stable Core: 29647775679 — success
+Kaiyuan Upstream Runtime: 29647775710 — success
+Squash merge: 1378f2790b52c5f08ddf235223fcf128928fc911
+```
+
+GitHub returned `merged=true`, and an independent `ls-remote` resolved `refs/heads/stable/kaiyuan-v2` to the same squash SHA. Final metadata was base `stable/kaiyuan-v2`, non-draft, mergeable, with zero review threads and zero submitted reviews. The 13-file diff contained only the non-mutating validator, strict CLI, synthetic fixture, Make/CI gate, runbook, tests, and governance documents. It did not change `main`, raw corpus, candidate content, ingest implementation, Qdrant schema/data, or `local_kb_default`.
+
+Independent review found six Important and one Minor issue; all were reproduced and resolved before the final head. Final local evidence was 26 focused, 6 contracts, 22 text-core, 220 downstream, and 75 upstream tests passed (3 environment skips), plus a passing 13-check synthetic drill. B6-T03 and the currently registered B4–B6 release sequence are complete. No further READY task is registered; future work must first be added to TASKS on a new feature branch.
+
 ## 2026-07-18 — B6-T02 merged; B6-T03 started
 
 ```text

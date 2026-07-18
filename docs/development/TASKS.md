@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-stable-release-rollback-v2
-Current PR: pending
+Current feature: codex/kaiyuan-b6-release-closeout-v2
+Current PR: #19 (closeout)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -193,13 +193,14 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T03 — Stable release runbook and rollback drill
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** 验证 `local_kb_kaiyuan_v2` 切换、回滚、manifest 对账和旧 collection 保护。
 - **Base evidence:** B6-T02 PR #17 squash merged as `af3f80d8b415f98825a0516fbbce7890e134a90c`.
 - **Branch:** `codex/kaiyuan-stable-release-rollback-v2`.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-stable-release-rollback-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-stable-release-rollback.md`.
-- **PR:** #18, draft, base `stable/kaiyuan-v2`.
+- **PR:** #18, base `stable/kaiyuan-v2`.
+- **Merge evidence:** final head `4f403682d8d39860b383d9483446704d82a85029`; Governance `29647775680`, Stable Core `29647775679`, Upstream Runtime `29647775710` all succeeded; squash merged as `1378f2790b52c5f08ddf235223fcf128928fc911`.
 - **Acceptance:** pure non-mutating three-phase verifier; exact release/rollback manifest reconciliation; healthy structured and primary smoke; exact prior-routing restoration; invariant `local_kb_default` fingerprint; explicit failed report/exit semantics; synthetic CI drill; operator runbook; full gates and independent review.
 
 ## 当前执行顺序
