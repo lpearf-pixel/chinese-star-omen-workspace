@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from pathlib import Path
+from time import monotonic_ns
 from typing import Any
 
 from src.connectors.candidate_overlay import overlay_hits
+from src.observability import base_observability, elapsed_ms
 
 
 class TwoStageMixin:
@@ -18,6 +20,7 @@ class TwoStageMixin:
         literal_first: bool | None = None,
         literal_pool_factor: int | None = None,
     ) -> dict[str, Any]:
+        total_started_ns = monotonic_ns()
         effective_query_mode = query_mode or self._query_mode(query)
         effective_limit = top_k if top_k is not None else self.default_limit
         canonical_filters = self._canonicalize_filters(filters) or {}
@@ -83,8 +86,10 @@ class TwoStageMixin:
         }
         fallback_used = False
         fallback_reason: str | None = None
+        fallback_observability: dict[str, Any] | None = None
 
         if mode != "support" and not primary_candidates:
+            fallback_started_ns = monotonic_ns()
             primary_candidates, scan_stats = self._scan_primary_files(
                 query,
                 book_id=str(book_id) if book_id else None,
@@ -99,6 +104,20 @@ class TwoStageMixin:
                 for hit in primary_candidates
                 if hit.get("card_type") in self.PRIMARY_CARD_TYPES
             ][:effective_limit]
+            fallback_observability = base_observability(
+                "filesystem_fallback",
+                stage="primary_evidence",
+                source="filesystem",
+                latency_ms=elapsed_ms(fallback_started_ns, monotonic_ns()),
+                upstream_latency_ms=None,
+                requested_top_k=effective_limit,
+                raw_pool_size=int(scan_stats.get("files_scanned") or 0),
+                returned_pool_size=len(primary_candidates),
+                card_types=list(pool_spec["stage2"]),
+                collection=collection or self.default_collection,
+                corpus_version=None,
+                fallback_reason=fallback_reason,
+            )
         elif mode == "support":
             fallback_reason = "support_mode"
 
@@ -194,4 +213,44 @@ class TwoStageMixin:
         }
         if "debug_scan" in scan_stats:
             stage2["debug_scan"] = scan_stats["debug_scan"]
-        return {"stage1": stage1, "stage2": stage2}
+        stages: list[dict[str, Any]] = []
+        if isinstance(stage1.get("observability"), dict):
+            stages.append({**stage1["observability"], "source": "official_qdrant"})
+        if mode != "support" and isinstance(official_result.get("observability"), dict):
+            stages.append(
+                {**official_result["observability"], "source": "official_qdrant"}
+            )
+        elif mode == "support":
+            stages.append(
+                base_observability(
+                    "retrieve",
+                    stage="primary_evidence",
+                    source="skipped",
+                    latency_ms=0.0,
+                    upstream_latency_ms=None,
+                    requested_top_k=effective_limit,
+                    raw_pool_size=0,
+                    returned_pool_size=0,
+                    card_types=list(pool_spec["stage2"]),
+                    collection=collection or self.default_collection,
+                    corpus_version=None,
+                    fallback_reason="support_mode",
+                )
+            )
+        if fallback_observability is not None:
+            stages.append(fallback_observability)
+
+        corpus_version = None
+        for stage in reversed(stages):
+            if stage.get("corpus_version") is not None:
+                corpus_version = stage["corpus_version"]
+                break
+        observability = base_observability(
+            "two_stage_retrieve",
+            total_latency_ms=elapsed_ms(total_started_ns, monotonic_ns()),
+            collection=collection or self.default_collection,
+            corpus_version=corpus_version,
+            fallback_reason=fallback_reason,
+            stages=stages,
+        )
+        return {"stage1": stage1, "stage2": stage2, "observability": observability}
