@@ -195,13 +195,30 @@ jobs:
           exit 1
 
       - name: Candidate promote ingest retrieve sync roundtrip
+        id: candidate-roundtrip-test
+        continue-on-error: true
         env:
           RUN_CANDIDATE_ROUNDTRIP: "1"
           QDRANT_URL: http://127.0.0.1:6333
           KB_SEARCH_API_KEY: roundtrip-key
         run: |
+          set -o pipefail
           PYTHONPATH=packages/kb-contracts/python:packages/kb-text-core/python \
-          pytest -q apps/local-kb-unified/tests/test_candidate_roundtrip_v2.py
+          pytest -q apps/local-kb-unified/tests/test_candidate_roundtrip_v2.py \
+            2>&1 | tee candidate-roundtrip.log
+
+      - name: Upload candidate roundtrip log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: candidate-roundtrip-log-${{ github.run_id }}
+          path: candidate-roundtrip.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Fail when candidate roundtrip failed
+        if: steps.candidate-roundtrip-test.outcome == 'failure'
+        run: exit 1
 
   workspace-regression:
     runs-on: ubuntu-latest
