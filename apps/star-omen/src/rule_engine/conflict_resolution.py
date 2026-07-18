@@ -121,8 +121,6 @@ def resolve_rule_conflicts(
             raise ValueError(
                 f"rule {row['rule_id']!r} conflict_group must be a string or null"
             )
-        group = group.strip()
-        row["conflict_group"] = group
         groups.setdefault(group, []).append(row)
 
     selected: list[dict[str, Any]] = list(independent)
