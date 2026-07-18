@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T02 merged; B6-T03 started
+
+```text
+PR: #17
+Final head: 534723d0828c8f438900e203d96e981daf77218d
+Development Governance: 29646657185 — success
+Kaiyuan Stable Core: 29646657169 — success
+Kaiyuan Upstream Runtime: 29646657195 — success
+Squash merge: af3f80d8b415f98825a0516fbbce7890e134a90c
+```
+
+GitHub returned `merged=true`, and `refs/heads/stable/kaiyuan-v2` independently resolved to the same squash SHA. No corpus, candidate content, ingest, Qdrant schema/collection, `main`, or `local_kb_default` change.
+
+B6-T03 started from the actual merge SHA on `codex/kaiyuan-stable-release-rollback-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory release scripts, manifest/meta health checks, collection configuration, and existing B4 runbook; define a non-destructive ephemeral rollback drill that proves `local_kb_default` protection.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence
