@@ -10,6 +10,10 @@ def test_match_rule_minimal_closure_outputs_required_fields():
     row = out["matches"][0]
     for field in [
         "trigger_match_reason",
+        "condition_states",
+        "unknown_conditions",
+        "failed_conditions",
+        "trigger_ratio",
         "match_status",
         "match_score",
         "missing_conditions",
@@ -31,7 +35,9 @@ def test_match_rule_moon_event_matches_moon_rule():
 
 
 def test_match_rule_jupiter_saturn_conjunction():
-    out = run_match_rule(event_path=Path("data/examples/events/jupiter_saturn_conjunction_demo.json"))
+    out = run_match_rule(
+        event_path=Path("data/examples/events/jupiter_saturn_conjunction_demo.json")
+    )
     assert "rule_jupiter_saturn_conjunction_001" in out["matched_rule_ids"]
 
 
@@ -45,10 +51,16 @@ def test_match_rule_conflict_resolution_and_sorting():
     assert out["matched_rule_ids"][0] == "rule_mars_guarding_xin_high_priority"
 
 
-def test_match_rule_structured_only_candidate_status():
+def test_match_rule_structured_only_event_is_insufficient_data():
     out = run_match_rule(
         event_path=Path("data/examples/events/structured_only_demo.json"),
         rules_path=Path("data/examples/rules/structured_only_rules_demo.json"),
     )
-    assert out["match_status"] in {"candidate_only", "partial_match"}
+    assert out["match_status"] == "insufficient_data"
+    assert out["unknown_conditions"] == [
+        "angular_distance",
+        "duration",
+        "visibility",
+    ]
     assert out["primary_evidence_found"] is False
+    assert out["candidate_only"] is True
