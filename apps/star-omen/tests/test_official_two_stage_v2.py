@@ -269,7 +269,11 @@ def test_two_stage_observability_records_ordered_official_stages(monkeypatch):
     def fake_request(method, path, **kwargs):
         stage = kwargs["json_payload"]["retrieval_stage"]
         response = _structured_response() if stage == "structured_recall" else _primary_response()
-        return {**response, "corpus_version": "corpus-v2"}
+        return {
+            **response,
+            "collection": "effective-alias-v2",
+            "corpus_version": "corpus-v2",
+        }
 
     monkeypatch.setattr(retriever, "_request", fake_request)
     monkeypatch.setattr(
@@ -284,7 +288,7 @@ def test_two_stage_observability_records_ordered_official_stages(monkeypatch):
     assert trace["schema_version"] == "kb-observability/v1"
     assert trace["operation"] == "two_stage_retrieve"
     assert trace["total_latency_ms"] == 8.0
-    assert trace["collection"] == "local_kb_kaiyuan_v2"
+    assert trace["collection"] == "effective-alias-v2"
     assert trace["corpus_version"] == "corpus-v2"
     assert [stage["stage"] for stage in trace["stages"]] == [
         "structured_recall",
@@ -295,6 +299,24 @@ def test_two_stage_observability_records_ordered_official_stages(monkeypatch):
     assert trace["stages"][0]["raw_pool_size"] == 1
     assert trace["stages"][0]["returned_pool_size"] == 1
     assert trace["stages"][0]["upstream_latency_ms"] == 1.0
+
+
+def test_two_stage_observability_does_not_guess_conflicting_provenance(monkeypatch):
+    retriever = _retriever()
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        if stage == "structured_recall":
+            return {**_structured_response(), "collection": "collection-a", "corpus_version": "v1"}
+        return {**_primary_response(), "collection": "collection-b", "corpus_version": "v2"}
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    result = retriever.two_stage_retrieve("荧惑守心", query_mode="evidence")
+
+    trace = result["observability"]
+    assert trace["collection"] is None
+    assert trace["corpus_version"] is None
+    assert trace["provenance_conflicts"] == ["collection", "corpus_version"]
 
 
 def test_filesystem_fallback_observability_records_reason_and_pool(monkeypatch):
