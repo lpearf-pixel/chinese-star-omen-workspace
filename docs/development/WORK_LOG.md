@@ -2,6 +2,16 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T02 observability design and plan
+
+- Inventory confirmed upstream retrieve already returns some `latency_ms`, collection, and optional corpus metadata, but downstream two-stage results have no uniform stage trace and candidate sync reports expose errors without timing/count provenance.
+- Selected an additive `kb-observability/v1` envelope using client monotonic timing. Upstream timing is retained separately and invalid/missing values become null.
+- Retrieval errors still raise; sync errors remain run-level reports and preserve all manifest bytes. No error becomes healthy empty results or candidate status.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-retrieval-sync-observability-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-retrieval-sync-observability.md`.
+- Decision: D-015.
+- No implementation claim. Next exact action: create draft PR, add observability helper tests, observe import RED, then implement only the pure helper.
+
 ## 2026-07-18 — B6-T01 merged; B6-T02 started
 
 ```text
