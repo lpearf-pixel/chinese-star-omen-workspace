@@ -99,14 +99,16 @@ class PrimaryPassageCache:
                 self._entries.move_to_end(key)
                 return cached
 
+            parsed = parse_kaiyuan_passages(
+                text,
+                source_path=str(resolved),
+                card_type=card_type,
+                kb_book_id=kb_book_id,
+                book_title=book_title,
+            )
             passages = tuple(
-                parse_kaiyuan_passages(
-                    text,
-                    source_path=str(resolved),
-                    card_type=card_type,
-                    kb_book_id=kb_book_id,
-                    book_title=book_title,
-                )
+                replace(passage, heading_path=tuple(passage.heading_path))
+                for passage in parsed
             )
             snapshot = PrimarySourceSnapshot(
                 path=resolved,
