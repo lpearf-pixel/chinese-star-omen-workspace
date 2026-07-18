@@ -29,13 +29,13 @@ V2 collection: local_kb_kaiyuan_v2 or ephemeral CI collection
 ## 最新验证基线
 
 ```text
-Verified head: 6152acc6bd9e3dbb07af97b10df42577ff87af54
-Development Governance run: 29623960771 — success
-Kaiyuan Stable Core run: 29623960806 — success
-Kaiyuan Upstream Runtime run: 29623960814 — success
+Verified implementation head: 767e107d7ccaf34a6dbfc7881dd2860ca0bd1369
+Development Governance run: 29624529981 — success
+Kaiyuan Stable Core run: 29624530036 — success
+Kaiyuan Upstream Runtime run: 29624529987 — success
 ```
 
-该 head 已包含开发治理、严格 CText 定点比对、下游全回归、上游单元测试、Qdrant 增量、Qdrant 检索契约和 candidate roundtrip。后续 review hardening 与文档状态更新必须再次通过最终门禁；不得以该历史 head 代替最终 merge head。
+该 head 已包含开发治理、严格 CText 定点比对、下游全回归、上游单元测试、Qdrant 增量、Qdrant 检索契约、candidate roundtrip 与 pre-merge sync integrity hardening。后续任务/日志状态提交必须再次通过最终门禁；不得以历史 head 代替最终 merge head。
 
 ## Governance
 
@@ -50,7 +50,7 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - 代码 PR 必须更新 `TASKS.md` 或 `WORK_LOG.md`；
   - governance checker 有独立单元测试；
   - CI 对 `stable/kaiyuan-v2` PR 生效。
-- **Evidence:** `Development Governance` run `29623960771` 通过；详情见 `WORK_LOG.md`。
+- **Evidence:** `Development Governance` run `29624529981` 通过；详情见 `WORK_LOG.md`。
 
 ## B4 — Candidate sync、可引用证据与黄金评测
 
@@ -78,7 +78,7 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - 401/403、404、408/timeout、422、429/5xx、连接错误、invalid JSON/shape 均有明确分类；
   - 旧字符串异常使用方式保持兼容；
   - 不再将错误转换为空命中。
-- **Evidence:** transport taxonomy tests 和下游全回归在 run `29623960806`/`29623960814` 通过。
+- **Evidence:** transport taxonomy tests 和下游全回归在 run `29624530036`/`29624529987` 通过。
 
 ### B4-T03 — Atomic candidate sync
 
@@ -86,12 +86,12 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
 - **Scope:** 全 manifest 内存规划、run-level error、原子替换与旧入口兼容。
 - **Acceptance:**
   - 健康无命中为 `pending`；
-  - 相同正式 hash 为 `merged`；
-  - 正式卡存在但 hash 不同为 `needs_review`；
-  - 本地 source/anchor/hash 漂移为 `stale`；
+  - 相同正式 hash 与 source identity 为 `merged`；
+  - 正式卡存在但 hash 或 locator 不同为 `needs_review`；
+  - 本地 source/card/anchor/hash 漂移为 `stale`；
   - 任一上游错误时所有 manifest byte-for-byte 不变；
   - 多 item 中途失败不产生部分写入；
-  - `sync-upstream-status` CLI 使用新执行器。
+  - `sync-upstream-status` CLI 使用同一个 canonical structured retriever。
 - **Evidence:** atomic sync unit tests、workspace regression 和 candidate roundtrip 均通过。
 
 ### B4-T04 — Strong citable evidence resolver
@@ -139,7 +139,7 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - linked primary passage 通过 citable 校验；
   - 使用 deterministic fake embedding 和随机 ephemeral collection；
   - 专用 CI job 通过。
-- **Evidence:** `candidate-roundtrip` job 在 `Kaiyuan Upstream Runtime` run `29623960814` 通过；未访问 `local_kb_default`。
+- **Evidence:** `candidate-roundtrip` job 在 `Kaiyuan Upstream Runtime` run `29624529987` 通过；未访问 `local_kb_default`。
 
 ### B4-T08 — Targeted CText spot-check audit
 
@@ -152,7 +152,22 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - strict audit 在正式 121 卷目录运行；
   - 结果写入 release 文档，不修改 raw corpus。
 - **Source:** Chinese Text Project Wiki《開元占經》，用户确认本项目可二次开发；文本未经校订。
-- **Evidence:** strict spot-check 在 Stable Core run `29623960806` 通过。
+- **Evidence:** strict spot-check 在 Stable Core run `29624530036` 通过。
+
+### B4-R01 — Pre-merge sync/transport integrity review
+
+- **Status:** `DONE`
+- **Origin:** 合并前静态 code review。
+- **Scope:** 真实 CLI sync 路径、candidate card 完整性、official source identity、generic 404 分类。
+- **Acceptance:**
+  - `sync-upstream-status` 复用同一个结构化 `KBSearchRetriever`，并传 `filters={"kb_book_id": book_id}`；
+  - 不再为每个 item 通过 legacy helper 新建无 book filter 的 retriever；
+  - candidate card frontmatter 缺失 `anchor_text` 或 `content_hash` 时标为 `stale`；
+  - official hit 只有 hash 与 source locator 同时匹配时标为 `merged`；
+  - 同 hash 但 locator 不同或 locator 缺失时为 `needs_review`；
+  - 只有显式 `COLLECTION_NOT_FOUND` 的 404 才分类为 `collection_not_found`，generic 404 为非重试 `contract_error`；
+  - focused、downstream、candidate roundtrip 与全部门禁通过。
+- **Evidence:** implementation head `767e107d...` 的三个 required workflow 全部成功；详情见 `WORK_LOG.md`。
 
 ### B4-T09 — Documentation and release gates
 
@@ -164,22 +179,7 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
   - PR 从 draft 转为 ready；
   - squash 只合入 `stable/kaiyuan-v2`；
   - `main` 和 `local_kb_default` 无变化。
-- **Current state:** 运行手册和治理文件已完成；pre-merge review 新发现的 hardening 项完成后再跑最终 head 门禁。
-
-### B4-R01 — Pre-merge sync/transport integrity review
-
-- **Status:** `IN_PROGRESS`
-- **Origin:** 合并前静态 code review。
-- **Scope:** 真实 CLI sync 路径、candidate card 完整性、official source identity、generic 404 分类。
-- **Acceptance:**
-  - `sync-upstream-status` 复用同一个结构化 `KBSearchRetriever`，并传 `filters={"kb_book_id": book_id}`；
-  - 不再为每个 item 通过 legacy helper 新建无 book filter 的 retriever；
-  - candidate card frontmatter 缺失 `anchor_text` 或 `content_hash` 时必须标为 `stale`；
-  - official hit 只有 hash 与 source locator 同时匹配时才可标为 `merged`；
-  - 同 hash 但 locator 不同或 locator 缺失时为 `needs_review`；
-  - 只有显式 `COLLECTION_NOT_FOUND` 的 404 才分类为 `collection_not_found`，generic 404 分类为非重试 `contract_error`；
-  - 添加失败测试，确认 RED 后实施；
-  - focused、downstream、candidate roundtrip 与全部最终门禁通过。
+- **Current state:** 代码和 pre-merge review 已完成；等待本状态/日志提交后的 final-head 门禁，随后更新 PR、标记 ready 并 squash 合入稳定分支。
 
 ## B5 — 规则引擎语义收口
 
@@ -220,8 +220,7 @@ Kaiyuan Upstream Runtime run: 29623960814 — success
 ## 当前执行顺序
 
 ```text
-B4-R01
-→ B4-T09 最终 head 全门禁
+B4-T09 final-head 全门禁
 → PR #12 ready/review/squash 到 stable/kaiyuan-v2
 → 从稳定分支开始 B5-T01
 → B5-T02
