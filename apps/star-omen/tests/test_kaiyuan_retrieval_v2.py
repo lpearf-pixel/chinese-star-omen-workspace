@@ -1,8 +1,11 @@
 from pathlib import Path
 
+import src.connectors.primary_file_scanner as scanner_module
+import src.connectors.primary_passage_cache as cache_module
 from src.config.settings import reload_settings
 from src.connectors.kb_search_retriever import KBSearchRetriever
 from src.connectors.primary_file_scanner import source_locator
+from src.connectors.primary_passage_cache import PrimaryPassageCache
 
 
 def _configure_sources(monkeypatch, root: Path) -> None:
@@ -143,3 +146,39 @@ def test_filesystem_fallback_scans_all_candidates_before_limit(monkeypatch, tmp_
     assert stats["files_scanned"] == 2
     assert hits[0]["card_type"] == "fenjuan"
     assert hits[0]["source_locator"] == "KR3g0018_031"
+
+
+def test_repeated_filesystem_scan_reuses_cached_passage_parse(monkeypatch, tmp_path):
+    corpus = tmp_path / "古籍" / "唐開元占經" / "分卷"
+    corpus.mkdir(parents=True)
+    (corpus / "KR3g0018_031.md").write_text(
+        "# 唐開元占經 卷31\n\n## 熒惑占\n"
+        "<pb:KR3g0018_WYG_031-17a>\n熒惑守心，天下兵起。",
+        encoding="utf-8",
+    )
+    _configure_sources(monkeypatch, tmp_path)
+    isolated_cache = PrimaryPassageCache()
+    monkeypatch.setattr(scanner_module, "primary_passage_cache", isolated_cache)
+    real_parser = cache_module.parse_kaiyuan_passages
+    calls = 0
+
+    def counting_parser(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return real_parser(*args, **kwargs)
+
+    monkeypatch.setattr(cache_module, "parse_kaiyuan_passages", counting_parser)
+    retriever = KBSearchRetriever(base_url="http://127.0.0.1:8008", api_key="k")
+
+    first, first_stats = retriever._scan_primary_files(
+        "荧惑守心", book_id="kaiyuan_zhanjing", mode="evidence", limit=3
+    )
+    second, second_stats = retriever._scan_primary_files(
+        "荧惑守心", book_id="kaiyuan_zhanjing", mode="evidence", limit=3
+    )
+
+    assert calls == 1
+    assert second == first
+    assert second_stats == first_stats
+    assert first[0]["page_marker"] == "KR3g0018_WYG_031-17a"
+    assert first[0]["heading_path"][-1] == "熒惑占"
