@@ -112,3 +112,12 @@
 - **Failure:** missing、unreadable、invalid UTF-8、unstable read 或 parse error 不得回退到旧 entry，也不得转换为健康空结果。
 - **Reason:** filesystem fallback、resolver 与 migration 重复解析相同 Markdown；共享只读 passage snapshot 可以降低解析成本，同时不改变检索顺序、证据校验或原始语料。
 - **Consequence:** cache 仅存在于下游进程内，不写磁盘、corpus、candidate 或 Qdrant；正式 evidence 每次仍执行 B4 全部 fail-closed checks。
+
+## D-015 — 可观察性使用附加 envelope，错误语义保持不变
+
+- **Status:** Accepted
+- **Decision:** downstream retrieval 与 candidate sync 使用 `kb-observability/v1` 附加 envelope 记录 monotonic latency、请求/原始/返回 pool、fallback reason、collection、corpus version 和 structured run error。
+- **Error boundary:** retrieval 失败仍抛 `KBSearchError`，trace 只附加到 `details.observability`；sync 失败仍返回 `run_status=error` 且 manifest 原子不写，`run_error` 等于既有 structured error。
+- **Provenance:** collection 来自 effective request/response/meta；corpus version 只来自 upstream response/meta。缺失值为 null，不伪造 `unknown` 或零。
+- **Safety:** trace 严格 JSON-safe，不记录 secret、anchor、source content 或 raw error body；成功 manifest 不持久化 nondeterministic latency。
+- **Reason:** in-band versioned trace 能被 CLI、测试与报告共同消费，同时避免引入外部 telemetry 服务或改变 B4 的健康空结果、运行错误和 candidate 状态边界。
