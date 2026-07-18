@@ -2,6 +2,89 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T01 implementation verifying
+
+### TDD evidence
+
+```text
+RED 1: test_primary_passage_cache_v2.py collection failed with
+ModuleNotFoundError: src.connectors.primary_passage_cache
+GREEN 1: 9 passed
+
+RED 2: scanner integration failed because primary_file_scanner had no
+primary_passage_cache injection point
+GREEN 2: cache + filesystem retrieval 16 passed
+
+RED 3: resolver and migration integration failed because both modules had no
+primary_passage_cache injection point
+GREEN 3: cache + retrieval + resolver + migration 37 passed
+```
+
+### Implementation
+
+- Added a bounded, thread-safe process-local LRU of immutable strict-UTF-8 source snapshots and `kb-text-core` passages.
+- Each load reads and hashes exact bytes; a content change invalidates parsing even when mtime and byte length are preserved.
+- Missing, invalid UTF-8, or unstable sources never return a stale snapshot. Parser errors propagate.
+- Filesystem fallback, citable resolver, and rule-evidence migration reuse snapshots. Resolver still performs every B4 validation on every call; migration fingerprint keeps its exact raw-byte algorithm.
+- Draft PR #16 targets only `stable/kaiyuan-v2`.
+
+### Local verification
+
+```text
+PATH=/tmp/kaiyuan-b5/bin:$PATH make contracts-test
+6 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make text-core-test
+22 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make downstream-test
+195 passed
+
+PATH=/tmp/kaiyuan-b5/bin:$PATH make upstream-test
+49 passed, 3 skipped
+```
+
+B6-T01 is `VERIFYING`, not `DONE`. Remaining: publish implementation, run governance and all three exact-head GitHub workflows, independent review, fix any Critical/Important finding with RED tests, then ready/squash merge. No raw corpus, candidate, ingest, Qdrant, collection, `main`, or `local_kb_default` change.
+
+### Independent review fix
+
+Review found one Important issue and no Critical issues: `KaiyuanPassage` is frozen but its `heading_path` was a mutable list, so returning the cached parser object allowed a consumer to poison later resolver/migration loads without changing source bytes.
+
+```text
+RED: cached heading_path was ['唐開元占經', '熒惑占'] rather than an immutable tuple
+GREEN focused: 38 passed
+GREEN downstream: 196 passed
+GREEN contracts: 6 passed
+GREEN text-core: 22 passed
+GREEN upstream: 49 passed, 3 skipped
+```
+
+The cache now defensively converts every cached passage heading path to a tuple. The regression attempts mutation and proves a later unchanged-byte load remains source-derived. Publishing this fix creates a new head and requires all exact-head CI again.
+
+## 2026-07-18 — B6-T01 design and implementation plan
+
+- Hot paths confirmed in `primary_file_scanner`, `evidence_resolver`, and rule-evidence migration: unchanged primary Markdown was decoded and/or parsed repeatedly.
+- Selected a bounded process-local cache of exact-byte source snapshots and immutable `kb-text-core` passages. Each load hashes strict UTF-8 bytes, so preserved mtime/size cannot hide content changes.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-primary-passage-cache-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-primary-passage-cache.md`.
+- Decision: D-014.
+- No implementation or completion claim yet. Next exact action: create draft PR, add `tests/test_primary_passage_cache_v2.py`, run focused pytest, and record the expected RED before implementing the cache module.
+
+## 2026-07-18 — B5-T03 merged; B6-T01 started
+
+```text
+PR: #15
+Final head: dcea5ac9b58cb9621307104b18ea49c4caa2f10b
+Governance: 29640418519 — success
+Stable Core: 29640418556 — success
+Upstream Runtime: 29640418531 — success
+Squash merge: 6dd0910a2d6b825904ae8e0dcc7d3f1a75557775
+```
+
+B5-T03 merged only to `stable/kaiyuan-v2`. Repository audit kept the legacy primary reference ambiguous and created no migrated evidence or raw-corpus change.
+
+B6-T01 started on `codex/kaiyuan-primary-passage-cache-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory filesystem parse hot paths and define path/mtime/hash invalidation semantics.
+
 ## 2026-07-18 — B5-T03 evidence migration implementation verifying
 
 ### TDD and implementation
