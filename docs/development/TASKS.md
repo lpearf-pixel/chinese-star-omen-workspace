@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-retrieval-observability-v2
-Current PR: #17 (draft)
+Current feature: codex/kaiyuan-stable-release-rollback-v2
+Current PR: pending
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -182,18 +182,21 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T02 — 检索与同步可观察性
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** 记录 stage latency、pool size、fallback reason、sync run error、corpus version 和 collection。
 - **Base evidence:** B6-T01 PR #16 squash merged as `0632c0a87515b4b6d33ea2476630d62e2b3321d7`.
 - **Branch:** `codex/kaiyuan-retrieval-observability-v2`.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-retrieval-sync-observability-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-retrieval-sync-observability.md`.
 - **Acceptance:** additive strict-JSON trace; client stage/total latency; requested/raw/returned pools; fallback reason; collection/corpus provenance; structured sync run error; unchanged exception and atomic manifest semantics; full gates and independent review.
+- **Merge evidence:** PR #17 final head `534723d0828c8f438900e203d96e981daf77218d` squash merged to `stable/kaiyuan-v2` as `af3f80d8b415f98825a0516fbbce7890e134a90c`.
 
 ### B6-T03 — Stable release runbook and rollback drill
 
-- **Status:** `BACKLOG`
+- **Status:** `IN_PROGRESS`
 - **Goal:** 验证 `local_kb_kaiyuan_v2` 切换、回滚、manifest 对账和旧 collection 保护。
+- **Base evidence:** B6-T02 PR #17 squash merged as `af3f80d8b415f98825a0516fbbce7890e134a90c`.
+- **Branch:** `codex/kaiyuan-stable-release-rollback-v2`.
 
 ## 当前执行顺序
 
