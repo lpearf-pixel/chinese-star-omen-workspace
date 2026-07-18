@@ -2,6 +2,78 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B6-T02 merged; B6-T03 started
+
+```text
+PR: #17
+Final head: 534723d0828c8f438900e203d96e981daf77218d
+Development Governance: 29646657185 — success
+Kaiyuan Stable Core: 29646657169 — success
+Kaiyuan Upstream Runtime: 29646657195 — success
+Squash merge: af3f80d8b415f98825a0516fbbce7890e134a90c
+```
+
+GitHub returned `merged=true`, and `refs/heads/stable/kaiyuan-v2` independently resolved to the same squash SHA. No corpus, candidate content, ingest, Qdrant schema/collection, `main`, or `local_kb_default` change.
+
+B6-T03 started from the actual merge SHA on `codex/kaiyuan-stable-release-rollback-v2`. Task moved to `IN_PROGRESS` before design. Next action: inventory release scripts, manifest/meta health checks, collection configuration, and existing B4 runbook; define a non-destructive ephemeral rollback drill that proves `local_kb_default` protection.
+
+### B6-T03 design
+
+Selected a pure three-phase snapshot verifier over a live mutating switch script or documentation-only checklist. The design records exact release and rollback manifest identities, healthy structured/primary smoke results, the prior read route, and an invariant fingerprint for `local_kb_default`. It explicitly permits restoring read routing to a previously active legacy collection while never authorizing writes, ingest, recreation, deletion, or migration. Decision `D-016` and the design spec are the durable source of truth. Next action: write the implementation plan, publish the design checkpoint, and open a draft PR targeting only `stable/kaiyuan-v2`.
+
+### B6-T03 implementation verifying
+
+Draft PR #18 targets only `stable/kaiyuan-v2`; first implementation head is `0d4ba53a02a86eaf85ea6eaddc398b5ee9c08bb5`. Added the pure `kaiyuan-release-drill/v1` verifier, strict CLI exit semantics, synthetic fixture, Make/CI gate, operator runbook, design, plan, and decision D-016. No command connects to Qdrant or changes routing; no corpus, candidate, ingest, Qdrant schema/data, `main`, or `local_kb_default` change.
+
+TDD evidence:
+
+```text
+RED  PYTHONPATH=. pytest -q tests/test_release_drill_v1.py
+     ModuleNotFoundError: release_drill
+GREEN 2 passed, then 14 passed
+
+RED  PYTHONPATH=. pytest -q tests/test_release_drill_v1.py -k cli
+     3 failed because CLI and fixture were absent
+GREEN 17 passed
+
+RED  test_release_target_must_exist_in_observed_collection_snapshot
+     expected failed, got passed
+GREEN 18 passed
+```
+
+Related regression on the same local implementation tree:
+
+```text
+make release-drill   passed, status=passed, all 12 checks true
+make contracts-test  6 passed
+make text-core-test  22 passed
+make downstream-test 220 passed
+make upstream-test   67 passed, 3 skipped
+git diff --check     passed
+```
+
+B6-T03 is `VERIFYING`, not `DONE`. Remaining: publish this evidence update, run governance and all required workflows for the resulting exact head, inspect the complete PR diff and unresolved review threads, perform independent review, resolve findings with RED/GREEN evidence, mark ready, and squash merge only to `stable/kaiyuan-v2`.
+
+Independent review of `a5271684d3e629b119402ba3dccfda97d7633773` found six Important fail-closed/proof-boundary defects and one Minor report-safety issue. All five validator/CLI counterexamples were reproduced together as RED (`5 failed`): missing `meta_status`, bool/int manifest equality, invalid protected fingerprint, non-finite JSON, and a no-op transition. A sixth RED proved arbitrary HTTP/stage/pool smoke data passed. Fixes require observed `meta_status=ok`, non-empty string manifest identities, typed existing protected fingerprints, strict finite/unique-key JSON, a distinct safe previous collection, HTTP 200 plus exact official stage pools, and redaction of unsafe rollback names. The runbook now labels B4 citable resolution as separate manual release evidence rather than executable drill proof. Focused result after fixes: `26 passed`. Required full regressions and exact-head CI must be rerun after publishing; prior run IDs `29647515047`, `29647515058`, and `29647515057` are stale evidence for the superseded head.
+
+Review fixes were published as head `714280b90cd7dd2c68de14f0a0a3570278f494b3`. Fresh post-fix verification:
+
+```text
+PYTHONPATH=. pytest -q tests/test_release_drill_v1.py  26 passed
+make release-drill                                      passed, 13 checks true
+make contracts-test                                     6 passed
+make text-core-test                                     22 passed
+make downstream-test                                    220 passed
+make upstream-test                                      75 passed, 3 skipped
+governance af3f80d..714280b                             passed, 13 changed / 6 code files
+git diff --check af3f80d..714280b                       passed
+Development Governance 29647704022                     success
+Kaiyuan Stable Core 29647704011                        success
+Kaiyuan Upstream Runtime 29647703977                    success (all 5 jobs)
+```
+
+The GitHub thread-aware API returned zero review threads and zero submitted reviews; the independent review findings above were all resolved and independently covered by focused tests. PR #18 remained draft, mergeable, and targeted only `stable/kaiyuan-v2`; its 13-file diff contains no raw corpus, candidate content, ingest implementation, Qdrant schema/data, `main`, or `local_kb_default` mutation. This evidence update changes the head, so these run IDs are an intermediate reviewed checkpoint, not final merge evidence. Next operation: publish this log-only commit, wait for every required workflow on the resulting exact head, mark ready, verify metadata/threads/diff once more, and squash merge.
+
 ## 2026-07-18 — B6-T02 implementation verifying
 
 ### TDD evidence

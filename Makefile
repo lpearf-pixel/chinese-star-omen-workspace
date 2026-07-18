@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes
+.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill
 
 status:
 	git status --short
@@ -59,6 +59,9 @@ downstream-test:
 
 upstream-test:
 	cd $(UPSTREAM_DIR) && PYTHONPATH=.:../../packages/kb-contracts/python:../../packages/kb-text-core/python pytest -q
+
+release-drill:
+	cd $(UPSTREAM_DIR) && python scripts/verify_release_drill.py --input tests/fixtures/release_drill_v1.json
 
 contracts-test:
 	PYTHONPATH=packages/kb-contracts/python pytest -q packages/kb-contracts/tests
