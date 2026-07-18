@@ -162,7 +162,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 ### B5-T03 — 规则证据批量审计与迁移
 
 - **Status:** `BACKLOG`
-- **Goal:** 把 legacy primary 引用补齐 locator/page/anchor/hash；保留无法补齐项为 candidate-only。
+- **Goal:** 把 legacy primary 引用补齐 locator/page/anchor/hash；保留无法补齐项为 candidate-only。\n- **Base evidence:** B5-T02 PR #14 squash merged as `57da1a8b9afb994b3f3ef0ac1714d14fd4a3d37b`.\n- **Branch:** `codex/kaiyuan-rule-evidence-migration-v2`.
 
 ## B6 — 性能、可观察性与发布
 
