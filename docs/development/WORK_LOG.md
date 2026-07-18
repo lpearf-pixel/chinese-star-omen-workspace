@@ -28,6 +28,54 @@ GitHub returned `merged=true` for the expected feature head. PR #13 did not targ
 - Decision: D-012.
 - Remaining risk: no B5-T02 behavior has been implemented or verified yet; TDD RED is the next gate.
 
+## 2026-07-18 — B5-T02 conflict resolution implementation verifying
+
+### TDD evidence
+
+```text
+RED 1:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_conflict_resolution_policy_v2.py
+result: collection error, ModuleNotFoundError: src.rule_engine.conflict_resolution
+
+GREEN 1:
+same command
+result: 14 passed
+
+RED 2:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_rule_matcher.py
+result: 2 failed, 4 passed
+failures: recommendation_status absent; manual_review still returned a formal recommended_rule_id
+
+GREEN 2:
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python /tmp/kaiyuan-b5/bin/pytest -q tests/test_conflict_resolution_policy_v2.py tests/test_rule_matcher.py
+result: 20 passed
+```
+
+### Implementation
+
+- Added pure `resolve_rule_conflicts()` with fail-closed row validation.
+- Executed `highest_score`, `highest_priority`, `prefer_primary_evidence`, and `manual_review`.
+- Added stable rule-id tie-breaking, group-policy consistency checks, suppression metadata, formal/provisional recommendation separation, and group trace.
+- Replaced the matcher's report-only conflict block with resolver output while preserving all eligible rows.
+
+### Local regression evidence
+
+```text
+downstream: 173 passed
+contracts: 6 passed
+text-core: 22 passed
+upstream: 49 passed, 3 skipped
+```
+
+The initial upstream collection failure was environmental: the fresh isolated venv lacked declared upstream dependencies (`qdrant_client`, `requests`, `fastapi`). Installing both repository requirements files resolved collection without code or assertion changes.
+
+### Status
+
+- Task is `VERIFYING`, not `DONE`.
+- Draft PR: #14, base `stable/kaiyuan-v2`.
+- Remaining: publish implementation, run exact-head governance and all required GitHub workflows, review diff/threads, then mark ready and squash merge.
+- No corpus, CText, candidate, ingest, retrieval, Qdrant schema, `main`, or `local_kb_default` change.
+
 ## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
 
 ### Scope
