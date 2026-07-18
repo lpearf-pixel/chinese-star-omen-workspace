@@ -74,3 +74,13 @@
 - **Decision:** 采用 `AGENTS.md`、开发手册、任务台账、工作日志、决策记录五层治理结构，并用 CI 要求代码 PR 更新任务或工作日志。
 - **Reason:** 避免任务仅存在于聊天中、计划状态与实际代码脱节、开发会话遗漏安全边界。
 - **Consequence:** 开发前必须阅读手册；任务先入台账；完成后回写验证证据；治理门禁对稳定线 PR 生效。
+
+## D-011 — 规则条件采用三值语义
+
+- **Status:** Accepted
+- **Decision:** 所有适用规则条件使用 `pass | fail | unknown`；未配置条件不参与聚合，缺失或无效测量值为 `unknown`，不能视为通过。
+- **Aggregation:** 核心身份失败为 `not_matched`；已知非核心失败为 `partial_match`；无已知失败但存在 unknown 为 `insufficient_data`；全部适用条件通过后，再根据 B4 citable evidence 判定 `matched` 或 `candidate_only`。
+- **Scoring:** `trigger_ratio = pass_count / applicable_count`，unknown 进入分母但不进入分子，未配置条件不进入分母。
+- **Reason:** 古代与现代天象研究资料常存在测量缺口。把缺失值当通过会制造虚假的完整匹配；把缺失值当失败又会伪造负面观测。三值状态能同时保持 fail-closed 和研究可解释性。
+- **Compatibility:** 保留 `missing_conditions`、旧状态和旧输出字段，新增 `condition_states`、`unknown_conditions`、`failed_conditions`、`trigger_ratio` 与 `insufficient_data`。
+- **Consequence:** 非有限数必须输出严格 JSON-safe trace；非法阈值和非法 rule trigger 配置明确失败；B5-T02 再单独实现冲突组 resolution policy。
