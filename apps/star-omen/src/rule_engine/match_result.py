@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any
 
 
@@ -22,6 +22,10 @@ class RuleMatchResult:
     rule_priority: int
     conflict_group: str | None
     resolution_policy: str
+    condition_states: dict[str, dict[str, Any]] = field(default_factory=dict)
+    unknown_conditions: list[str] = field(default_factory=list)
+    failed_conditions: list[str] = field(default_factory=list)
+    trigger_ratio: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
