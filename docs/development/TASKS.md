@@ -19,7 +19,7 @@
 ```text
 Stable base: stable/kaiyuan-v2
 Current feature: codex/kaiyuan-primary-passage-cache-v2
-Current PR: pending
+Current PR: #16 (draft)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -171,7 +171,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T01 — Filesystem primary passage cache
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base evidence:** B5-T03 PR #15 squash merged as `6dd0910a2d6b825904ae8e0dcc7d3f1a75557775`.
 - **Branch:** `codex/kaiyuan-primary-passage-cache-v2`.
 - **Goal:** 基于 path/mtime/hash 的只读 passage index，避免每次查询全量解析所有 Markdown。
