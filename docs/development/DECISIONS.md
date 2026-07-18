@@ -117,7 +117,7 @@
 
 - **Status:** Accepted
 - **Decision:** downstream retrieval 与 candidate sync 使用 `kb-observability/v1` 附加 envelope 记录 monotonic latency、请求/原始/返回 pool、fallback reason、collection、corpus version 和 structured run error。
-- **Error boundary:** retrieval 失败仍抛 `KBSearchError`，trace 只附加到 `details.observability`；sync 失败仍返回 `run_status=error` 且 manifest 原子不写，`run_error` 等于既有 structured error。
-- **Provenance:** collection 来自 effective request/response/meta；corpus version 只来自 upstream response/meta。缺失值为 null，不伪造 `unknown` 或零。
+- **Error boundary:** retrieval 失败仍抛 `KBSearchError`，trace 只附加到 `details.observability`；sync 失败仍返回 `run_status=error` 且 manifest 原子不写。Telemetry `run_error` 只 allowlist `code/status_code/retryable`，权威 top-level error 保持原契约，避免复制可能含 secret/content 的 upstream message/details。
+- **Provenance:** collection 来自 effective response/request/meta；corpus version 只来自 upstream response/meta。两阶段 official 值必须一致才提升到顶层，冲突时为 null 并记录 `provenance_conflicts`，不伪造或猜测。
 - **Safety:** trace 严格 JSON-safe，不记录 secret、anchor、source content 或 raw error body；成功 manifest 不持久化 nondeterministic latency。
 - **Reason:** in-band versioned trace 能被 CLI、测试与报告共同消费，同时避免引入外部 telemetry 服务或改变 B4 的健康空结果、运行错误和 candidate 状态边界。
