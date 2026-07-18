@@ -121,7 +121,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T01 — 三值条件与 `insufficient_data`
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Goal:** 缺失的角距、持续时间、可见性等必要输入必须成为 `unknown`，不能自动当作通过。
 - **Scope:** `conditions.py`, `minimal_matcher.py`, `match_result.py`, focused tests, design/plan and user-facing reports.
 - **Acceptance:**
@@ -142,6 +142,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
   - scoring 不得给 unknown 条件通过分；
   - 旧 matched/candidate/not_matched 行为在数据完整时保持兼容；
   - focused tests、downstream regression 和治理门禁通过。
+- **Implementation evidence:** `da007704c7b11a0ed90241f57a4e02062f57a191` 的 Governance `29625394299`、Stable Core `29625394306`、Upstream Runtime `29625394314` 全部成功；等待当前文档状态 head 的 final gates。
 
 ### B5-T02 — 冲突组 resolution policy
 
@@ -174,8 +175,8 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 ## 当前执行顺序
 
 ```text
-B5-T01 hardening tests
-→ B5-T01 final implementation and full gates
+B5-T01 final-head full gates
+→ PR #13 ready/review/squash to stable/kaiyuan-v2
 → B5-T02
 → B5-T03
 → B6
