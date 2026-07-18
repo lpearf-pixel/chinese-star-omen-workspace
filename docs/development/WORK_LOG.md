@@ -2,6 +2,45 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T03 evidence migration implementation verifying
+
+### TDD and implementation
+
+```text
+RED: ModuleNotFoundError: src.rule_engine.rule_evidence_migration
+focused GREEN: 4 passed
+CLI/audit related: 7 passed
+```
+
+- Added a read-only bulk planner using `kb-text-core` primary passages.
+- Only a unique exact raw/normalized match can become `migratable`.
+- Every proposal is revalidated by the B4 resolver as `citable`.
+- Apply writes a separate atomic output and refuses input overwrite.
+- Added Typer and argparse `audit-rule-evidence-migration` command.
+
+### Repository audit
+
+```text
+source_fingerprint: sha256:f2e01f0cb17d77f9aa441d7e1481ebdae7ad9f340bd1bf7b9c2dd2b0a12ccbdc
+total_rules: 4
+ambiguous: 1
+missing_evidence: 3
+migratable: 0
+```
+
+The legacy `荧惑守心` anchor occurs in multiple primary passages and remains ambiguous/candidate-only. No migrated fixture or source change was created.
+
+### Local gates
+
+```text
+contracts: 6 passed
+text-core: 22 passed
+downstream: 181 passed
+upstream: 49 passed, 3 skipped
+```
+
+B5-T03 is `VERIFYING`, not `DONE`. Draft PR #15 targets `stable/kaiyuan-v2`. Remaining work is exact-head CI, independent review, ready and squash merge. No `main`, raw corpus, candidate, ingest, retrieval, Qdrant, or `local_kb_default` change.
+
 ## 2026-07-18 — B5-T02 merged; B5-T03 started
 
 ### B5-T02 final evidence
