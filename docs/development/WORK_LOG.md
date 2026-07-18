@@ -76,16 +76,23 @@ upstream: 49 passed, 3 skipped
 
 The initial upstream collection failure was environmental: the fresh isolated venv lacked declared upstream dependencies (`qdrant_client`, `requests`, `fastapi`). Installing both repository requirements files resolved collection without code or assertion changes.
 
+### Pre-merge review fixes
+
+Independent review found three Important issues. Each received an observed failing regression test before the fix:
+
+1. `minimal_matcher` coerced `rule_priority` with `int()`, allowing bool/string/float configuration to bypass resolver validation. The matcher now passes the raw value and the resolver alone validates it.
+2. The resolver stripped `conflict_group`, incorrectly merging distinct exact strings such as `group-a` and ` group-a`. It now only uses whitespace to recognize an empty group and otherwise preserves the exact string.
+3. The matcher attached all conflict reasons to every grouped row. It now maps each multi-row trace to only that exact group, so singleton groups and their top-level recommendation remain clean.
+
+Review-fix RED: 3 failed. Review-fix GREEN: focused 24 passed; downstream 177 passed; contracts 6 passed; text-core 22 passed; upstream 49 passed, 3 skipped.
+
 ### Status
 
 - Task is `VERIFYING`, not `DONE`.
 - Draft PR: #14, base `stable/kaiyuan-v2`.
-- Verified implementation head: `fbc114b6ec7841918f8ca041cd6372d429e3fce6`.
-- Development Governance run `29630852556` — success.
-- Kaiyuan Stable Core run `29630852553` — success.
-- Kaiyuan Upstream Runtime run `29630852552` — success.
+- Previous verified implementation head: `fbc114b6ec7841918f8ca041cd6372d429e3fce6`; its three workflows passed before review fixes.
 - Changed-file audit is limited to rule engine, focused tests, conflict documentation, task/decision/work log, design and plan. Review threads: 0.
-- Remaining: this evidence commit requires fresh final-head workflows; after they pass, mark ready and squash merge.
+- Remaining: publish review fixes and require fresh final-head workflows; after they pass, re-check threads/diff, mark ready and squash merge.
 - No corpus, CText, candidate, ingest, retrieval, Qdrant schema, `main`, or `local_kb_default` change.
 
 ## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
