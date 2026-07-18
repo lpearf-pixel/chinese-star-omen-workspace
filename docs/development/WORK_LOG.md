@@ -2,6 +2,12 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B7-T01 started
+
+Started `codex/kaiyuan-release-observation-capture-v2` from the independently verified stable head `627b3dc086966fec0c527500e4a7e5fac6a8f987`. B7-T01 is limited to a read-only phase-observation collector feeding the existing B6 verifier. It will not switch routing, ingest, upsert/delete Qdrant, write `local_kb_default`, or copy raw response bodies/source content into artifacts. Next action: inventory current health/meta/retrieve clients and Qdrant read metadata, then write the design and implementation plan before code.
+
+Selected a local direct-read CLI over a new inspection endpoint or operator-supplied fingerprints. Health/meta and exact-stage smoke use existing KB Search contracts; active/protected fingerprints use Qdrant read-only collection metadata and exact counts. Secrets, hits, raw bodies, payloads, and source content are excluded. Design and D-017 are now the durable source; next action is the detailed TDD plan and draft PR.
+
 ## 2026-07-18 — B6-T03 merged and release line complete
 
 ```text

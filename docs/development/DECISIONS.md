@@ -131,3 +131,12 @@
 - **Protection:** `local_kb_default` 的 `exists`、`points_count` 和 `config_hash` 指纹在三个阶段必须完全一致；缺少快照也视为失败。
 - **Reason:** 直接自动切换生产服务需要环境权限且带来数据风险；只写手册又无法提供可重复证据。纯验证器可在 CI 使用 synthetic fixture，并让生产操作保存同一契约的审计 artifact。
 - **Consequence:** CI 通过仅证明验证器和演练契约有效，不等同于生产已发布；生产证据必须另行记录实际 artifact hash、release head、workflow 和操作者。
+
+## D-017 — 发布观测由本机只读 collector 采集
+
+- **Status:** Accepted
+- **Decision:** B7-T01 使用本机 CLI 读取 KB Search health/meta/retrieve 和 Qdrant collection metadata；不新增远程 inspection endpoint，也不自动切流或组装通过结论。
+- **Secrets:** API key 只从环境读取；artifact 和 structured error 不保存 key、raw body、hit、snippet、path、anchor 或 source content。
+- **Fingerprint:** collection config 只取 allowlisted schema/settings，严格 canonical JSON 后计算 SHA-256；point payload 不参与。
+- **Failure:** 认证、超时、服务、collection、contract 和解析错误明确失败，不产生部分 observation 或健康零命中。
+- **Reason:** 手工拼装容易产生 provenance 漂移，而新增服务端 inspection API 会扩大攻击面。本机只读适配器兼顾可重复证据与最小权限。

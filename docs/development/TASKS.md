@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-b6-release-closeout-v2
-Current PR: #19 (closeout)
+Current feature: codex/kaiyuan-release-observation-capture-v2
+Current PR: pending
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -212,3 +212,15 @@ B5-T01 final-head full gates
 → B5-T03
 → B6
 ```
+
+## B7 — 发布观测自动化
+
+### B7-T01 — Read-only release observation capture
+
+- **Status:** `IN_PROGRESS`
+- **Base evidence:** B6-T03 closeout PR #19 squash merged as `627b3dc086966fec0c527500e4a7e5fac6a8f987`.
+- **Branch:** `codex/kaiyuan-release-observation-capture-v2`.
+- **Goal:** 从 KB Search 与 Qdrant 的只读接口采集 B6 release-drill phase observation，减少人工拼装 artifact 的遗漏与伪造风险。
+- **Acceptance:** no routing or Qdrant mutation; explicit transport/auth/timeout/contract errors; exact health/meta/stage/pool/collection provenance; protected collection fingerprint from allowlisted metadata only; no secret/raw body/source content in output; atomic caller-selected output; output validates through the existing B6 verifier; focused/full gates and independent review.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-observation-capture-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-observation-capture.md`.
