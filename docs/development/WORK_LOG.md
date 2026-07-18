@@ -80,7 +80,12 @@ The initial upstream collection failure was environmental: the fresh isolated ve
 
 - Task is `VERIFYING`, not `DONE`.
 - Draft PR: #14, base `stable/kaiyuan-v2`.
-- Remaining: publish implementation, run exact-head governance and all required GitHub workflows, review diff/threads, then mark ready and squash merge.
+- Verified implementation head: `fbc114b6ec7841918f8ca041cd6372d429e3fce6`.
+- Development Governance run `29630852556` — success.
+- Kaiyuan Stable Core run `29630852553` — success.
+- Kaiyuan Upstream Runtime run `29630852552` — success.
+- Changed-file audit is limited to rule engine, focused tests, conflict documentation, task/decision/work log, design and plan. Review threads: 0.
+- Remaining: this evidence commit requires fresh final-head workflows; after they pass, mark ready and squash merge.
 - No corpus, CText, candidate, ingest, retrieval, Qdrant schema, `main`, or `local_kb_default` change.
 
 ## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
