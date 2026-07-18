@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-rule-evidence-migration-v2
-Current PR: #15
+Current feature: codex/kaiyuan-primary-passage-cache-v2
+Current PR: pending
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -161,7 +161,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T03 — 规则证据批量审计与迁移
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** 把 legacy primary 引用补齐 locator/page/anchor/hash；保留无法补齐项为 candidate-only。
 - **Base evidence:** B5-T02 PR #14 squash merged as `57da1a8b9afb994b3f3ef0ac1714d14fd4a3d37b`.
 - **Branch:** `codex/kaiyuan-rule-evidence-migration-v2`.
@@ -171,7 +171,9 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B6-T01 — Filesystem primary passage cache
 
-- **Status:** `BACKLOG`
+- **Status:** `IN_PROGRESS`
+- **Base evidence:** B5-T03 PR #15 squash merged as `6dd0910a2d6b825904ae8e0dcc7d3f1a75557775`.
+- **Branch:** `codex/kaiyuan-primary-passage-cache-v2`.
 - **Goal:** 基于 path/mtime/hash 的只读 passage index，避免每次查询全量解析所有 Markdown。
 
 ### B6-T02 — 检索与同步可观察性
