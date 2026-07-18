@@ -2,6 +2,79 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T03 evidence migration implementation verifying
+
+### TDD and implementation
+
+```text
+RED: ModuleNotFoundError: src.rule_engine.rule_evidence_migration
+focused GREEN: 4 passed
+CLI/audit related: 7 passed
+```
+
+- Added a read-only bulk planner using `kb-text-core` primary passages.
+- Only a unique exact raw/normalized match can become `migratable`.
+- Every proposal is revalidated by the B4 resolver as `citable`.
+- Apply writes a separate atomic output and refuses input overwrite.
+- Added Typer and argparse `audit-rule-evidence-migration` command.
+
+### Repository audit
+
+```text
+source_fingerprint: sha256:f2e01f0cb17d77f9aa441d7e1481ebdae7ad9f340bd1bf7b9c2dd2b0a12ccbdc
+total_rules: 4
+ambiguous: 1
+missing_evidence: 3
+migratable: 0
+```
+
+The legacy `荧惑守心` anchor occurs in multiple primary passages and remains ambiguous/candidate-only. No migrated fixture or source change was created.
+
+### Local gates
+
+```text
+contracts: 6 passed
+text-core: 22 passed
+downstream: 181 passed
+upstream: 49 passed, 3 skipped
+```
+
+B5-T03 is `VERIFYING`, not `DONE`. Draft PR #15 targets `stable/kaiyuan-v2`. Remaining work is exact-head CI, independent review, ready and squash merge. No `main`, raw corpus, candidate, ingest, retrieval, Qdrant, or `local_kb_default` change.
+
+### Independent review fixes
+
+Review found one Critical and three Important issues. New tests first reproduced three failures, then fixes:
+
+- apply now binds every plan detail to current index/rule id/before evidence, verifies source fingerprint, rejects duplicate/out-of-range indices, and re-runs the resolver before any write;
+- plan/apply output must differ from input and remain outside `kb_root`; plan output is atomic too;
+- malformed evidence is `invalid_rule`, while only absent evidence is `missing_evidence`;
+- missing/empty primary `kb_root` fails clearly instead of returning healthy unresolved;
+- restored candidate-generation CLI message to its original command.
+
+Post-review verification: focused 6 passed; downstream 183 passed; contracts 6 passed; text-core 22 passed; upstream 49 passed, 3 skipped. A new exact-head CI run is required after publishing these fixes.
+
+## 2026-07-18 — B5-T02 merged; B5-T03 started
+
+### B5-T02 final evidence
+
+```text
+PR: #14
+Final feature head: 05cdf6271b73284e943e357df754292ebc31ade1
+Development Governance: 29631008326 — success
+Kaiyuan Stable Core: 29631008308 — success
+Kaiyuan Upstream Runtime: 29631008338 — success
+Squash merge commit: 57da1a8b9afb994b3f3ef0ac1714d14fd4a3d37b
+Base: stable/kaiyuan-v2
+```
+
+GitHub returned `merged=true` for the expected head after independent review fixes and fresh final-head gates. PR #14 did not target `main` and did not change corpus, candidate, ingest, retrieval, Qdrant schema, or `local_kb_default`.
+
+### B5-T03 start
+
+- Branch: `codex/kaiyuan-rule-evidence-migration-v2` from the actual B5-T02 stable merge commit.
+- Task moved to `IN_PROGRESS` before design or implementation.
+- Next: inventory legacy rule evidence states, define fail-closed audit/migration design, write implementation plan, and open a draft PR to `stable/kaiyuan-v2` before behavior changes.
+
 ## 2026-07-18 — B5-T01 merged; B5-T02 started
 
 ### B5-T01 merge evidence

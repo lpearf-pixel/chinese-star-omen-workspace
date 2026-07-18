@@ -94,3 +94,12 @@
 - **Auditability:** suppressed rule 不从 `matches` 删除；每行保存 selected/suppressed/manual 状态，group trace 保存候选、顺序、选择、临时选择和抑制原因。
 - **Reason:** 冲突解析既要可复现，又不能把人工复核候选静默升级为研究结论。独立纯 resolver 使 policy 可单测且不污染条件、证据或检索边界。
 - **Compatibility:** 无冲突和默认 `highest_score` 保留旧的 priority/score 全局推荐边界；保留 `conflict_detected`, `conflict_reasons`, `recommended_rule_id`，新增 provisional/status/trace 字段。
+
+## D-013 — 规则证据迁移只接受唯一精确 passage，并写入独立输出
+
+- **Status:** Accepted
+- **Decision:** legacy primary evidence 只有在 `kb-text-core` 找到唯一 exact raw 或 exact normalized primary passage，且补齐后的引用通过 B4 resolver `status=citable` 时才标记 `migratable`。
+- **Fail-closed:** ambiguous、loose、heading-only、无 anchor、无 evidence 和 validation failure 均不得产生正式迁移结果。
+- **Write policy:** audit 默认只读；apply 必须写调用方指定的独立输出 JSON，拒绝覆盖输入；全计划验证成功后才原子替换输出。
+- **Provenance:** 每项保留 before/after、match type、passage trace 和状态；原始规则与 raw corpus 均不静默改写。
+- **Reason:** 批量补字段若依赖模糊匹配会把错误卷页固化成正式证据。唯一精确命中加 resolver 二次验证能够复用既有 citation 边界并保持可审计回滚。

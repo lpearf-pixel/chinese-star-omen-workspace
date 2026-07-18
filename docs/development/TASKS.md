@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-rule-semantics-v2
-Current PR: #13
+Current feature: codex/kaiyuan-rule-evidence-migration-v2
+Current PR: #15
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -121,7 +121,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T01 — 三值条件与 `insufficient_data`
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** 缺失的角距、持续时间、可见性等必要输入必须成为 `unknown`，不能自动当作通过。
 - **Scope:** `conditions.py`, `minimal_matcher.py`, `match_result.py`, focused tests, design/plan and user-facing reports.
 - **Acceptance:**
@@ -146,7 +146,7 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T02 — 冲突组 resolution policy
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** 实际执行 `resolution_policy`, `conflict_group`, `rule_priority`，而非只报告冲突存在。
 - **Base evidence:** B5-T01 PR #13 squash merged to `stable/kaiyuan-v2` as `e4e25ba39d43270b1d2ac54ae3057eb741161b38`.
 - **Branch:** `codex/kaiyuan-conflict-resolution-v2`.
@@ -161,8 +161,11 @@ B4 已 squash 合入 `stable/kaiyuan-v2`。`main` 和 `local_kb_default` 未参�
 
 ### B5-T03 — 规则证据批量审计与迁移
 
-- **Status:** `BACKLOG`
+- **Status:** `VERIFYING`
 - **Goal:** 把 legacy primary 引用补齐 locator/page/anchor/hash；保留无法补齐项为 candidate-only。
+- **Base evidence:** B5-T02 PR #14 squash merged as `57da1a8b9afb994b3f3ef0ac1714d14fd4a3d37b`.
+- **Branch:** `codex/kaiyuan-rule-evidence-migration-v2`.
+- **Current result:** 1 `ambiguous`, 3 `missing_evidence`, 0 `migratable`; no silent promotion.
 
 ## B6 — 性能、可观察性与发布
 
