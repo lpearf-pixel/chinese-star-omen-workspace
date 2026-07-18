@@ -2,6 +2,32 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B5-T01 merged; B5-T02 started
+
+### B5-T01 merge evidence
+
+```text
+PR: #13
+Final feature head: 5e4ef05a3e4c4bfa02334676ef877f1bf1eccc8d
+Development Governance: 29625533123 — success
+Kaiyuan Stable Core: 29625533107 — success
+Kaiyuan Upstream Runtime: 29625533117 — success
+Squash merge commit: e4e25ba39d43270b1d2ac54ae3057eb741161b38
+Base: stable/kaiyuan-v2
+```
+
+GitHub returned `merged=true` for the expected feature head. PR #13 did not target `main`; its changed-file audit contained only rule engine, related tests, and development/spec/plan documents. It did not change raw corpus, candidate flow, ingest, retrieval, Qdrant schema, or `local_kb_default`.
+
+### B5-T02 start
+
+- Branch: `codex/kaiyuan-conflict-resolution-v2` from the actual merged stable commit above.
+- Task moved to `IN_PROGRESS` before behavior implementation.
+- Selected design: a pure conflict resolver module with deterministic policy keys, explicit manual-review withholding, retained suppressed rows, and group trace.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-conflict-resolution-policy-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-conflict-resolution-policy.md`.
+- Decision: D-012.
+- Remaining risk: no B5-T02 behavior has been implemented or verified yet; TDD RED is the next gate.
+
 ## 2026-07-18 — B5-T01 three-valued rule semantics implementation verified
 
 ### Scope
