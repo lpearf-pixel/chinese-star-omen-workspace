@@ -74,6 +74,11 @@ jobs:
           cd apps/local-kb-unified
           PYTHONPATH=. pytest -q tests/test_release_evidence_archive_v1.py
 
+      - name: Hermetic release evidence end-to-end gate
+        run: |
+          cd apps/local-kb-unified
+          PYTHONPATH=. pytest -q tests/test_release_evidence_e2e_v1.py
+
       - name: Validate Docker Compose configuration
         working-directory: apps/local-kb-unified
         run: docker compose --env-file .env.example -f docker-compose.yml config --quiet

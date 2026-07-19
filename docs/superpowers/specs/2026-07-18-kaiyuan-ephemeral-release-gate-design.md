@@ -14,13 +14,13 @@ B8-T02 adds a hermetic CI gate that composes the existing B7 release-observation
 
 The test creates a random identifier matching `ephemeral_kaiyuan_release_<hex>` for the safe pre-release active collection. Deterministic fake KB Search and collection-inspection adapters expose only the read methods accepted by `capture_phase_observation`. Each adapter records a structured operation before returning a content-free response.
 
-The gate captures `before_switch`, `after_switch`, and `after_rollback` at fixed canonical UTC instants. Before and after rollback use the ephemeral active collection and its manifest identity; after switch uses `local_kb_kaiyuan_v2` and the approved release manifest identity. The protected legacy fingerprint required by the B6 input contract is synthetic invariant evidence: the inspection adapter must never be called with `local_kb_default`.
+The gate captures `before_switch`, `after_switch`, and `after_rollback` at fixed canonical UTC instants. Before and after rollback use the ephemeral active collection and its manifest identity; after switch uses `local_kb_kaiyuan_v2` and the approved release manifest identity. The protected legacy fingerprint required by the B6 input contract is synthetic invariant evidence returned only by the hermetic fake inspector; no live client or service is instantiated.
 
 The observations and approved manifest pass to `assemble_release_artifact`; its report must be exactly passed. The assembled document passes to `create_bundle_bytes` with fixed explicit provenance, and the bytes pass to `verify_bundle_bytes`. The verifier summary must exactly identify the release head, target collection, schema, and member count.
 
 ## Safety and fail-closed rules
 
-The call audit allowlists health, meta, the two retrieval stages, and inspection of only the phase's active safe collection. It rejects mutation-like operations and any adapter argument equal to `local_kb_default`. The gate never imports index jobs, candidate promotion, routing, or mutation clients.
+The call audit allowlists health, meta, the two retrieval stages, and read-only inspection. `local_kb_default` must appear exactly once per phase as a fake inspection needed by the existing invariant contract, never as a network or mutation call. The audit rejects mutation-like operations. The gate never imports index jobs, candidate promotion, routing, live clients, or mutation clients.
 
 An explicit failure case corrupts one phase after capture. Assembly must raise its stable validation error, no bundle may be produced, and offline verification is not invoked. Exceptions are not converted into empty results or a passed report.
 
@@ -30,4 +30,4 @@ The focused test lives in `apps/local-kb-unified/tests/test_release_evidence_e2e
 
 ## Tests
 
-TDD covers successful capture-to-verification composition, exact deterministic summaries, fixed phase ordering, random safe ephemeral naming, operation audit, forbidden protected-collection access, absence of mutation operations, and fail-closed phase tampering before bundle creation.
+TDD covers successful capture-to-verification composition, exact deterministic summaries, fixed phase ordering, random safe ephemeral naming, operation audit, protected fingerprint inspection confined to the fake, absence of mutation operations, and fail-closed phase tampering before bundle creation.
