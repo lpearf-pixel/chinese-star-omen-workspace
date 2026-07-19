@@ -9,6 +9,7 @@ import sys
 from types import SimpleNamespace
 
 import pytest
+import httpx
 
 from release_observation import ReleaseObservationError, _config_hash, capture_phase_observation
 from release_observation_live import KBSearchReadClient, QdrantCollectionReader
@@ -220,6 +221,7 @@ def test_http_adapter_sends_secret_only_in_header_and_exact_retrieve_body():
     assert (method, url) == ("POST", "http://kb.example/v1/retrieve")
     assert kwargs["headers"] == {"Authorization": "Bearer super-secret-key"}
     assert kwargs["timeout"] == 3
+    assert kwargs["allow_redirects"] is False
     assert kwargs["json"] == {
         "schema_version": "kb-retrieve/v2",
         "query": "熒惑守心",
@@ -361,6 +363,19 @@ def test_qdrant_reader_uses_only_exact_read_calls_and_allowlisted_config():
     ]
 
 
+def test_qdrant_reader_preserves_timeout_taxonomy():
+    class TimedOutQdrant:
+        def collection_exists(self, collection_name):
+            raise httpx.ReadTimeout("secret qdrant endpoint")
+
+    with pytest.raises(ReleaseObservationError) as caught:
+        QdrantCollectionReader(TimedOutQdrant()).inspect("ephemeral_release_test")
+
+    assert caught.value.code == "timeout"
+    assert caught.value.operation == "inspect_collection"
+    assert "secret qdrant endpoint" not in str(caught.value)
+
+
 def test_cli_rejects_missing_secret_without_creating_output(tmp_path: Path):
     output = tmp_path / "phase.json"
     env = dict(os.environ)
@@ -412,6 +427,36 @@ def test_atomic_writer_creates_strict_json_and_refuses_overwrite(tmp_path: Path)
         module._write_new_atomic(output, {"value": 2})
     assert json.loads(output.read_text(encoding="utf-8")) == {"value": 1}
     assert list(tmp_path.glob(".phase.json.*")) == []
+
+
+def test_cli_reports_output_exists_when_atomic_create_loses_race(tmp_path: Path, monkeypatch, capsys):
+    spec = importlib.util.spec_from_file_location("capture_release_observation_race_cli", CLI)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "phase.json"
+    monkeypatch.setenv("B7_TEST_API_KEY", "secret")
+    monkeypatch.setattr(
+        module,
+        "KBSearchReadClient",
+        lambda **kwargs: SimpleNamespace(health=lambda: None, meta=lambda: None, retrieve=lambda **request: None),
+    )
+    monkeypatch.setattr(module, "QdrantClient", lambda **kwargs: SimpleNamespace())
+    monkeypatch.setattr(module, "QdrantCollectionReader", lambda client: SimpleNamespace(inspect=lambda name: None))
+    monkeypatch.setattr(module, "capture_phase_observation", lambda **kwargs: {"phase": {}})
+    monkeypatch.setattr(module, "_write_new_atomic", lambda path, payload: (_ for _ in ()).throw(FileExistsError()))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(CLI), "--phase", "before_switch", "--active-collection", "ephemeral_release_test",
+            "--query", "熒惑守心", "--base-url", "http://kb.example", "--qdrant-url",
+            "http://qdrant.example", "--api-key-env", "B7_TEST_API_KEY", "--out", str(output),
+        ],
+    )
+
+    assert module.main() == 2
+    assert capsys.readouterr().err == "release observation input error: output_exists\n"
 
 
 def test_builder_rejects_retrieved_count_hit_length_mismatch():
@@ -480,3 +525,11 @@ def test_live_modules_have_no_qdrant_or_ingest_mutation_calls():
     )
     for forbidden in (".upsert(", ".delete(", ".create_collection(", ".recreate_collection(", " ingest("):
         assert forbidden not in source
+
+
+def test_runbook_names_the_verifier_input_schema():
+    runbook = (ROOT.parent.parent / "docs" / "development" / "B6_RELEASE_ROLLBACK_RUNBOOK.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "`kaiyuan-release-drill-input/v1` root" in runbook

@@ -79,7 +79,10 @@ def main() -> int:
     except ReleaseObservationError as exc:
         print(f"release observation error: {exc.code}:{exc.operation}", file=sys.stderr)
         return 1
-    except (FileExistsError, OSError, TypeError, ValueError):
+    except FileExistsError:
+        print("release observation input error: output_exists", file=sys.stderr)
+        return 2
+    except (OSError, TypeError, ValueError):
         print("release observation input error: output_write_failed", file=sys.stderr)
         return 2
     print(json.dumps({"status": "captured", "phase": args.phase, "out": str(args.out)}, ensure_ascii=False))

@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
+import httpx
 import requests
 
 from release_observation import ReleaseObservationError
@@ -32,6 +33,7 @@ class KBSearchReadClient:
                 f"{self._base_url}{path}",
                 headers=headers,
                 timeout=self._timeout,
+                allow_redirects=False,
                 **({"json": json_body} if json_body is not None else {}),
             )
         except requests.Timeout as exc:
@@ -99,6 +101,8 @@ class QdrantCollectionReader:
                 return {"exists": False}
             info = self._client.get_collection(collection_name=collection)
             counted = self._client.count(collection_name=collection, exact=True)
+        except (httpx.TimeoutException, requests.Timeout) as exc:
+            raise ReleaseObservationError("timeout", "inspect_collection") from exc
         except Exception as exc:
             raise ReleaseObservationError("upstream_unavailable", "inspect_collection") from exc
 

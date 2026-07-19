@@ -57,7 +57,7 @@ make capture-release-observation PHASE=after_rollback ACTIVE_COLLECTION="$BEFORE
 
 每条命令只读取 KB Search health/meta/retrieve 与 Qdrant collection metadata/count。输出路径必须由调用者指定且不得已存在；任何认证、超时、传输、契约、collection、解析或写入错误都会失败退出，不生成部分 artifact，也不会转成零命中。
 
-三个文件分别提供 `phase` 对象。操作者将其放入实际 `kaiyuan-release-drill/v1` 根对象的同名字段，并从已批准的 release manifest 填写 `expected_release_manifest`、事件编号及时间窗口；`phase_name` 只用于防止文件混淆，不进入阶段验证。组装不会切流、回滚、ingest 或改变任何 collection，完成后仍须运行第 5 节验证器。
+三个文件分别提供 `phase` 对象。操作者将其放入实际 `kaiyuan-release-drill-input/v1` root 的同名字段，并从已批准的 release manifest 填写 `expected_release_manifest`、事件编号及时间窗口；`phase_name` 只用于防止文件混淆，不进入阶段验证。验证器输出的 `kaiyuan-release-drill/v1` 是报告 schema，不可用作输入。组装不会切流、回滚、ingest 或改变任何 collection，完成后仍须运行第 5 节验证器。
 
 对当前服务分别保存 health 和 meta 的 HTTP status 与 JSON。只有健康 200 response 才能写成 `status=ok`；传输或契约错误必须停止演练并保留原错误证据，不能写 `hits_count=0` 代替。
 

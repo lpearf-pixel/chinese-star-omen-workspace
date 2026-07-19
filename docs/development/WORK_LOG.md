@@ -29,6 +29,20 @@ make release-drill                                   passed, 13 checks true
 git diff --check                                     passed
 ```
 
+Independent safety review of remote head `902f59be8609c9f47df1c2314d973111e0382fbd` found no Critical and three Important issues: live Requests redirects could bypass the fake 302 test, the runbook named the verifier report schema instead of its input schema, and Qdrant timeouts were collapsed into `upstream_unavailable`. It also noted a race-only `output_exists` taxonomy gap. All were reproduced before fixes: redirect request kwargs RED, then two focused failures for Qdrant timeout/runbook schema, then an atomic-race error-code RED. Minimal fixes disable redirects, preserve `httpx`/Requests timeout taxonomy without exception text, document `kaiyuan-release-drill-input/v1`, and classify an exclusive-create race as `output_exists`.
+
+Post-review local evidence (prior workflow runs are stale after these fixes):
+
+```text
+focused       20 passed
+contracts      6 passed
+text-core     22 passed
+downstream   220 passed
+upstream      95 passed, 3 skipped
+```
+
+Remaining: publish a new exact head, rerun governance and all three workflows for that SHA, recheck PR metadata/threads, mark ready, and squash merge only to `stable/kaiyuan-v2`.
+
 Started `codex/kaiyuan-release-observation-capture-v2` from the independently verified stable head `627b3dc086966fec0c527500e4a7e5fac6a8f987`. B7-T01 is limited to a read-only phase-observation collector feeding the existing B6 verifier. It will not switch routing, ingest, upsert/delete Qdrant, write `local_kb_default`, or copy raw response bodies/source content into artifacts. Next action: inventory current health/meta/retrieve clients and Qdrant read metadata, then write the design and implementation plan before code.
 
 Selected a local direct-read CLI over a new inspection endpoint or operator-supplied fingerprints. Health/meta and exact-stage smoke use existing KB Search contracts; active/protected fingerprints use Qdrant read-only collection metadata and exact counts. Secrets, hits, raw bodies, payloads, and source content are excluded. Design and D-017 are now the durable source; next action is the detailed TDD plan and draft PR.
