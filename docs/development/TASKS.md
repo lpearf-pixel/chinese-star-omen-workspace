@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-release-evidence-archive-closeout-v2
-Current PR: pending (B8-T01 closeout PR will target stable/kaiyuan-v2)
+Current feature: codex/kaiyuan-ephemeral-release-gate-v2
+Current PR: pending (B8-T02 draft PR will target stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -264,3 +264,13 @@ B5-T01 final-head full gates
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-archive-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-archive.md`.
 - **Merge evidence:** PR #26 final head `d58e7ff91adf54a35b9d9d49c54a3a2fa5a12ad0`; exact-head workflows Governance `29673734249`, Stable Core `29673734284`, Upstream Runtime `29673734259` all succeeded; squash merged to `stable/kaiyuan-v2` as `c6af74a5875d3df55e56bbea251ede63b56c427c`.
+
+### B8-T02 — Hermetic end-to-end release evidence gate
+
+- **Status:** `VERIFYING`
+- **Base evidence:** B8-T01 closeout PR #27 squash merged to `stable/kaiyuan-v2` as `bae59e0b636588c5600916ce992c642746f002da`.
+- **Branch:** `codex/kaiyuan-ephemeral-release-gate-v2`.
+- **Goal:** 在 hermetic CI 中串联只读 observation capture、artifact assembly、sealed bundle creation 与 offline verification，持续证明跨组件发布证据契约兼容。
+- **Acceptance:** deterministic three-phase capture through read-only fakes; real B7-T02/B7-T03 pure APIs; exact passed validation and verified bundle summary; explicit call audit proving no create/upsert/delete/routing/ingest operation; random safe ephemeral prior collection; no live service access and no create, write or delete of `local_kb_default`; its required invariant fingerprint is supplied only by a hermetic fake inspection; failure injection remains fail-closed; no production-release claim; focused/full gates and independent review.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-ephemeral-release-gate-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-ephemeral-release-gate.md`.
