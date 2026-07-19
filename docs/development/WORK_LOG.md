@@ -12,7 +12,67 @@
 - Baseline: `PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_drill_v1.py tests/test_release_observation_v1.py tests/test_release_artifact_v1.py` from `apps/local-kb-unified` → `83 passed in 2.31s`.
 - Environment note: bare `pytest` was unavailable; this was a shell environment issue, not a test failure. The existing isolated venv `/tmp/kaiyuan-b5` ran the baseline without dependency or assertion changes.
 - Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-bundle.md`; self-review found no uncovered spec requirement, placeholder, or interface mismatch.
-- Remaining: create draft PR, then observe TDD RED before production code.
+- Draft PR: #24, base `stable/kaiyuan-v2`, head `codex/kaiyuan-release-evidence-bundle-v2`; initial published design/plan head `fff4c4a320db6dfef73b0c06f77d289c7611dc1f`.
+
+### TDD and implementation evidence
+
+```text
+RED 1:
+PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_evidence_bundle_v1.py::test_create_and_verify_deterministic_bundle
+result: collection error, ModuleNotFoundError: release_evidence_bundle
+
+GREEN 1:
+same command
+result: 1 passed
+
+RED 2:
+PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_evidence_bundle_v1.py
+result: 4 failed, 11 passed
+root causes: verifier accepted ZIP member comment/extra/compression metadata and leaked a lower-level ReleaseArtifactError for semantic tampering.
+
+GREEN 2:
+same command after fixed metadata checks and stable exception normalization
+result: 15 passed
+
+RED 3:
+PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_evidence_bundle_v1.py::test_create_and_verify_clis_publish_once_without_temp_residue
+result: 1 failed because create_release_evidence_bundle.py did not exist
+
+GREEN 3:
+PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_evidence_bundle_v1.py
+result: 18 passed in 0.16s
+```
+
+Implemented deterministic stored ZIP creation, exact internal inventory, explicit release-head/time provenance, strict finite/unique/bounded JSON, bounded no-extraction verification, byte hash/size checks, semantic reassembly and B6 validation, atomic hard-link publication, create/verify CLIs, Make targets, CI coverage, and runbook operations. No network/Qdrant/ingest/routing/corpus/candidate integration was added.
+
+Related regression: bundle plus B6/B7 drill/observation/artifact tests → `101 passed in 2.38s`. Make missing-argument contract exited `2` with the exact required-variable list. Production forbidden-import/mutation scan returned no match. B7-T03 is now `VERIFYING`, not `DONE`.
+
+Remaining: run full local gates, perform independent review, publish implementation head to PR #24, require exact-head CI, then merge only if every safety/review condition remains satisfied.
+
+### Independent review fixes
+
+Independent safety review found no Critical and two Important issues:
+
+1. Python `ZipFile` accepted arbitrary trailing bytes, so member-level checks alone did not prove exact deterministic archive bytes. RED: `verify_bundle_bytes(valid_bundle + b"SECRET")` returned healthy success. Fix: after byte and semantic validation, deterministically rebuild the complete archive and require exact byte equality, covering trailing data and noncanonical local/central metadata.
+2. Creator allowed reused `ReleaseArtifactError` to escape, producing a traceback and unstable exit semantics for strict-JSON but contract-invalid observation/manifest input; verifier also collapsed drill failure into assembly mismatch. RED: the two focused review tests failed, including a full traceback from `observation_contract_error`. Fix: translate all assembler exceptions at the pure boundary using content-free stable fields and preserve `drill_validation_failed` distinctly.
+
+Review-fix GREEN: the two focused regressions passed, then the full bundle suite passed `21 passed in 0.17s`. A separate TDD RED/GREEN also made canonical JSON bytes mandatory even when a tamperer recomputed inventory hashes. Full gates must be rerun on the resulting head.
+
+### Final local verification after review fixes
+
+```text
+make contracts-test: 6 passed
+make text-core-test: 22 passed
+make downstream-test: 220 passed
+make upstream-test: 153 passed, 3 environment skips
+make release-drill: passed, all 13 checks true
+python scripts/check_development_governance.py --base d3aaea12... --head a80e76b7...: passed, changed_files=13, code_files=6
+git diff --check: passed
+forbidden component diff scan: empty for corpus, star-omen, contracts, text-core, index-jobs and upstream data
+machine-path/private-key/embedded-key scan: no match
+```
+
+Verified implementation head before this evidence-only commit: `a80e76b76f0f4e94e35c38a02d5635a6df8463e2`. Scope is limited to the offline bundle pure module/CLIs/tests, Make/CI entry points, runbook, design/plan/decision/task/work-log. No raw corpus, candidate, ingest, runtime retrieval, Qdrant schema/data, `main`, or `local_kb_default` operation changed. The evidence commit creates a new head, so GitHub workflows on that exact published head remain mandatory before completion.
 
 ## 2026-07-18 — B7-T02 merged
 

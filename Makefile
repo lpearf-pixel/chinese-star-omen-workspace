@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact
+.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
 
 status:
 	git status --short
@@ -68,6 +68,12 @@ capture-release-observation:
 
 assemble-release-artifact:
 	$(MAKE) -C $(UPSTREAM_DIR) assemble-release-artifact BEFORE_SWITCH="$(BEFORE_SWITCH)" AFTER_SWITCH="$(AFTER_SWITCH)" AFTER_ROLLBACK="$(AFTER_ROLLBACK)" EXPECTED_MANIFEST="$(EXPECTED_MANIFEST)" OUT="$(OUT)"
+
+create-release-evidence-bundle:
+	$(MAKE) -C $(UPSTREAM_DIR) create-release-evidence-bundle BEFORE_SWITCH="$(BEFORE_SWITCH)" AFTER_SWITCH="$(AFTER_SWITCH)" AFTER_ROLLBACK="$(AFTER_ROLLBACK)" EXPECTED_MANIFEST="$(EXPECTED_MANIFEST)" ASSEMBLED_INPUT="$(ASSEMBLED_INPUT)" RELEASE_HEAD="$(RELEASE_HEAD)" CREATED_AT="$(CREATED_AT)" OUT="$(OUT)"
+
+verify-release-evidence-bundle:
+	$(MAKE) -C $(UPSTREAM_DIR) verify-release-evidence-bundle BUNDLE="$(BUNDLE)"
 
 contracts-test:
 	PYTHONPATH=packages/kb-contracts/python pytest -q packages/kb-contracts/tests
