@@ -2,6 +2,49 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B7-T02 started
+
+### Implementation verifying
+
+Implemented the pure offline assembler and strict atomic CLI, Make entry points, a named synthetic CI step, and runbook assembly instructions. The implementation imports the existing B6 constants/validator, binds exact B7 observation envelopes and phase slots, requires strictly increasing canonical UTC capture times, projects only approved manifest identity, and creates output only after the B6 report passes. It contains no HTTP/Qdrant/ingest integration and performs no routing, corpus, candidate, collection, or `local_kb_default` mutation.
+
+Observed TDD evidence:
+
+```text
+RED 1  ModuleNotFoundError: release_artifact
+GREEN  pure happy path 1 passed
+RED 2  3 failures: timezone offset, invalid date, non-increasing chronology accepted
+GREEN  pure contract suite 15 passed
+RED 3  4 failures: assemble_release_artifact.py absent
+GREEN  focused assembler suite 22 passed, including strict JSON/UTF-8, exact artifact hash, and no-live/mutation source assertions
+```
+
+B7-T02 is `VERIFYING`, not `DONE`. Remaining: add final source/strict-parser safety assertions, run full gates and governance, publish exact head, latest-head workflows, independent review, squash merge to `stable/kaiyuan-v2`, and closeout evidence.
+
+Fresh pre-publication local verification:
+
+```text
+focused assembler  22 passed
+release drill       passed, 13 checks true
+contracts            6 passed
+text-core           22 passed
+downstream         220 passed
+upstream           117 passed, 3 skipped
+git diff --check     passed
+```
+
+Remaining exact action: commit the implementation evidence, run governance/base-scope scans, publish the resulting remote head, then use only that SHA's workflows and review as merge evidence.
+
+Independent review of remote head `522b102a5cbc3968b1bcade4278d36f0d2588d51` found one Important content-boundary issue: the assembler validated the four observation envelope keys but copied the nested `phase` mapping verbatim, while B6 intentionally ignores unknown fields. Four injected raw-body/hit/meta/fingerprint payload cases were observed RED (`4 failed`) and could have entered a passing artifact. The fix recursively requires exact allowlisted keys for phase, health/checks, meta, smoke stages/results, collection set, and fingerprints before copying. Focused post-fix result is 27 passed. The prior workflow run IDs are stale; full gates and workflows must rerun on the fixed head.
+
+Review of that first fix found two further Important gaps. Exact keys still allowed object/content values in B6-ignored fields, and mkdir/UTF-8/argparse failures could bypass stable content-free diagnostics. Six counterexamples were observed RED: three allowed-value payloads, output parent as a file, lone-surrogate identity, and unknown argument sentinel. The fix validates every phase scalar/constant/count/collection/hash and safe manifest text, moves all output preparation inside structured error handling, distinguishes link races from parent failures, and uses a parser whose errors never echo untrusted arguments. Focused post-fix result: 33 passed. No prior CI is final evidence.
+
+Final re-review found two additional Important type/value holes: `card_types=1|null` raised an uncaught `TypeError`, and symbolic strings such as `sha256:SECRET_SOURCE_CONTENT` satisfied the permissive hash pattern. Three counterexamples were observed RED. The fix requires JSON list card pools exactly equal to official stage pools and exact lowercase 64-hex SHA-256 values for source/config fingerprints. Focused post-fix result: 36 passed. A final independent assessment and all full/exact-head gates remain required.
+
+The final assessment found no Critical and one last Important parser-boundary risk: excessive JSON nesting/`RecursionError` could bypass stable input errors. A 2,000-level input was observed RED because it reached later validation instead of being rejected as `invalid_json`. Strict parsing now uses iterative depth/node bounds and explicitly maps `RecursionError`; focused result is 37 passed. All independent Critical/Important findings are addressed; final full and exact-head gates remain.
+
+Started `codex/kaiyuan-release-artifact-assembly-v2` from the independently verified stable head `549143c396d1566096e26797161d8d9b25ccf2dd`. No READY task existed after B7-T01, so B7-T02 was registered as the smallest adjacent release-safety increment: offline assembly of the three already captured phase observations into the existing B6 input contract. Selected a separate pure assembler over extending the verifier CLI or documenting shell/jq assembly. It will perform no network, routing, ingest, corpus/candidate, Qdrant, or collection operation. Design, D-018, implementation plan, and draft PR #22 are now the durable sources; next action is observed import RED for the pure assembler.
+
 ## 2026-07-18 — B7-T01 merged
 
 ```text
