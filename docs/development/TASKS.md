@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-release-evidence-archive-v2
-Current PR: #26 (draft; base stable/kaiyuan-v2)
+Current feature: codex/kaiyuan-release-evidence-archive-closeout-v2
+Current PR: pending (B8-T01 closeout PR will target stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -256,10 +256,11 @@ B5-T01 final-head full gates
 
 ### B8-T01 — Verified evidence archive index and retention classification
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base evidence:** B7-T03 closeout PR #25 squash merged to `stable/kaiyuan-v2` as `dfefb73daf001af051a50a461c63a4e7ab308fe8`.
 - **Branch:** `codex/kaiyuan-release-evidence-archive-v2`.
 - **Goal:** 对多份 B7-T03 证据包离线复验后生成确定性归档索引，并根据显式策略标记保留或可转冷归档，不自动移动或删除任何证据。
 - **Acceptance:** every indexed bundle passes exact-byte and semantic B7-T03 verification; strict versioned index; unique bundle hash and safe logical name; deterministic ordering; explicit `keep_latest` plus pinned hashes; `retain|cold_archive_eligible` classification with reasons; atomic caller-selected no-overwrite index; no path/content/secret leakage; no network, deletion, routing, ingest, Qdrant or collection mutation; full gates and independent review.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-archive-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-archive.md`.
+- **Merge evidence:** PR #26 final head `d58e7ff91adf54a35b9d9d49c54a3a2fa5a12ad0`; exact-head workflows Governance `29673734249`, Stable Core `29673734284`, Upstream Runtime `29673734259` all succeeded; squash merged to `stable/kaiyuan-v2` as `c6af74a5875d3df55e56bbea251ede63b56c427c`.
