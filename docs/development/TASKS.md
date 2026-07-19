@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-release-evidence-bundle-closeout-v2
-Current PR: pending (B7-T03 closeout PR will target stable/kaiyuan-v2)
+Current feature: codex/kaiyuan-release-evidence-archive-v2
+Current PR: #26 (draft; base stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -214,6 +214,7 @@ B5-T01 final-head full gates
 → B7-T01
 → B7-T02
 → B7-T03
+→ B8-T01
 ```
 
 ## B7 — 发布观测自动化
@@ -250,3 +251,15 @@ B5-T01 final-head full gates
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-bundle-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-bundle.md`.
 - **Merge evidence:** PR #24 final head `71cc8d9e299154d877b7600d2e042c4541312339`; exact-head workflows Governance `29672619531`, Stable Core `29672619536`, Upstream Runtime `29672619530` all succeeded; squash merged to `stable/kaiyuan-v2` as `bf56df0a1f396d1e2db40f72c6b52e809dd7ab9c`.
+
+## B8 — 发布证据归档与持续门禁
+
+### B8-T01 — Verified evidence archive index and retention classification
+
+- **Status:** `VERIFYING`
+- **Base evidence:** B7-T03 closeout PR #25 squash merged to `stable/kaiyuan-v2` as `dfefb73daf001af051a50a461c63a4e7ab308fe8`.
+- **Branch:** `codex/kaiyuan-release-evidence-archive-v2`.
+- **Goal:** 对多份 B7-T03 证据包离线复验后生成确定性归档索引，并根据显式策略标记保留或可转冷归档，不自动移动或删除任何证据。
+- **Acceptance:** every indexed bundle passes exact-byte and semantic B7-T03 verification; strict versioned index; unique bundle hash and safe logical name; deterministic ordering; explicit `keep_latest` plus pinned hashes; `retain|cold_archive_eligible` classification with reasons; atomic caller-selected no-overwrite index; no path/content/secret leakage; no network, deletion, routing, ingest, Qdrant or collection mutation; full gates and independent review.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-archive-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-archive.md`.
