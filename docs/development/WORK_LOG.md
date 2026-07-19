@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B8-T01 merged
+
+```text
+PR: #26
+Final head: d58e7ff91adf54a35b9d9d49c54a3a2fa5a12ad0
+Development Governance: 29673734249 — success
+Kaiyuan Stable Core: 29673734284 — success
+Kaiyuan Upstream Runtime: 29673734259 — success
+Squash merge: c6af74a5875d3df55e56bbea251ede63b56c427c
+```
+
+GitHub returned `merged=true` for the exact reviewed head, and independent `git ls-remote` plus fetch resolved `refs/heads/stable/kaiyuan-v2` to the actual squash SHA. Immediately before merge PR #26 was base `stable/kaiyuan-v2`, non-draft and mergeable; changed-file audit contained only the offline archive module/CLIs/tests, CI, runbook, and development/design/plan evidence. Review threads and submitted reviews were empty, and independent review had no remaining Critical/Important finding.
+
+The implementation verifies every B7-T03 bundle, emits a path-free deterministic archive index, and classifies only `retain|cold_archive_eligible`; it never moves or deletes evidence. It does not target `main`, access corpus/candidates/ingest/runtime retrieval/Qdrant data, or read/write `local_kb_default`. B8-T01 is DONE. Closeout exact-head gates remain before the next task starts.
+
 ## 2026-07-18 — B8-T01 evidence archive index started
 
 - Actual base: `stable/kaiyuan-v2` at `dfefb73daf001af051a50a461c63a4e7ab308fe8` (B7-T03 closeout PR #25).
