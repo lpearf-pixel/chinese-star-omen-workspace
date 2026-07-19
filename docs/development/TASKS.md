@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-ephemeral-release-gate-v2
-Current PR: pending (B8-T02 draft PR will target stable/kaiyuan-v2)
+Current feature: codex/kaiyuan-ephemeral-release-gate-closeout-v2
+Current PR: pending (B8-T02 closeout PR will target stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -267,10 +267,11 @@ B5-T01 final-head full gates
 
 ### B8-T02 — Hermetic end-to-end release evidence gate
 
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base evidence:** B8-T01 closeout PR #27 squash merged to `stable/kaiyuan-v2` as `bae59e0b636588c5600916ce992c642746f002da`.
 - **Branch:** `codex/kaiyuan-ephemeral-release-gate-v2`.
 - **Goal:** 在 hermetic CI 中串联只读 observation capture、artifact assembly、sealed bundle creation 与 offline verification，持续证明跨组件发布证据契约兼容。
 - **Acceptance:** deterministic three-phase capture through read-only fakes; real B7-T02/B7-T03 pure APIs; exact passed validation and verified bundle summary; explicit call audit proving no create/upsert/delete/routing/ingest operation; random safe ephemeral prior collection; no live service access and no create, write or delete of `local_kb_default`; its required invariant fingerprint is supplied only by a hermetic fake inspection; failure injection remains fail-closed; no production-release claim; focused/full gates and independent review.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-ephemeral-release-gate-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-ephemeral-release-gate.md`.
+- **Merge evidence:** PR #28 final head `8e4e1e704d19559bb2bf213a5d7143cd16f04e8a`; exact-head workflows Governance `29674325255`, Stable Core `29674325256`, Upstream Runtime `29674325263` all succeeded; squash merged to `stable/kaiyuan-v2` as `9945fc4c76cdc3521cd9ab6dbe7a068580582bbf`.

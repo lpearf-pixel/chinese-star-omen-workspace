@@ -2,6 +2,19 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B8-T02 merged
+
+```text
+PR: #28
+Final head: 8e4e1e704d19559bb2bf213a5d7143cd16f04e8a
+Development Governance: 29674325255 — success
+Kaiyuan Stable Core: 29674325256 — success
+Kaiyuan Upstream Runtime: 29674325263 — success
+Squash merge: 9945fc4c76cdc3521cd9ab6dbe7a068580582bbf
+```
+
+Immediately before merge PR #28 was base `stable/kaiyuan-v2`, non-draft, mergeable, scoped to the seven expected workflow/test/governance files, and had no submitted review or unresolved review thread. GitHub merged the expected exact head, and independent `git ls-remote` resolved the stable ref to the same actual squash SHA. The hermetic gate composes the real capture, assembly, bundle, and offline verification contracts, audits protected fake inspection once per phase, and proves tampering fails before bundle creation. It performs no live service/Qdrant/corpus/candidate/ingest/routing or collection mutation and does not treat synthetic CI as production evidence. B8-T02 is DONE; only this docs-only closeout PR remains.
+
 ## 2026-07-18 — B8-T01 merged
 
 ```text
