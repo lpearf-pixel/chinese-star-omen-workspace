@@ -59,6 +59,23 @@ make capture-release-observation PHASE=after_rollback ACTIVE_COLLECTION="$BEFORE
 
 三个文件分别提供 `phase` 对象。操作者将其放入实际 `kaiyuan-release-drill-input/v1` root 的同名字段，并从已批准的 release manifest 填写 `expected_release_manifest`、事件编号及时间窗口；`phase_name` 只用于防止文件混淆，不进入阶段验证。验证器输出的 `kaiyuan-release-drill/v1` 是报告 schema，不可用作输入。组装不会切流、回滚、ingest 或改变任何 collection，完成后仍须运行第 5 节验证器。
 
+推荐使用离线 assembler 代替人工复制。三次采集完成且已取得本次发布的批准 manifest 后运行：
+
+```bash
+make assemble-release-artifact \
+  BEFORE_SWITCH="$ARTIFACT_DIR/before_switch.json" \
+  AFTER_SWITCH="$ARTIFACT_DIR/after_switch.json" \
+  AFTER_ROLLBACK="$ARTIFACT_DIR/after_rollback.json" \
+  EXPECTED_MANIFEST="$APPROVED_MANIFEST" \
+  OUT="$ARTIFACT_DIR/release-drill.actual.json"
+
+python apps/local-kb-unified/scripts/verify_release_drill.py \
+  --input "$ARTIFACT_DIR/release-drill.actual.json"
+sha256sum "$ARTIFACT_DIR/release-drill.actual.json"
+```
+
+assembler 严格绑定三份 `phase_name`、要求 UTC 采集时间依次递增、只投影 manifest identity，并在创建输出前调用现有 B6 validator。输入/验证/输出错误不会创建或覆盖 artifact。该命令不联网、不切流、不执行回滚或 ingest，也不授权任何 collection 写入。
+
 对当前服务分别保存 health 和 meta 的 HTTP status 与 JSON。只有健康 200 response 才能写成 `status=ok`；传输或契约错误必须停止演练并保留原错误证据，不能写 `hits_count=0` 代替。
 
 执行两个固定 smoke：

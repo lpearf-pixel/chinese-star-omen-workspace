@@ -1,7 +1,7 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 
-.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation
+.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact
 
 status:
 	git status --short
@@ -65,6 +65,9 @@ release-drill:
 
 capture-release-observation:
 	$(MAKE) -C $(UPSTREAM_DIR) capture-release-observation PHASE="$(PHASE)" ACTIVE_COLLECTION="$(ACTIVE_COLLECTION)" QUERY="$(QUERY)" BASE_URL="$(BASE_URL)" QDRANT_URL="$(QDRANT_URL)" API_KEY_ENV="$(API_KEY_ENV)" OUT="$(OUT)"
+
+assemble-release-artifact:
+	$(MAKE) -C $(UPSTREAM_DIR) assemble-release-artifact BEFORE_SWITCH="$(BEFORE_SWITCH)" AFTER_SWITCH="$(AFTER_SWITCH)" AFTER_ROLLBACK="$(AFTER_ROLLBACK)" EXPECTED_MANIFEST="$(EXPECTED_MANIFEST)" OUT="$(OUT)"
 
 contracts-test:
 	PYTHONPATH=packages/kb-contracts/python pytest -q packages/kb-contracts/tests

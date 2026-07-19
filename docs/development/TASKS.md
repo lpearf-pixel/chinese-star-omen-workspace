@@ -228,10 +228,11 @@ B5-T01 final-head full gates
 
 ### B7-T02 — Fail-closed release artifact assembly
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base evidence:** B7-T01 closeout PR #21 squash merged to `stable/kaiyuan-v2` as `549143c396d1566096e26797161d8d9b25ccf2dd`.
 - **Branch:** `codex/kaiyuan-release-artifact-assembly-v2`.
 - **Goal:** 将三份独立 B7 phase observation 与已批准 release manifest 组装为现有 B6 verifier 的严格输入，消除人工复制 schema、phase 和 manifest identity 的风险。
 - **Acceptance:** strict unique-key/finite JSON; exact observation schema and phase_name-to-slot binding; safe RFC3339 capture ordering; exact allowlisted manifest identity; in-memory B6 validation before output; atomic caller-selected no-overwrite output; validation/input failures create no artifact; no network, routing, ingest, corpus, candidate or Qdrant mutation; full gates and independent review.
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-artifact-assembly-design.md`.
-- **Plan:** pending after design checkpoint.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-artifact-assembly.md`.
+- **PR:** #22 (draft; base `stable/kaiyuan-v2`). Implementation is complete; focused/full gates, exact-head CI, independent review, and merge evidence remain.

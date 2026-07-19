@@ -3,7 +3,7 @@ ROOT := $(shell pwd)
 INDEX_PY := $(ROOT)/index-jobs/.venv/bin/python
 COLLECTION ?= $${KB_SEARCH_DEFAULT_COLLECTION:-local_kb_kaiyuan_v2}
 
-.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest release-drill capture-release-observation
+.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest release-drill capture-release-observation assemble-release-artifact
 
 setup:
 	bash $(ROOT)/index-jobs/setup_env.sh
@@ -62,6 +62,10 @@ release-drill:
 capture-release-observation:
 	@test -n "$(PHASE)" -a -n "$(ACTIVE_COLLECTION)" -a -n "$(QUERY)" -a -n "$(BASE_URL)" -a -n "$(QDRANT_URL)" -a -n "$(API_KEY_ENV)" -a -n "$(OUT)" || { echo "required: PHASE ACTIVE_COLLECTION QUERY BASE_URL QDRANT_URL API_KEY_ENV OUT" >&2; exit 2; }
 	python scripts/capture_release_observation.py --phase "$(PHASE)" --active-collection "$(ACTIVE_COLLECTION)" --query "$(QUERY)" --base-url "$(BASE_URL)" --qdrant-url "$(QDRANT_URL)" --api-key-env "$(API_KEY_ENV)" --out "$(OUT)"
+
+assemble-release-artifact:
+	@test -n "$(BEFORE_SWITCH)" -a -n "$(AFTER_SWITCH)" -a -n "$(AFTER_ROLLBACK)" -a -n "$(EXPECTED_MANIFEST)" -a -n "$(OUT)" || { echo "required: BEFORE_SWITCH AFTER_SWITCH AFTER_ROLLBACK EXPECTED_MANIFEST OUT" >&2; exit 2; }
+	python scripts/assemble_release_artifact.py --before-switch "$(BEFORE_SWITCH)" --after-switch "$(AFTER_SWITCH)" --after-rollback "$(AFTER_ROLLBACK)" --expected-manifest "$(EXPECTED_MANIFEST)" --out "$(OUT)"
 
 validate-candidates:
 	python scripts/import_candidate_cards.py --inbox incoming/downstream_candidates/codex-ready --book-id kaiyuan_zhanjing --mode validate

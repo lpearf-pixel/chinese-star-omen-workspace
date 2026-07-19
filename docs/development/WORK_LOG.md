@@ -4,7 +4,38 @@
 
 ## 2026-07-18 — B7-T02 started
 
-Started `codex/kaiyuan-release-artifact-assembly-v2` from the independently verified stable head `549143c396d1566096e26797161d8d9b25ccf2dd`. No READY task existed after B7-T01, so B7-T02 was registered as the smallest adjacent release-safety increment: offline assembly of the three already captured phase observations into the existing B6 input contract. Selected a separate pure assembler over extending the verifier CLI or documenting shell/jq assembly. It will perform no network, routing, ingest, corpus/candidate, Qdrant, or collection operation. Design and D-018 are the durable sources; next action is design checkpoint, plan, draft PR, then observed RED before implementation.
+### Implementation verifying
+
+Implemented the pure offline assembler and strict atomic CLI, Make entry points, a named synthetic CI step, and runbook assembly instructions. The implementation imports the existing B6 constants/validator, binds exact B7 observation envelopes and phase slots, requires strictly increasing canonical UTC capture times, projects only approved manifest identity, and creates output only after the B6 report passes. It contains no HTTP/Qdrant/ingest integration and performs no routing, corpus, candidate, collection, or `local_kb_default` mutation.
+
+Observed TDD evidence:
+
+```text
+RED 1  ModuleNotFoundError: release_artifact
+GREEN  pure happy path 1 passed
+RED 2  3 failures: timezone offset, invalid date, non-increasing chronology accepted
+GREEN  pure contract suite 15 passed
+RED 3  4 failures: assemble_release_artifact.py absent
+GREEN  focused assembler suite 22 passed, including strict JSON/UTF-8, exact artifact hash, and no-live/mutation source assertions
+```
+
+B7-T02 is `VERIFYING`, not `DONE`. Remaining: add final source/strict-parser safety assertions, run full gates and governance, publish exact head, latest-head workflows, independent review, squash merge to `stable/kaiyuan-v2`, and closeout evidence.
+
+Fresh pre-publication local verification:
+
+```text
+focused assembler  22 passed
+release drill       passed, 13 checks true
+contracts            6 passed
+text-core           22 passed
+downstream         220 passed
+upstream           117 passed, 3 skipped
+git diff --check     passed
+```
+
+Remaining exact action: commit the implementation evidence, run governance/base-scope scans, publish the resulting remote head, then use only that SHA's workflows and review as merge evidence.
+
+Started `codex/kaiyuan-release-artifact-assembly-v2` from the independently verified stable head `549143c396d1566096e26797161d8d9b25ccf2dd`. No READY task existed after B7-T01, so B7-T02 was registered as the smallest adjacent release-safety increment: offline assembly of the three already captured phase observations into the existing B6 input contract. Selected a separate pure assembler over extending the verifier CLI or documenting shell/jq assembly. It will perform no network, routing, ingest, corpus/candidate, Qdrant, or collection operation. Design, D-018, implementation plan, and draft PR #22 are now the durable sources; next action is observed import RED for the pure assembler.
 
 ## 2026-07-18 — B7-T01 merged
 
