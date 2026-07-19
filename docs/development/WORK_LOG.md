@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B7-T02 merged
+
+```text
+PR: #22
+Final head: 23168954f809f046dedee7d1ce107be8dd0332d4
+Development Governance: 29670048368 — success
+Kaiyuan Stable Core: 29670048362 — success
+Kaiyuan Upstream Runtime: 29670048361 — success
+Squash merge: 4abd11d5f5c30991656cbf525f9f3be0ff3fbf38
+```
+
+GitHub returned `merged=true`, and independent `git ls-remote` resolved `refs/heads/stable/kaiyuan-v2` to the same squash SHA. Final PR metadata was base `stable/kaiyuan-v2`, non-draft, mergeable, with zero review threads/submitted reviews. Independent review found no Critical; every Important finding was reproduced with RED tests and fixed before the final exact-head workflows. Final local evidence: 37 focused, 6 contracts, 22 text-core, 220 downstream, and 132 upstream tests passed (3 environment skips), plus the passing 13-check release drill and governance check.
+
+The merged 12-file scope is limited to the offline pure assembler/CLI, tests, Make/CI entry points, runbook, design/plan/decision, and task evidence. It contains no network/Qdrant client, routing, ingest, corpus/candidate, collection schema/data, `main`, or `local_kb_default` mutation. B7-T02 is DONE. No later READY task is registered.
+
 ## 2026-07-18 — B7-T02 started
 
 ### Implementation verifying
