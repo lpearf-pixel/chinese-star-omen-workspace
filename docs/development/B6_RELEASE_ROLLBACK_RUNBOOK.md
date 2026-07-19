@@ -98,6 +98,25 @@ sha256sum "$ARTIFACT_DIR/release-evidence.zip"
 
 证据包通过不授权切流、回滚、ingest 或 collection 写入。创建和验证都不联网、不读取 Qdrant，也不访问或修改 `local_kb_default`。
 
+多次发布后，可对已封装的 bundle 生成内容受限的归档索引。`BUNDLES` 中每项是显式 `logical-name=path` 绑定；logical name 会进入索引，本机 path 只用于读取且永不序列化。
+
+```bash
+python apps/local-kb-unified/scripts/create_release_evidence_archive.py \
+  --bundle "release-2026-07=$ARTIFACT_DIR/release evidence 07.zip" \
+  --bundle "release-2026-08=$ARTIFACT_DIR/release evidence 08.zip" \
+  --keep-latest 2 \
+  --pin "sha256:<64-lowercase-hex>" \
+  --out "$ARTIFACT_DIR/release-evidence-archive.json"
+
+python apps/local-kb-unified/scripts/verify_release_evidence_archive.py \
+  --index "$ARTIFACT_DIR/release-evidence-archive.json" \
+  --bundle "release-2026-07=$ARTIFACT_DIR/release evidence 07.zip" \
+  --bundle "release-2026-08=$ARTIFACT_DIR/release evidence 08.zip"
+sha256sum "$ARTIFACT_DIR/release-evidence-archive.json"
+```
+
+创建和验证都会对每份 bundle 重跑 B7-T03 精确字节与语义复验。每份 `--bundle` 独立 shell quote，因此路径可含空格；不经由 Make 的 whitespace list 传递。`keep_latest` 按 target 保留最新 N 份，pinned hash 始终标记 `retain`，其余只标记 `cold_archive_eligible`。分类不是删除或移动授权；任何后续冷归档操作必须由操作者独立审批和执行。索引已存在时退出 `2` 且不覆盖；bundle 或索引篡改退出 `1`。
+
 对当前服务分别保存 health 和 meta 的 HTTP status 与 JSON。只有健康 200 response 才能写成 `status=ok`；传输或契约错误必须停止演练并保留原错误证据，不能写 `hits_count=0` 代替。
 
 执行两个固定 smoke：

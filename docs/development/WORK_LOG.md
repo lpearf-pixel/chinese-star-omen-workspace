@@ -14,7 +14,42 @@
 - Baseline: B7-T03 focused bundle suite → `21 passed in 0.17s`.
 - TDD RED: focused archive test failed during collection with `ModuleNotFoundError: release_evidence_archive`.
 - TDD GREEN: the same focused test passed after the minimal pure builder implemented full B7 verification, safe provenance projection, deterministic per-target latest/pin classification, and stable final ordering.
-- Remaining: add fail-closed policy/index boundary RED cases before CLI or final verification work. B8-T01 remains `IN_PROGRESS`.
+- TDD RED 2: the expanded archive suite failed during collection because `canonical_index_bytes` and `verify_archive_index` did not exist.
+- TDD GREEN 2: policy/name/pin/bundle validation plus strict canonical rebuild verifier passed `24 passed`.
+- TDD RED 3: four CLI tests failed because `create_release_evidence_archive.py` and `verify_release_evidence_archive.py` did not exist.
+- TDD GREEN 3: atomic create/verify CLI, safe binding parsing and no-path serialization passed the full archive suite, `28 passed`.
+- Related regression after Make/CI/runbook integration: archive, bundle, artifact, observation and release-drill suites → `132 passed in 3.42s`.
+- Initial Make missing-argument contract exited `2`, but independent review later showed that a Make whitespace list cannot preserve bundle paths containing spaces; archive Make targets were removed and the runbook now uses separately quoted repeated CLI arguments.
+- Implementation includes pure deterministic classification, strict index verifier, bounded reads, atomic hard-link no-overwrite output, create/verify CLIs, named CI coverage, and classification-only runbook instructions. Production scan found no network/Qdrant/ingest/routing integration; the only deletion-like call is same-directory temporary-file cleanup after atomic publication, never an evidence bundle or completed index.
+- B8-T01 is now `VERIFYING`, not `DONE`. Remaining: full local gates, independent review, latest-head PR #26 workflows, merge and closeout evidence.
+
+### Independent review fixes
+
+Independent review found no Critical and three Important issues. Each was reproduced before the fix:
+
+1. Input files were fully read before size checks. RED proved no bounded reader existed. The shared reader now requests at most `limit + 1` bytes for bundles and indexes, then fails `input_too_large` without loading the remainder.
+2. Latest sorting converted datetimes to float Unix timestamps, collapsing valid year-9999 microseconds. RED selected the older `.000001Z` bundle over `.000002Z`. Stable two-pass ordering now compares exact `datetime` values and preserves release-head/hash tie-breakers.
+3. Make `foreach` split `NAME=PATH` bindings on whitespace. RED confirmed unsafe archive Make targets existed. They were removed; runbook commands pass every repeated `--bundle` as a separately quoted CLI argument and explicitly support paths with spaces.
+
+A separate fail-closed RED also found non-string/unhashable pin values could raise raw `TypeError`; validation now checks pin type/format before duplicate-set construction. Focused post-fix verification is required before full gates are considered current.
+
+### Post-review local verification
+
+```text
+focused review regressions: 3 passed
+archive plus B6/B7 related regression: 136 passed
+make contracts-test: 6 passed
+make text-core-test: 22 passed
+make downstream-test: 220 passed
+make upstream-test: 185 passed, 3 environment skips
+make release-drill: passed, all 13 checks true
+governance --base dfefb73d... --head 501b15a1...: passed, changed_files=11, code_files=4
+git diff --check: passed
+forbidden component diff scan: empty
+machine-path/private-key/embedded-key scan: no match
+```
+
+Verified implementation head before this evidence-only commit: `501b15a1f0335d0c83db773f11019721daa8c863`. Independent review has no remaining Critical/Important finding after the three review-fix RED/GREEN cycles. PR #26 remains draft; this evidence commit changes the head, so all three workflows must succeed on the newly published exact head before ready/merge.
 
 ## 2026-07-18 — B7-T03 merged
 

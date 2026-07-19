@@ -55,8 +55,7 @@
 - Create: `apps/local-kb-unified/scripts/create_release_evidence_archive.py`
 - Create: `apps/local-kb-unified/scripts/verify_release_evidence_archive.py`
 - Modify: `apps/local-kb-unified/tests/test_release_evidence_archive_v1.py`
-- Modify: `apps/local-kb-unified/Makefile`
-- Modify: `Makefile`
+- Modify: `docs/development/B6_RELEASE_ROLLBACK_RUNBOOK.md`
 
 **Interfaces:**
 - Create: repeated `--bundle NAME=PATH`, required `--keep-latest`, repeatable `--pin`, and required `--out`.
@@ -65,7 +64,7 @@
 
 - [ ] Add subprocess RED for missing/duplicate/unsafe bindings, unreadable/oversized input, invalid policy, existing output, exclusive-create race, successful canonical summary/hash, verifier mismatch, safe stderr, and no temp residue.
 - [ ] Implement thin bounded-read CLIs and fsynced temporary plus hard-link publication; never serialize paths.
-- [ ] Add required-argument Make targets with no defaults and run CLI GREEN plus forbidden operation/import scans.
+- [ ] Document direct repeated `--bundle` CLI calls so each binding remains one shell argument even when its path contains whitespace; do not encode bindings as a Make whitespace list.
 - [ ] Commit CLI/build entry points.
 
 ### Task 4: Runbook, CI, verification, review, and merge

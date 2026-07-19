@@ -19,7 +19,7 @@
 ```text
 Stable base: stable/kaiyuan-v2
 Current feature: codex/kaiyuan-release-evidence-archive-v2
-Current PR: pending (B8-T01 draft PR will target stable/kaiyuan-v2)
+Current PR: #26 (draft; base stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -256,7 +256,7 @@ B5-T01 final-head full gates
 
 ### B8-T01 — Verified evidence archive index and retention classification
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base evidence:** B7-T03 closeout PR #25 squash merged to `stable/kaiyuan-v2` as `dfefb73daf001af051a50a461c63a4e7ab308fe8`.
 - **Branch:** `codex/kaiyuan-release-evidence-archive-v2`.
 - **Goal:** 对多份 B7-T03 证据包离线复验后生成确定性归档索引，并根据显式策略标记保留或可转冷归档，不自动移动或删除任何证据。
