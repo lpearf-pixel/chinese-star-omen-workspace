@@ -2,6 +2,21 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B7-T03 merged
+
+```text
+PR: #24
+Final head: 71cc8d9e299154d877b7600d2e042c4541312339
+Development Governance: 29672619531 — success
+Kaiyuan Stable Core: 29672619536 — success
+Kaiyuan Upstream Runtime: 29672619530 — success
+Squash merge: bf56df0a1f396d1e2db40f72c6b52e809dd7ab9c
+```
+
+GitHub returned `merged=true` for the exact reviewed head, and independent `git ls-remote` plus fetch resolved `refs/heads/stable/kaiyuan-v2` to the actual squash SHA above. PR metadata was base `stable/kaiyuan-v2`, non-draft and mergeable immediately before merge; all three workflows belonged to the actual final head, review threads and submitted reviews were empty, and independent safety review had no remaining Critical/Important finding.
+
+The merged 13-file diff is limited to the offline deterministic evidence bundle module/CLIs/tests, Make/CI entry points, runbook, design/plan/decision/task/work-log. It does not target `main`, change corpus/candidates/ingest/runtime retrieval/Qdrant schema or data, or access/write `local_kb_default`. B7-T03 is DONE. The closeout PR and its exact-head gates remain before starting the next task.
+
 ## 2026-07-18 — B7-T03 release evidence bundle started
 
 - Actual base: `stable/kaiyuan-v2` at `d3aaea12f0a033703e91ee1f715441761444d563` (B7-T02 closeout PR #23).
