@@ -167,3 +167,10 @@
 - **Identity:** 索引保留安全 logical name、bundle hash、release head、created time、target collection 和 schema/tool identity，不记录本机路径或文件系统 metadata。
 - **Determinism:** 每个 target 按 created time 降序分配 latest，完全 tie 由 release head 和 bundle hash 稳定打破；最终索引升序输出，与 CLI 输入顺序无关。
 - **Reason:** 自动删除会把证据治理变成不可逆数据操作，且可能破坏审计或回滚证据。内容受限的确定性索引允许人工归档流程使用同一可复验判断，不扩大工具权限。
+
+## D-021 — 跨组件发布证据 CI 保持 hermetic 与只读
+
+- **Status:** Accepted
+- **Decision:** B8-T02 在单个 hermetic pytest 门禁中使用确定性只读 adapters，并调用真实 observation、assembly、bundle 和 offline verification 纯 API。前态 active collection 使用随机安全 ephemeral 标识；门禁记录每次 adapter 调用并拒绝任何对 `local_kb_default` 的访问。
+- **Reason:** 门禁需要发现 B7 组件间的契约漂移，但不得依赖凭据、改变路由、执行 ingest、修改 Qdrant，或把 synthetic CI 伪装成生产发布证据。
+- **Consequence:** live adapter 行为继续由独立测试覆盖。B8-T02 只证明契约组合与 fail-closed 语义；生产发布证据仍须使用实际 observation 和既有 operator workflow。

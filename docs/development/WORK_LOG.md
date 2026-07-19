@@ -960,3 +960,8 @@ conclusion: success
 - Text-core Python 3.9/3.12 jobs: passing on the inspected run.
 - Upstream unit, Qdrant incremental and retrieval-contract jobs: passing on the inspected run.
 - Downstream: failing on stale legacy expectations; no completion claim was made at that point.
+# 2026-07-18 — B8-T02 hermetic release evidence gate started
+
+B8-T01 closeout PR #27 was confirmed base `stable/kaiyuan-v2`, ready, mergeable, docs-only, and free of reviews or unresolved threads at exact head `d60e3daa5e0c9e8934184ac43faca3b721182b2c`. Its exact-head workflows Governance `29673783672`, Stable Core `29673783647`, and Upstream Runtime `29673783671` all succeeded. PR #27 squash merged, and independent `git ls-remote` confirmed the actual stable ref as `bae59e0b636588c5600916ce992c642746f002da`.
+
+B8-T02 started from that exact stable SHA on `codex/kaiyuan-ephemeral-release-gate-v2`. TASKS moved to `IN_PROGRESS` before code. Design selects one hermetic pytest composing the real read-only observation, assembly, bundle, and offline verification pure APIs with an explicit operation audit. D-021 records that synthetic CI does not prove a production release and must never access `local_kb_default`. Next exact action: commit the reviewed spec/plan, create a draft PR targeting only `stable/kaiyuan-v2`, then observe TDD RED for the missing end-to-end gate helper.
