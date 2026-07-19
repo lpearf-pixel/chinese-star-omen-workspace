@@ -2,6 +2,18 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B7-T03 release evidence bundle started
+
+- Actual base: `stable/kaiyuan-v2` at `d3aaea12f0a033703e91ee1f715441761444d563` (B7-T02 closeout PR #23).
+- Branch: `codex/kaiyuan-release-evidence-bundle-v2`; PR will target only `stable/kaiyuan-v2`.
+- Task moved to `IN_PROGRESS` before behavior implementation.
+- Selected design: deterministic stored ZIP with strict internal inventory, atomic hard-link publication, no extraction, and offline byte plus semantic revalidation. Directory and external-reference alternatives were rejected because they cannot preserve the same atomic/no-overwrite or portability guarantees.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-bundle-design.md`; decision D-019.
+- Baseline: `PYTHONPATH=. /tmp/kaiyuan-b5/bin/pytest -q tests/test_release_drill_v1.py tests/test_release_observation_v1.py tests/test_release_artifact_v1.py` from `apps/local-kb-unified` → `83 passed in 2.31s`.
+- Environment note: bare `pytest` was unavailable; this was a shell environment issue, not a test failure. The existing isolated venv `/tmp/kaiyuan-b5` ran the baseline without dependency or assertion changes.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-bundle.md`; self-review found no uncovered spec requirement, placeholder, or interface mismatch.
+- Remaining: create draft PR, then observe TDD RED before production code.
+
 ## 2026-07-18 — B7-T02 merged
 
 ```text
