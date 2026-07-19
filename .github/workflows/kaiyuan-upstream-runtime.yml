@@ -51,6 +51,11 @@ jobs:
       - name: Upstream unit tests
         run: make upstream-test
 
+      - name: Read-only release observation capture contract
+        run: |
+          cd apps/local-kb-unified
+          PYTHONPATH=. pytest -q tests/test_release_observation_v1.py
+
       - name: Non-mutating release rollback drill
         run: make release-drill
 
