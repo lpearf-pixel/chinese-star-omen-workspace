@@ -140,3 +140,12 @@
 - **Fingerprint:** collection config 只取 allowlisted schema/settings，严格 canonical JSON 后计算 SHA-256；point payload 不参与。
 - **Failure:** 认证、超时、服务、collection、contract 和解析错误明确失败，不产生部分 observation 或健康零命中。
 - **Reason:** 手工拼装容易产生 provenance 漂移，而新增服务端 inspection API 会扩大攻击面。本机只读适配器兼顾可重复证据与最小权限。
+
+## D-018 — 发布 artifact 由离线纯 assembler 组装并先验证后写入
+
+- **Status:** Accepted
+- **Decision:** B7-T02 使用独立离线 assembler 读取三份 B7 observation 和一份已批准 manifest，在内存构造 `kaiyuan-release-drill-input/v1`，复用 B6 validator，通过后才原子创建最终 artifact。
+- **Binding:** 每份 observation 的 `schema_version`、`phase_name`、`captured_at` 和 `phase` 必须严格有效；phase name 必须分别绑定 `before_switch`、`after_switch`、`after_rollback`，时间必须按该顺序严格递增。
+- **Failure:** duplicate key、non-finite JSON、schema/phase/manifest mismatch、B6 validation failure、output exists 或写入失败都不创建或覆盖最终 artifact。
+- **Boundary:** assembler 不联网、不切流、不回滚、不 ingest、不读取或修改 Qdrant、corpus、candidate；失败报告仅使用既有安全 validation code/field/phase。
+- **Reason:** shell/jq 或人工复制容易混淆 verifier input/report schema、错放阶段并引入 manifest 漂移；独立纯模块可测试且不扩大运行时服务面。

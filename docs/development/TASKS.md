@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-release-observation-capture-v2
-Current PR: pending
+Current feature: codex/kaiyuan-release-artifact-assembly-v2
+Current PR: pending (B7-T02 draft PR will target stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -225,3 +225,13 @@ B5-T01 final-head full gates
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-observation-capture-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-observation-capture.md`.
 - **Merge evidence:** PR #20 final head `57f43bcc1778b2e79926ca625a08ac4f4de49016`; squash merge `eef5f2c2afd64312bedf7c33cc07fe7ca6f5f41f` to `stable/kaiyuan-v2`; exact-head workflows Governance `29666701659`, Stable Core `29666701666`, Upstream Runtime `29666701658` all succeeded.
+
+### B7-T02 — Fail-closed release artifact assembly
+
+- **Status:** `IN_PROGRESS`
+- **Base evidence:** B7-T01 closeout PR #21 squash merged to `stable/kaiyuan-v2` as `549143c396d1566096e26797161d8d9b25ccf2dd`.
+- **Branch:** `codex/kaiyuan-release-artifact-assembly-v2`.
+- **Goal:** 将三份独立 B7 phase observation 与已批准 release manifest 组装为现有 B6 verifier 的严格输入，消除人工复制 schema、phase 和 manifest identity 的风险。
+- **Acceptance:** strict unique-key/finite JSON; exact observation schema and phase_name-to-slot binding; safe RFC3339 capture ordering; exact allowlisted manifest identity; in-memory B6 validation before output; atomic caller-selected no-overwrite output; validation/input failures create no artifact; no network, routing, ingest, corpus, candidate or Qdrant mutation; full gates and independent review.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-artifact-assembly-design.md`.
+- **Plan:** pending after design checkpoint.
