@@ -17,6 +17,11 @@ sys.path.insert(0, str(ROOT))
 from release_artifact import ReleaseArtifactError, assemble_release_artifact  # noqa: E402
 
 
+class SafeArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        raise ReleaseArtifactError("invalid_arguments", "arguments")
+
+
 def _reject_constant(value: str):
     raise ValueError("non-finite token")
 
@@ -32,33 +37,54 @@ def _unique_object(pairs):
 
 def _load_strict_json(path: Path, field: str):
     try:
-        return json.loads(
+        value = json.loads(
             path.read_text(encoding="utf-8"),
             parse_constant=_reject_constant,
             object_pairs_hook=_unique_object,
         )
+        _require_bounded_json(value)
+        return value
     except (OSError, UnicodeError) as exc:
         raise ReleaseArtifactError("input_read_failed", field) from exc
-    except (json.JSONDecodeError, ValueError) as exc:
+    except (json.JSONDecodeError, ValueError, RecursionError) as exc:
         raise ReleaseArtifactError("invalid_json", field) from exc
 
 
+def _require_bounded_json(value, *, max_depth: int = 128, max_nodes: int = 100_000) -> None:
+    pending = [(value, 0)]
+    visited = 0
+    while pending:
+        item, depth = pending.pop()
+        visited += 1
+        if depth > max_depth or visited > max_nodes:
+            raise ValueError("JSON structure exceeds safety limit")
+        if isinstance(item, dict):
+            pending.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            pending.extend((child, depth + 1) for child in item)
+
+
 def _write_new_atomic(path: Path, document: dict[str, object]) -> bytes:
-    if path.exists():
-        raise ReleaseArtifactError("output_exists", "out")
-    path.parent.mkdir(parents=True, exist_ok=True)
-    encoded = (json.dumps(document, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
     temporary = None
+    linking = False
     try:
+        if path.exists():
+            raise ReleaseArtifactError("output_exists", "out")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        encoded = (json.dumps(document, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
         with tempfile.NamedTemporaryFile(dir=path.parent, prefix=f".{path.name}.", delete=False) as handle:
             temporary = Path(handle.name)
             handle.write(encoded)
             handle.flush()
             os.fsync(handle.fileno())
+        linking = True
         os.link(temporary, path)
     except FileExistsError as exc:
-        raise ReleaseArtifactError("output_exists", "out") from exc
-    except (OSError, TypeError, ValueError) as exc:
+        code = "output_exists" if linking else "output_write_failed"
+        raise ReleaseArtifactError(code, "out") from exc
+    except ReleaseArtifactError:
+        raise
+    except (OSError, UnicodeError, TypeError, ValueError) as exc:
         raise ReleaseArtifactError("output_write_failed", "out") from exc
     finally:
         if temporary is not None:
@@ -67,13 +93,17 @@ def _write_new_atomic(path: Path, document: dict[str, object]) -> bytes:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Assemble a validated Kaiyuan release drill artifact")
+    parser = SafeArgumentParser(description="Assemble a validated Kaiyuan release drill artifact")
     parser.add_argument("--before-switch", required=True, type=Path)
     parser.add_argument("--after-switch", required=True, type=Path)
     parser.add_argument("--after-rollback", required=True, type=Path)
     parser.add_argument("--expected-manifest", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args()
+    except ReleaseArtifactError as exc:
+        print(f"release artifact input error: {exc.code}:{exc.field}", file=sys.stderr)
+        return 2
 
     fields = {
         "before_switch": args.before_switch,
