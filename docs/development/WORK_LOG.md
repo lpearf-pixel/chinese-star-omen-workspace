@@ -4,6 +4,31 @@
 
 ## 2026-07-18 — B7-T01 started
 
+### Implementation verifying
+
+Implemented the content-free pure observation builder, exact KB Search HTTP adapter, allowlisted Qdrant metadata reader, and atomic caller-selected CLI. The CLI performs no routing change or Qdrant/corpus/candidate/ingest mutation, refuses overwrite, and never persists API keys, raw bodies, hits, snippets, paths, anchors, payloads, or source content. Added Make entry points, an explicit synthetic CI contract step, and three-phase operator instructions in the B6 runbook.
+
+Observed TDD evidence includes missing-module RED, allowlist-hash RED, missing live-adapter RED, count/hit mismatch RED, generic-404 taxonomy RED, and a final four-failure RED proving missing vector schema, invalid input preflight, and HTTP redirect acceptance. After minimal fixes:
+
+```text
+cd apps/local-kb-unified
+PYTHONPATH=. /tmp/kaiyuan-b5/bin/python -m pytest -q tests/test_release_observation_v1.py
+17 passed
+```
+
+The focused suite also proves a captured phase passes the existing B6 verifier, timeout errors omit upstream text, source modules contain no Qdrant/ingest mutation calls, and exclusive atomic creation preserves an existing file without temp residue. B7-T01 is now `VERIFYING`, not `DONE`. Remaining: full local gates, governance/diff/secret checks, publish the resulting exact head, latest-head workflows, independent safety review, ready transition, squash merge to `stable/kaiyuan-v2`, and merge evidence.
+
+Full local regression (using the existing `/tmp/kaiyuan-b5/bin` environment because bare `make` could not locate pytest) passed without changing assertions:
+
+```text
+PATH=/tmp/kaiyuan-b5/bin:$PATH make contracts-test   6 passed
+PATH=/tmp/kaiyuan-b5/bin:$PATH make text-core-test   22 passed
+PATH=/tmp/kaiyuan-b5/bin:$PATH make downstream-test  220 passed
+PATH=/tmp/kaiyuan-b5/bin:$PATH make upstream-test    92 passed, 3 skipped
+make release-drill                                   passed, 13 checks true
+git diff --check                                     passed
+```
+
 Started `codex/kaiyuan-release-observation-capture-v2` from the independently verified stable head `627b3dc086966fec0c527500e4a7e5fac6a8f987`. B7-T01 is limited to a read-only phase-observation collector feeding the existing B6 verifier. It will not switch routing, ingest, upsert/delete Qdrant, write `local_kb_default`, or copy raw response bodies/source content into artifacts. Next action: inventory current health/meta/retrieve clients and Qdrant read metadata, then write the design and implementation plan before code.
 
 Selected a local direct-read CLI over a new inspection endpoint or operator-supplied fingerprints. Health/meta and exact-stage smoke use existing KB Search contracts; active/protected fingerprints use Qdrant read-only collection metadata and exact counts. Secrets, hits, raw bodies, payloads, and source content are excluded. Design and D-017 are now the durable source; next action is the detailed TDD plan and draft PR.

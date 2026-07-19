@@ -8,6 +8,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from release_drill import (
+    COLLECTION_NAME_RE,
     MANIFEST_IDENTITY_FIELDS,
     PROTECTED_COLLECTION,
     REQUIRED_HEALTH_CHECKS,
@@ -56,6 +57,16 @@ def _body(response: Any, operation: str) -> Mapping[str, Any]:
 def _config_hash(config: Any) -> str:
     if not isinstance(config, Mapping):
         raise ReleaseObservationError("invalid_response", "inspect_collection")
+    vectors = config.get("vectors")
+    if (
+        not isinstance(vectors, Mapping)
+        or isinstance(vectors.get("size"), bool)
+        or not isinstance(vectors.get("size"), int)
+        or vectors["size"] <= 0
+        or not isinstance(vectors.get("distance"), str)
+        or not vectors["distance"]
+    ):
+        raise ReleaseObservationError("invalid_response", "inspect_collection")
     projected = {name: config[name] for name in SCALAR_CONFIG_FIELDS if name in config}
     for section, fields in CONFIG_FIELDS.items():
         value = config.get(section)
@@ -78,6 +89,13 @@ def capture_phase_observation(
     inspect_collection: Callable[[str], Any],
     captured_at: str,
 ) -> dict[str, object]:
+    if (
+        not isinstance(active_collection, str)
+        or COLLECTION_NAME_RE.fullmatch(active_collection) is None
+        or not isinstance(query, str)
+        or not query.strip()
+    ):
+        raise ReleaseObservationError("contract_error", "input")
     health = _body(fetch_health(), "health")
     checks = health.get("checks")
     if (
@@ -92,6 +110,9 @@ def capture_phase_observation(
     meta = _body(fetch_meta(), "meta")
     if (
         meta.get("meta_status") != "ok"
+        or meta.get("schema_version") != "corpus-manifest/v1"
+        or meta.get("managed_by") != "local-kb-unified/v2"
+        or meta.get("collection_schema") != "passage-v2"
         or meta.get("collection") != active_collection
         or any(not isinstance(meta.get(name), str) or not meta[name] for name in MANIFEST_IDENTITY_FIELDS)
     ):
@@ -111,6 +132,7 @@ def capture_phase_observation(
             stage,
         )
         count = body.get("retrieved_count")
+        hits = body.get("hits")
         if (
             body.get("retrieval_stage") != stage
             or body.get("card_types") != pool
@@ -118,8 +140,10 @@ def capture_phase_observation(
             or isinstance(count, bool)
             or not isinstance(count, int)
             or count <= 0
+            or not isinstance(hits, list)
+            or len(hits) != count
         ):
-            raise ReleaseObservationError("contract_error", stage)
+            raise ReleaseObservationError("invalid_response", stage)
         smoke[stage] = {
             "status": "ok",
             "http_status": 200,
