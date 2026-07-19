@@ -159,3 +159,11 @@
 - **Provenance:** release head 和 creation time 必须由调用方显式提供并严格验证；bundle 不记录任何本机 source path。
 - **Reason:** 外部路径引用无法随证据搬运，目录发布又无法在不依赖平台特有 syscall 时同时保证原子可见与并发 no-overwrite。确定性单文件可搬运、可重现，并能在无网络环境 fail-closed 复验。
 - **Boundary:** 证据包不含 raw corpus、hit、snippet、anchor、source path、secret 或 raw HTTP body；创建和验证都不联网、不切流、不 ingest、不读写 Qdrant 或 collection。
+
+## D-020 — 归档保留策略只做确定性分类，不自动删除证据
+
+- **Status:** Accepted
+- **Decision:** B8-T01 对每份 B7-T03 bundle 完整离线复验后，根据显式 `keep_latest` 与 pinned bundle hash 产生 `retain|cold_archive_eligible` 分类；不移动或删除任何文件。
+- **Identity:** 索引保留安全 logical name、bundle hash、release head、created time、target collection 和 schema/tool identity，不记录本机路径或文件系统 metadata。
+- **Determinism:** 每个 target 按 created time 降序分配 latest，完全 tie 由 release head 和 bundle hash 稳定打破；最终索引升序输出，与 CLI 输入顺序无关。
+- **Reason:** 自动删除会把证据治理变成不可逆数据操作，且可能破坏审计或回滚证据。内容受限的确定性索引允许人工归档流程使用同一可复验判断，不扩大工具权限。

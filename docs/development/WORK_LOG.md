@@ -2,6 +2,16 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-18 — B8-T01 evidence archive index started
+
+- Actual base: `stable/kaiyuan-v2` at `dfefb73daf001af051a50a461c63a4e7ab308fe8` (B7-T03 closeout PR #25).
+- Branch: `codex/kaiyuan-release-evidence-archive-v2`; PR will target only `stable/kaiyuan-v2`.
+- Task moved to `IN_PROGRESS` before behavior implementation.
+- Selected design: explicit logical-name/path bundle map, full B7-T03 verification, deterministic content-free archive index, and classification-only retention. Automatic scan and any move/delete behavior are excluded.
+- Design: `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-archive-design.md`; decision D-020.
+- Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-archive.md`; self-review found no placeholder, uncovered spec requirement, or interface mismatch.
+- Remaining: create draft PR, observe TDD RED, then implement the smallest pure index/CLI boundary.
+
 ## 2026-07-18 — B7-T03 merged
 
 ```text
