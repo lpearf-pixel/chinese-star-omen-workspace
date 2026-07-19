@@ -10,7 +10,11 @@
 - Selected design: explicit logical-name/path bundle map, full B7-T03 verification, deterministic content-free archive index, and classification-only retention. Automatic scan and any move/delete behavior are excluded.
 - Design: `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-archive-design.md`; decision D-020.
 - Plan: `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-archive.md`; self-review found no placeholder, uncovered spec requirement, or interface mismatch.
-- Remaining: create draft PR, observe TDD RED, then implement the smallest pure index/CLI boundary.
+- Draft PR: #26, base `stable/kaiyuan-v2`; initial published design/plan head `fb4cb4c1e6360a2c3498ca801340e426da095c0d`.
+- Baseline: B7-T03 focused bundle suite → `21 passed in 0.17s`.
+- TDD RED: focused archive test failed during collection with `ModuleNotFoundError: release_evidence_archive`.
+- TDD GREEN: the same focused test passed after the minimal pure builder implemented full B7 verification, safe provenance projection, deterministic per-target latest/pin classification, and stable final ordering.
+- Remaining: add fail-closed policy/index boundary RED cases before CLI or final verification work. B8-T01 remains `IN_PROGRESS`.
 
 ## 2026-07-18 — B7-T03 merged
 
