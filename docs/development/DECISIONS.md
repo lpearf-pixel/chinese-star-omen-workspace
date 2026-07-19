@@ -149,3 +149,13 @@
 - **Failure:** duplicate key、non-finite JSON、schema/phase/manifest mismatch、B6 validation failure、output exists 或写入失败都不创建或覆盖最终 artifact。
 - **Boundary:** assembler 不联网、不切流、不回滚、不 ingest、不读取或修改 Qdrant、corpus、candidate；失败报告仅使用既有安全 validation code/field/phase。
 - **Reason:** shell/jq 或人工复制容易混淆 verifier input/report schema、错放阶段并引入 manifest 漂移；独立纯模块可测试且不扩大运行时服务面。
+
+## D-019 — 发布证据使用确定性单文件封装并离线重验
+
+- **Status:** Accepted
+- **Decision:** B7-T03 使用不解压的 deterministic ZIP 封装三份 observation、批准 manifest identity、assembled drill input 和内部生成的 validation report；严格 bundle manifest 对前六份成员记录精确名称、字节数和 SHA-256。
+- **Atomicity:** 完整 archive 先写入同目录临时文件，fsync 后用 hard link 独占发布；已存在或并发创建的输出不得覆盖。
+- **Verification:** offline verifier 先校验 archive 结构、固定 metadata、inventory、size 和 hash，再重跑 B7-T02 assembly 与 B6 validator，并要求 assembled input/report 精确相等。
+- **Provenance:** release head 和 creation time 必须由调用方显式提供并严格验证；bundle 不记录任何本机 source path。
+- **Reason:** 外部路径引用无法随证据搬运，目录发布又无法在不依赖平台特有 syscall 时同时保证原子可见与并发 no-overwrite。确定性单文件可搬运、可重现，并能在无网络环境 fail-closed 复验。
+- **Boundary:** 证据包不含 raw corpus、hit、snippet、anchor、source path、secret 或 raw HTTP body；创建和验证都不联网、不切流、不 ingest、不读写 Qdrant 或 collection。

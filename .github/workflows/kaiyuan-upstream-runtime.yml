@@ -64,6 +64,11 @@ jobs:
       - name: Non-mutating release rollback drill
         run: make release-drill
 
+      - name: Offline release evidence bundle contract
+        run: |
+          cd apps/local-kb-unified
+          PYTHONPATH=. pytest -q tests/test_release_evidence_bundle_v1.py
+
       - name: Validate Docker Compose configuration
         working-directory: apps/local-kb-unified
         run: docker compose --env-file .env.example -f docker-compose.yml config --quiet

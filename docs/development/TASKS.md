@@ -18,8 +18,8 @@
 
 ```text
 Stable base: stable/kaiyuan-v2
-Current feature: codex/kaiyuan-release-artifact-assembly-v2
-Current PR: pending (B7-T02 draft PR will target stable/kaiyuan-v2)
+Current feature: codex/kaiyuan-release-evidence-bundle-v2
+Current PR: pending (B7-T03 draft PR will target stable/kaiyuan-v2)
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -211,6 +211,9 @@ B5-T01 final-head full gates
 → B5-T02
 → B5-T03
 → B6
+→ B7-T01
+→ B7-T02
+→ B7-T03
 ```
 
 ## B7 — 发布观测自动化
@@ -236,3 +239,13 @@ B5-T01 final-head full gates
 - **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-artifact-assembly-design.md`.
 - **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-artifact-assembly.md`.
 - **Merge evidence:** PR #22 final head `23168954f809f046dedee7d1ce107be8dd0332d4`; exact-head workflows Governance `29670048368`, Stable Core `29670048362`, Upstream Runtime `29670048361` all succeeded; squash merged to `stable/kaiyuan-v2` as `4abd11d5f5c30991656cbf525f9f3be0ff3fbf38`.
+
+### B7-T03 — Sealed release evidence bundle and offline verification
+
+- **Status:** `VERIFYING`
+- **Base evidence:** B7-T02 closeout PR #23 squash merged to `stable/kaiyuan-v2` as `d3aaea12f0a033703e91ee1f715441761444d563`.
+- **Branch:** `codex/kaiyuan-release-evidence-bundle-v2`.
+- **Goal:** 将已验证的三阶段 release artifact、批准 manifest identity 与验证结果封装为可搬运、可离线复验、内容受限且防篡改的单文件发布证据包。
+- **Acceptance:** exact ZIP member inventory and byte hashes/sizes; strict versioned bundle manifest; release head/tool/schema provenance; offline no-extraction fail-closed verifier reruns B7-T02 assembly and B6 validation; deterministic bytes; atomic caller-selected no-overwrite file creation; no raw corpus, hit, snippet, source path, secret, network, routing, ingest, Qdrant or collection mutation; focused/full gates and independent review.
+- **Design:** `docs/superpowers/specs/2026-07-18-kaiyuan-release-evidence-bundle-design.md`.
+- **Plan:** `docs/superpowers/plans/2026-07-18-kaiyuan-release-evidence-bundle.md`.

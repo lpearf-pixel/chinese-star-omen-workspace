@@ -3,7 +3,7 @@ ROOT := $(shell pwd)
 INDEX_PY := $(ROOT)/index-jobs/.venv/bin/python
 COLLECTION ?= $${KB_SEARCH_DEFAULT_COLLECTION:-local_kb_kaiyuan_v2}
 
-.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest release-drill capture-release-observation assemble-release-artifact
+.PHONY: setup up down logs ps restart rebuild pull-models health kb-search ingest ingest-full ingest-recreate ingest-dry-run test validate-candidates promote-candidates corpus-manifest release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
 
 setup:
 	bash $(ROOT)/index-jobs/setup_env.sh
@@ -66,6 +66,14 @@ capture-release-observation:
 assemble-release-artifact:
 	@test -n "$(BEFORE_SWITCH)" -a -n "$(AFTER_SWITCH)" -a -n "$(AFTER_ROLLBACK)" -a -n "$(EXPECTED_MANIFEST)" -a -n "$(OUT)" || { echo "required: BEFORE_SWITCH AFTER_SWITCH AFTER_ROLLBACK EXPECTED_MANIFEST OUT" >&2; exit 2; }
 	python scripts/assemble_release_artifact.py --before-switch "$(BEFORE_SWITCH)" --after-switch "$(AFTER_SWITCH)" --after-rollback "$(AFTER_ROLLBACK)" --expected-manifest "$(EXPECTED_MANIFEST)" --out "$(OUT)"
+
+create-release-evidence-bundle:
+	@test -n "$(BEFORE_SWITCH)" -a -n "$(AFTER_SWITCH)" -a -n "$(AFTER_ROLLBACK)" -a -n "$(EXPECTED_MANIFEST)" -a -n "$(ASSEMBLED_INPUT)" -a -n "$(RELEASE_HEAD)" -a -n "$(CREATED_AT)" -a -n "$(OUT)" || { echo "required: BEFORE_SWITCH AFTER_SWITCH AFTER_ROLLBACK EXPECTED_MANIFEST ASSEMBLED_INPUT RELEASE_HEAD CREATED_AT OUT" >&2; exit 2; }
+	python scripts/create_release_evidence_bundle.py --before-switch "$(BEFORE_SWITCH)" --after-switch "$(AFTER_SWITCH)" --after-rollback "$(AFTER_ROLLBACK)" --expected-manifest "$(EXPECTED_MANIFEST)" --assembled-input "$(ASSEMBLED_INPUT)" --release-head "$(RELEASE_HEAD)" --created-at "$(CREATED_AT)" --out "$(OUT)"
+
+verify-release-evidence-bundle:
+	@test -n "$(BUNDLE)" || { echo "required: BUNDLE" >&2; exit 2; }
+	python scripts/verify_release_evidence_bundle.py --bundle "$(BUNDLE)"
 
 validate-candidates:
 	python scripts/import_candidate_cards.py --inbox incoming/downstream_candidates/codex-ready --book-id kaiyuan_zhanjing --mode validate

@@ -76,6 +76,28 @@ sha256sum "$ARTIFACT_DIR/release-drill.actual.json"
 
 assembler 严格绑定三份 `phase_name`、要求 UTC 采集时间依次递增、只投影 manifest identity，并在创建输出前调用现有 B6 validator。输入/验证/输出错误不会创建或覆盖 artifact。该命令不联网、不切流、不执行回滚或 ingest，也不授权任何 collection 写入。
 
+验证通过后，可将本次证据封装为可搬运、可离线复验的 deterministic ZIP。`RELEASE_HEAD` 必须是实际 40 位小写 Git SHA，`CREATED_AT` 必须是操作者记录的 canonical UTC `...Z` 时间；工具不会从 checkout 或本机路径猜测 provenance。
+
+```bash
+make create-release-evidence-bundle \
+  BEFORE_SWITCH="$ARTIFACT_DIR/before_switch.json" \
+  AFTER_SWITCH="$ARTIFACT_DIR/after_switch.json" \
+  AFTER_ROLLBACK="$ARTIFACT_DIR/after_rollback.json" \
+  EXPECTED_MANIFEST="$APPROVED_MANIFEST" \
+  ASSEMBLED_INPUT="$ARTIFACT_DIR/release-drill.actual.json" \
+  RELEASE_HEAD="<40-lowercase-git-sha>" \
+  CREATED_AT="2026-07-18T12:15:00Z" \
+  OUT="$ARTIFACT_DIR/release-evidence.zip"
+
+make verify-release-evidence-bundle \
+  BUNDLE="$ARTIFACT_DIR/release-evidence.zip"
+sha256sum "$ARTIFACT_DIR/release-evidence.zip"
+```
+
+创建命令会重新组装 observation、对比 supplied drill input，并重跑 B6 validator；输出已存在时退出 `2` 且不覆盖。离线 verifier 不解压，会校验精确 member inventory、固定 ZIP metadata、size/hash，再重跑 B7-T02 assembly 和 B6 validator；篡改或语义不一致退出 `1`。
+
+证据包通过不授权切流、回滚、ingest 或 collection 写入。创建和验证都不联网、不读取 Qdrant，也不访问或修改 `local_kb_default`。
+
 对当前服务分别保存 health 和 meta 的 HTTP status 与 JSON。只有健康 200 response 才能写成 `status=ok`；传输或契约错误必须停止演练并保留原错误证据，不能写 `hits_count=0` 代替。
 
 执行两个固定 smoke：
