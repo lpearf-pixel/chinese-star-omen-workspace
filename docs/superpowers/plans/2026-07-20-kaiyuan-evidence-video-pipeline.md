@@ -1,277 +1,248 @@
-# Kaiyuan Evidence-Backed Astronomical Short Video Pipeline Implementation Plan
+# B9 契约先行与证据型天象垂直样片实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** 实现时必须使用独立 feature branch；在开始任何代码前重新读取 stable HEAD、全局记忆、任务台账、决策、设计与本计划。本文件当前仅是规划，不授权开始实现。
 
-**Goal:** Build a review-first pipeline that converts verified celestial events and citable 《唐開元占經》 evidence into a claim-labelled short-video package, Stellarium scene script, subtitles, and optional local vertical MP4 preview.
+**Goal:** 冻结 `AstronomyEvent/v1`、`RuleAssessment/v1`、`VideoPackage/v1` 三个长期契约，并完成一条 2026-07-21 可复验研究包、Stellarium 脚本、字幕和本地竖屏预览。
 
-**Architecture:** New focused modules under `apps/star-omen/src/video_pipeline/` own contracts, astronomy calculation, asterism mapping, evidence assembly, editorial compilation, Stellarium scene generation, subtitle/render manifests, and human review. Existing retrieval, evidence resolver, and rule-engine APIs remain authoritative; Stellarium and FFmpeg are optional local adapters invoked only after a deterministic package passes validation.
+**Architecture:** B9 是单条垂直切片，不是通用视频平台。现代星历、传统星官、古籍证据、规则评估、现代转译和渲染互相隔离，通过版本化契约连接。B10/B11 可以改变内部规则实现，但不得迫使视频层依赖内部对象。
 
-**Tech Stack:** Python 3.12, Pydantic 2, Skyfield, existing KB Search/retrieval/evidence/rule modules, Stellarium 26.x scripting/Remote Control, FFmpeg, pytest, Typer, YAML/JSON.
+**Tech Stack:** Python 3.12、Pydantic 2、Skyfield、现有 KB Search/证据解析/规则引擎、pytest、Hypothesis、Stellarium `.ssc`、FFmpeg 最小预览。
 
 ## Global Constraints
 
-- Target only `stable/kaiyuan-v2` through a feature pull request; never merge B9 into `main`.
-- Never delete, recreate, migrate, or write to `local_kb_default`.
-- `apps/star-omen` remains read-only with respect to official Qdrant data and official ingest.
-- Pending, rejected, stale, ambiguous, or candidate-only evidence is not a final classical quotation.
-- Every narration segment must be exactly one of `astronomy_fact`, `classical_quote`, `historical_context`, `modern_interpretation`, or `production_instruction`.
-- “开口破局” is `modern_interpretation`; it must never be presented as 《开元占经》原文或古代占断。
-- Raw corpus bytes, `<pb:...>` markers, original glyphs, and `&KRxxxx;` entities remain immutable.
-- Missing astronomy values, non-finite values, ambiguous asterism mapping, unavailable retrieval, or failed citation validation fails closed.
-- Generated frames, audio, and MP4 files stay outside Git; only small deterministic fixtures and manifests may be committed.
-- No automatic Douyin upload or publication is in B9.
+- 规划 PR #30 只修改文档；实现必须从规划 PR 合并后的新 `stable/kaiyuan-v2` HEAD 建立新分支。
+- 不合入 `main`；不写、删、重建或迁移 `local_kb_default`。
+- `apps/star-omen` 不执行正式 ingest 或正式 Qdrant mutation。
+- B9 不实现全书规则结构化、自动配音、批量天象扫描、通用剪辑、自动发布。
+- 候选、歧义、缺失或不可引用证据不得进入 `classical_quote`。
+- 三个 v1 契约进入实现后冻结；语义变化必须新建版本。
+- 结构化黄金文件不得由普通测试自动更新。
 
 ---
 
-### Task 0: Activate B9 governance before code
+## Task 0：规划收口与仓库治理
 
 **Files:**
+- Modify: `docs/development/PROJECT_MEMORY.md`
 - Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
 - Modify: `docs/development/DECISIONS.md`
+- Modify: `docs/development/WORK_LOG.md`
+- Modify: `AGENTS.md`
+- Modify: `docs/development/DEVELOPMENT_MANUAL.md`
 
-**Interfaces:**
-- Consumes: this design and implementation plan, current stable head, and draft PR metadata.
-- Produces: an active `B9` section with `B9-T01` through `B9-T10`, current feature/PR metadata, a decision recording the evidence-package-first boundary, and an initial work-log entry.
+**Outcome:** 规划 PR 合并前，仓库事实源能准确恢复 B8 完成状态、B9–B12 路线、开放 PR 和测试策略。
 
-- [ ] **Step 1: Update the stale current-release metadata.** Set the stable base to the exact current `stable/kaiyuan-v2` head, current feature to `codex/kaiyuan-evidence-video-pipeline-v1`, current PR to the B9 draft PR, forbidden target to `main`, protected collection to `local_kb_default`, and v2 collection policy unchanged.
-- [ ] **Step 2: Add B9 tasks and mark only `B9-T01` `IN_PROGRESS`.** Record the design path, plan path, goal, acceptance criteria, review-first boundary, and that no subsequent task may begin until its predecessor is `DONE` or explicitly recorded as independently executable.
-- [ ] **Step 3: Add an accepted architecture decision.** Record that modern astronomy, classical evidence, modern interpretation, and rendering are separate claim/provenance layers; Stellarium is a renderer, not the astronomy authority; no automatic Douyin publication is allowed.
-- [ ] **Step 4: Add a work-log start entry with exact base/head/PR, files changed, and the next RED test.**
-- [ ] **Step 5: Run `python scripts/check_development_governance.py --base stable/kaiyuan-v2 --head HEAD` and `python -m unittest discover -s scripts/tests -p 'test_*.py' -v`; require pass.**
-- [ ] **Step 6: Commit with `git commit -m "docs(video): activate B9 evidence video pipeline"`.**
+- [ ] 核验 `stable/kaiyuan-v2` 当前远端 HEAD，不使用聊天中的旧 SHA。
+- [ ] 核验开放 PR；将 #1、#7 记录为 legacy/superseded 待处置，不能再声明“无开放 PR”。
+- [ ] 将 B9 标记为“规划已批准，尚未实现”，B10–B12 标记为路线任务。
+- [ ] 记录方案 C：B9 契约与垂直样片 → B10 全书规则结构化 → B11 规则执行器 2.0 → B12 批量视频生产。
+- [ ] 将 `PROJECT_MEMORY.md` 加入每次恢复开发的强制阅读顺序。
+- [ ] 规划 PR 只运行 docs/governance 门禁，不声称功能测试已完成。
+- [ ] 规划 PR 合并后关闭规划分支，不直接继续写实现代码。
 
-### Task 1: Versioned video-package contracts
+## Task 1：冻结三个 v1 Schema 与兼容政策
 
 **Files:**
-- Create: `apps/star-omen/src/video_pipeline/__init__.py`
-- Create: `apps/star-omen/src/video_pipeline/models.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_models_v1.py`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+- Create: `apps/star-omen/src/video_pipeline/contracts/astronomy_event_v1.py`
+- Create: `apps/star-omen/src/video_pipeline/contracts/rule_assessment_v1.py`
+- Create: `apps/star-omen/src/video_pipeline/contracts/video_package_v1.py`
+- Create: `apps/star-omen/tests/video_pipeline/contracts/`
+- Create: `tests/fixtures/video-package/v1/manifest.json`
 
 **Interfaces:**
-- Produces: `ClaimClass`, `EvidenceStatus`, `ReviewStatus`, `ObserverLocation`, `AstronomyMeasurement`, `AsterismMapping`, `EvidenceReference`, `NarrationSegment`, `Shot`, `RenderManifest`, `ReviewRecord`, and `VideoPackage` Pydantic models.
-- Produces: `VideoPackage.model_json_schema()` with `schema_version="video-package/v1"`.
-- Consumes: no production dependency beyond Pydantic and standard library.
+- `AstronomyEventV1`
+- `RuleAssessmentV1`
+- `VideoPackageV1`
+- `validate_contract_compatibility(old_schema, new_schema)`
 
-- [ ] **Step 1: Write failing contract tests.** Assert that a minimal valid package serializes with stable field names; duplicate segment IDs, non-finite coordinates, negative durations, unknown claim classes, and a `classical_quote` without citable evidence fail validation.
-- [ ] **Step 2: Run `cd apps/star-omen && pytest -q tests/video_pipeline/test_models_v1.py`; expect collection/import failure because `src.video_pipeline.models` does not exist.**
-- [ ] **Step 3: Implement strict models.** Use `ConfigDict(extra="forbid")`, finite-number validators, UTC-aware datetimes, positive durations, stable IDs, and model-level checks linking every classical quotation to at least one `EvidenceReference(status="citable")`.
-- [ ] **Step 4: Rerun the focused test; expect all contract cases pass.**
-- [ ] **Step 5: Move `B9-T01` to `VERIFYING`, record RED/GREEN evidence, run the relevant governance gate, then mark `DONE` only with commit evidence.**
-- [ ] **Step 6: Commit with `git commit -m "feat(video): add evidence video package contracts"`.**
+**Tests before implementation:**
 
-### Task 2: Deterministic Skyfield astronomy provider
+- [ ] RED：模块不存在。
+- [ ] RED：未知字段、重复 ID、非有限数、无时区时刻、负时长被接受。
+- [ ] RED：`classical_quote` 在没有 citable evidence 时被接受。
+- [ ] RED：candidate-only assessment 被标记为可口播。
+- [ ] RED：同一 v1 schema 的字段语义被静默改变。
+
+**Implementation acceptance:**
+
+- [ ] Pydantic `extra="forbid"`，严格 UTC、有限数、稳定 ID 和交叉引用校验。
+- [ ] JSON Schema 快照和 canonical JSON fixtures。
+- [ ] v1 兼容政策：可新增明确 optional 字段，不得删除 required 字段或改变 enum 含义。
+- [ ] `RuleAssessment/v1` 只投影稳定字段，不暴露内部 matcher 对象。
+- [ ] focused tests、property smoke、contract golden tests 通过。
+
+## Task 2：科学约定、固定星历和中国星官目录
 
 **Files:**
-- Create: `apps/star-omen/src/video_pipeline/astronomy.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_astronomy_provider_v1.py`
-- Modify: `apps/star-omen/src/config/settings.py`
-- Modify: `.env.workspace.example`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+- Create: `apps/star-omen/src/video_pipeline/astronomy/provider.py`
+- Create: `apps/star-omen/src/video_pipeline/astronomy/conventions.py`
+- Create: `apps/star-omen/src/video_pipeline/asterisms/catalog.py`
+- Create: `apps/star-omen/data/video_pipeline/scientific_conventions_v1.yaml`
+- Create: `apps/star-omen/data/video_pipeline/asterism_catalog_v1.yaml`
+- Create: `tests/fixtures/astronomy/v1/`
+- Create: `tests/fixtures/asterisms/v1/`
 
 **Interfaces:**
-- Consumes: `src.interfaces.astronomy.EphemerisPoint` and `EphemerisProvider`.
-- Produces: `SkyfieldEphemerisProvider.get_points(*, bodies: list[str], at: list[datetime]) -> list[EphemerisPoint]`.
-- Produces: `calculate_observer_measurement(*, body: str, at_utc: datetime, observer: ObserverLocation) -> AstronomyMeasurement`.
-- Configuration: `ASTRO_EPHEMERIS_PATH`, `ASTRO_TIMESCALE_DIR`, and existing observer defaults; no network download during normal execution or tests.
+- `SkyfieldEphemerisProvider.get_points(...)`
+- `calculate_event_candidate(...) -> AstronomyEventV1`
+- `AsterismCatalog.resolve_object(...) -> AsterismMapping`
 
-- [ ] **Step 1: Mark `B9-T02` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write failing tests using an injected fake timescale/ephemeris.** Cover UTC normalization, right ascension/declination/ecliptic coordinates, observer altitude/azimuth, angular separation, finite-value rejection, unknown bodies, and deterministic provenance hashes.
-- [ ] **Step 3: Run the focused module and require RED from missing provider.**
-- [ ] **Step 4: Implement dependency-injected Skyfield calculation.** Runtime loads only the configured local ephemeris file; errors are classified as `missing_ephemeris`, `unknown_body`, `invalid_time`, or `calculation_error`, never empty success.
-- [ ] **Step 5: Rerun focused tests; expect pass without internet access.**
-- [ ] **Step 6: Run `cd apps/star-omen && pytest -q tests/test_config_settings.py tests/video_pipeline/test_astronomy_provider_v1.py`.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): add deterministic astronomy provider"`.**
+**Required planning decisions encoded in fixtures:**
 
-### Task 3: Chinese asterism mapping and event detection
+- [ ] UTC/TT/TDB 转换和输出边界。
+- [ ] ICRS、视位置、黄道坐标和站心坐标分离。
+- [ ] 无折射几何高度与展示高度分离。
+- [ ] 东经为正、北纬为正；海拔和时区必填策略。
+- [ ] 星历逻辑名、版本、字节数和 SHA-256；正常运行不联网下载。
+- [ ] 可见性阈值版本。
+- [ ] 每类科学 fixture 的独立来源、参考架和容差。
+
+**Tests:**
+
+- [ ] 属性测试：纬度、经度、时区、闰日、极区、非有限数。
+- [ ] 变形测试：同一 UTC 的不同时区表达结果一致。
+- [ ] 变形测试：改变地点不改变地心身份坐标，但改变站心高度/方位。
+- [ ] 科学黄金测试：月相、近合、恒星附近经过等至少三类事件。
+- [ ] 星官映射测试：verified identity、membership、region-only、ambiguous、unresolved。
+- [ ] 禁止以最近恒星作为无来源的通用映射。
+
+## Task 3：证据检索与 `RuleAssessment/v1` 适配器
 
 **Files:**
-- Create: `apps/star-omen/src/video_pipeline/asterism.py`
-- Create: `apps/star-omen/src/video_pipeline/events.py`
-- Create: `apps/star-omen/data/video_pipeline/asterism_aliases_v1.yaml`
-- Create: `apps/star-omen/tests/video_pipeline/test_asterism_event_v1.py`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+- Create: `apps/star-omen/src/video_pipeline/rule_assessment.py`
+- Create: `apps/star-omen/src/video_pipeline/evidence_bundle.py`
+- Create: `apps/star-omen/tests/video_pipeline/test_rule_assessment_v1.py`
+- Create: `tests/fixtures/evidence/v1/`
 
 **Interfaces:**
-- Consumes: existing asterism catalog records and `EphemerisPoint` values.
-- Produces: `CatalogAsterismMatcher.match(*, points, asterisms) -> list[MatchResult]`.
-- Produces: `detect_video_event(*, measurements, mappings, thresholds) -> CelestialVideoEvent`.
-- Alias file maps modern object IDs to Chinese names without rewriting the underlying catalog.
+- `build_rule_assessment(event, retriever, rules) -> RuleAssessmentV1`
+- `build_evidence_bundle(assessment) -> EvidenceBundleV1`
 
-- [ ] **Step 1: Mark `B9-T03` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Add failing tests for exact object mapping, nearest-star angular mapping, ambiguous equal-distance candidates, low-confidence mapping, and unresolved aliases.**
-- [ ] **Step 3: Add failing event tests for conjunction/near-passage, lunar phase marker, visibility-required failure, missing angular separation, and `insufficient_data`.**
-- [ ] **Step 4: Implement the minimum matcher and detector with deterministic tie-breaking and explicit confidence/method metadata.**
-- [ ] **Step 5: Run `cd apps/star-omen && pytest -q tests/video_pipeline/test_asterism_event_v1.py`; expect pass.**
-- [ ] **Step 6: Record verification and commit with `git commit -m "feat(video): map astronomy events to Chinese asterisms"`.**
+**Must reuse:**
 
-### Task 4: Evidence and rule-result assembly
+```text
+official structured_recall
+→ official primary_evidence
+→ filesystem fallback only after healthy empty official primary
+```
 
-**Files:**
-- Create: `apps/star-omen/src/video_pipeline/evidence.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_evidence_builder_v1.py`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+**Tests:**
 
-**Interfaces:**
-- Consumes: `KBSearchRetriever`, official two-stage retrieval, `resolve_evidence`, `is_citable_evidence`, and `run_match_rule`/existing rule executor.
-- Produces: `build_video_evidence(*, event, queries, rules_path, kb_root=None, retriever=None) -> VideoEvidenceBundle`.
-- Produces ordered fields for official structured hits, official primary hits, filesystem fallback, candidate leads, resolved citations, match status, conflicts, and corpus/collection provenance.
+- [ ] transport/auth/timeout/contract 错误不会转换成健康无命中。
+- [ ] pending overlay 不进入 citable evidence。
+- [ ] source/locator/page/paragraph/heading/anchor/hash 任一不匹配即阻止口播。
+- [ ] `matched`、`candidate_only`、`insufficient_data`、`partial_match`、冲突抑制正确投影。
+- [ ] 规则内部字段变化不影响冻结的 `RuleAssessment/v1` fixture。
+- [ ] 负向黄金集覆盖标题命中、反向词序、全文重复、多处 anchor 和缺 hash。
 
-- [ ] **Step 1: Mark `B9-T04` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write failing tests with fakes proving official structured retrieval runs before official primary retrieval and filesystem fallback runs only when official primary is empty.**
-- [ ] **Step 3: Add tests proving pending overlays never become `classical_quote`, generic transport/contract errors are not converted into no-hit, and citable references require source/locator/page/paragraph/heading/anchor/hash.**
-- [ ] **Step 4: Add rule tests proving `insufficient_data`, `candidate_only`, conflict suppression, and primary-evidence preference remain visible in the video evidence bundle.**
-- [ ] **Step 5: Implement the evidence builder by composing existing modules without duplicating retrieval or citation logic.**
-- [ ] **Step 6: Run `cd apps/star-omen && pytest -q tests/video_pipeline/test_evidence_builder_v1.py tests/test_cli_evidence_audit_v2.py tests/test_rule_matcher.py`.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): assemble citable astronomy evidence"`.**
-
-### Task 5: Claim-labelled editorial compiler
+## Task 4：2026-07-21 受限编辑包与 Stellarium 脚本
 
 **Files:**
 - Create: `apps/star-omen/src/video_pipeline/editorial.py`
-- Create: `apps/star-omen/data/video_pipeline/templates/zh_cn_75s_v1.yaml`
-- Create: `apps/star-omen/tests/video_pipeline/test_editorial_compiler_v1.py`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
-
-**Interfaces:**
-- Consumes: `CelestialVideoEvent`, `VideoEvidenceBundle`, and the versioned YAML template.
-- Produces: `compile_editorial(*, event, evidence, template_id, modern_interpretation=None) -> EditorialPackage`.
-- Produces: narration segments, disclosure text, hook, title candidates, source card text, and bounded action suggestion.
-
-- [ ] **Step 1: Mark `B9-T05` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write failing tests for the fixed 60–90 second structure, deterministic segment ordering, exact claim classes, and required source disclosure.**
-- [ ] **Step 3: Add rejection tests for unsourced classical quotation, candidate-only quotation, unclassified text, deterministic/fatalistic promises, and wording that attributes modern interpretation to the ancient source.**
-- [ ] **Step 4: Implement a template-only compiler; do not add a free-form LLM dependency in B9.**
-- [ ] **Step 5: Verify the phrase `开口破局` appears only in a `modern_interpretation` segment and disclosure identifies it as contemporary cultural translation.**
-- [ ] **Step 6: Run the focused tests; expect pass.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): compile claim-labelled short video scripts"`.**
-
-### Task 6: Shot list and Stellarium script generation
-
-**Files:**
 - Create: `apps/star-omen/src/video_pipeline/stellarium.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_stellarium_script_v1.py`
-- Create: `apps/star-omen/data/video_pipeline/stellarium_defaults_v1.yaml`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+- Create: `apps/star-omen/data/examples/video/2026-07-21-input.json`
+- Create: `apps/star-omen/data/examples/video/2026-07-21-modern-interpretation.json`
+- Create: `apps/star-omen/data/video_pipeline/templates/zh_cn_vertical_slice_v1.yaml`
+- Create: `apps/star-omen/tests/video_pipeline/test_vertical_editorial_v1.py`
 
-**Interfaces:**
-- Consumes: observer location, UTC event times, selected objects, asterism labels, and editorial timing.
-- Produces: `build_shot_list(editorial, event) -> list[Shot]`.
-- Produces: `render_stellarium_script(*, shots, output_dir, config) -> str`.
-- Local runtime contract: generated `.ssc` may be launched with Stellarium `--startup-script` or posted to the Remote Control script endpoint; CI does not start Stellarium.
+**Scope:** 只支持一套约 60–90 秒的垂直样片模板。
 
-- [ ] **Step 1: Mark `B9-T06` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write snapshot tests for date, location, sky culture, projection, atmosphere/landscape state, object selection, camera movement, field of view, pauses, screenshot names, and safe relative output paths.**
-- [ ] **Step 3: Add failure tests for absolute output paths, path traversal, unsupported object IDs, negative shot duration, and scene/event time mismatch.**
-- [ ] **Step 4: Implement deterministic `.ssc` generation using only allowlisted commands and caller-selected relative screenshot names.**
-- [ ] **Step 5: Add a parser-level smoke assertion that every generated screenshot is represented in the render manifest.**
-- [ ] **Step 6: Run `cd apps/star-omen && pytest -q tests/video_pipeline/test_stellarium_script_v1.py`; expect pass.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): generate Stellarium scene scripts"`.**
+**Tests:**
 
-### Task 7: Subtitles, media manifest, and local FFmpeg adapter
+- [ ] 每段口播必须有且只有一个 claim class。
+- [ ] “开口破局”只能是 `modern_interpretation`，且带现代转译披露。
+- [ ] 无 citable 古籍证据时自动省略古籍占断，不生成占位式伪引文。
+- [ ] 禁止确定性命运承诺和恐吓性表达。
+- [ ] shot list 时间连续且与字幕总时长一致。
+- [ ] `.ssc` 中 UTC、地点、对象与 `AstronomyEvent/v1` 一致。
+- [ ] `.ssc` 只使用 allowlist 命令，拒绝绝对路径和路径穿越。
+- [ ] 重复生成的脚本和结构化文件字节一致。
 
-**Files:**
-- Create: `apps/star-omen/src/video_pipeline/subtitles.py`
-- Create: `apps/star-omen/src/video_pipeline/media.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_media_pipeline_v1.py`
-- Modify: `.gitignore`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
-
-**Interfaces:**
-- Produces: `render_srt(segments) -> str` with monotonic, non-overlapping timestamps.
-- Produces: `build_render_manifest(*, shots, frames, subtitle_path, audio_path=None) -> RenderManifest`.
-- Produces: `build_ffmpeg_command(*, manifest, output_path, mode) -> list[str]` for `preview` or `final`.
-- `preview` may be subtitle-only; `final` requires approved narration audio.
-
-- [ ] **Step 1: Mark `B9-T07` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write failing tests for SRT numbering, millisecond formatting, no overlap, exact total duration, frame hash inventory, 1080x1920 output, and shell-safe argv construction.**
-- [ ] **Step 3: Add rejection tests for missing frames, hash mismatch, audio shorter than the narration timeline, output outside package root, and `final` mode without audio.**
-- [ ] **Step 4: Implement pure manifest and command construction; isolate `subprocess.run` behind `run_ffmpeg(...)` and do not execute it in unit tests.**
-- [ ] **Step 5: Add `.gitignore` entries for `video_packages/`, frame sequences, WAV/M4A files, and MP4 files while preserving committed JSON/YAML fixtures.**
-- [ ] **Step 6: Run focused tests; expect pass.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): add subtitles and local media rendering"`.**
-
-### Task 8: Atomic package builder and human review gate
+## Task 5：原子研究包、审核门禁和最小预览
 
 **Files:**
 - Create: `apps/star-omen/src/video_pipeline/package.py`
 - Create: `apps/star-omen/src/video_pipeline/review.py`
-- Create: `apps/star-omen/tests/video_pipeline/test_package_review_v1.py`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
+- Create: `apps/star-omen/src/video_pipeline/preview.py`
+- Create: `apps/star-omen/tests/video_pipeline/test_package_review_preview_v1.py`
+- Modify: `.gitignore`
 
 **Interfaces:**
-- Produces: `build_video_package(*, event, evidence, editorial, shots, stellarium_script, output_dir) -> VideoPackage`.
-- Produces: `write_video_package_atomic(package, output_dir) -> Path`.
-- Produces: `evaluate_publish_gate(package, review) -> PublishGateResult`.
+- `write_package_atomic(...)`
+- `evaluate_review_gate(...)`
+- `build_minimal_preview_command(...)`
 
-- [ ] **Step 1: Mark `B9-T08` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write RED tests proving the builder writes no partial directory when validation or serialization fails and refuses to overwrite an existing package.**
-- [ ] **Step 3: Write gate tests requiring separate astronomy, classical evidence, editorial, and render approvals; reviewer identity and UTC timestamp are mandatory.**
-- [ ] **Step 4: Add tests proving `partial_metadata_only`, `candidate_only`, ambiguous asterism, missing audio, or changed asset hashes block `publishable`.**
-- [ ] **Step 5: Implement atomic staging-directory write followed by same-filesystem rename; use strict canonical JSON and SHA-256 inventory.**
-- [ ] **Step 6: Run focused tests; expect pass.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): add atomic packages and review gate"`.**
+**Acceptance:**
 
-### Task 9: CLI commands and 2026-07-21 reference candidate
+- [ ] staging directory 全部验证成功后才同文件系统原子发布。
+- [ ] 输出已存在时拒绝覆盖。
+- [ ] 所有结构化资产和可选媒体资产进入 hash inventory。
+- [ ] 审核维度独立：astronomy、classical evidence、editorial、render。
+- [ ] `partial_metadata_only`、candidate-only、ambiguous mapping、hash 变化阻止 publishable。
+- [ ] B9 允许无音频 `preview.mp4`；不生成或承诺 `final.mp4`。
+- [ ] FFmpeg 只构造 argv，不通过 shell 拼接；单元测试不启动外部进程。
 
-**Files:**
-- Modify: `apps/star-omen/src/cli.py`
-- Create: `apps/star-omen/data/examples/video/2026-07-21-special-event-input.json`
-- Create: `apps/star-omen/data/examples/video/2026-07-21-modern-interpretation.json`
-- Create: `apps/star-omen/tests/video_pipeline/test_video_cli_v1.py`
-- Modify: `Makefile`
-- Modify: `docs/development/TASKS.md`
-- Modify: `docs/development/WORK_LOG.md`
-
-**Interfaces:**
-- Adds: `python -m src.cli video-plan --input <json> --out <dir>`.
-- Adds: `python -m src.cli video-review --package <dir> --review <json>`.
-- Adds: `python -m src.cli video-render --package <dir> --mode preview|final --execute` where execution is explicit.
-- Adds: `make video-pipeline-test` and `make video-plan-2026-07-21`.
-
-- [ ] **Step 1: Mark `B9-T09` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Write CLI tests for successful dry package generation, strict JSON output, explicit non-zero exits, and absence of external process execution without `--execute`.**
-- [ ] **Step 3: Create the July 21 input as a candidate with configurable observer coordinates and explicit `source_video_status="partial_metadata_only"`; do not hardcode an unverified Spica/角宿一 conclusion as verified.**
-- [ ] **Step 4: Create the modern interpretation fixture with `phrase="开口破局"`, `claim_class="modern_interpretation"`, and `classical_quote=false`.**
-- [ ] **Step 5: Implement Typer and fallback argparse commands using shared implementation functions.**
-- [ ] **Step 6: Run `make video-pipeline-test`; then run `make video-plan-2026-07-21` against fake/offline fixtures and inspect every generated file.**
-- [ ] **Step 7: Record verification and commit with `git commit -m "feat(video): expose evidence video pipeline CLI"`.**
-
-### Task 10: Hermetic end-to-end gate, documentation, and release evidence
+## Task 6：分层测试、Hermetic E2E 与本地视觉 Smoke
 
 **Files:**
-- Create: `apps/star-omen/tests/video_pipeline/test_video_pipeline_e2e_v1.py`
+- Create: `apps/star-omen/tests/video_pipeline/test_vertical_slice_e2e_v1.py`
+- Create: `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`
 - Modify: `.github/workflows/kaiyuan-stable-core.yml`
-- Modify: `README.md`
 - Modify: `docs/development/TASKS.md`
 - Modify: `docs/development/WORK_LOG.md`
-- Modify: `docs/development/DECISIONS.md`
-- Create: `docs/development/B9_VIDEO_PIPELINE_RUNBOOK.md`
 
-**Interfaces:**
-- Hermetic E2E consumes fake Skyfield data, fake official retrieval, real citation/rule/editorial/package code, and pure Stellarium/FFmpeg command generators.
-- Produces a deterministic package summary and proves no network, Stellarium process, FFmpeg process, Qdrant mutation, ingest, or Douyin publishing occurs in CI.
+**PR gates:**
 
-- [ ] **Step 1: Mark `B9-T10` `IN_PROGRESS` before editing code.**
-- [ ] **Step 2: Add an end-to-end RED test that builds the July 21 candidate package and asserts exact claim counts, citable-reference requirements, disclosure text, shot inventory, `.ssc`, SRT, and blocked publish status before human/audio approval.**
-- [ ] **Step 3: Add failure injection for tampered evidence hash, missing angular separation, candidate-only quotation, path traversal, and changed frame hash; each must fail before publishable output.**
-- [ ] **Step 4: Register a named `Evidence-backed video pipeline gate` in `kaiyuan-stable-core.yml`.**
-- [ ] **Step 5: Document local prerequisites and exact commands in the B9 runbook, including Stellarium user permissions for external screenshot directories and FFmpeg availability checks.**
-- [ ] **Step 6: Move B9 to `VERIFYING`, update decisions and work log with exact RED/GREEN evidence, and keep media outside Git.**
-- [ ] **Step 7: Run focused tests, `make contracts-test`, `make text-core-test`, `make downstream-test`, `make upstream-test`, governance checks, and the new E2E gate.**
-- [ ] **Step 8: Perform one manual local rendering smoke with Stellarium and FFmpeg into an ignored package directory; record versions, commands, output hashes, and remaining visual defects without committing media.**
-- [ ] **Step 9: Keep the implementation PR draft until exact-head workflows pass and independent review has no unresolved Critical or Important findings.**
-- [ ] **Step 10: After merge, record final head, workflow run IDs, squash merge SHA, and change B9 status to `DONE` in a docs-only closeout PR.**
+```text
+G0 Governance
+G1 Contract/schema
+G2 Scientific golden + property smoke
+G3 Retrieval/citation negative golden
+G4 RuleAssessment projection
+G5 Hermetic vertical E2E
+G7 Package/review verification
+```
 
-## Completion definition
+**Nightly or scheduled gates:**
 
-B9 is complete only when the deterministic package and review gate are merged, the July 21 reference remains correctly classified according to its verified evidence, CI proves the fail-closed boundaries, and a local Stellarium/FFmpeg smoke produces a reviewable vertical preview. A publish-ready `final.mp4` additionally requires approved narration audio and human approval; automated Douyin publication remains out of scope.
+```text
+full Hypothesis profiles
+scientific golden full set
+full corpus/rule fixture scan
+mutation testing for critical validators
+```
+
+**Local/self-hosted macOS gates:**
+
+```text
+Stellarium capability detection
+actual .ssc execution
+screenshot inventory
+FFmpeg minimal preview
+manual visual review record
+```
+
+**E2E failure injection:**
+
+- [ ] tampered astronomy provenance；
+- [ ] missing angular separation；
+- [ ] candidate-only quotation；
+- [ ] ambiguous star mapping；
+- [ ] path traversal；
+- [ ] changed frame/hash inventory；
+- [ ] transport failure；
+- [ ] noncanonical JSON；
+- [ ] repeated generation nondeterminism。
+
+## Completion Definition
+
+B9 只有在以下全部成立时才能 `DONE`：
+
+- 三个 v1 契约冻结并有兼容测试；
+- 2026-07-21 研究包可以从固定输入重复生成；
+- 科学事实、传统映射、古籍证据和现代转译严格隔离；
+- hermetic E2E 不联网、不启动 GUI、不写正式 Qdrant；
+- 本地 macOS 实际生成 `.ssc` 截图和一个可查看的竖屏预览；
+- 所有 required gates 和独立 review 通过；
+- 实现 PR 合入 `stable/kaiyuan-v2` 并记录 exact-head CI 与 squash SHA；
+- 没有自动配音、批量生成或自动发布。
