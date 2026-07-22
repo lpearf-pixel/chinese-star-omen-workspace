@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from skyfield import almanac
 from skyfield.api import Loader, Star, load_file, wgs84
 from skyfield.framelib import ecliptic_frame
@@ -32,6 +33,14 @@ from .ephemeris import (
 )
 
 
+def _ensure_utc(value: datetime) -> datetime:
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError("datetime must be explicit UTC")
+    if value.utcoffset() != timedelta(0):
+        raise ValueError("datetime must be expressed in UTC")
+    return value.astimezone(timezone.utc)
+
+
 class _StrictModel(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
@@ -56,12 +65,30 @@ class ScientificObservationV1(_StrictModel):
     topocentric_azimuth_deg: float | None = Field(default=None, strict=True, ge=0.0, lt=360.0, allow_inf_nan=False)
     mapping_status: str | None = None
 
+    @field_validator("at_utc")
+    @classmethod
+    def validate_utc(cls, value: datetime) -> datetime:
+        return _ensure_utc(value)
+
+    @model_validator(mode="after")
+    def validate_altaz_pair(self) -> "ScientificObservationV1":
+        if (self.topocentric_altitude_deg is None) != (
+            self.topocentric_azimuth_deg is None
+        ):
+            raise ValueError("topocentric altitude and azimuth must be supplied together")
+        return self
+
 
 class MoonPhaseEventV1(_StrictModel):
     schema_version: Literal["moon-phase-event/v1"] = "moon-phase-event/v1"
     phase_index: int = Field(strict=True, ge=0, le=3)
     phase_name: Literal["new-moon", "first-quarter", "full-moon", "last-quarter"]
     utc: datetime
+
+    @field_validator("utc")
+    @classmethod
+    def validate_utc(cls, value: datetime) -> datetime:
+        return _ensure_utc(value)
 
 
 _BODY_KEYS = {
@@ -79,14 +106,6 @@ _PHASE_NAMES = {
     2: "full-moon",
     3: "last-quarter",
 }
-
-
-def _ensure_utc(value: datetime) -> datetime:
-    if value.tzinfo is None or value.utcoffset() is None:
-        raise ValueError("datetime must be explicit UTC")
-    if value.utcoffset() != timedelta(0):
-        raise ValueError("datetime must be expressed in UTC")
-    return value.astimezone(timezone.utc)
 
 
 def _round_utc_second(value: datetime) -> datetime:
@@ -113,6 +132,7 @@ class SkyfieldEphemerisProvider:
         conventions: ScientificConventionsSnapshotV1,
         catalog: AsterismCatalogSnapshotV1,
     ) -> None:
+        verified_ephemeris.assert_unchanged()
         self.verified_ephemeris = verified_ephemeris
         self.conventions = conventions
         self.catalog = catalog
@@ -122,7 +142,15 @@ class SkyfieldEphemerisProvider:
             expire=False,
         )
         self._timescale = loader.timescale(builtin=True)
-        self._ephemeris = load_file(str(verified_ephemeris.path))
+        ephemeris = load_file(str(verified_ephemeris.path))
+        try:
+            verified_ephemeris.assert_unchanged()
+        except Exception:
+            close = getattr(ephemeris, "close", None)
+            if callable(close):
+                close()
+            raise
+        self._ephemeris = ephemeris
         skyfield_version = _package_version("skyfield")
         if skyfield_version is None:
             raise RuntimeError("skyfield package version is unavailable")
@@ -138,7 +166,7 @@ class SkyfieldEphemerisProvider:
     def from_local_ephemeris(
         cls,
         *,
-        ephemeris_path: str | object,
+        ephemeris_path: str | Path,
         ephemeris_spec: EphemerisFileSpecV1,
         conventions: ScientificConventionsSnapshotV1,
         catalog: AsterismCatalogSnapshotV1,
