@@ -1,0 +1,41 @@
+schema_version: asterism-catalog/v1
+catalog_id: kaiyuan-chinese-asterisms-v1
+catalog_version: 1
+sources:
+  - source_id: source:stellarium-chinese-skyculture
+    source_type: git-file
+    title: Stellarium Chinese sky-culture star names
+    revision: 3972e97101e4321079279b5e5660b074fafc030a
+    path_or_record: skycultures/chinese/star_names.zh_CN.fab
+    content_sha: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+    locator: '65474|_("角宿一") 1'
+  - source_id: source:simbad-spica
+    source_type: catalog-record
+    title: SIMBAD Spica identity and ICRS coordinates
+    revision: 2026-07-22
+    path_or_record: SIMBAD/basic?Ident=Spica
+    content_sha: d6aa4158853faf4ada29b7a9a5c01398f34e36ffde8cd84d4b47b174aebb1f6e
+    locator: HIP 65474 / Spica
+    reference_frame: ICRS J2000
+entries:
+  - modern_object_id: hip:65474
+    traditional_star_id: jiao-xiu-1
+    asterism_id: jiao-xiu
+    canonical_chinese_name: 角宿一
+    aliases:
+      - spica
+      - alpha virginis
+      - α virginis
+      - hip 65474
+    catalog_epoch: J2000
+    reference_coordinates:
+      frame: icrs
+      epoch: J2000
+      ra_deg: 201.298247375
+      dec_deg: -11.161319472222223
+    source_refs:
+      - source:stellarium-chinese-skyculture
+      - source:simbad-spica
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
