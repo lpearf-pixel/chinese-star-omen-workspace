@@ -1,0 +1,30 @@
+{
+  "compatibility_policy": "additive-optional-only",
+  "registry_version": "video-contract-registry/v1",
+  "schemas": [
+    {
+      "fixture_manifest_path": "tests/fixtures/video-package/v1/manifest.json",
+      "fixture_manifest_sha256": "9d853b2d5333aad3d38f860b665134a94e70c203707214989f7e9e42d0dc7cfc",
+      "owner": "apps/star-omen",
+      "path": "v1/astronomy-event.schema.json",
+      "schema_id": "astronomy-event/v1",
+      "version": 1
+    },
+    {
+      "fixture_manifest_path": "tests/fixtures/video-package/v1/manifest.json",
+      "fixture_manifest_sha256": "9d853b2d5333aad3d38f860b665134a94e70c203707214989f7e9e42d0dc7cfc",
+      "owner": "apps/star-omen",
+      "path": "v1/rule-assessment.schema.json",
+      "schema_id": "rule-assessment/v1",
+      "version": 1
+    },
+    {
+      "fixture_manifest_path": "tests/fixtures/video-package/v1/manifest.json",
+      "fixture_manifest_sha256": "9d853b2d5333aad3d38f860b665134a94e70c203707214989f7e9e42d0dc7cfc",
+      "owner": "apps/star-omen",
+      "path": "v1/video-package.schema.json",
+      "schema_id": "video-package/v1",
+      "version": 1
+    }
+  ]
+}
