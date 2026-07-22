@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from src.video_pipeline.contracts import (
 
 
 ROOT = Path(__file__).resolve().parents[3]
+WORKSPACE_ROOT = ROOT.parents[1]
 SCHEMA_ROOT = ROOT / "schemas" / "video_pipeline"
 REGISTRY_PATH = SCHEMA_ROOT / "schema-registry.json"
 
@@ -47,8 +49,12 @@ def test_registry_binds_all_contracts_and_fixture_manifest() -> None:
     for entry in entries.values():
         assert entry["owner"] == "apps/star-omen"
         assert entry["version"] == 1
-        assert len(entry["fixture_manifest_sha256"]) == 64
         assert (SCHEMA_ROOT / entry["path"]).is_file()
+        manifest_path = WORKSPACE_ROOT / entry["fixture_manifest_path"]
+        assert manifest_path.is_file()
+        assert hashlib.sha256(manifest_path.read_bytes()).hexdigest() == entry[
+            "fixture_manifest_sha256"
+        ]
 
 
 def base_schema() -> dict:
