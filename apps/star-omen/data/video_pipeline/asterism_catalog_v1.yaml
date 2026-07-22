@@ -12,7 +12,7 @@ sources:
   - source_id: source:simbad-spica
     source_type: catalog-record
     title: SIMBAD Spica identity and ICRS coordinates
-    revision: 2026-07-22
+    revision: '2026-07-22'
     path_or_record: SIMBAD/basic?Ident=Spica
     content_sha: d6aa4158853faf4ada29b7a9a5c01398f34e36ffde8cd84d4b47b174aebb1f6e
     locator: HIP 65474 / Spica
