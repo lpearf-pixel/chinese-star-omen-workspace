@@ -1,0 +1,22 @@
+schema_version: scientific-conventions/v1
+conventions_id: kaiyuan-science-v1
+time:
+  persisted_scale: utc
+  input_format: rfc3339-z
+  skyfield_internal_scales: [tt, tdb]
+  timescale_source: skyfield-builtin
+coordinates:
+  identity_frame: icrs
+  apparent_frame: gcrs
+  ecliptic_frame: ecliptic-of-date
+  topocentric_frame: wgs84-altaz
+  longitude_sign: east-positive
+  latitude_sign: north-positive
+refraction:
+  scientific_geometry: disabled
+  display_refraction: explicit-only
+ephemeris:
+  runtime_download: forbidden
+  verification: sha256-required
+  accepted_suffixes: [.bsp]
+  timescale_builtin: true
