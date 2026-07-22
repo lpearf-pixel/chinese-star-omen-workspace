@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import hashlib
-import os
 import platform
 import re
 from dataclasses import dataclass
@@ -56,6 +55,9 @@ class VerifiedEphemerisFile:
     logical_name: str
     byte_size: int
     sha256: str
+    device: int
+    inode: int
+    mtime_ns: int
 
     def safe_provenance(self) -> EphemerisProvenanceV1:
         return EphemerisProvenanceV1(
@@ -63,6 +65,20 @@ class VerifiedEphemerisFile:
             byte_size=self.byte_size,
             sha256=self.sha256,
         )
+
+    def assert_unchanged(self) -> None:
+        candidate = self.path
+        if candidate.is_symlink():
+            raise ValueError("ephemeris file identity changed to a symlink")
+        if not candidate.exists() or not candidate.is_file():
+            raise ValueError("ephemeris file identity changed or disappeared")
+        stat = candidate.stat()
+        if (stat.st_dev, stat.st_ino) != (self.device, self.inode):
+            raise ValueError("ephemeris file identity changed")
+        if stat.st_size != self.byte_size or stat.st_mtime_ns != self.mtime_ns:
+            raise ValueError("ephemeris file changed after verification")
+        if _sha256_file(candidate) != self.sha256:
+            raise ValueError("ephemeris file changed after verification")
 
 
 class AstronomyToolchainManifestV1(_StrictModel):
@@ -99,24 +115,38 @@ def verify_ephemeris_file(
         raise ValueError("ephemeris path must be a regular file")
     if candidate.suffix.lower() != ".bsp":
         raise ValueError("ephemeris file must use the .bsp suffix")
-    stat = candidate.stat()
-    if stat.st_size <= 0:
+    before = candidate.stat()
+    if before.st_size <= 0:
         raise ValueError("ephemeris file is empty")
-    if stat.st_size > spec.max_size_bytes:
+    if before.st_size > spec.max_size_bytes:
         raise ValueError("ephemeris file is too large")
-    if spec.expected_size_bytes is not None and stat.st_size != spec.expected_size_bytes:
+    if spec.expected_size_bytes is not None and before.st_size != spec.expected_size_bytes:
         raise ValueError("ephemeris file size mismatch")
     digest = _sha256_file(candidate)
+    after = candidate.stat()
+    if (
+        before.st_dev,
+        before.st_ino,
+        before.st_size,
+        before.st_mtime_ns,
+    ) != (
+        after.st_dev,
+        after.st_ino,
+        after.st_size,
+        after.st_mtime_ns,
+    ):
+        raise ValueError("ephemeris file changed while verifying")
     if digest != spec.expected_sha256:
         raise ValueError("ephemeris file sha256 mismatch")
     resolved = candidate.resolve(strict=True)
-    if not os.path.samefile(candidate, resolved):
-        raise ValueError("ephemeris file identity changed while verifying")
     return VerifiedEphemerisFile(
         path=resolved,
         logical_name=spec.logical_name,
-        byte_size=stat.st_size,
+        byte_size=after.st_size,
         sha256=digest,
+        device=after.st_dev,
+        inode=after.st_ino,
+        mtime_ns=after.st_mtime_ns,
     )
 
 
