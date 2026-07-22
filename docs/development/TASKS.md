@@ -18,9 +18,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 6f00ff79fdaebb76f27f879abccc7c5a3fcf50e6
-Current planning branch: codex/kaiyuan-evidence-video-pipeline-v1
-Current planning PR: #30 (docs-only draft)
+Last verified stable HEAD: 017601e74f32f50fea9faeb663b72eb8cfe3b93c
+Planning PR #30: merged
+Planning PR final head: d31a69f89aabba2b360d31b7af2b7ac6b88fd30d
+Planning squash merge: 017601e74f32f50fea9faeb663b72eb8cfe3b93c
+Current closeout branch: codex/kaiyuan-b9-b10-plan-closeout
 Implementation status: NOT STARTED
 Release target: stable/kaiyuan-v2
 Forbidden target: main
@@ -40,18 +42,24 @@ B7: DONE
 B8-T01: DONE
 B8-T02: DONE
 B8 closeout PR #29: merged
-B8 stable closeout SHA: 6f00ff79fdaebb76f27f879abccc7c5a3fcf50e6
+B9/B10 planning PR #30: merged
 ```
 
-完整任务明细：`docs/development/TASKS_B4_B8_ARCHIVE.md`。
+完整 B4–B8 任务明细：`docs/development/TASKS_B4_B8_ARCHIVE.md`。
 
 ## 当前规划任务
 
 ### PLAN-T01 — B9/B10 方案 C、计划硬化与全局记忆
 
 - **Status:** `VERIFYING`
-- **Branch:** `codex/kaiyuan-evidence-video-pipeline-v1`
-- **PR:** #30，base `stable/kaiyuan-v2`，docs-only draft。
+- **Planning PR:** #30，已 squash 合入 `stable/kaiyuan-v2`。
+- **Final head:** `d31a69f89aabba2b360d31b7af2b7ac6b88fd30d`。
+- **Exact-head workflows:**
+  - Development Governance `29809558357` — success；
+  - Kaiyuan Stable Core `29809558424` — success；
+  - Kaiyuan Upstream Runtime `29809558491` — success。
+- **Squash merge:** `017601e74f32f50fea9faeb663b72eb8cfe3b93c`。
+- **Closeout branch:** `codex/kaiyuan-b9-b10-plan-closeout`。
 - **Goal:** 冻结“B9 契约＋垂直样片 → B10 全书规则结构化 → B11 执行器 2.0 → B12 批量媒体”的路线，并补齐测试、记忆、范围和完成定义。
 - **Acceptance:**
   - B9 拆为五个顺序实现 PR；
@@ -60,20 +68,20 @@ B8 stable closeout SHA: 6f00ff79fdaebb76f27f879abccc7c5a3fcf50e6
   - JSON Schema registry、claim lineage、toolchain provenance、双轨样片验收明确；
   - batch/checkpoint/review queue/model governance/engine-gap 明确；
   - 七层测试、黄金文件和媒体确定性边界明确；
-  - PR 仍为 docs-only，无功能代码、schema 实现、媒体或 Qdrant 操作；
-  - exact-head workflows 和独立文档 review 通过后才可进入 DONE。
-- **Design/plan review:** `docs/development/B9_B10_PLAN_REVIEW.md`。
+  - PR #30 保持 docs-only，无功能代码、schema 实现、媒体或 Qdrant 操作；
+  - closeout PR exact-head workflows 和合并证据记录后转 `DONE`。
+- **Plan review:** `docs/development/B9_B10_PLAN_REVIEW.md`。
 
 ### GOV-T02 — 核验并处置旧开放 PR #1、#7
 
 - **Status:** `BACKLOG`
 - **Goal:** 逐项比较旧 PR 与 stable v2，确认是否完全 superseded；有充分证据后添加说明并关闭。
-- **Boundary:** 不得只因“看起来旧”而关闭；不影响 B9 规划 PR review。
+- **Boundary:** 不得只因“看起来旧”而关闭；不影响 B9 规划 closeout。
 
 ## B9 — 契约先行＋2026-07-21 垂直样片
 
 - **Status:** `BACKLOG`
-- **Entry gate:** PLAN-T01 合并并 closeout；重新读取新 stable HEAD；建立独立 B9-PR-A 分支。
+- **Entry gate:** PLAN-T01 closeout 合并；重新读取新 stable HEAD；用户明确授权进入实现；建立独立 B9-PR-A 分支。
 - **Public contracts:** `AstronomyEvent/v1`、`RuleAssessment/v1`、`VideoPackage/v1`。
 - **Design:** `docs/superpowers/specs/2026-07-20-kaiyuan-evidence-video-pipeline-design.md`。
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`。
@@ -145,18 +153,18 @@ B10 只有满足全书 inventory、eligibility、candidate/no-reason、候选终
 ## 当前执行顺序
 
 ```text
-PLAN-T01 exact-head docs workflows and review
-→ review/merge/closeout PR #30
+PLAN-T01 closeout exact-head docs workflows and review
+→ review/merge closeout PR
 → re-read remote stable HEAD and open PRs
-→ create B9-PR-A branch
-→ mark only B9-PR-A IN_PROGRESS
-→ begin TDD implementation
+→ keep B9-PR-A BACKLOG
 ```
+
+用户此前要求“先计划，不要开发”。因此 closeout 完成后不得自动建立 B9 实现分支，也不得将 B9-PR-A 标记为 `IN_PROGRESS`，直到用户明确授权。
 
 当前不得：
 
-- 在规划分支写功能代码；
-- 提前启动 B10/B11/B12；
+- 在规划或 closeout 分支写功能代码；
+- 提前启动 B9/B10/B11/B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
 - 生成或发布视频；
 - 将候选原文或现代转译升级为正式古籍结论。
