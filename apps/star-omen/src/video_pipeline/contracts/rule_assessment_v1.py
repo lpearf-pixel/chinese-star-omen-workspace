@@ -52,7 +52,7 @@ class RuleAssessmentV1(StrictContractModel):
     event_id: StableId
     rule_set_version: StableId
     matched_rules: list[RuleMatchV1]
-    condition_states: dict[str, ConditionState]
+    condition_states: dict[StableId, ConditionState]
     match_status: RuleMatchStatus
     conflict_summary: list[str] = Field(default_factory=list)
     recommended_rule_id: StableId | None = None
@@ -64,13 +64,22 @@ class RuleAssessmentV1(StrictContractModel):
     @model_validator(mode="after")
     def validate_assessment(self) -> "RuleAssessmentV1":
         rule_ids = [item.rule_id for item in self.matched_rules]
+        rules_by_id = {item.rule_id: item for item in self.matched_rules}
         ensure_unique(rule_ids, "matched_rules")
         ensure_unique(
             [item.evidence_id for item in self.evidence_references],
             "evidence_references",
         )
-        if self.recommended_rule_id is not None and self.recommended_rule_id not in rule_ids:
-            raise ValueError("recommended_rule_id must reference matched_rules")
+        if self.match_status == "matched" and not any(
+            item.status == "matched" for item in self.matched_rules
+        ):
+            raise ValueError("matched assessment requires a matched rule")
+        if self.recommended_rule_id is not None:
+            recommended = rules_by_id.get(self.recommended_rule_id)
+            if recommended is None:
+                raise ValueError("recommended_rule_id must reference matched_rules")
+            if self.match_status != "matched" or recommended.status != "matched":
+                raise ValueError("formal recommendation must reference a matched rule")
         if self.provisional_rule_id is not None and self.provisional_rule_id not in rule_ids:
             raise ValueError("provisional_rule_id must reference matched_rules")
         if self.narration_eligibility == "eligible":
