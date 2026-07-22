@@ -35,6 +35,16 @@ class VisibilityV1(StrictContractModel):
     sun_altitude_deg: FiniteFloat | None = None
     threshold_version: StableId
 
+    @model_validator(mode="after")
+    def validate_measurements(self) -> "VisibilityV1":
+        if self.status != "unknown" and (
+            self.target_altitude_deg is None or self.sun_altitude_deg is None
+        ):
+            raise ValueError(
+                "visible and not_visible status require target and solar altitude"
+            )
+        return self
+
 
 class CalculationProvenanceV1(StrictContractModel):
     provider: StableId
