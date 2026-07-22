@@ -1,53 +1,55 @@
 # Chinese Star Omen Workspace 全局记忆
 
-> 本文件是跨会话恢复的全局事实与长期边界入口。它不替代实时 GitHub、`TASKS.md`、`DECISIONS.md`、设计、计划或 `WORK_LOG.md`。每次开始或恢复开发时必须先读，并立即用远端事实修正过期内容。
+> 本文件是跨会话恢复的全局事实与长期边界入口。它不替代实时 GitHub、`TASKS.md`、`DECISIONS.md`、设计、计划或工作日志。每次开始或恢复开发时必须先读，并立即用远端事实修正过期内容。
 
 ## 1. 仓库与稳定基线
 
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 6f00ff79fdaebb76f27f879abccc7c5a3fcf50e6
-Verified at: 2026-07-20
+Last verified stable HEAD: 017601e74f32f50fea9faeb663b72eb8cfe3b93c
+Verified at: 2026-07-22
+Planning PR #30: merged
+Planning PR final head: d31a69f89aabba2b360d31b7af2b7ac6b88fd30d
+Planning squash merge: 017601e74f32f50fea9faeb663b72eb8cfe3b93c
+Implementation status: NOT STARTED
 Forbidden release target: main
 Protected legacy collection: local_kb_default
 V2 collection: local_kb_kaiyuan_v2 or random ephemeral CI collection
 ```
 
-恢复时必须重新读取远端 stable HEAD 和全部开放 PR，不得因为本文件记录了 SHA 就假定它仍为最新。
+恢复时必须重新读取远端 stable HEAD 和全部开放 PR。不得因为本文件记录了 SHA 就假定它仍为最新。
 
 ## 2. 当前阶段事实
 
-### B8
+### 已完成
 
 ```text
+B4: DONE
+B5: DONE
+B6: DONE
+B7: DONE
 B8-T01: DONE
 B8-T02: DONE
 B8 closeout PR #29: merged
-Stable closeout SHA: 6f00ff79fdaebb76f27f879abccc7c5a3fcf50e6
+B9/B10 planning PR #30: merged
 ```
 
-B8 已完成发布证据归档、离线复验和 hermetic 持续门禁，没有遗留实现任务。
+B8 已完成发布证据归档、离线复验和 hermetic 持续门禁。PR #30 已完成方案 C、B9/B10 计划硬化、测试策略、活跃任务台账和全局记忆建设。
 
-### 当前规划工作
+### 当前 closeout
 
 ```text
-Planning branch: codex/kaiyuan-evidence-video-pipeline-v1
-Planning PR: #30
-PR base: stable/kaiyuan-v2
-PR type: docs-only draft planning PR
+Closeout branch: codex/kaiyuan-b9-b10-plan-closeout
+Closeout type: docs-only state update
 Implementation status: NOT STARTED
 ```
 
-PR #30 只能完善设计、计划、测试策略、任务路线和全局记忆。不得在该分支写 B9 功能代码。规划 PR 合并后，必须从新的 remote stable HEAD 创建独立实现分支。
+Closeout 只记录 PR #30 的 exact-head workflows、合并 SHA、稳定 HEAD 和下一阶段边界。不得在 closeout 分支写功能代码。
 
 ### 其他开放 PR
 
-截至最后核验，远端仍存在早期开放 PR #1、#7。它们属于旧候选/`dev-test` 路线，不是 B9 稳定线实现任务。关闭前必须确认已被 stable v2 取代；在关闭前不得宣称“仓库无开放 PR”。
-
-### 任务台账提醒
-
-`TASKS.md` 的历史 B4/B8 顶部摘要仍需在规划 closeout/实现 Task 0 中刷新为当前稳定 HEAD 和 B9–B12 路线。该文档未刷新前，当前状态以实时 GitHub、本文件和 PR #30 设计/计划共同核验，不得直接依赖旧 header。
+截至最后核验，远端仍存在早期开放 PR #1、#7。它们属于旧候选/`dev-test` 路线，不是 B9 稳定线实现任务。关闭前必须确认已被 stable v2 取代；在关闭前不得宣称仓库无开放 PR。
 
 ## 3. 已批准总体路线：方案 C
 
@@ -88,8 +90,6 @@ B10 的成果是完整规则知识资产和正式 `engine-gap-report.json`，不
 
 ## 4. B9 实施拓扑
 
-B9 使用五个顺序实现 PR：
-
 ```text
 B9-PR-A Contract registry and compatibility
 → B9-PR-B Scientific provider and asterism catalog
@@ -113,8 +113,6 @@ B9-PR-A Contract registry and compatibility
 
 ## 5. B10 实施拓扑与完成分母
 
-B10 适用 PR：
-
 ```text
 B10-PR-A OmenRule/v2, identity and annotation
 → B10-PR-B Passage inventory and batch framework
@@ -137,7 +135,7 @@ B10 只有满足以下全书分母才能 `DONE`：
 5. approved rules 全部通过 citable、去重/冲突和 source-change validation；
 6. unresolved/ambiguous/deferred 保留在分母和报告中。
 
-单批发布、基础设施完成或部分审核不能冒充“全书完成”。
+单批发布、基础设施完成或部分审核不能冒充全书完成。
 
 ## 6. 永久边界
 
@@ -175,8 +173,6 @@ VideoPackage/v1
 
 ## 8. 测试总策略
 
-B9–B10 使用七层门禁：
-
 ```text
 G0 Governance
 G1 Contract
@@ -203,22 +199,11 @@ G7 Release
 
 ## 9. 关键文档
 
-### 规划审查
-
 ```text
 docs/development/B9_B10_PLAN_REVIEW.md
-```
-
-### B9
-
-```text
+docs/development/B9_B10_TEST_STRATEGY.md
 docs/superpowers/specs/2026-07-20-kaiyuan-evidence-video-pipeline-design.md
 docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md
-```
-
-### B10
-
-```text
 docs/superpowers/specs/2026-07-20-kaiyuan-whole-book-rule-structuring-design.md
 docs/superpowers/plans/2026-07-20-kaiyuan-whole-book-rule-structuring.md
 ```
@@ -229,45 +214,31 @@ docs/superpowers/plans/2026-07-20-kaiyuan-whole-book-rule-structuring.md
 2. 读取本文件。
 3. 查询远端 stable HEAD 和全部开放 PR，修正过期事实。
 4. 读取 `DEVELOPMENT_MANUAL.md`。
-5. 读取 `TASKS.md`，识别并修正旧 header。
+5. 读取 `TASKS.md`。
 6. 读取 `DECISIONS.md`。
 7. 读取当前阶段设计、计划和 `B9_B10_PLAN_REVIEW.md`。
 8. 读取 `WORK_LOG.md` 最新相关记录。
 9. 只有当前实现任务在 `TASKS.md` 标记 `IN_PROGRESS` 后才允许写代码。
 
-## 11. 规划 PR #30 完成条件
+## 11. 当前下一动作
 
-PR #30 只有以下条件满足后才可从 Draft 进入 review：
-
-- B9 已收敛为契约＋单条垂直样片并拆为顺序小 PR；
-- B10 有独立全书规则结构化计划、全书分母和可恢复批次；
-- B11/B12 依赖边界明确但未过度设计；
-- 分层测试、黄金数据、媒体确定性和模型数据治理写入仓库；
-- 全局记忆加入强制阅读顺序；
-- PR 仍为 docs-only，无功能代码、schema 实现、媒体文件或 Qdrant 操作；
-- Governance/适用 docs-only workflows 通过；
-- 自检无 TBD、TODO、范围矛盾或未归属需求。
-
-规划 PR 合并后必须重新读取 stable HEAD，再建立 B9-PR-A 实现分支。不得直接在规划分支追加实现。
-
-## 12. 当前下一动作
-
-当前允许：
+当前只允许完成规划 closeout：
 
 ```text
-完成 PR #30 文档自检和 review
-→ 合并 PR #30
-→ 从新的 stable HEAD 建立 B9-PR-A 分支
-→ 刷新 TASKS.md 当前 header 并将首个实现任务标记 IN_PROGRESS
-→ 才开始 TDD 实现
+核验 closeout exact-head workflows
+→ review/merge closeout PR
+→ 重新读取 stable HEAD 与开放 PR
+→ 保持 B9-PR-A 为 BACKLOG
 ```
+
+用户此前要求“先计划，不要开发”。因此 closeout 后不得自动创建 B9 实现分支、不得把 B9-PR-A 标为 `IN_PROGRESS`，直到用户明确授权进入开发。
 
 当前禁止：
 
 ```text
-在 PR #30 写功能代码
-启动 B10 实现
-自动生成/发布视频
+在规划或 closeout 分支写功能代码
+启动 B9/B10/B11/B12 实现
+自动生成或发布视频
 修改正式 Qdrant
 把候选原文或现代转译升级为正式古籍结论
 ```
