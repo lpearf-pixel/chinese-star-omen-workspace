@@ -7,14 +7,20 @@ sources:
     title: Stellarium Chinese sky-culture star names
     revision: 3972e97101e4321079279b5e5660b074fafc030a
     path_or_record: skycultures/chinese/star_names.zh_CN.fab
-    content_sha: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+    content_hash_algorithm: sha256
+    content_hash: d036a7f37e3c27ca1197d93739d922808e2a0d60e57b96b7692e7d60ca711229
+    snapshot_path: data/video_pipeline/sources/stellarium_hip65474_v1.json
+    upstream_content_id_algorithm: git-sha1
+    upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
     locator: '65474|_("角宿一") 1'
   - source_id: source:simbad-spica
     source_type: catalog-record
     title: SIMBAD Spica identity and ICRS coordinates
     revision: '2026-07-22'
     path_or_record: SIMBAD/basic?Ident=Spica
-    content_sha: d6aa4158853faf4ada29b7a9a5c01398f34e36ffde8cd84d4b47b174aebb1f6e
+    content_hash_algorithm: sha256
+    content_hash: 467a3c5ca8ae01d794c2fd394cfe059a40708815e98e9680ead2d863c5fbe957
+    snapshot_path: data/video_pipeline/sources/simbad_spica_v1.json
     locator: HIP 65474 / Spica
     reference_frame: ICRS J2000
 entries:
