@@ -18,10 +18,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: d63bfd458764bf7999ff20b4c367f53c0b4f31fe
+Last verified stable HEAD before B9-PR-A: d63bfd458764bf7999ff20b4c367f53c0b4f31fe
 Current feature branch: codex/kaiyuan-b9-contract-registry-v1
+Current PR: #32
 Current task: B9-PR-A
-Implementation status: IN_PROGRESS
+Implementation status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -32,7 +33,7 @@ V2 collection: local_kb_kaiyuan_v2 or random ephemeral CI collection
 
 ### 稳定分支治理事件
 
-2026-07-22 在建立实现分支时误用 contents API，曾直接在 stable 新增临时 `README.tmp`；随即停止实现并删除该文件。`cd630c44...` 与当前 stable 的净文件差异为空，但 stable 历史多出两个直接提交。不得改写 stable 历史掩盖该事件；后续所有实现只通过 feature branch 和 PR。
+2026-07-22 在建立实现分支时误用 contents API，曾直接在 stable 新增临时 `README.tmp`；随即停止实现并删除该文件。`cd630c44...` 与修复后 stable 的净文件差异为空，但 stable 历史多出两个直接提交。不得改写 stable 历史掩盖该事件；后续所有实现只通过 feature branch 和 PR。
 
 ## 已完成稳定阶段
 
@@ -67,27 +68,36 @@ Planning closeout PR #31: merged as cd630c44a16ade295626e62dcee8e27ee99c8f3a
 
 ### B9-PR-A — Contract registry and compatibility
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `d63bfd458764bf7999ff20b4c367f53c0b4f31fe`.
 - **Branch:** `codex/kaiyuan-b9-contract-registry-v1`.
+- **PR:** #32，draft，base only `stable/kaiyuan-v2`。
 - **Scope:**
   - three strict Pydantic v1 public contracts;
-  - JSON Schema snapshots and schema registry;
-  - canonical JSON bytes;
+  - Draft 2020-12 JSON Schema snapshots and schema registry;
+  - canonical JSON bytes and three canonical fixture assets;
   - stable IDs, UTC/finite-number validation and cross-reference checks;
-  - compatibility checks that reject removed required fields and enum semantic changes;
-  - tests and fixtures only for this contract layer.
+  - recursive compatibility checks covering nested `$defs`;
+  - focused, property, fixture and negative tests only for this contract layer.
 - **Excluded:** Skyfield calculations, asterism catalog, retrieval integration, rule engine adapter, editorial generation, Stellarium, FFmpeg and media.
-- **Acceptance:**
-  - tests are committed and observed RED before production modules exist;
-  - `extra="forbid"`, UTC, finite numeric and stable identifier validation;
-  - `classical_quote` requires citable evidence and candidate-only assessments are not narration eligible;
-  - claim source references reject unknown, dangling, wrong-type and cross-package references;
-  - Python models, JSON Schemas, registry and canonical fixtures agree;
-  - v1 optional additive changes are accepted, while removed required fields and changed enum meanings fail;
-  - focused, property smoke, downstream regression and all applicable exact-head workflows pass;
-  - no Qdrant, ingest, corpus, candidate or `local_kb_default` operation.
-- **Start log:** `docs/development/B9_PR_A_START.md`.
+- **TDD evidence:**
+  - initial RED: missing `src.video_pipeline` caused collection failure;
+  - review RED: valid package fixture failed on non-ASCII stable ID and nested enum mutation was accepted (`2 failed`);
+  - validation RED: coercion/recommendation/visibility/empty-fixture gaps produced `11 failed, 1 passed`;
+  - schema RED: invalid condition key produced zero JSON Schema errors;
+  - focused GREEN after fixes: local contract/review/validation/fixture suite `26 passed`;
+  - prior remote heads passed all three workflows, but only the final evidence head may be merge evidence.
+- **Review fixes:**
+  - stable IDs remain ASCII while Chinese names stay in display/content fields;
+  - finite numbers and IDs reject coercion;
+  - formal recommendation must target a matched rule;
+  - visible/not-visible states require target and solar altitude;
+  - compatibility validation recursively checks nested object/array/combinator semantics;
+  - canonical fixtures bind model → JSON Schema → file hash → manifest hash → registry;
+  - condition-state JSON Schema closes unmatched keys.
+- **Decision:** `docs/development/B9_PR_A_DECISION.md`。
+- **Start/evidence log:** `docs/development/B9_PR_A_START.md`。
+- **Remaining:** final exact-head workflows, complete diff/review-thread audit, ready transition, squash merge, then docs-only closeout before B9-PR-B。
 
 ### B9-PR-B — Scientific provider and asterism catalog
 - **Status:** `BACKLOG`
@@ -151,14 +161,11 @@ B10 只有满足全书 inventory、eligibility、candidate/no-reason、候选终
 ## 当前执行顺序
 
 ```text
-B9-PR-A governance start commit
-→ focused baseline inventory
-→ tests-first RED
-→ minimal GREEN implementation
-→ contract/property/regression gates
-→ independent review
-→ exact-head workflows
-→ squash merge and closeout
+B9-PR-A final exact-head workflows
+→ independent diff/review-thread audit
+→ mark PR #32 ready
+→ squash merge to stable/kaiyuan-v2
+→ docs-only closeout and stable HEAD recovery
 → only then B9-PR-B
 ```
 
