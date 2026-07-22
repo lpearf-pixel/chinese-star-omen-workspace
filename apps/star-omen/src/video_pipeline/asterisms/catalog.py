@@ -174,7 +174,7 @@ class AsterismCatalogV1(_StrictModel):
                     AsterismStatus.UNRESOLVED: AsterismNarrationPolicy.BLOCKED,
                 }[entry.editorial_status]
                 return AsterismResolutionV1(
-                    query=query,
+                    query=entry.modern_object_id,
                     status=entry.editorial_status,
                     narration_policy=policy,
                     modern_object_id=entry.modern_object_id,
@@ -186,7 +186,7 @@ class AsterismCatalogV1(_StrictModel):
                     source_refs=list(entry.source_refs),
                 )
         return AsterismResolutionV1(
-            query=query,
+            query=normalized,
             status=AsterismStatus.UNRESOLVED,
             narration_policy=AsterismNarrationPolicy.BLOCKED,
         )
