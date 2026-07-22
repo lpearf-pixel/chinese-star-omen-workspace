@@ -4,10 +4,10 @@ import hashlib
 import re
 from enum import StrEnum
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, model_validator
 
 _MAX_ASSET_BYTES = 1024 * 1024
 _STABLE_ID_PATTERN = r"^[a-z0-9][a-z0-9._:/-]{0,159}$"
@@ -30,6 +30,23 @@ class AsterismStatus(StrEnum):
     REGION_ONLY = "region_only"
     AMBIGUOUS = "ambiguous"
     UNRESOLVED = "unresolved"
+
+
+def _parse_asterism_status(value: object) -> AsterismStatus:
+    if isinstance(value, AsterismStatus):
+        return value
+    if isinstance(value, str):
+        try:
+            return AsterismStatus(value)
+        except ValueError as exc:
+            raise ValueError("unknown asterism status") from exc
+    raise TypeError("asterism status must be a string")
+
+
+AsterismStatusValue = Annotated[
+    AsterismStatus,
+    BeforeValidator(_parse_asterism_status),
+]
 
 
 class AsterismNarrationPolicy(StrEnum):
@@ -76,7 +93,7 @@ class AsterismEntryV1(_StrictModel):
     source_refs: list[str] = Field(min_length=1)
     mapping_method: Literal["catalog-identity", "catalog-membership", "region-definition"]
     confidence: float = Field(strict=True, ge=0.0, le=1.0, allow_inf_nan=False)
-    editorial_status: AsterismStatus
+    editorial_status: AsterismStatusValue
 
     @model_validator(mode="after")
     def validate_status_claim(self) -> "AsterismEntryV1":
@@ -99,7 +116,7 @@ class AsterismEntryV1(_StrictModel):
 class AsterismResolutionV1(_StrictModel):
     schema_version: Literal["asterism-resolution/v1"] = "asterism-resolution/v1"
     query: str = Field(min_length=1, max_length=256)
-    status: AsterismStatus
+    status: AsterismStatusValue
     narration_policy: AsterismNarrationPolicy
     modern_object_id: str | None = Field(default=None, pattern=_STABLE_ID_PATTERN)
     traditional_star_id: str | None = Field(default=None, pattern=_STABLE_ID_PATTERN)
