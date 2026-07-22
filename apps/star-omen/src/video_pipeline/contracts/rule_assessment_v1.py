@@ -52,7 +52,9 @@ class RuleAssessmentV1(StrictContractModel):
     event_id: StableId
     rule_set_version: StableId
     matched_rules: list[RuleMatchV1]
-    condition_states: dict[StableId, ConditionState]
+    condition_states: dict[StableId, ConditionState] = Field(
+        json_schema_extra={"additionalProperties": False}
+    )
     match_status: RuleMatchStatus
     conflict_summary: list[str] = Field(default_factory=list)
     recommended_rule_id: StableId | None = None
