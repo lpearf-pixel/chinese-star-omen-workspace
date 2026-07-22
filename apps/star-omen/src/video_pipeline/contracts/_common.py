@@ -20,9 +20,12 @@ def _validate_utc(value: datetime) -> datetime:
 
 
 UtcDateTime = Annotated[datetime, AfterValidator(_validate_utc)]
-FiniteFloat = Annotated[float, Field(allow_inf_nan=False)]
-StableId = Annotated[str, Field(min_length=1, max_length=160, pattern=_ID_RE.pattern)]
-Sha256Hex = Annotated[str, Field(pattern=_SHA256_RE.pattern)]
+FiniteFloat = Annotated[float, Field(strict=True, allow_inf_nan=False)]
+StableId = Annotated[
+    str,
+    Field(strict=True, min_length=1, max_length=160, pattern=_ID_RE.pattern),
+]
+Sha256Hex = Annotated[str, Field(strict=True, pattern=_SHA256_RE.pattern)]
 
 
 class StrictContractModel(BaseModel):
