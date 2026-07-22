@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from enum import StrEnum
 from pathlib import Path
@@ -10,8 +11,11 @@ import yaml
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, model_validator
 
 _MAX_ASSET_BYTES = 1024 * 1024
+_MAX_SOURCE_BYTES = 256 * 1024
+_APP_ROOT = Path(__file__).resolve().parents[3]
 _STABLE_ID_PATTERN = r"^[a-z0-9][a-z0-9._:/-]{0,159}$"
 _PINNED_REVISION_RE = re.compile(r"^(?:[0-9a-f]{40,64}|[0-9]{4}-[0-9]{2}-[0-9]{2})$")
+_SNAPSHOT_PATH_RE = r"^data/video_pipeline/sources/[a-z0-9][a-z0-9._-]{0,127}\.json$"
 
 
 class _StrictModel(BaseModel):
@@ -43,10 +47,7 @@ def _parse_asterism_status(value: object) -> AsterismStatus:
     raise TypeError("asterism status must be a string")
 
 
-AsterismStatusValue = Annotated[
-    AsterismStatus,
-    BeforeValidator(_parse_asterism_status),
-]
+AsterismStatusValue = Annotated[AsterismStatus, BeforeValidator(_parse_asterism_status)]
 
 
 class AsterismNarrationPolicy(StrEnum):
@@ -62,7 +63,11 @@ class CatalogSourceV1(_StrictModel):
     title: str = Field(min_length=1, max_length=256)
     revision: str = Field(min_length=10, max_length=64)
     path_or_record: str = Field(min_length=1, max_length=512)
-    content_sha: str | None = Field(default=None, pattern=r"^[0-9a-f]{40,64}$")
+    content_hash_algorithm: Literal["sha256"]
+    content_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    snapshot_path: str = Field(pattern=_SNAPSHOT_PATH_RE)
+    upstream_content_id_algorithm: Literal["git-sha1"] | None = None
+    upstream_content_id: str | None = Field(default=None, pattern=r"^[0-9a-f]{40}$")
     locator: str = Field(min_length=1, max_length=512)
     reference_frame: str | None = Field(default=None, min_length=1, max_length=64)
 
@@ -70,8 +75,12 @@ class CatalogSourceV1(_StrictModel):
     def validate_pin(self) -> "CatalogSourceV1":
         if not _PINNED_REVISION_RE.fullmatch(self.revision):
             raise ValueError("catalog source revision must be pinned")
-        if self.source_type == "git-file" and self.content_sha is None:
-            raise ValueError("git-file source requires content_sha")
+        if (self.upstream_content_id_algorithm is None) != (
+            self.upstream_content_id is None
+        ):
+            raise ValueError("upstream content ID algorithm and value must appear together")
+        if self.source_type == "git-file" and self.upstream_content_id is None:
+            raise ValueError("git-file source requires a pinned upstream content ID")
         return self
 
 
@@ -153,7 +162,6 @@ class AsterismCatalogV1(_StrictModel):
             raise ValueError("modern object IDs must be unique")
         if len(traditional_ids) != len(set(traditional_ids)):
             raise ValueError("traditional star IDs must be unique")
-
         alias_owner: dict[str, str] = {}
         for entry in self.entries:
             if any(source_ref not in source_set for source_ref in entry.source_refs):
@@ -217,6 +225,46 @@ class AsterismCatalogSnapshotV1(_StrictModel):
     catalog: AsterismCatalogV1
 
 
+def _canonical_json_bytes(payload: object) -> bytes:
+    return (
+        json.dumps(
+            payload,
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        + "\n"
+    ).encode("utf-8")
+
+
+def _validate_source_snapshots(catalog: AsterismCatalogV1) -> None:
+    for source in catalog.sources:
+        relative = Path(source.snapshot_path)
+        if relative.is_absolute() or ".." in relative.parts:
+            raise ValueError("catalog source snapshot path must be confined")
+        snapshot = (_APP_ROOT / relative).resolve(strict=True)
+        if not snapshot.is_relative_to(_APP_ROOT):
+            raise ValueError("catalog source snapshot escaped app root")
+        if snapshot.is_symlink() or not snapshot.is_file():
+            raise ValueError("catalog source snapshot must be a regular file")
+        if snapshot.stat().st_size > _MAX_SOURCE_BYTES:
+            raise ValueError("catalog source snapshot is too large")
+        raw = snapshot.read_bytes()
+        try:
+            payload = json.loads(raw.decode("utf-8", errors="strict"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError("catalog source snapshot must be canonical JSON") from exc
+        if raw != _canonical_json_bytes(payload):
+            raise ValueError("catalog source snapshot is not canonical JSON")
+        if hashlib.sha256(raw).hexdigest() != source.content_hash:
+            raise ValueError("catalog source snapshot sha256 mismatch")
+        if payload.get("source_id") != source.source_id:
+            raise ValueError("catalog source snapshot source_id mismatch")
+        if payload.get("revision") != source.revision:
+            raise ValueError("catalog source snapshot revision mismatch")
+
+
 def load_asterism_catalog(path: str | Path) -> AsterismCatalogSnapshotV1:
     asset_path = Path(path)
     if asset_path.is_symlink():
@@ -242,6 +290,7 @@ def load_asterism_catalog(path: str | Path) -> AsterismCatalogSnapshotV1:
     if not isinstance(payload, dict):
         raise ValueError("asterism catalog root must be a mapping")
     catalog = AsterismCatalogV1.model_validate(payload)
+    _validate_source_snapshots(catalog)
     return AsterismCatalogSnapshotV1(
         logical_name=asset_path.name,
         sha256=hashlib.sha256(raw).hexdigest(),
