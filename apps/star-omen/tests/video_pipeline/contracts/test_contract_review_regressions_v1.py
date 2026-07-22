@@ -14,17 +14,22 @@ from tests.video_pipeline.contracts.test_contract_compatibility_v1 import base_s
 from tests.video_pipeline.contracts.test_contract_models_v1 import valid_package_payload
 
 
+def valid_package_with_ascii_ids() -> dict:
+    payload = valid_package_payload()
+    payload["source_inventory"]["asterism_mapping_ids"] = [
+        "asterism:spica:jiao-xiu-1"
+    ]
+    return payload
+
+
 def test_video_package_valid_fixture_is_actually_accepted() -> None:
-    package = VideoPackageV1.model_validate(valid_package_payload())
+    package = VideoPackageV1.model_validate(valid_package_with_ascii_ids())
     assert package.package_id == "package:2026-07-21:moon-spica"
     assert len(package.claims) == 2
 
 
 def test_non_ascii_display_name_is_not_a_stable_identifier() -> None:
-    payload = valid_package_payload()
-    payload["source_inventory"]["asterism_mapping_ids"] = [
-        "asterism:spica:jiao-xiu-1"
-    ]
+    payload = valid_package_with_ascii_ids()
     package = VideoPackageV1.model_validate(payload)
     assert package.source_inventory.asterism_mapping_ids == [
         "asterism:spica:jiao-xiu-1"
