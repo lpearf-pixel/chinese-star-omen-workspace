@@ -89,7 +89,9 @@ def test_duplicate_ids_and_aliases_fail_closed(tmp_path: Path) -> None:
             "      epoch: J2000\n"
             "      ra_deg: 0.0\n"
             "      dec_deg: 0.0\n"
-            "    source_refs: [source:simbad-spica]\n"
+            "    source_refs:\n"
+            "      - source:stellarium-chinese-skyculture\n"
+            "      - source:simbad-spica\n"
             "    mapping_method: catalog-identity\n"
             "    confidence: 1.0\n"
             "    editorial_status: verified_identity\n",
