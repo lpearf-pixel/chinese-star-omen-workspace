@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 from src.video_pipeline.capability import (
     LocalCapabilityEvidenceV1,
+    PreviewMediaEvidenceV1,
     ScreenshotEvidenceV1,
     build_local_capability_evidence,
     canonical_capability_evidence_bytes,
@@ -20,6 +21,21 @@ def preview_capability() -> PreviewCapabilityV1:
         ffmpeg_version="7.1.1",
         enabled_features=["lavfi-color", "subtitles", "libx264"],
         max_timeout_seconds=120,
+    )
+
+
+def preview_media() -> PreviewMediaEvidenceV1:
+    return PreviewMediaEvidenceV1(
+        path="preview.mp4",
+        byte_size=2048,
+        sha256="f" * 64,
+        width=1080,
+        height=1920,
+        duration_ms=80_000,
+        duration_tolerance_ms=500,
+        video_codec="h264",
+        video_stream_count=1,
+        audio_stream_count=0,
     )
 
 
@@ -40,6 +56,7 @@ def test_local_capability_evidence_is_path_free_hash_bound_and_canonical() -> No
         duration_ms=editorial.total_duration_ms,
         capability=capability,
     )
+    media = preview_media()
 
     first = build_local_capability_evidence(
         evidence_id="local-capability:macos-arm64-v1",
@@ -49,6 +66,7 @@ def test_local_capability_evidence_is_path_free_hash_bound_and_canonical() -> No
         stellarium_script=script,
         preview_command=command,
         preview_capability=capability,
+        preview_media=media,
         preview_observed=True,
         visual_review_status="approved",
         screenshots=[screenshot()],
@@ -61,6 +79,7 @@ def test_local_capability_evidence_is_path_free_hash_bound_and_canonical() -> No
         stellarium_script=script,
         preview_command=command,
         preview_capability=capability,
+        preview_media=media,
         preview_observed=True,
         visual_review_status="approved",
         screenshots=[screenshot()],
@@ -71,6 +90,7 @@ def test_local_capability_evidence_is_path_free_hash_bound_and_canonical() -> No
     assert raw == canonical_capability_evidence_bytes(second)
     assert raw.endswith(b"\n")
     assert script.sha256.encode() in raw
+    assert media.sha256.encode() in raw
     assert b"/Users/" not in raw and b"/tmp/" not in raw
 
 
@@ -83,6 +103,7 @@ def test_local_capability_evidence_rejects_non_utc_unsafe_or_excess_screenshots(
         duration_ms=editorial.total_duration_ms,
         capability=capability,
     )
+    media = preview_media()
 
     with pytest.raises((ValidationError, ValueError), match="UTC|timezone"):
         build_local_capability_evidence(
@@ -93,6 +114,7 @@ def test_local_capability_evidence_rejects_non_utc_unsafe_or_excess_screenshots(
             stellarium_script=script,
             preview_command=command,
             preview_capability=capability,
+            preview_media=media,
             preview_observed=True,
             visual_review_status="approved",
             screenshots=[screenshot()],
@@ -114,6 +136,7 @@ def test_local_capability_evidence_rejects_non_utc_unsafe_or_excess_screenshots(
             stellarium_script=script,
             preview_command=command,
             preview_capability=capability,
+            preview_media=media,
             preview_observed=True,
             visual_review_status="approved",
             screenshots=[screenshot(index) for index in range(1, 32)],
@@ -131,6 +154,7 @@ def test_capability_model_rejects_unobserved_approved_preview() -> None:
         "ffmpeg_version": "7.1.1",
         "stellarium_script_sha256": "a" * 64,
         "preview_command_sha256": "b" * 64,
+        "preview_media": None,
         "preview_observed": False,
         "visual_review_status": "approved",
         "screenshots": [],
