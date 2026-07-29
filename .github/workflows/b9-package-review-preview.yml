@@ -9,6 +9,7 @@ on:
       - "apps/star-omen/src/video_pipeline/review.py"
       - "apps/star-omen/src/video_pipeline/subtitle.py"
       - "apps/star-omen/src/video_pipeline/preview.py"
+      - "apps/star-omen/src/video_pipeline/capability.py"
       - "apps/star-omen/src/video_pipeline/vertical_package.py"
       - "apps/star-omen/tests/video_pipeline/package_review/**"
       - ".github/workflows/b9-package-review-preview.yml"
