@@ -18,10 +18,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD before closeout: e6cd46f87f16aef94074534aac09b03898ab9289
-Current closeout branch: codex/kaiyuan-b9-editorial-closeout-v1
-Current task: B9-PR-D closeout
-Implementation status: B9-PR-D DONE; B9-PR-E READY after closeout merge
+Last verified stable HEAD: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
+Current feature branch: codex/kaiyuan-b9-package-review-preview-v1
+Current task: B9-PR-E
+Implementation status: IN_PROGRESS
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -41,6 +41,7 @@ B9-PR-B closeout #35: 48180f6239187b491e41d9f68be0a9aab8dde95d
 B9-PR-C implementation #36: 38042b995e885101999c93c6698a9544f22a948b
 B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
 B9-PR-D implementation #38: e6cd46f87f16aef94074534aac09b03898ab9289
+B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
 ```
 
 ## Governance
@@ -74,20 +75,37 @@ B9-PR-D implementation #38: e6cd46f87f16aef94074534aac09b03898ab9289
 ### B9-PR-D — Editorial package and Stellarium script
 - **Status:** `DONE`
 - **Implementation PR:** #38，squash `e6cd46f87f16aef94074534aac09b03898ab9289`。
-- **Final feature head:** `2e0b4713c158a321de645d74808316852fc20177`。
-- **Tests:** focused `41 passed in 1.55s`；full downstream `395 passed in 4.29s`。
-- **Exact-head workflows:** Governance `30488433312`、Editorial/Stellarium `30488434202`、Stable Core `30488433382`、Upstream Runtime `30488433542` 均 success。
-- **Review:** 17 expected files；0 review threads；0 submitted reviews。
-- **Delivered:** strict 80-second claim compiler、content-bound package identity、exact quote-lineage set validation、one-shot-per-claim timeline、deterministic safe Stellarium 26.x `.ssc`。
-- **Boundary:** no GUI、screenshots、SRT、FFmpeg、audio/video、publishing、corpus/candidate/ingest/Qdrant/collection or `local_kb_default` mutation。
-- **Decision:** `docs/development/B9_PR_D_DECISION.md`。
-- **Closeout:** `docs/development/B9_PR_D_CLOSEOUT.md`。
+- **Closeout PR:** #39，squash `d16e75d9eda153c13fcbcfc13449c49bb1a8af60`。
+- **Tests:** focused 41 passed；full downstream 395 passed。
+- **Evidence:** `docs/development/B9_PR_D_CLOSEOUT.md`。
 
 ### B9-PR-E — Atomic package, review, preview and E2E
-- **Status:** `READY`
-- **Entry gate:** B9-PR-D docs-only closeout merged；重新核验远端 stable HEAD 与开放 PR；从新 stable 建独立 feature branch。
-- **Scope:** atomic no-overwrite package writing、review records、deterministic SRT、bounded FFmpeg preview argv、hermetic vertical E2E、local/self-hosted Stellarium/preview evidence interface。
-- **Excluded:** TTS、final.mp4、batch generation、automatic publishing、full-book rule structuring、formal Qdrant mutation。
+
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `d16e75d9eda153c13fcbcfc13449c49bb1a8af60`。
+- **Branch:** `codex/kaiyuan-b9-package-review-preview-v1`。
+- **Scope:**
+  - deterministic SRT derived from the frozen claim/shot timeline;
+  - atomic same-filesystem no-overwrite package publication;
+  - canonical manifest and hash inventory for structured assets, `.ssc`, SRT and optional preview metadata;
+  - independent review records for astronomy、classical evidence、editorial and render dimensions;
+  - bounded FFmpeg preview argv construction without shell execution;
+  - hermetic end-to-end assembly for the July 21 blocked-classical path and evidence-rich citable path;
+  - local/self-hosted capability evidence interface for actual Stellarium/preview verification.
+- **Acceptance:**
+  - tests are committed and RED observed before production modules;
+  - staging validates every member before an atomic publish and refuses overwrite/races;
+  - package paths are relative, confined, normalized and free of symlink/traversal ambiguity;
+  - structured package size is bounded to 10 MiB excluding optional media;
+  - SRT cues are monotonic, non-overlapping, cover the editorial timeline and are byte-deterministic;
+  - review dimensions remain independent and classical publishability is blocked by candidate/ambiguous/missing/tampered evidence;
+  - preview command is an argv list only, fixed at 1080x1920, bounded to 120 seconds, with no shell or arbitrary filters/paths;
+  - `preview.mp4` is optional and toolchain-bound; `final.mp4` is forbidden;
+  - hermetic E2E performs no network, GUI, Qdrant or official ingest operation;
+  - repeated structured generation is byte-identical and tampering fails before publication;
+  - focused/full exact-head workflows and independent review pass.
+- **Excluded:** TTS、voice cloning、`final.mp4`、batch generation、general media orchestration、automatic publishing、full-book rule structuring、formal Qdrant mutation。
+- **Start log:** `docs/development/B9_PR_E_START.md`。
 
 B9 不做全书结构化、TTS、批量扫描、通用剪辑或自动发布。
 
@@ -105,18 +123,20 @@ B9 不做全书结构化、TTS、批量扫描、通用剪辑或自动发布。
 ## 当前执行顺序
 
 ```text
-B9-PR-D docs-only closeout workflows/review/merge
-→ re-read remote stable HEAD and open PRs
-→ create B9-PR-E branch from exact stable
-→ mark B9-PR-E IN_PROGRESS
+B9-PR-E governance start
 → tests-first RED
-→ atomic package/review/SRT/preview/E2E implementation
+→ deterministic SRT and canonical member inventory
+→ atomic package writer and review gate
+→ bounded preview argv and capability evidence
+→ hermetic blocked/citable E2E
+→ independent review and exact-head workflows
+→ squash merge and B9 closeout
 ```
 
 当前不得：
 
-- 在 stable 或 closeout 分支写 B9-PR-E 实现；
+- 在 stable 或旧 closeout 分支写实现；
 - 提前启动 B10、B11 或 B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
-- 自动发布或生成 `final.mp4`；
-- 弱化 claim、evidence、quote-set、package-ID 或 `.ssc` 安全边界。
+- 自动发布、生成 `final.mp4` 或引入通用媒体编排；
+- 弱化 claim、evidence、quote-set、package-ID、`.ssc`、atomic/no-overwrite 或 review 安全边界。
