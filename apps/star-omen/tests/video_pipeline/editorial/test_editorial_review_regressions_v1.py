@@ -6,7 +6,6 @@ from copy import deepcopy
 import pytest
 from pydantic import ValidationError
 
-from src.video_pipeline.asterisms import AsterismResolutionV1
 from src.video_pipeline.contracts import RuleAssessmentV1
 from src.video_pipeline.editorial import (
     ClassicalQuoteAssetV1,
@@ -117,7 +116,7 @@ def test_verified_asterism_mapping_must_bind_to_event_target() -> None:
     template_payload["object_names"]["hip:99999"] = "Sirius"
     template = load_editorial_template(template_payload)
 
-    mapping_payload = mapping.model_dump(mode="json")
+    mapping_payload = mapping.model_dump(mode="python")
     mapping_payload.update(
         {
             "query": "hip:99999",
@@ -127,7 +126,7 @@ def test_verified_asterism_mapping_must_bind_to_event_target() -> None:
             "canonical_chinese_name": "错误星",
         }
     )
-    unrelated = AsterismResolutionV1.model_validate(mapping_payload)
+    unrelated = mapping.__class__.model_validate(mapping_payload)
 
     with pytest.raises(ValueError, match="event target|mapping target"):
         compile_editorial_package(
