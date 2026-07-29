@@ -18,12 +18,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
-Current feature branch: codex/kaiyuan-b9-package-review-preview-v1
-Current PR: #40
-Current task: B9-PR-E implementation verification
-Implementation status: VERIFYING
-B9 overall status: VERIFYING — local/self-hosted macOS G6 evidence pending
+Last verified stable HEAD: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
+Current closeout branch: codex/kaiyuan-b9-package-closeout-v1
+Current task: B9-PR-E implementation closeout
+Implementation status: MERGED; B9 remains VERIFYING
+B9-G6 status: READY
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -44,6 +43,7 @@ B9-PR-C implementation #36: 38042b995e885101999c93c6698a9544f22a948b
 B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
 B9-PR-D implementation #38: e6cd46f87f16aef94074534aac09b03898ab9289
 B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
+B9-PR-E implementation #40: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
 ```
 
 ## Governance
@@ -83,10 +83,9 @@ B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
 
 ### B9-PR-E — Atomic package, review, preview and E2E
 
-- **Status:** `VERIFYING`
-- **Base:** `stable/kaiyuan-v2` at `d16e75d9eda153c13fcbcfc13449c49bb1a8af60`。
-- **Branch:** `codex/kaiyuan-b9-package-review-preview-v1`。
-- **PR:** #40，draft，base only `stable/kaiyuan-v2`。
+- **Status:** `VERIFYING` — implementation merged；local G6 remains。
+- **Implementation PR:** #40，squash `92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f`。
+- **Final feature head:** `64730f1bac882d7495d15dc53b6bfb6df6addf2d`。
 - **Delivered:**
   - deterministic SRT bound to the 80-second claim/shot timeline;
   - canonical member manifest with exact byte size and SHA-256;
@@ -94,48 +93,32 @@ B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
   - canonical confined POSIX member paths;
   - same-filesystem staging and atomic no-replace directory publication;
   - Linux `renameat2(RENAME_NOREPLACE)`、macOS `renamex_np(RENAME_EXCL)` and explicit unsupported-platform failure;
-  - independent astronomy、classical evidence、editorial and render review records;
-  - astronomy review bound to canonical `AstronomyEvent/v1`;
-  - classical review bound to canonical `{RuleAssessment/v1, EvidenceBundle/v1}`;
-  - editorial review bound to canonical `EditorialPackage/v1`;
-  - render review bound to `.ssc` SHA-256;
-  - fixed shell-free 1080x1920 FFmpeg preview argv with 120-second maximum timeout;
-  - path-free `LocalCapabilityEvidence/v1` with exact tools、script/command hashes and at most 30 screenshots;
+  - four independent review dimensions with dimension-specific canonical artifact hashes;
+  - classical review bound to the full `RuleAssessment/v1` plus `EvidenceBundle/v1`;
+  - fixed shell-free 1080x1920 FFmpeg preview argv with maximum 120-second timeout;
+  - path-free `LocalCapabilityEvidence/v1` with exact tool、script/command hashes and at most 30 screenshots;
   - hermetic July 21 blocked-classical and evidence-rich citable vertical-package paths;
   - local/self-hosted runbook and ignored generated-output directories.
-- **Review gate:** all four dimensions must approve for `previewable`; `classical_publishable` additionally requires included citable editorial status and exactly one narration-allowed lineage。
-- **Media boundary:** `preview.mp4` and screenshots are optional local evidence, not structured members；`final.mp4` remains forbidden。
-- **TDD/review evidence:**
-  - initial RED: `package`、`preview`、`review`、`subtitle` modules absent；
-  - minimal module GREEN: `21 passed`；
-  - E2E/capability RED: `capability`、`vertical_package` modules absent；
-  - initial hermetic GREEN: `28 passed`；
-  - review RED: no atomic no-replace primitive；
-  - review RED after publication fix: one failure，review gate lacked astronomy binding；
-  - review GREEN: `32 passed`；
-  - final review RED: one failure，classical review did not bind `RuleAssessment/v1`；
-  - final focused GREEN: `33 passed in 1.35s`；
-  - full downstream GREEN: `428 passed in 4.51s`。
-- **Successful implementation head before final docs:** `9f71ce892f145a9df7cd99b31b62d4515dd4ed1f`。
-- **Exact-head workflows at implementation head:**
-  - Development Governance `30491246882` — success；
-  - B9 Package Review Preview `30491246939` — success；
-  - Kaiyuan Stable Core `30491247040` — success；
-  - Kaiyuan Upstream Runtime `30491246920` — success。
+- **Tests:** focused `33 passed in 1.35s`；full downstream `428 passed in 4.51s`。
+- **Exact-head workflows:**
+  - Development Governance `30491630267` — success；
+  - B9 Package Review Preview `30491630257` — success；
+  - Kaiyuan Stable Core `30491630255` — success；
+  - Kaiyuan Upstream Runtime `30491630260` — success。
+- **Review:** 22 expected changed files；PR discussion/review timeline empty。
 - **Decision:** `docs/development/B9_PR_E_DECISION.md`。
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
-- **Start log:** `docs/development/B9_PR_E_START.md`。
-- **Remaining implementation closeout:** final docs-only exact-head workflows，diff/review audit，Ready transition and squash merge。
-- **Remaining B9 acceptance:** real macOS G6 Stellarium execution、screenshots、bounded FFmpeg preview and canonical local capability evidence。
+- **Implementation closeout:** `docs/development/B9_PR_E_IMPLEMENTATION_CLOSEOUT.md`。
+- **Remaining B9 acceptance:** actual macOS G6 Stellarium execution、screenshots、bounded FFmpeg preview and canonical local capability evidence。
 - **Excluded:** TTS、voice cloning、`final.mp4`、batch generation、general media orchestration、automatic publishing、full-book rule structuring、formal Qdrant mutation。
 
 ### B9-G6 — Local/self-hosted renderer evidence
 
-- **Status:** `READY` after PR #40 implementation merge；cannot be `DONE` from hosted CI。
-- **Goal:** execute the exact package `.ssc` and preview argv on macOS, inspect the visual result, capture at most 30 screenshots and produce `LocalCapabilityEvidence/v1`.
+- **Status:** `READY`
+- **Goal:** execute the exact package `.ssc` and preview argv on macOS, inspect the visual result, capture at most 30 screenshots and produce `LocalCapabilityEvidence/v1`。
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
 - **Acceptance:** exact tool versions、script hash、preview-command hash、screenshot size/hash inventory、preview observed and visual decision are all present；no absolute path、secret、corpus or Qdrant data。
-- **Boundary:** local evidence authorizes neither automatic publication nor classical narration；content review remains a separate gate。
+- **Boundary:** local evidence authorizes neither automatic publication nor classical narration；synthetic CI reviews do not count as real publication approval。
 
 B9 cannot be marked `DONE` and B10 cannot start until B9-G6 is reviewed and the final B9 closeout is merged.
 
@@ -153,11 +136,8 @@ B9 cannot be marked `DONE` and B10 cannot start until B9-G6 is reviewed and the 
 ## 当前执行顺序
 
 ```text
-B9-PR-E final docs exact-head workflows
-→ independent changed-file/review audit
-→ Ready and squash merge PR #40
-→ implementation closeout records merged
-→ run local/self-hosted macOS G6
+merge B9-PR-E docs-only implementation closeout
+→ execute local/self-hosted macOS G6
 → review capability evidence
 → final B9 closeout
 → only then B10
@@ -165,7 +145,7 @@ B9-PR-E final docs exact-head workflows
 
 当前不得：
 
-- 在 stable 或旧 closeout 分支写实现；
+- 在 stable 或 implementation closeout 分支写新功能；
 - 提前启动 B10、B11 或 B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
 - 自动发布、生成 `final.mp4` 或引入通用媒体编排；
