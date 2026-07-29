@@ -20,8 +20,9 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 523c724add978bc4bb51fc07a716c6a852c95447
 Current feature branch: codex/kaiyuan-b9-editorial-stellarium-v1
+Current PR: #38
 Current task: B9-PR-D
-Implementation status: IN_PROGRESS
+Implementation status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -76,39 +77,51 @@ B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
 
 ### B9-PR-D — Editorial package and Stellarium script
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `523c724add978bc4bb51fc07a716c6a852c95447`。
 - **Branch:** `codex/kaiyuan-b9-editorial-stellarium-v1`。
-- **Scope:**
-  - strict fixed `EditorialTemplate/v1` for one 80-second Chinese vertical slice;
-  - claim compiler into frozen `VideoPackage/v1`;
-  - claim/source cross-validation against `AstronomyEvent/v1`、`RuleAssessment/v1`、`EvidenceBundle/v1` and asterism resolution;
-  - `classical_quote` only from lineage with `narration_allowed=true` and matching quote SHA-256;
+- **PR:** #38，draft，base only `stable/kaiyuan-v2`。
+- **Delivered:**
+  - fixed strict `EditorialTemplate/v1` for one 80-second `zh-CN` vertical slice;
+  - deterministic claim compiler into frozen `VideoPackage/v1`;
+  - stricter internal `EditorialPackage/v1` with one-shot-per-claim and continuous timeline invariants;
+  - astronomy/source/mapping cross-validation against `AstronomyEvent/v1`、`RuleAssessment/v1`、`EvidenceBundle/v1` and asterism resolution;
+  - citable classical quotation only from the formally recommended、narration-allowed lineage with matching locator/hash/text SHA-256;
+  - explicit historical source type/title disclosure and fail-closed single-history limit;
+  - verified identity wording and verified-membership-limited wording;
   - “开口破局” only as disclosed `modern_interpretation`;
-  - prohibited deterministic-fate and fear-language gate;
-  - deterministic continuous shot list and editorial package;
-  - capability-gated deterministic Stellarium `.ssc` generation;
-  - allowlisted commands, safe object names, UTC/location/object consistency and no paths/includes/eval/arbitrary script;
-  - one fixed example input, modern interpretation asset and template;
-  - focused CI with retained logs and package-level consistency tests.
-- **Stellarium boundary:** script generation targets the documented 26.x scripting API and uses only `core.clear`、`core.setGuiVisible`、`core.setDate`、`core.setTimeRate`、`core.setObserverLocation`、`core.selectObjectByName`、`core.wait`、`StelMovementMgr.setFlagTracking`、`StelMovementMgr.zoomTo`。No GUI execution or screenshot in this PR。
-- **Acceptance:**
-  - tests committed and RED observed before production modules;
-  - every spoken claim has exactly one class, stable ID and valid same-package refs;
-  - astronomy claims reference existing event measurements/verified mapping;
-  - classical claims are omitted when lineage is blocked/missing/ambiguous;
-  - quote text hash must match citable lineage content hash;
-  - modern interpretation includes explicit disclosure and cannot be reclassified;
-  - prohibited promises/threats fail closed;
-  - shot timeline starts at 0, is continuous, ends at exactly 80,000 ms and uses only compiled claim IDs;
-  - repeated package and `.ssc` generation is byte-identical;
-  - `.ssc` time/location/object match the event and fixed object map;
-  - missing commands or unsupported Stellarium capability is blocked;
-  - no absolute path, path traversal, include/eval/shell/screenshot command;
-  - focused/full exact-head workflows and independent review pass;
-  - no Qdrant、ingest、corpus、candidate、media or publishing operation.
+  - NFKC/spacing/punctuation-resistant deterministic-fate、fear and coercion language gate;
+  - deterministic 80,000 ms shot list and canonical UTF-8 JSON;
+  - capability-gated deterministic Stellarium 26.x `.ssc`;
+  - canonical setup/shot/restore command order、wait-duration binding、safe object names、reviewed observer label、UTC/location/object consistency;
+  - renderer-state restoration for tracking、time rate and GUI;
+  - fixed July 21 input、modern interpretation asset、template and dedicated CI with retained logs.
+- **Classical-evidence boundary:** assessment and evidence bundle must agree on event、assessment、rule-set、formal recommendation、evidence ID、locator and hash；blocked/candidate/ambiguous/missing lineage never produces a classical placeholder。
+- **Asterism boundary:** verified mapping must bind to the event target；verified membership says it is a reviewed member relationship rather than asserting identity；unrelated or unresolved mappings cannot rename the event。
+- **Editorial boundary:** zero or one historical asset、exactly one modern asset、zero or one allowed classical lineage；every claim has exactly one shot and the timeline starts at 0 and ends at 80,000 ms。
+- **Stellarium boundary:** only the fixed allowlist is accepted；no path、traversal、include/eval、URL、screenshot、shell or arbitrary command；script generation does not launch Stellarium or take screenshots。
+- **TDD/review evidence:**
+  - initial RED: `editorial` / `stellarium` modules absent；
+  - implementation RED 1: `12 failed / 12 passed`；
+  - implementation RED 2: `4 failed / 20 passed`；
+  - implementation RED 3: `1 failed / 23 passed`；
+  - initial feature GREEN: `24 passed`；
+  - review RED 1: `10 failed / 24 passed`；
+  - review GREEN 1: `34 passed`；
+  - review RED 2: `4 failed / 34 passed`；
+  - final focused GREEN: `38 passed in 1.51s`；
+  - full downstream GREEN: `392 passed in 4.17s`。
+- **Successful implementation head before final docs:** `73990cec275a7aa03950e84038a2bc14884e5fc7`。
+- **Exact-head workflows at implementation head:**
+  - Development Governance `30486499167` — success；
+  - B9 Editorial Stellarium `30486497740` — success；
+  - Kaiyuan Stable Core `30486497774` — success；
+  - Kaiyuan Upstream Runtime `30486497941` — success。
+- **Review:** 15 expected changed files before final docs；zero review threads；zero submitted reviews。
+- **Decision:** `docs/development/B9_PR_D_DECISION.md`。
 - **Start log:** `docs/development/B9_PR_D_START.md`。
-- **Excluded:** Stellarium GUI execution、screenshots、SRT、FFmpeg、audio/video、publishing、full-book rule structuring。
+- **Excluded:** Stellarium GUI execution、screenshots、SRT、FFmpeg、audio/video、publishing、full-book rule structuring、corpus/candidate/ingest/Qdrant/`local_kb_default` mutation。
+- **Remaining:** final docs-only exact-head workflows，diff/review audit，ready transition，squash merge，then docs-only closeout before B9-PR-E。
 
 ### B9-PR-E — Atomic package, review, preview and E2E
 - **Status:** `BACKLOG`
@@ -129,12 +142,11 @@ B9 不做全书结构化、TTS、批量扫描、通用剪辑或自动发布。
 ## 当前执行顺序
 
 ```text
-B9-PR-D tests-first RED
-→ minimal editorial package and claim compiler
-→ deterministic Stellarium script
-→ focused/full regressions
-→ independent review and exact-head workflows
-→ squash merge and docs-only closeout
+B9-PR-D final docs-only exact-head workflows
+→ independent diff/review-thread audit
+→ mark PR #38 ready
+→ squash merge to stable/kaiyuan-v2
+→ docs-only closeout and stable HEAD recovery
 → only then B9-PR-E
 ```
 
