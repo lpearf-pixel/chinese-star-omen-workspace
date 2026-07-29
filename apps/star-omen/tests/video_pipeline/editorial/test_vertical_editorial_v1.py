@@ -147,29 +147,26 @@ def test_tampered_or_unapproved_quote_is_rejected() -> None:
         )
 
 
-def test_quote_is_omitted_when_lineage_is_blocked_even_if_text_is_supplied() -> None:
+def test_quote_is_rejected_when_lineage_is_blocked() -> None:
     event, result, mapping = july_inputs()
-    package = compile_editorial_package(
-        event=event,
-        assessment=result.assessment,
-        evidence_bundle=result.evidence_bundle,
-        asterism_mapping=mapping,
-        historical_assets=[],
-        modern_assets=[ModernInterpretationAssetV1.model_validate(modern_asset_payload())],
-        classical_quotes=[
-            ClassicalQuoteAssetV1(
-                evidence_id="evidence:not-authorized",
-                text="伪引文不得进入包",
-                review_status="approved",
-            )
-        ],
-        template=load_editorial_template(TEMPLATE_PATH),
-    )
 
-    assert all(
-        claim.claim_class != "classical_quote" for claim in package.video_package.claims
-    )
-    assert package.classical_status == "omitted_no_allowed_lineage"
+    with pytest.raises(ValueError, match="quote|lineage"):
+        compile_editorial_package(
+            event=event,
+            assessment=result.assessment,
+            evidence_bundle=result.evidence_bundle,
+            asterism_mapping=mapping,
+            historical_assets=[],
+            modern_assets=[ModernInterpretationAssetV1.model_validate(modern_asset_payload())],
+            classical_quotes=[
+                ClassicalQuoteAssetV1(
+                    evidence_id="evidence:not-authorized",
+                    text="伪引文不得进入包",
+                    review_status="approved",
+                )
+            ],
+            template=load_editorial_template(TEMPLATE_PATH),
+        )
 
 
 def test_open_mouth_phrase_is_restricted_to_modern_interpretation() -> None:
