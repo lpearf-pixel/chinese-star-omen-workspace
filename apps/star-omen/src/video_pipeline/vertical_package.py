@@ -176,6 +176,7 @@ def assemble_vertical_package(
     )
     review_gate = evaluate_review_gate(
         astronomy_event=event,
+        assessment=assessment,
         editorial=editorial,
         evidence_bundle=evidence_bundle,
         stellarium_script=stellarium_script,
