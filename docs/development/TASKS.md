@@ -20,8 +20,9 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 48180f6239187b491e41d9f68be0a9aab8dde95d
 Current feature branch: codex/kaiyuan-b9-rule-assessment-lineage-v1
+Current PR: #36
 Current task: B9-PR-C
-Implementation status: IN_PROGRESS
+Implementation status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -85,38 +86,50 @@ B9-PR-B closeout PR #35: 48180f6239187b491e41d9f68be0a9aab8dde95d
 
 ### B9-PR-C — RuleAssessment and evidence lineage
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `48180f6239187b491e41d9f68be0a9aab8dde95d`。
 - **Branch:** `codex/kaiyuan-b9-rule-assessment-lineage-v1`。
-- **Scope:**
-  - deterministic `AstronomyEvent/v1` → legacy matcher input projection;
-  - existing matcher/evidence resolver → frozen `RuleAssessment/v1` projection;
-  - optional fail-closed two-stage retrieval only for unresolved rule evidence;
-  - exact-primary hydration only after unique exact hit and full resolver validation;
-  - content-free `EvidenceBundle/v1` with rule/evidence/claim-class lineage;
-  - formal versus provisional recommendation and narration eligibility;
-  - deterministic IDs, fixtures, negative-golden and integration tests.
-- **Evidence projection:**
-  - `citable` remains citable only with locator and normalized SHA-256;
-  - overlay/structured fallback remains `candidate_only`;
-  - multiple exact passages or conflicting source metadata becomes `ambiguous`;
-  - missing source/evidence becomes `missing_evidence`;
-  - transport/auth/timeout/contract errors propagate and never become healthy empty results.
-- **Formal recommendation:** only an internally selected rule with `match_status=matched` and citable evidence may populate `recommended_rule_id` or become narration eligible. Candidate-only/insufficient/partial/manual-review results remain blocked and may expose only provisional identity.
+- **PR:** #36，draft，base only `stable/kaiyuan-v2`。
+- **Delivered:**
+  - deterministic `AstronomyEvent/v1` → existing matcher projection;
+  - two-pass matcher orchestration that hydrates only `candidate_only` rules;
+  - existing matcher/resolver → frozen `RuleAssessment/v1`;
+  - formal/provisional recommendation and fail-closed narration eligibility;
+  - exact-primary hydration with primary-candidate membership、status and provenance checks;
+  - content-free canonical `EvidenceBundle/v1` lineage;
+  - matcher diagnostics excluded from serialized build results;
+  - evidence-rich positive fixture and July 21 blocked-classical fixture;
+  - dedicated B9 RuleAssessment CI with retained focused logs.
+- **Evidence boundary:**
+  - candidate overlay、structured fallback、non-exact hit、explicit candidate-only hit and no-exact results never become citable;
+  - multiple exact hits become ambiguous;
+  - missing evidence becomes `missing_evidence`;
+  - transport/auth/timeout/contract errors propagate;
+  - only exactly one official/fallback provenance route is accepted;
+  - resolver must validate source/book/locator/page/paragraph/heading/anchor/hash.
+- **Retrieval scope:** external hydration is not called for core non-matches、partial matches、insufficient data or already-citable matches。
+- **Formal recommendation:** only selected、matched、unsuppressed、citable rules may populate `recommended_rule_id` and enable classical narration。Manual-review and non-citable rows expose at most provisional identity。
+- **TDD/review evidence:**
+  - initial RED: 3 missing-module collection errors；
+  - first fixture GREEN: 22 passed；
+  - review RED 1: 5 failed / 22 passed；
+  - review GREEN 1: 31 passed；
+  - review RED 2: 3 failed / 28 passed；
+  - review GREEN 2: 31 passed；
+  - final review RED: 4 failed / 31 passed；
+  - final focused GREEN: 35 passed in 1.19s；
+  - full downstream GREEN: 354 passed in 3.37s。
+- **Successful evidence head:** `19b320bbe0f1099a8dbe4f2c4aeefb465ab090ce`。
+- **Exact-head workflows at evidence head:**
+  - Development Governance `30480670491` — success；
+  - B9 RuleAssessment Lineage `30480670199` — success；
+  - Kaiyuan Stable Core `30480670733` — success；
+  - Kaiyuan Upstream Runtime `30480670531` — success。
+- **Review:** 21 expected changed files；zero review threads；zero submitted reviews at evidence head。
+- **Decision:** `docs/development/B9_PR_C_DECISION.md`。
 - **Start log:** `docs/development/B9_PR_C_START.md`。
-- **Acceptance:**
-  - task and failing tests committed before production modules;
-  - public output contains only frozen contract fields, not matcher internals;
-  - event ID, rule IDs, conditions, conflicts and evidence links fail closed on malformed input;
-  - official structured recall → official primary → filesystem fallback order is preserved by the existing retriever;
-  - candidate overlay is never considered citable;
-  - unique exact primary candidate must pass source/locator/page/paragraph/heading/anchor/hash resolver checks before hydration;
-  - evidence bundle is content-free, canonical and deterministically hashable;
-  - evidence-rich regression enables classical narration only for a citable selected rule;
-  - 2026-07-21 no-rule path remains honest and blocked for classical narration;
-  - focused/full exact-head workflows and independent review pass;
-  - no corpus/candidate/ingest/Qdrant/`local_kb_default` mutation and no media generation.
-- **Excluded:** editorial text generation、Stellarium script、SRT/FFmpeg/media、full-book rule structuring、Qdrant mutation。
+- **Excluded:** editorial text generation、Stellarium、SRT/FFmpeg/media、full-book structuring、corpus/candidate/ingest/Qdrant/`local_kb_default` mutation。
+- **Remaining:** final docs-only exact-head workflows，diff/review audit，ready transition，squash merge，then docs-only closeout before B9-PR-D。
 
 ### B9-PR-D — Editorial package and Stellarium script
 - **Status:** `BACKLOG`
@@ -163,13 +176,11 @@ B10 只有满足全书 inventory、eligibility、candidate/no-reason、候选终
 ## 当前执行顺序
 
 ```text
-B9-PR-C governance start
-→ tests-first RED
-→ minimal event/matcher/evidence projection
-→ retrieval hydration and evidence bundle
-→ focused/full regressions
-→ independent review and exact-head workflows
-→ squash merge and docs-only closeout
+B9-PR-C final docs-only exact-head workflows
+→ independent diff/review-thread audit
+→ mark PR #36 ready
+→ squash merge to stable/kaiyuan-v2
+→ docs-only closeout and stable HEAD recovery
 → only then B9-PR-D
 ```
 
