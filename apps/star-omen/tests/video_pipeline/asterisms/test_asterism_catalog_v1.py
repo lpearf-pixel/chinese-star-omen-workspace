@@ -57,7 +57,10 @@ def test_catalog_source_is_pinned_to_exact_stellarium_and_simbad_records() -> No
     simbad = sources[entry.source_refs[1]]
 
     assert stellarium.revision == "3972e97101e4321079279b5e5660b074fafc030a"
-    assert stellarium.content_sha == "fe8761576dc6c5cd4a65e3551a81ead6122c895f"
+    assert stellarium.content_hash_algorithm == "sha256"
+    assert stellarium.content_hash == "d036a7f37e3c27ca1197d93739d922808e2a0d60e57b96b7692e7d60ca711229"
+    assert stellarium.upstream_content_id_algorithm == "git-sha1"
+    assert stellarium.upstream_content_id == "fe8761576dc6c5cd4a65e3551a81ead6122c895f"
     assert stellarium.locator == '65474|_("角宿一") 1'
     assert simbad.locator == "HIP 65474 / Spica"
     assert simbad.reference_frame == "ICRS J2000"
