@@ -10,8 +10,8 @@ from src.video_pipeline.asterisms import (
     AsterismResolutionV1,
     AsterismStatus,
 )
-from src.video_pipeline.contracts import AstronomyEventV1, RuleAssessmentV1
-from src.video_pipeline.evidence_bundle import EvidenceBundleV1
+from src.video_pipeline.contracts import AstronomyEventV1, RuleAssessmentV1, VideoPackageV1
+from src.video_pipeline.evidence_bundle import EvidenceBundleV1, stable_lineage_id
 
 from . import editorial_impl as _impl
 
@@ -172,6 +172,22 @@ def _validate_assessment_bundle(
         raise ValueError("assessment and lineage content hash disagree")
 
 
+def _validate_quote_asset_set(
+    evidence_bundle: EvidenceBundleV1,
+    classical_quotes: Sequence[ClassicalQuoteAssetV1],
+) -> None:
+    allowed_ids = {
+        entry.evidence_id
+        for entry in evidence_bundle.entries
+        if entry.claim_class == "classical_quote" and entry.narration_allowed
+    }
+    supplied_ids = {asset.evidence_id for asset in classical_quotes}
+    if supplied_ids != allowed_ids:
+        raise ValueError(
+            "classical quote assets must exactly match narration-allowed lineage"
+        )
+
+
 def _validate_mapping_target(
     event: AstronomyEventV1,
     mapping: AsterismResolutionV1 | None,
@@ -223,6 +239,100 @@ def _prepare_mapping(
     )
 
 
+def _claim_identity_parts(video_package: VideoPackageV1) -> list[str]:
+    parts: list[str] = []
+    for index, claim in enumerate(video_package.claims, start=1):
+        refs = sorted(
+            f"{ref.reference_type}:{ref.reference_id}" for ref in claim.source_refs
+        )
+        parts.append(
+            "|".join(
+                [str(index), claim.claim_class, claim.text, *refs]
+            )
+        )
+    return parts
+
+
+def _rekey_compiled_package(
+    *,
+    compiled: _impl.EditorialPackageV1,
+    event: AstronomyEventV1,
+    assessment: RuleAssessmentV1,
+    template: EditorialTemplateV1,
+) -> EditorialPackageV1:
+    package_id = stable_lineage_id(
+        "package",
+        event.event_id,
+        assessment.assessment_id,
+        template.template_id,
+        *_claim_identity_parts(compiled.video_package),
+    )
+
+    claim_id_map: dict[str, str] = {}
+    claims = []
+    for index, claim in enumerate(compiled.video_package.claims, start=1):
+        ref_parts = [
+            f"{ref.reference_type}:{ref.reference_id}" for ref in claim.source_refs
+        ]
+        claim_id = stable_lineage_id(
+            "claim",
+            package_id,
+            str(index),
+            claim.claim_class,
+            claim.text,
+            *ref_parts,
+        )
+        claim_id_map[claim.claim_id] = claim_id
+        claims.append(
+            claim.model_copy(
+                update={
+                    "claim_id": claim_id,
+                    "source_refs": [
+                        ref.model_copy(update={"source_package_id": package_id})
+                        for ref in claim.source_refs
+                    ],
+                }
+            )
+        )
+
+    video_package = VideoPackageV1.model_validate(
+        {
+            **compiled.video_package.model_dump(mode="json"),
+            "package_id": package_id,
+            "claims": [claim.model_dump(mode="json") for claim in claims],
+        }
+    )
+    shots = [
+        shot.model_copy(
+            update={
+                "shot_id": stable_lineage_id(
+                    "shot",
+                    package_id,
+                    claim_id_map[shot.claim_id],
+                ),
+                "claim_id": claim_id_map[shot.claim_id],
+            }
+        )
+        for shot in compiled.shots
+    ]
+    editorial_id = stable_lineage_id(
+        "editorial",
+        package_id,
+        compiled.template_sha256,
+        compiled.classical_status,
+    )
+    payload = compiled.model_dump(mode="json")
+    payload.update(
+        {
+            "editorial_package_id": editorial_id,
+            "video_package": video_package.model_dump(mode="json"),
+            "shots": [shot.model_dump(mode="json") for shot in shots],
+            "observer_label": template.observer_label,
+        }
+    )
+    return EditorialPackageV1.model_validate(payload)
+
+
 def load_editorial_template(
     source: str | Path | Mapping[str, Any],
 ) -> EditorialTemplateSnapshotV1 | EditorialTemplateV1:
@@ -252,6 +362,7 @@ def compile_editorial_package(
         template=template_model,
     )
     _validate_assessment_bundle(assessment, evidence_bundle)
+    _validate_quote_asset_set(evidence_bundle, classical_quotes)
     _validate_mapping_target(event, asterism_mapping, template_model)
     prepared_historical = _prepare_historical_assets(historical_assets)
     prepared_mapping = _prepare_mapping(asterism_mapping)
@@ -265,9 +376,12 @@ def compile_editorial_package(
         classical_quotes=classical_quotes,
         template=template,
     )
-    payload = compiled.model_dump(mode="json")
-    payload["observer_label"] = template_model.observer_label
-    return EditorialPackageV1.model_validate(payload)
+    return _rekey_compiled_package(
+        compiled=compiled,
+        event=event,
+        assessment=assessment,
+        template=template_model,
+    )
 
 
 __all__ = [
