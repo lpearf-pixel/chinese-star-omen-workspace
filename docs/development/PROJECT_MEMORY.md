@@ -7,9 +7,9 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 26b4ce14afbc0010357c0fd9bc21bc69aa025f70
-Verified at: 2026-07-22
-Current closeout branch: codex/kaiyuan-b9-contract-registry-closeout-v1
+Last verified stable HEAD: c72aa7630f58c5828b8343bcdd39c369efe1df76
+Verified at: 2026-07-30
+Current closeout branch: codex/kaiyuan-b9-scientific-provider-closeout-v1
 Forbidden release target: main
 Protected legacy collection: local_kb_default
 V2 collection: local_kb_kaiyuan_v2 or random ephemeral CI collection
@@ -27,36 +27,49 @@ B7: DONE
 B8-T01: DONE
 B8-T02: DONE
 PLAN-T01 / B9-B10 planning: DONE
-B9-PR-A Contract registry and compatibility: MERGED, closeout in progress
-B9-PR-B Scientific provider and asterism catalog: BACKLOG
-B9-PR-C RuleAssessment and evidence lineage: BACKLOG
+B9-PR-A Contract registry and compatibility: DONE
+B9-PR-B Scientific provider and asterism catalog: MERGED, closeout in progress
+B9-PR-C RuleAssessment and evidence lineage: READY after closeout
 B9-PR-D Editorial package and Stellarium script: BACKLOG
 B9-PR-E Atomic package, review, preview and E2E: BACKLOG
 ```
 
-### B9-PR-A 合并事实
+### B9-PR-A
 
 ```text
-PR: #32
-Base before merge: d63bfd458764bf7999ff20b4c367f53c0b4f31fe
-Final feature head: 8bc3e4ae97780cd0f9f6f9c935508fd374684c4e
-Development Governance: 29889316084 — success
-Kaiyuan Stable Core: 29889316073 — success
-Kaiyuan Upstream Runtime: 29889316046 — success
-Squash merge: 26b4ce14afbc0010357c0fd9bc21bc69aa025f70
+Implementation PR: #32
+Implementation squash: 26b4ce14afbc0010357c0fd9bc21bc69aa025f70
+Closeout PR: #33
+Closeout squash: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
+```
+
+### B9-PR-B
+
+```text
+Implementation PR: #34
+Base before merge: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
+Final feature head: 3493270f65f2d177a9c755078477512fa585c0bb
+Development Governance: 30476661474 — success
+B9 Scientific Provider: 30476655763 — success
+Kaiyuan Stable Core: 30476656261 — success
+Kaiyuan Upstream Runtime: 30476655660 — success
+Squash merge: c72aa7630f58c5828b8343bcdd39c369efe1df76
+Focused tests: 40 passed
+Full downstream: 319 passed
 Review threads: 0
 Submitted reviews: 0
 ```
 
-详细证据：`docs/development/B9_PR_A_CLOSEOUT.md`。
+Detailed evidence:
 
-### 稳定分支治理事件
+```text
+docs/development/B9_PR_B_DECISION.md
+docs/development/B9_PR_B_CLOSEOUT.md
+```
 
-2026-07-22 建立 B9 实现分支前曾误用 contents API，直接在 stable 新增临时 `README.tmp`，随后立即删除。修复前后净文件差异为空，但 stable 历史保留两个直接提交。不得改写历史掩盖该事件；以后所有实现只通过 feature branch 和 PR。
+### Other open PRs
 
-### 其他开放 PR
-
-最后核验时，旧路线 PR #1、#7 仍开放，均不以 `stable/kaiyuan-v2` 为目标。它们不是 B9 实现任务，关闭前必须逐项确认已被 stable v2 取代。
+最后核验时，旧路线 PR #1、#7 仍开放，均不以 `stable/kaiyuan-v2` 为目标。关闭前必须逐项确认已被 stable v2 取代。
 
 ## 3. 已批准路线：方案 C
 
@@ -70,14 +83,14 @@ B9  契约先行＋2026-07-21 垂直样片
 ## 4. B9 顺序
 
 ```text
-B9-PR-A Contract registry and compatibility              DONE after closeout
-→ B9-PR-B Scientific provider and asterism catalog       next
-→ B9-PR-C RuleAssessment and evidence lineage
+B9-PR-A Contract registry and compatibility              DONE
+→ B9-PR-B Scientific provider and asterism catalog       DONE after closeout
+→ B9-PR-C RuleAssessment and evidence lineage            next
 → B9-PR-D Editorial package and Stellarium script
 → B9-PR-E Atomic package, review, preview and E2E
 ```
 
-每个 PR 必须从前一个 closeout 后的实时 stable HEAD 建独立分支。
+每个 PR 必须从前一个 closeout 后的实时 stable HEAD 建立独立分支。
 
 ### 已冻结公共契约
 
@@ -87,24 +100,33 @@ RuleAssessment/v1
 VideoPackage/v1
 ```
 
-B9-PR-A 已固化：
+### B9-PR-A 固化
 
 - 严格 Pydantic 契约；
 - Draft 2020-12 JSON Schema；
 - schema registry；
 - canonical fixture 与双层 SHA-256 绑定；
-- ASCII stable ID，中文名称保留在内容/显示字段；
 - UTC、有限数、正式推荐和同包引用 fail-closed；
 - nested `$defs` 的 additive-optional-only 兼容门禁。
 
-决策：`docs/development/B9_PR_A_DECISION.md`。
+### B9-PR-B 固化
 
-### B9 双轨验收
+- public time 为显式 UTC；Skyfield 内部 TT/TDB 不得冒充 UTC；
+- ICRS/J2000 identity、date-dependent apparent/GCRS、ecliptic-of-date 和 WGS84 topocentric 语义分离；
+- 科学高度默认无折射；
+- runtime ephemeris download 禁止；只接受调用方传入的本地 `.bsp` 和期望 hash/size；
+- 星历文件加载前后验证 SHA-256 和文件身份；
+- toolchain provenance 不保存绝对路径；
+- 星官映射只接受 exact identity/membership/region records，不做 nearest-star 推断；
+- ambiguous/unresolved 映射禁止正式星名口播；
+- `HIP 65474 / Spica = 角宿一` 是首个双来源、可哈希身份。
+
+## 5. B9 双轨验收
 
 - 2026-07-21 公开样片若没有 citable 古籍规则，只生成 astronomy/history/modern-interpretation 版本，省略古籍占断；
 - 独立 evidence-rich CI fixture 只验证 classical quote 正向路径，不冒充真实当日内容。
 
-## 5. B10 完成分母
+## 6. B10 完成分母
 
 ```text
 100% primary passages 进入 inventory
@@ -117,7 +139,7 @@ ambiguous/deferred 始终保留在统计分母
 
 单批发布不能冒充全书完成；模型辅助默认 disabled，可跳过。
 
-## 6. 永久边界
+## 7. 永久边界
 
 - v2 只合入 `stable/kaiyuan-v2`，不进入 `main`；
 - `apps/local-kb-unified` 是正式 KB 唯一写入者；
@@ -132,7 +154,7 @@ ambiguous/deferred 始终保留在统计分母
 - Stellarium 只是渲染器；
 - “开口破局”属于现代文化转译，不是古籍原文。
 
-## 7. 测试策略
+## 8. 测试策略
 
 ```text
 G0 Governance
@@ -151,7 +173,7 @@ G7 Release
 - 普通测试不得更新黄金文件；
 - 长任务必须 checkpoint/resume、幂等、no-overwrite。
 
-## 8. 强制恢复顺序
+## 9. 强制恢复顺序
 
 1. `AGENTS.md`；
 2. 本文件；
@@ -163,14 +185,14 @@ G7 Release
 8. 当前阶段 start/closeout 日志；
 9. 只有任务在 `TASKS.md` 标记 `IN_PROGRESS` 后才允许写代码。
 
-## 9. 下一动作
+## 10. 下一动作
 
 ```text
-完成 B9-PR-A docs-only closeout
+完成 B9-PR-B docs-only closeout
 → 重新核验 stable HEAD 与开放 PR
-→ 从新 stable 建 B9-PR-B 独立分支
-→ 将 B9-PR-B 标记 IN_PROGRESS
-→ 按 TDD 实现科学 provider 与版本化星官目录
+→ 从新 stable 建 B9-PR-C 独立分支
+→ 将 B9-PR-C 标记 IN_PROGRESS
+→ 按 TDD 实现 RuleAssessment adapter 和 claim-level evidence lineage
 ```
 
-禁止在 closeout 分支加入 B9-PR-B 功能代码。
+禁止在 closeout 分支加入 B9-PR-C 功能代码。
