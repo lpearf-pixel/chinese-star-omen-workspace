@@ -1,0 +1,30 @@
+schema_version: editorial-template/v1
+template_id: editorial-template:zh-cn-vertical-slice-v1
+language: zh-CN
+orientation: vertical-9:16
+total_duration_ms: 80000
+claim_weights:
+  astronomy_fact: 26
+  classical_quote: 18
+  historical_context: 18
+  modern_interpretation: 24
+  production_instruction: 14
+fov_degrees:
+  astronomy_fact: 12.0
+  classical_quote: 18.0
+  historical_context: 20.0
+  modern_interpretation: 25.0
+  production_instruction: 30.0
+object_names:
+  moon: Moon
+  mars: Mars
+  sun: Sun
+  hip:65474: Spica
+display_names:
+  moon: 月球
+  mars: 火星
+  sun: 太阳
+  spica: Spica
+  xin_xiu: 心宿
+production_instruction_text: 画面只用于天象与文化信息展示，不构成命运判断或行动强制。
+observer_label: Kaiyuan Observer
