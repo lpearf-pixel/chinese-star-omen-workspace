@@ -22,8 +22,9 @@ EditorialTemplateV1 = _impl.EditorialTemplateV1
 HistoricalContextAssetV1 = _impl.HistoricalContextAssetV1
 ModernInterpretationAssetV1 = _impl.ModernInterpretationAssetV1
 
+_SAFE_OBJECT_NAME_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9 ._+\-]{0,79}$"
 _SAFE_OBJECT_NAME = TypeAdapter(
-    Annotated[str, Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9 ._+\-]{0,79}$")]
+    Annotated[str, Field(pattern=_SAFE_OBJECT_NAME_PATTERN)]
 )
 _VERIFIED_MAPPING_STATUSES = {
     AsterismStatus.VERIFIED_IDENTITY,
@@ -50,6 +51,12 @@ _OPEN_MOUTH_PHRASES = {"开口破局", "開口破局"}
 
 class EditorialPackageV1(_impl.EditorialPackageV1):
     """Reviewed B9 editorial package with strict shot and status invariants."""
+
+    observer_label: str = Field(
+        min_length=1,
+        max_length=80,
+        pattern=_SAFE_OBJECT_NAME_PATTERN,
+    )
 
     @model_validator(mode="after")
     def validate_review_invariants(self) -> "EditorialPackageV1":
@@ -186,6 +193,36 @@ def _validate_mapping_target(
         raise ValueError("asterism mapping target does not match event target")
 
 
+def _prepare_historical_assets(
+    assets: Sequence[HistoricalContextAssetV1],
+) -> list[HistoricalContextAssetV1]:
+    if len(assets) > 1:
+        raise ValueError("B9 vertical slice supports one historical context asset")
+    if not assets:
+        return []
+    asset = assets[0]
+    disclosed_text = (
+        f"历史背景（来源类型：{asset.source_type}；来源：{asset.source_title}）："
+        f"{asset.text}"
+    )
+    payload = asset.model_dump(mode="json")
+    payload["text"] = disclosed_text
+    return [HistoricalContextAssetV1.model_validate(payload)]
+
+
+def _prepare_mapping(
+    mapping: AsterismResolutionV1 | None,
+) -> AsterismResolutionV1 | None:
+    if mapping is None or mapping.status is not AsterismStatus.VERIFIED_MEMBERSHIP:
+        return mapping
+    base_name = mapping.canonical_chinese_name or mapping.asterism_id or "该星官"
+    return mapping.model_copy(
+        update={
+            "canonical_chinese_name": f"{base_name}的经审核成员",
+        }
+    )
+
+
 def load_editorial_template(
     source: str | Path | Mapping[str, Any],
 ) -> EditorialTemplateSnapshotV1 | EditorialTemplateV1:
@@ -216,17 +253,21 @@ def compile_editorial_package(
     )
     _validate_assessment_bundle(assessment, evidence_bundle)
     _validate_mapping_target(event, asterism_mapping, template_model)
+    prepared_historical = _prepare_historical_assets(historical_assets)
+    prepared_mapping = _prepare_mapping(asterism_mapping)
     compiled = _impl.compile_editorial_package(
         event=event,
         assessment=assessment,
         evidence_bundle=evidence_bundle,
-        asterism_mapping=asterism_mapping,
-        historical_assets=historical_assets,
+        asterism_mapping=prepared_mapping,
+        historical_assets=prepared_historical,
         modern_assets=modern_assets,
         classical_quotes=classical_quotes,
         template=template,
     )
-    return EditorialPackageV1.model_validate(compiled.model_dump(mode="json"))
+    payload = compiled.model_dump(mode="json")
+    payload["observer_label"] = template_model.observer_label
+    return EditorialPackageV1.model_validate(payload)
 
 
 __all__ = [
