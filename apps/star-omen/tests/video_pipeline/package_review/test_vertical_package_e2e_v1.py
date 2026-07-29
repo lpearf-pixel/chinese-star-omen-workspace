@@ -58,9 +58,10 @@ def preview_capability() -> PreviewCapabilityV1:
     )
 
 
-def approved_reviews(event, evidence_bundle, editorial, script):
+def approved_reviews(event, assessment, evidence_bundle, editorial, script):
     hashes = expected_review_artifact_hashes(
         astronomy_event=event,
+        assessment=assessment,
         evidence_bundle=evidence_bundle,
         editorial=editorial,
         stellarium_script=script,
@@ -88,7 +89,13 @@ def approved_reviews(event, evidence_bundle, editorial, script):
 
 def july_build():
     event, result, editorial, script = july_editorial_and_script()
-    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
+    reviews = approved_reviews(
+        event,
+        result.assessment,
+        result.evidence_bundle,
+        editorial,
+        script,
+    )
     build = assemble_vertical_package(
         event=event,
         assessment=result.assessment,
@@ -131,7 +138,13 @@ def evidence_rich_build():
             stellarium_capability_payload()
         ),
     )
-    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
+    reviews = approved_reviews(
+        event,
+        result.assessment,
+        result.evidence_bundle,
+        editorial,
+        script,
+    )
     build = assemble_vertical_package(
         event=event,
         assessment=result.assessment,
@@ -195,7 +208,13 @@ def test_vertical_package_rejects_cross_input_identity_drift() -> None:
     wrong_assessment = result.assessment.model_copy(
         update={"event_id": "event:other"}
     )
-    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
+    reviews = approved_reviews(
+        event,
+        result.assessment,
+        result.evidence_bundle,
+        editorial,
+        script,
+    )
 
     with pytest.raises((ValueError, TypeError), match="event|assessment|identity"):
         assemble_vertical_package(
