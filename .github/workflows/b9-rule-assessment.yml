@@ -1,0 +1,50 @@
+name: B9 RuleAssessment Lineage
+
+on:
+  pull_request:
+    branches:
+      - stable/kaiyuan-v2
+    paths:
+      - "apps/star-omen/src/video_pipeline/rule_assessment.py"
+      - "apps/star-omen/src/video_pipeline/evidence_bundle.py"
+      - "apps/star-omen/tests/video_pipeline/rule_assessment/**"
+      - "tests/fixtures/evidence/v1/**"
+      - "tests/fixtures/video-package/v1/evidence-rich-regression/**"
+      - ".github/workflows/b9-rule-assessment.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  rule-assessment-312:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/star-omen/pyproject.toml
+      - name: Install downstream project
+        run: python -m pip install -e apps/star-omen
+      - name: Install shared text packages
+        run: |
+          python -m pip install -e packages/kb-contracts/python
+          python -m pip install -e packages/kb-text-core/python
+      - name: Run focused RuleAssessment tests
+        id: focused
+        shell: bash
+        run: |
+          set -o pipefail
+          cd apps/star-omen
+          python -m pytest -q tests/video_pipeline/rule_assessment \
+            2>&1 | tee "$GITHUB_WORKSPACE/b9-rule-assessment.log"
+      - name: Upload focused test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b9-rule-assessment-log
+          path: b9-rule-assessment.log
+          if-no-files-found: error
+          retention-days: 14
