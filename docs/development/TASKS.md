@@ -20,8 +20,9 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 41a613a1606cbbf8a77336fa01ea4c98236b57c7
 Current feature branch: codex/kaiyuan-b9-preview-media-evidence-v1
+Current PR: #42
 Current task: B9-G6-E1 preview media evidence hardening
-Implementation status: IN_PROGRESS
+Implementation status: VERIFYING
 B9 overall status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
@@ -94,29 +95,43 @@ B9-PR-E implementation closeout #41: 41a613a1606cbbf8a77336fa01ea4c98236b57c7
 
 ### B9-G6-E1 — Preview media evidence hardening
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `41a613a1606cbbf8a77336fa01ea4c98236b57c7`。
 - **Branch:** `codex/kaiyuan-b9-preview-media-evidence-v1`。
-- **Problem:** current `LocalCapabilityEvidence/v1` records preview observation and tool/command hashes but does not bind the actual `preview.mp4` bytes or ffprobe-visible properties。
-- **Scope:**
-  - add strict `PreviewMediaEvidence/v1`;
-  - bind preview relative path、byte size、SHA-256、width、height、duration、video codec and audio stream count;
-  - require observed preview to include media evidence;
-  - require approved visual evidence to include preview media and screenshots;
-  - add a bounded helper that hashes an actual local preview and validates caller-supplied ffprobe metadata;
-  - update runbook and local evidence builder.
-- **Acceptance:**
-  - tests committed and RED observed before production change;
-  - actual media hash changes when preview bytes change;
-  - only `preview.mp4`, 1080x1920, H.264, approximately 80 seconds and zero audio streams are accepted;
-  - non-finite/invalid metadata、path traversal、missing media and oversized input fail closed;
-  - no subprocess or shell is introduced into the evidence model;
-  - exact-head focused/full workflows pass.
-- **Excluded:** generating media in hosted CI、arbitrary ffprobe/FFmpeg execution、`final.mp4`、publishing、TTS、Qdrant/corpus mutation。
+- **PR:** #42，draft，base only `stable/kaiyuan-v2`。
+- **Delivered:**
+  - strict `PreviewMediaEvidence/v1`;
+  - actual `preview.mp4` byte size and SHA-256;
+  - exact 1080x1920 H.264、one-video、zero-audio boundary;
+  - finite `80000 ± 500 ms` duration boundary;
+  - MP4 format、logical filename and actual-size cross-check;
+  - bounded non-symlink streaming hash with before/after file identity check;
+  - caller-supplied strict ffprobe payload with only empty program/stream-group compatibility sections;
+  - observed preview requires media evidence；unobserved preview forbids media evidence；approved visual review requires media plus screenshots;
+  - canonical local evidence includes actual media hash and properties;
+  - runbook uses fresh no-overwrite outputs and hands off preview、ffprobe、script、command、manifest and screenshot evidence.
+- **TDD/review evidence:**
+  - initial RED: `PreviewMediaEvidenceV1` missing during collection；
+  - migration wave: `42 passed / 3 failed`；
+  - migrated GREEN: `45 passed`；
+  - ffprobe compatibility RED: `1 failed / 47 passed`；
+  - final focused GREEN: `48 passed in 1.42s`；
+  - full downstream GREEN: `443 passed in 3.98s`。
+- **Successful implementation head before final docs:** `0b641533088095cf8bd2f80fde2afa4614f58557`。
+- **Exact-head workflows:**
+  - Development Governance `30493574389` — success；
+  - B9 Package Review Preview `30493574356` — success；
+  - Kaiyuan Stable Core `30493574387` — success；
+  - Kaiyuan Upstream Runtime `30493574435` — success。
+- **Decision:** `docs/development/B9_G6_E1_DECISION.md`。
+- **Start log:** `docs/development/B9_G6_E1_START.md`。
+- **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
+- **Remaining:** final docs exact-head workflows、changed-file/review audit、Ready transition、squash merge and docs-only closeout。
+- **Excluded:** hosted media generation、subprocess/shell in evidence model、arbitrary ffprobe execution、`final.mp4`、publishing、TTS、Qdrant/corpus mutation。
 
 ### B9-G6 — Local/self-hosted renderer evidence
 
-- **Status:** `BLOCKED` until B9-G6-E1 merges; then `READY`。
+- **Status:** `BLOCKED` until B9-G6-E1 merges；then `READY`。
 - **Goal:** execute the exact package `.ssc` and preview argv on macOS, inspect the visual result, capture at most 30 screenshots and produce media-bound `LocalCapabilityEvidence/v1`。
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
 - **Boundary:** local evidence authorizes neither automatic publication nor classical narration；synthetic CI reviews do not count as real publication approval。
@@ -137,9 +152,10 @@ B9 cannot be marked `DONE` and B10 cannot start until B9-G6 is reviewed and the 
 ## 当前执行顺序
 
 ```text
-B9-G6-E1 tests-first RED
-→ preview media evidence implementation
-→ focused/full review and merge
+B9-G6-E1 final docs exact-head workflows
+→ independent diff/review audit
+→ Ready and squash merge PR #42
+→ docs-only closeout
 → local/self-hosted macOS G6
 → final B9 closeout
 → only then B10
