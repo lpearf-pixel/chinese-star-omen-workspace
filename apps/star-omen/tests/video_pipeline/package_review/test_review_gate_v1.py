@@ -17,9 +17,16 @@ from tests.video_pipeline.package_review.helpers import july_editorial_and_scrip
 DIMENSIONS = ("astronomy", "classical_evidence", "editorial", "render")
 
 
-def approved_records(event, evidence_bundle, editorial, script) -> list[ReviewRecordV1]:
+def approved_records(
+    event,
+    assessment,
+    evidence_bundle,
+    editorial,
+    script,
+) -> list[ReviewRecordV1]:
     hashes = expected_review_artifact_hashes(
         astronomy_event=event,
+        assessment=assessment,
         evidence_bundle=evidence_bundle,
         editorial=editorial,
         stellarium_script=script,
@@ -41,11 +48,18 @@ def test_four_independent_approvals_make_july_package_previewable() -> None:
     event, result, editorial, script = july_editorial_and_script()
     reviews = build_review_bundle(
         package_id=editorial.video_package.package_id,
-        records=approved_records(event, result.evidence_bundle, editorial, script),
+        records=approved_records(
+            event,
+            result.assessment,
+            result.evidence_bundle,
+            editorial,
+            script,
+        ),
     )
 
     gate = evaluate_review_gate(
         astronomy_event=event,
+        assessment=result.assessment,
         editorial=editorial,
         evidence_bundle=result.evidence_bundle,
         stellarium_script=script,
@@ -60,7 +74,13 @@ def test_four_independent_approvals_make_july_package_previewable() -> None:
 
 def test_review_bundle_requires_exactly_one_record_per_dimension() -> None:
     event, result, editorial, script = july_editorial_and_script()
-    records = approved_records(event, result.evidence_bundle, editorial, script)
+    records = approved_records(
+        event,
+        result.assessment,
+        result.evidence_bundle,
+        editorial,
+        script,
+    )
 
     with pytest.raises((ValidationError, ValueError), match="dimension|review"):
         build_review_bundle(
@@ -77,7 +97,13 @@ def test_review_bundle_requires_exactly_one_record_per_dimension() -> None:
 
 def test_rejected_or_tampered_review_blocks_package() -> None:
     event, result, editorial, script = july_editorial_and_script()
-    records = approved_records(event, result.evidence_bundle, editorial, script)
+    records = approved_records(
+        event,
+        result.assessment,
+        result.evidence_bundle,
+        editorial,
+        script,
+    )
     records[2] = records[2].model_copy(
         update={"decision": "rejected", "reason": "editorial claim needs revision"}
     )
@@ -88,6 +114,7 @@ def test_rejected_or_tampered_review_blocks_package() -> None:
 
     gate = evaluate_review_gate(
         astronomy_event=event,
+        assessment=result.assessment,
         editorial=editorial,
         evidence_bundle=result.evidence_bundle,
         stellarium_script=script,
@@ -107,6 +134,7 @@ def test_rejected_or_tampered_review_blocks_package() -> None:
     with pytest.raises((ValidationError, ValueError), match="hash|artifact|review"):
         evaluate_review_gate(
             astronomy_event=event,
+            assessment=result.assessment,
             editorial=editorial,
             evidence_bundle=result.evidence_bundle,
             stellarium_script=script,
