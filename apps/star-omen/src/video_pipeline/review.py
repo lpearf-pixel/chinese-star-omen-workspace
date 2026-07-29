@@ -6,7 +6,11 @@ from typing import Literal, Sequence
 
 from pydantic import Field, field_validator, model_validator
 
-from src.video_pipeline.contracts import AstronomyEventV1, canonical_contract_bytes
+from src.video_pipeline.contracts import (
+    AstronomyEventV1,
+    RuleAssessmentV1,
+    canonical_contract_bytes,
+)
 from src.video_pipeline.contracts._common import StableId, StrictContractModel, ensure_unique
 from src.video_pipeline.editorial import EditorialPackageV1, canonical_editorial_bytes
 from src.video_pipeline.evidence_bundle import (
@@ -106,11 +110,15 @@ def build_review_bundle(
 def expected_review_artifact_hashes(
     *,
     astronomy_event: AstronomyEventV1,
+    assessment: RuleAssessmentV1,
     evidence_bundle: EvidenceBundleV1,
     editorial: EditorialPackageV1,
     stellarium_script: StellariumScriptV1,
 ) -> dict[ReviewDimension, str]:
     event = AstronomyEventV1.model_validate(astronomy_event.model_dump(mode="json"))
+    assessment_model = RuleAssessmentV1.model_validate(
+        assessment.model_dump(mode="json")
+    )
     evidence = EvidenceBundleV1.model_validate(
         evidence_bundle.model_dump(mode="json")
     )
@@ -120,10 +128,14 @@ def expected_review_artifact_hashes(
     script = StellariumScriptV1.model_validate(
         stellarium_script.model_dump(mode="json")
     )
+    classical_payload = {
+        "assessment": assessment_model.model_dump(mode="json", exclude_none=False),
+        "evidence_bundle": evidence.model_dump(mode="json", exclude_none=False),
+    }
     return {
         "astronomy": hashlib.sha256(canonical_contract_bytes(event)).hexdigest(),
         "classical_evidence": hashlib.sha256(
-            canonical_evidence_bundle_bytes(evidence)
+            canonical_contract_bytes(classical_payload)
         ).hexdigest(),
         "editorial": hashlib.sha256(
             canonical_editorial_bytes(editorial_package)
@@ -135,6 +147,7 @@ def expected_review_artifact_hashes(
 def evaluate_review_gate(
     *,
     astronomy_event: AstronomyEventV1,
+    assessment: RuleAssessmentV1,
     editorial: EditorialPackageV1,
     evidence_bundle: EvidenceBundleV1,
     stellarium_script: StellariumScriptV1,
@@ -143,6 +156,7 @@ def evaluate_review_gate(
     astronomy_event = AstronomyEventV1.model_validate(
         astronomy_event.model_dump(mode="json")
     )
+    assessment = RuleAssessmentV1.model_validate(assessment.model_dump(mode="json"))
     editorial = EditorialPackageV1.model_validate(editorial.model_dump(mode="json"))
     evidence_bundle = EvidenceBundleV1.model_validate(
         evidence_bundle.model_dump(mode="json")
@@ -155,6 +169,10 @@ def evaluate_review_gate(
     package_id = editorial.video_package.package_id
     if reviews.package_id != package_id:
         raise ValueError("review bundle package does not match editorial package")
+    if assessment.event_id != astronomy_event.event_id:
+        raise ValueError("reviewed assessment does not match astronomy event")
+    if assessment.assessment_id != editorial.video_package.assessment_id:
+        raise ValueError("reviewed assessment does not match editorial package")
     if astronomy_event.event_id != editorial.video_package.event_id:
         raise ValueError("reviewed astronomy event does not match editorial package")
     if stellarium_script.event_id != astronomy_event.event_id:
@@ -163,11 +181,14 @@ def evaluate_review_gate(
         raise ValueError("reviewed script does not match editorial package")
     if evidence_bundle.event_id != astronomy_event.event_id:
         raise ValueError("evidence bundle event does not match astronomy event")
-    if evidence_bundle.assessment_id != editorial.video_package.assessment_id:
-        raise ValueError("evidence bundle assessment does not match editorial package")
+    if evidence_bundle.assessment_id != assessment.assessment_id:
+        raise ValueError("evidence bundle assessment does not match assessment")
+    if evidence_bundle.rule_set_version != assessment.rule_set_version:
+        raise ValueError("evidence bundle rule set does not match assessment")
 
     expected_hashes = expected_review_artifact_hashes(
         astronomy_event=astronomy_event,
+        assessment=assessment,
         evidence_bundle=evidence_bundle,
         editorial=editorial,
         stellarium_script=stellarium_script,
