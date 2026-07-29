@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import ctypes
+import errno
 import hashlib
 import json
 import os
 import shutil
+import sys
 import tempfile
 from pathlib import Path, PurePosixPath
 from typing import Literal, Mapping
@@ -14,6 +17,9 @@ from src.video_pipeline.contracts._common import StableId, StrictContractModel, 
 
 _MAX_STRUCTURED_BYTES = 10 * 1024 * 1024
 _MAX_MEMBER_COUNT = 256
+_AT_FDCWD = -100
+_RENAME_NOREPLACE = 1
+_RENAME_EXCL = 0x00000004
 
 
 class PackageMemberV1(StrictContractModel):
@@ -57,11 +63,15 @@ class PackageManifestV1(StrictContractModel):
 def _validate_member_path(value: str) -> PurePosixPath:
     if not isinstance(value, str) or not value or "\x00" in value or "\\" in value:
         raise ValueError("package member path is unsafe")
+    if value.strip() != value:
+        raise ValueError("package member path must use canonical spelling")
     path = PurePosixPath(value)
     if path.is_absolute() or value in {".", ".."}:
         raise ValueError("package member path must be relative")
     if any(part in {"", ".", ".."} for part in path.parts):
         raise ValueError("package member path contains traversal")
+    if path.as_posix() != value:
+        raise ValueError("package member path must use canonical spelling")
     if path.name == "manifest.json":
         raise ValueError("manifest.json is reserved")
     if any(ord(character) < 32 for character in value):
@@ -146,6 +156,69 @@ def verify_package_members(
     return True
 
 
+def _raise_publish_error(error_number: int, target: Path) -> None:
+    if error_number in {errno.EEXIST, errno.ENOTEMPTY}:
+        raise FileExistsError(error_number, os.strerror(error_number), str(target))
+    if error_number == errno.EXDEV:
+        raise OSError(
+            error_number,
+            "package staging and output must be on the same filesystem",
+            str(target),
+        )
+    raise OSError(error_number, os.strerror(error_number), str(target))
+
+
+def _publish_directory_noreplace(staging: Path, output: Path) -> None:
+    """Atomically rename a directory while refusing to replace any target."""
+
+    source_bytes = os.fsencode(staging)
+    target_bytes = os.fsencode(output)
+    libc = ctypes.CDLL(None, use_errno=True)
+
+    if sys.platform.startswith("linux"):
+        renameat2 = getattr(libc, "renameat2", None)
+        if renameat2 is None:
+            raise RuntimeError("atomic no-replace directory publication is unavailable")
+        renameat2.argtypes = [
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_char_p,
+            ctypes.c_uint,
+        ]
+        renameat2.restype = ctypes.c_int
+        result = renameat2(
+            _AT_FDCWD,
+            source_bytes,
+            _AT_FDCWD,
+            target_bytes,
+            _RENAME_NOREPLACE,
+        )
+        if result != 0:
+            _raise_publish_error(ctypes.get_errno(), output)
+        return
+
+    if sys.platform == "darwin":
+        renamex_np = getattr(libc, "renamex_np", None)
+        if renamex_np is None:
+            raise RuntimeError("atomic no-replace directory publication is unavailable")
+        renamex_np.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint]
+        renamex_np.restype = ctypes.c_int
+        result = renamex_np(source_bytes, target_bytes, _RENAME_EXCL)
+        if result != 0:
+            _raise_publish_error(ctypes.get_errno(), output)
+        return
+
+    if os.name == "nt":
+        try:
+            os.rename(staging, output)
+        except FileExistsError:
+            raise
+        return
+
+    raise RuntimeError("atomic no-replace directory publication is unsupported")
+
+
 def write_package_atomic(
     *,
     output_dir: str | Path,
@@ -163,9 +236,7 @@ def write_package_atomic(
     if not parent.exists() or not parent.is_dir() or parent.is_symlink():
         raise ValueError("package output parent must be an existing real directory")
 
-    staging = Path(
-        tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(parent))
-    )
+    staging = Path(tempfile.mkdtemp(prefix=f".{output.name}.", dir=str(parent)))
     try:
         for relative_path, content in sorted(normalized.items()):
             target = staging.joinpath(*PurePosixPath(relative_path).parts)
@@ -185,9 +256,7 @@ def write_package_atomic(
             for entry in manifest.members
         }
         verify_package_members(manifest, staged_members)
-        if output.exists() or output.is_symlink():
-            raise FileExistsError(output)
-        os.rename(staging, output)
+        _publish_directory_noreplace(staging, output)
         return output
     except Exception:
         shutil.rmtree(staging, ignore_errors=True)
@@ -197,6 +266,7 @@ def write_package_atomic(
 __all__ = [
     "PackageManifestV1",
     "PackageMemberV1",
+    "_publish_directory_noreplace",
     "build_package_manifest",
     "canonical_manifest_bytes",
     "verify_package_members",
