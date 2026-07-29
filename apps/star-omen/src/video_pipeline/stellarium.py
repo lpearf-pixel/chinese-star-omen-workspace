@@ -5,7 +5,7 @@ import re
 from datetime import timezone
 from typing import Literal
 
-from pydantic import Field, model_validator
+from pydantic import ConfigDict, Field, model_validator
 
 from src.video_pipeline.contracts import AstronomyEventV1
 from src.video_pipeline.contracts._common import StableId, StrictContractModel, ensure_unique
@@ -54,6 +54,14 @@ class StellariumCapabilityV1(StrictContractModel):
 
 
 class StellariumScriptV1(StrictContractModel):
+    model_config = ConfigDict(
+        extra="forbid",
+        frozen=True,
+        strict=True,
+        str_strip_whitespace=False,
+        validate_default=True,
+    )
+
     schema_version: Literal["stellarium-script/v1"] = "stellarium-script/v1"
     script_id: StableId
     event_id: StableId
@@ -66,7 +74,7 @@ class StellariumScriptV1(StrictContractModel):
 
     @model_validator(mode="after")
     def validate_hash(self) -> "StellariumScriptV1":
-        if not self.content.endswith("\n"):
+        if not self.content.endswith("\n") or self.content.endswith("\n\n"):
             raise ValueError("Stellarium script must end with one newline")
         if hashlib.sha256(self.content.encode("utf-8")).hexdigest() != self.sha256:
             raise ValueError("Stellarium script hash mismatch")
