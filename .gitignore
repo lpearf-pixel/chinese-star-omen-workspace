@@ -20,3 +20,6 @@ __pycache__/
 apps/local-kb-unified/data/qdrant/
 apps/local-kb-unified/data/postgres/
 apps/star-omen/data/generated_candidates/
+apps/star-omen/data/generated_video_packages/
+apps/star-omen/data/local_renderer_evidence/
+apps/star-omen/data/b9-local-g6-evidence.tar.gz
