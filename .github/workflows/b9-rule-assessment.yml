@@ -32,7 +32,7 @@ jobs:
         id: focused
         shell: bash
         env:
-          PYTHONPATH: packages/kb-contracts/python:packages/kb-text-core/python
+          PYTHONPATH: ${{ github.workspace }}/packages/kb-contracts/python:${{ github.workspace }}/packages/kb-text-core/python
         run: |
           set -o pipefail
           : > "$GITHUB_WORKSPACE/b9-rule-assessment.log"
