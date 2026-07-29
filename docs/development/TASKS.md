@@ -18,10 +18,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD before closeout: c72aa7630f58c5828b8343bcdd39c369efe1df76
-Current closeout branch: codex/kaiyuan-b9-scientific-provider-closeout-v1
-Current task: B9-PR-B closeout
-Implementation status: B9-PR-B DONE; B9-PR-C READY after closeout merge
+Last verified stable HEAD: 48180f6239187b491e41d9f68be0a9aab8dde95d
+Current feature branch: codex/kaiyuan-b9-rule-assessment-lineage-v1
+Current PR: #36
+Current task: B9-PR-C
+Implementation status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -48,6 +49,7 @@ B9-PR-A: DONE
 B9-PR-A implementation PR #32: 26b4ce14afbc0010357c0fd9bc21bc69aa025f70
 B9-PR-A closeout PR #33: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
 B9-PR-B implementation PR #34: c72aa7630f58c5828b8343bcdd39c369efe1df76
+B9-PR-B closeout PR #35: 48180f6239187b491e41d9f68be0a9aab8dde95d
 ```
 
 完整 B4–B8 任务明细：`docs/development/TASKS_B4_B8_ARCHIVE.md`。
@@ -77,30 +79,57 @@ B9-PR-B implementation PR #34: c72aa7630f58c5828b8343bcdd39c369efe1df76
 ### B9-PR-B — Scientific provider and asterism catalog
 
 - **Status:** `DONE`
-- **Base:** `stable/kaiyuan-v2` at `8bc8d0c8f91f78e4a4faceb22a037b9c526596c0`。
 - **Implementation PR:** #34，squash `c72aa7630f58c5828b8343bcdd39c369efe1df76`。
-- **Final feature head:** `3493270f65f2d177a9c755078477512fa585c0bb`。
-- **Exact-head workflows:**
-  - Development Governance `30476661474` — success；
-  - B9 Scientific Provider `30476655763` — success；
-  - Kaiyuan Stable Core `30476656261` — success；
-  - Kaiyuan Upstream Runtime `30476655660` — success。
-- **Tests:** focused `40 passed in 1.66s`；full downstream `319 passed in 3.75s`。
-- **Review:** zero review threads；zero submitted reviews；28 expected changed files。
-- **Delivered:** versioned scientific conventions、verified local ephemeris boundary、offline Skyfield provider、path-free toolchain provenance、source-bound Chinese asterism catalog、canonical source/fixture assets and dedicated scientific CI。
-- **Source-backed identity:** `HIP 65474 / Spica = 角宿一`。
-- **User-side validation:** Python 3.12.8、Skyfield 1.51、skyfield-data 7.0.0；`de421.bsp` 16,788,480 bytes，SHA-256 `a20a7139da04cbc462454634918e9a9ca69127044e2cc9d4f9c16e238d2deedc`。
-- **Decision:** `docs/development/B9_PR_B_DECISION.md`。
-- **Start log:** `docs/development/B9_PR_B_START.md`。
-- **Closeout:** `docs/development/B9_PR_B_CLOSEOUT.md`。
-- **Boundary:** no KB retrieval、RuleAssessment adapter、classical evidence、omen judgment、editorial、Stellarium execution、FFmpeg/media、publishing、corpus/candidate/ingest/Qdrant or `local_kb_default` operation。
+- **Closeout PR:** #35，squash `48180f6239187b491e41d9f68be0a9aab8dde95d`。
+- **Tests:** focused 40 passed；full downstream 319 passed。
+- **Evidence:** `docs/development/B9_PR_B_CLOSEOUT.md`。
 
 ### B9-PR-C — RuleAssessment and evidence lineage
 
-- **Status:** `READY`
-- **Entry gate:** B9-PR-B docs-only closeout merged；重新核验 remote stable HEAD 与开放 PR；从新 stable 建独立 feature branch。
-- **Scope:** stable `RuleAssessment/v1` adapter、event/assessment identity binding、claim-level evidence lineage、narration eligibility and fail-closed evidence-status projection。
-- **Excluded:** editorial text generation、Stellarium script、SRT/FFmpeg/media、full-book rule structuring、Qdrant mutation。
+- **Status:** `VERIFYING`
+- **Base:** `stable/kaiyuan-v2` at `48180f6239187b491e41d9f68be0a9aab8dde95d`。
+- **Branch:** `codex/kaiyuan-b9-rule-assessment-lineage-v1`。
+- **PR:** #36，draft，base only `stable/kaiyuan-v2`。
+- **Delivered:**
+  - deterministic `AstronomyEvent/v1` → existing matcher projection;
+  - two-pass matcher orchestration that hydrates only `candidate_only` rules;
+  - existing matcher/resolver → frozen `RuleAssessment/v1`;
+  - formal/provisional recommendation and fail-closed narration eligibility;
+  - exact-primary hydration with primary-candidate membership、status and provenance checks;
+  - content-free canonical `EvidenceBundle/v1` lineage;
+  - matcher diagnostics excluded from serialized build results;
+  - evidence-rich positive fixture and July 21 blocked-classical fixture;
+  - dedicated B9 RuleAssessment CI with retained focused logs.
+- **Evidence boundary:**
+  - candidate overlay、structured fallback、non-exact hit、explicit candidate-only hit and no-exact results never become citable;
+  - multiple exact hits become ambiguous;
+  - missing evidence becomes `missing_evidence`;
+  - transport/auth/timeout/contract errors propagate;
+  - only exactly one official/fallback provenance route is accepted;
+  - resolver must validate source/book/locator/page/paragraph/heading/anchor/hash.
+- **Retrieval scope:** external hydration is not called for core non-matches、partial matches、insufficient data or already-citable matches。
+- **Formal recommendation:** only selected、matched、unsuppressed、citable rules may populate `recommended_rule_id` and enable classical narration。Manual-review and non-citable rows expose at most provisional identity。
+- **TDD/review evidence:**
+  - initial RED: 3 missing-module collection errors；
+  - first fixture GREEN: 22 passed；
+  - review RED 1: 5 failed / 22 passed；
+  - review GREEN 1: 31 passed；
+  - review RED 2: 3 failed / 28 passed；
+  - review GREEN 2: 31 passed；
+  - final review RED: 4 failed / 31 passed；
+  - final focused GREEN: 35 passed in 1.19s；
+  - full downstream GREEN: 354 passed in 3.37s。
+- **Successful evidence head:** `19b320bbe0f1099a8dbe4f2c4aeefb465ab090ce`。
+- **Exact-head workflows at evidence head:**
+  - Development Governance `30480670491` — success；
+  - B9 RuleAssessment Lineage `30480670199` — success；
+  - Kaiyuan Stable Core `30480670733` — success；
+  - Kaiyuan Upstream Runtime `30480670531` — success。
+- **Review:** 21 expected changed files；zero review threads；zero submitted reviews at evidence head。
+- **Decision:** `docs/development/B9_PR_C_DECISION.md`。
+- **Start log:** `docs/development/B9_PR_C_START.md`。
+- **Excluded:** editorial text generation、Stellarium、SRT/FFmpeg/media、full-book structuring、corpus/candidate/ingest/Qdrant/`local_kb_default` mutation。
+- **Remaining:** final docs-only exact-head workflows，diff/review audit，ready transition，squash merge，then docs-only closeout before B9-PR-D。
 
 ### B9-PR-D — Editorial package and Stellarium script
 - **Status:** `BACKLOG`
@@ -147,17 +176,17 @@ B10 只有满足全书 inventory、eligibility、candidate/no-reason、候选终
 ## 当前执行顺序
 
 ```text
-B9-PR-B docs-only closeout workflows/review/merge
-→ re-read remote stable HEAD and open PRs
-→ create B9-PR-C branch from exact stable
-→ mark B9-PR-C IN_PROGRESS
-→ tests-first RED
-→ minimal RuleAssessment and lineage implementation
+B9-PR-C final docs-only exact-head workflows
+→ independent diff/review-thread audit
+→ mark PR #36 ready
+→ squash merge to stable/kaiyuan-v2
+→ docs-only closeout and stable HEAD recovery
+→ only then B9-PR-D
 ```
 
 当前不得：
 
-- 在 stable 或 closeout 分支写 B9-PR-C 实现；
+- 在 stable 或旧 closeout 分支写实现；
 - 提前启动 B9-PR-D、B10、B11 或 B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
 - 生成或发布视频；
