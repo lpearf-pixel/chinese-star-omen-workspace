@@ -7,9 +7,9 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD before closeout: e6cd46f87f16aef94074534aac09b03898ab9289
+Last verified stable HEAD: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
 Verified at: 2026-07-30
-Current closeout branch: codex/kaiyuan-b9-editorial-closeout-v1
+Current closeout branch: codex/kaiyuan-b9-package-closeout-v1
 Forbidden release target: main
 Protected legacy collection: local_kb_default
 V2 collection: local_kb_kaiyuan_v2 or random ephemeral CI collection
@@ -25,8 +25,10 @@ PLAN-T01 / B9-B10 planning: DONE
 B9-PR-A Contract registry and compatibility: DONE
 B9-PR-B Scientific provider and asterism catalog: DONE
 B9-PR-C RuleAssessment and evidence lineage: DONE
-B9-PR-D Editorial package and Stellarium script: MERGED, closeout in progress
-B9-PR-E Atomic package, review, preview and E2E: READY after closeout
+B9-PR-D Editorial package and Stellarium script: DONE
+B9-PR-E Atomic package, review, preview and E2E: implementation MERGED; local G6 pending
+B9 overall: VERIFYING
+B10: BLOCKED by B9 local/self-hosted G6 and final B9 closeout
 ```
 
 ### B9 implementation chain
@@ -38,29 +40,31 @@ B9-PR-B #34 squash: c72aa7630f58c5828b8343bcdd39c369efe1df76
 B9-PR-B closeout #35: 48180f6239187b491e41d9f68be0a9aab8dde95d
 B9-PR-C #36 squash: 38042b995e885101999c93c6698a9544f22a948b
 B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
-B9-PR-D #38 final head: 2e0b4713c158a321de645d74808316852fc20177
 B9-PR-D #38 squash: e6cd46f87f16aef94074534aac09b03898ab9289
+B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
+B9-PR-E #40 final head: 64730f1bac882d7495d15dc53b6bfb6df6addf2d
+B9-PR-E #40 squash: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
 ```
 
-### B9-PR-D final evidence
+### B9-PR-E final evidence
 
 ```text
-Focused editorial/Stellarium: 41 passed in 1.55s
-Full downstream: 395 passed in 4.29s
-Development Governance: 30488433312 — success
-B9 Editorial Stellarium: 30488434202 — success
-Kaiyuan Stable Core: 30488433382 — success
-Kaiyuan Upstream Runtime: 30488433542 — success
-Changed files: 17 expected
-Review threads: 0
-Submitted reviews: 0
+Focused package/review/preview: 33 passed in 1.35s
+Full downstream: 428 passed in 4.51s
+Development Governance: 30491630267 — success
+B9 Package Review Preview: 30491630257 — success
+Kaiyuan Stable Core: 30491630255 — success
+Kaiyuan Upstream Runtime: 30491630260 — success
+Changed files: 22 expected
+PR discussion/review timeline: empty
 ```
 
 Detailed evidence:
 
 ```text
-docs/development/B9_PR_D_DECISION.md
-docs/development/B9_PR_D_CLOSEOUT.md
+docs/development/B9_PR_E_DECISION.md
+docs/development/B9_VERTICAL_SLICE_RUNBOOK.md
+docs/development/B9_PR_E_IMPLEMENTATION_CLOSEOUT.md
 ```
 
 ### Other open PRs
@@ -114,15 +118,47 @@ VideoPackage/v1
 - `开口破局` 只能属于带 `现代文化转译` 披露的 modern interpretation；
 - 宿命承诺、恐吓和强迫性天象措辞 fail-closed；
 - shot list 与 claims 一一对应、连续覆盖 0..80,000 ms；
-- Stellarium 只是 renderer；`.ssc` 使用固定命令白名单并绑定 UTC、地点、对象和时长；
-- B9-D 不启动 GUI、不截图、不生成 SRT/音视频。
+- Stellarium 只是 renderer；`.ssc` 使用固定命令白名单并绑定 UTC、地点、对象和时长。
+
+### Atomic package, review and preview
+
+- SRT 由 claim/shot 时间线确定性生成；
+- structured package 使用 canonical member path、byte size 和 SHA-256 inventory；
+- structured members 总计不超过 10 MiB，成员不超过 256；
+- 目录发布使用同文件系统 staging 和 atomic no-replace；
+- astronomy、classical evidence、editorial、render 四维审核分别绑定 canonical artifact hash；
+- classical review hash 同时绑定完整 `RuleAssessment/v1` 与 `EvidenceBundle/v1`；
+- preview 只构造固定 1080x1920、80 秒、shell-free FFmpeg argv，timeout 最大 120 秒；
+- `preview.mp4`、截图是可选本地证据，不是 structured members；`final.mp4` 不属于 B9；
+- `LocalCapabilityEvidence/v1` 绑定工具版本、`.ssc` hash、preview command hash 和最多 30 张截图。
 
 ## 6. B9 双轨验收
 
 - 2026-07-21 公开样片若没有 citable 古籍规则，只生成 astronomy/history/modern-interpretation 版本并省略古籍占断；
 - 独立 evidence-rich CI fixture 只验证 classical quote 正向路径，不冒充真实当日内容。
 
-## 7. B10 完成分母
+## 7. 当前未完成的 G6
+
+Hosted CI 没有启动 Stellarium GUI 或 FFmpeg，不能冒充本地渲染证据。B9 仍要求：
+
+```text
+实际 Stellarium 26.x 加载 exact scene.ssc
+实际生成 preview.mp4
+人工检查 UTC、地点、对象、字幕和画面
+最多 30 张截图的 size/SHA-256 inventory
+canonical LocalCapabilityEvidence/v1
+```
+
+执行入口：`docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
+
+G6 完成前：
+
+- B9 不得标记 `DONE`；
+- 不得启动 B10；
+- 不得声称已有正式视频或可自动发布；
+- 不得把 synthetic CI review records 当作真实发布审核。
+
+## 8. B10 完成分母
 
 ```text
 100% primary passages 进入 inventory
@@ -135,7 +171,7 @@ ambiguous/deferred 始终保留在统计分母
 
 单批发布不能冒充全书完成；模型辅助默认 disabled，可跳过。
 
-## 8. 永久边界
+## 9. 永久边界
 
 - v2 只合入 `stable/kaiyuan-v2`，不进入 `main`；
 - `apps/local-kb-unified` 是正式 KB 唯一写入者；
@@ -150,7 +186,7 @@ ambiguous/deferred 始终保留在统计分母
 - “开口破局”属于现代文化转译，不是古籍原文；
 - 自动发布需要独立安全决策。
 
-## 9. 强制恢复顺序
+## 10. 强制恢复顺序
 
 1. `AGENTS.md`；
 2. 本文件；
@@ -158,18 +194,19 @@ ambiguous/deferred 始终保留在统计分母
 4. `DEVELOPMENT_MANUAL.md`；
 5. `TASKS.md`；
 6. 当前阶段决策与 closeout；
-7. 当前设计与实施计划；
+7. 当前设计、实施计划和本地运行手册；
 8. 只有任务在 `TASKS.md` 标记 `IN_PROGRESS` 后才允许写代码。
 
-## 10. 下一动作
+## 11. 下一动作
 
 ```text
-完成 B9-PR-D docs-only closeout
-→ 重新核验 stable HEAD 与开放 PR
-→ 从新 stable 建 B9-PR-E 独立分支
-→ 将 B9-PR-E 标记 IN_PROGRESS
-→ tests-first RED
-→ 实现 atomic package、review、SRT、bounded preview argv 和 hermetic E2E
+合并 B9-PR-E docs-only implementation closeout
+→ 从最新 stable 构建 fixed July local smoke package
+→ 在 macOS 执行 FFmpeg preview 和 Stellarium scene.ssc
+→ 生成并上传 B9 local G6 evidence archive
+→ 审核 evidence and toolchain binding
+→ final B9 closeout
+→ only then B10
 ```
 
-禁止在 closeout 分支加入 B9-PR-E 功能代码。
+禁止在 implementation closeout 分支加入新功能代码或 synthetic G6 证据。
