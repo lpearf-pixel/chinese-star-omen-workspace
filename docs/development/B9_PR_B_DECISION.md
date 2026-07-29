@@ -62,7 +62,7 @@ Python: 3.12.8
 Skyfield: 1.51
 skyfield-data: 7.0.0
 jplephem: 2.24
-dde421.bsp size: 16788480 bytes
+de421.bsp size: 16788480 bytes
 de421.bsp SHA-256: a20a7139da04cbc462454634918e9a9ca69127044e2cc9d4f9c16e238d2deedc
 ```
 
