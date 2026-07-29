@@ -67,11 +67,15 @@ class _FFprobeFormatV1(StrictContractModel):
 
 
 class _FFprobePayloadV1(StrictContractModel):
+    programs: list[object] = Field(default_factory=list)
+    stream_groups: list[object] = Field(default_factory=list)
     streams: list[_FFprobeStreamV1]
     format: _FFprobeFormatV1
 
     @model_validator(mode="after")
     def validate_streams(self) -> "_FFprobePayloadV1":
+        if self.programs or self.stream_groups:
+            raise ValueError("ffprobe programs and stream groups must be empty")
         if not self.streams:
             raise ValueError("ffprobe payload requires streams")
         ensure_unique([stream.index for stream in self.streams], "ffprobe stream indexes")
