@@ -31,7 +31,7 @@ def valid_ffprobe_payload(**overrides: object) -> dict:
         "format": {
             "filename": "preview.mp4",
             "duration": "80.000000",
-            "size": "18",
+            "size": "19",
             "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
         },
     }
