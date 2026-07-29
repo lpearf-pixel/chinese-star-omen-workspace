@@ -18,11 +18,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
-Current closeout branch: codex/kaiyuan-b9-package-closeout-v1
-Current task: B9-PR-E implementation closeout
-Implementation status: MERGED; B9 remains VERIFYING
-B9-G6 status: READY
+Last verified stable HEAD: 41a613a1606cbbf8a77336fa01ea4c98236b57c7
+Current feature branch: codex/kaiyuan-b9-preview-media-evidence-v1
+Current task: B9-G6-E1 preview media evidence hardening
+Implementation status: IN_PROGRESS
+B9 overall status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -44,12 +44,12 @@ B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
 B9-PR-D implementation #38: e6cd46f87f16aef94074534aac09b03898ab9289
 B9-PR-D closeout #39: d16e75d9eda153c13fcbcfc13449c49bb1a8af60
 B9-PR-E implementation #40: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
+B9-PR-E implementation closeout #41: 41a613a1606cbbf8a77336fa01ea4c98236b57c7
 ```
 
 ## Governance
 
 ### GOV-T02 — 核验并处置旧开放 PR #1、#7
-
 - **Status:** `BACKLOG`
 - **Boundary:** 不得只因“看起来旧”而关闭；不阻塞 B9。
 
@@ -85,46 +85,47 @@ B9-PR-E implementation #40: 92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
 
 - **Status:** `VERIFYING` — implementation merged；local G6 remains。
 - **Implementation PR:** #40，squash `92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f`。
-- **Final feature head:** `64730f1bac882d7495d15dc53b6bfb6df6addf2d`。
-- **Delivered:**
-  - deterministic SRT bound to the 80-second claim/shot timeline;
-  - canonical member manifest with exact byte size and SHA-256;
-  - 10 MiB structured-package and 256-member limits;
-  - canonical confined POSIX member paths;
-  - same-filesystem staging and atomic no-replace directory publication;
-  - Linux `renameat2(RENAME_NOREPLACE)`、macOS `renamex_np(RENAME_EXCL)` and explicit unsupported-platform failure;
-  - four independent review dimensions with dimension-specific canonical artifact hashes;
-  - classical review bound to the full `RuleAssessment/v1` plus `EvidenceBundle/v1`;
-  - fixed shell-free 1080x1920 FFmpeg preview argv with maximum 120-second timeout;
-  - path-free `LocalCapabilityEvidence/v1` with exact tool、script/command hashes and at most 30 screenshots;
-  - hermetic July 21 blocked-classical and evidence-rich citable vertical-package paths;
-  - local/self-hosted runbook and ignored generated-output directories.
+- **Implementation closeout PR:** #41，squash `41a613a1606cbbf8a77336fa01ea4c98236b57c7`。
 - **Tests:** focused `33 passed in 1.35s`；full downstream `428 passed in 4.51s`。
-- **Exact-head workflows:**
-  - Development Governance `30491630267` — success；
-  - B9 Package Review Preview `30491630257` — success；
-  - Kaiyuan Stable Core `30491630255` — success；
-  - Kaiyuan Upstream Runtime `30491630260` — success。
-- **Review:** 22 expected changed files；PR discussion/review timeline empty。
+- **Delivered:** deterministic SRT、canonical manifest、atomic no-replace publication、four dimension-bound reviews、bounded shell-free preview argv、local capability evidence interface、blocked/citable hermetic E2E and runbook。
 - **Decision:** `docs/development/B9_PR_E_DECISION.md`。
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
 - **Implementation closeout:** `docs/development/B9_PR_E_IMPLEMENTATION_CLOSEOUT.md`。
-- **Remaining B9 acceptance:** actual macOS G6 Stellarium execution、screenshots、bounded FFmpeg preview and canonical local capability evidence。
-- **Excluded:** TTS、voice cloning、`final.mp4`、batch generation、general media orchestration、automatic publishing、full-book rule structuring、formal Qdrant mutation。
+
+### B9-G6-E1 — Preview media evidence hardening
+
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `41a613a1606cbbf8a77336fa01ea4c98236b57c7`。
+- **Branch:** `codex/kaiyuan-b9-preview-media-evidence-v1`。
+- **Problem:** current `LocalCapabilityEvidence/v1` records preview observation and tool/command hashes but does not bind the actual `preview.mp4` bytes or ffprobe-visible properties。
+- **Scope:**
+  - add strict `PreviewMediaEvidence/v1`;
+  - bind preview relative path、byte size、SHA-256、width、height、duration、video codec and audio stream count;
+  - require observed preview to include media evidence;
+  - require approved visual evidence to include preview media and screenshots;
+  - add a bounded helper that hashes an actual local preview and validates caller-supplied ffprobe metadata;
+  - update runbook and local evidence builder.
+- **Acceptance:**
+  - tests committed and RED observed before production change;
+  - actual media hash changes when preview bytes change;
+  - only `preview.mp4`, 1080x1920, H.264, approximately 80 seconds and zero audio streams are accepted;
+  - non-finite/invalid metadata、path traversal、missing media and oversized input fail closed;
+  - no subprocess or shell is introduced into the evidence model;
+  - exact-head focused/full workflows pass.
+- **Excluded:** generating media in hosted CI、arbitrary ffprobe/FFmpeg execution、`final.mp4`、publishing、TTS、Qdrant/corpus mutation。
 
 ### B9-G6 — Local/self-hosted renderer evidence
 
-- **Status:** `READY`
-- **Goal:** execute the exact package `.ssc` and preview argv on macOS, inspect the visual result, capture at most 30 screenshots and produce `LocalCapabilityEvidence/v1`。
+- **Status:** `BLOCKED` until B9-G6-E1 merges; then `READY`。
+- **Goal:** execute the exact package `.ssc` and preview argv on macOS, inspect the visual result, capture at most 30 screenshots and produce media-bound `LocalCapabilityEvidence/v1`。
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
-- **Acceptance:** exact tool versions、script hash、preview-command hash、screenshot size/hash inventory、preview observed and visual decision are all present；no absolute path、secret、corpus or Qdrant data。
 - **Boundary:** local evidence authorizes neither automatic publication nor classical narration；synthetic CI reviews do not count as real publication approval。
 
 B9 cannot be marked `DONE` and B10 cannot start until B9-G6 is reviewed and the final B9 closeout is merged.
 
 ## B10 — 《唐开元占经》全书规则结构化
 - **Status:** `BACKLOG`
-- **Entry gate:** B9-G6 evidence accepted and final B9 closeout merged from the resulting stable HEAD。
+- **Entry gate:** B9-G6 evidence accepted and final B9 closeout merged。
 
 ## B11 — 规则执行器 2.0
 - **Status:** `BACKLOG`
@@ -136,18 +137,19 @@ B9 cannot be marked `DONE` and B10 cannot start until B9-G6 is reviewed and the 
 ## 当前执行顺序
 
 ```text
-merge B9-PR-E docs-only implementation closeout
-→ execute local/self-hosted macOS G6
-→ review capability evidence
+B9-G6-E1 tests-first RED
+→ preview media evidence implementation
+→ focused/full review and merge
+→ local/self-hosted macOS G6
 → final B9 closeout
 → only then B10
 ```
 
 当前不得：
 
-- 在 stable 或 implementation closeout 分支写新功能；
+- 在 stable 直接写入；
 - 提前启动 B10、B11 或 B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
 - 自动发布、生成 `final.mp4` 或引入通用媒体编排；
 - 将 hosted CI 冒充实际 Stellarium/FFmpeg G6 证据；
-- 弱化 claim、evidence、quote-set、package-ID、`.ssc`、atomic/no-overwrite 或 review 安全边界。
+- 用“preview_observed=true”替代实际 preview media hash 和 ffprobe metadata。
