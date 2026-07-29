@@ -5,7 +5,7 @@ on:
     branches:
       - stable/kaiyuan-v2
     paths:
-      - "apps/star-omen/src/video_pipeline/rule_assessment.py"
+      - "apps/star-omen/src/video_pipeline/rule_assessment*.py"
       - "apps/star-omen/src/video_pipeline/evidence_bundle.py"
       - "apps/star-omen/tests/video_pipeline/rule_assessment/**"
       - "tests/fixtures/evidence/v1/**"
