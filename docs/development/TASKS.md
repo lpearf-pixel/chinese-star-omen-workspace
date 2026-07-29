@@ -87,6 +87,8 @@ B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
   - stricter internal `EditorialPackage/v1` with one-shot-per-claim and continuous timeline invariants;
   - astronomy/source/mapping cross-validation against `AstronomyEvent/v1`、`RuleAssessment/v1`、`EvidenceBundle/v1` and asterism resolution;
   - citable classical quotation only from the formally recommended、narration-allowed lineage with matching locator/hash/text SHA-256;
+  - exact quote-asset-set validation：unauthorized、extra or blocked-lineage quote input fails explicitly rather than being silently dropped;
+  - content-bound `VideoPackage/v1.package_id` derived from actual claim classes、text and source references;
   - explicit historical source type/title disclosure and fail-closed single-history limit;
   - verified identity wording and verified-membership-limited wording;
   - “开口破局” only as disclosed `modern_interpretation`;
@@ -96,9 +98,9 @@ B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
   - canonical setup/shot/restore command order、wait-duration binding、safe object names、reviewed observer label、UTC/location/object consistency;
   - renderer-state restoration for tracking、time rate and GUI;
   - fixed July 21 input、modern interpretation asset、template and dedicated CI with retained logs.
-- **Classical-evidence boundary:** assessment and evidence bundle must agree on event、assessment、rule-set、formal recommendation、evidence ID、locator and hash；blocked/candidate/ambiguous/missing lineage never produces a classical placeholder。
+- **Classical-evidence boundary:** assessment and evidence bundle must agree on event、assessment、rule-set、formal recommendation、evidence ID、locator and hash；blocked/candidate/ambiguous/missing lineage never produces a classical placeholder；supplied quote IDs must exactly equal allowed lineage IDs。
 - **Asterism boundary:** verified mapping must bind to the event target；verified membership says it is a reviewed member relationship rather than asserting identity；unrelated or unresolved mappings cannot rename the event。
-- **Editorial boundary:** zero or one historical asset、exactly one modern asset、zero or one allowed classical lineage；every claim has exactly one shot and the timeline starts at 0 and ends at 80,000 ms。
+- **Editorial boundary:** zero or one historical asset、exactly one modern asset、zero or one allowed classical lineage；every claim has exactly one shot and the timeline starts at 0 and ends at 80,000 ms；changing claim content changes package identity。
 - **Stellarium boundary:** only the fixed allowlist is accepted；no path、traversal、include/eval、URL、screenshot、shell or arbitrary command；script generation does not launch Stellarium or take screenshots。
 - **TDD/review evidence:**
   - initial RED: `editorial` / `stellarium` modules absent；
@@ -109,15 +111,18 @@ B9-PR-C closeout #37: 523c724add978bc4bb51fc07a716c6a852c95447
   - review RED 1: `10 failed / 24 passed`；
   - review GREEN 1: `34 passed`；
   - review RED 2: `4 failed / 34 passed`；
-  - final focused GREEN: `38 passed in 1.51s`；
-  - full downstream GREEN: `392 passed in 4.17s`。
-- **Successful implementation head before final docs:** `73990cec275a7aa03950e84038a2bc14884e5fc7`。
+  - pre-identity-review GREEN: `38 passed`；
+  - identity/orphan-quote review RED: `3 failed / 38 passed`；
+  - post-fix legacy-contract conflict: `1 failed / 40 passed`；
+  - final focused GREEN: `41 passed in 1.55s`；
+  - full downstream GREEN: `395 passed in 4.29s`。
+- **Successful implementation head before final docs:** `f4520ac706a07f309d063180fd7e7d42d7aac0ad`。
 - **Exact-head workflows at implementation head:**
-  - Development Governance `30486499167` — success；
-  - B9 Editorial Stellarium `30486497740` — success；
-  - Kaiyuan Stable Core `30486497774` — success；
-  - Kaiyuan Upstream Runtime `30486497941` — success。
-- **Review:** 15 expected changed files before final docs；zero review threads；zero submitted reviews。
+  - Development Governance `30488226219` — success；
+  - B9 Editorial Stellarium `30488226335` — success；
+  - Kaiyuan Stable Core `30488226182` — success；
+  - Kaiyuan Upstream Runtime `30488226257` — success。
+- **Review:** 17 expected changed files before final docs；zero review threads；zero submitted reviews。
 - **Decision:** `docs/development/B9_PR_D_DECISION.md`。
 - **Start log:** `docs/development/B9_PR_D_START.md`。
 - **Excluded:** Stellarium GUI execution、screenshots、SRT、FFmpeg、audio/video、publishing、full-book rule structuring、corpus/candidate/ingest/Qdrant/`local_kb_default` mutation。
@@ -156,4 +161,5 @@ B9-PR-D final docs-only exact-head workflows
 - 提前启动 B9-PR-E、B10、B11 或 B12；
 - 修改正式 Qdrant 或 `local_kb_default`；
 - 运行 Stellarium GUI、截图或生成音视频；
-- 将 blocked lineage 升级为 classical quotation。
+- 将 blocked lineage 升级为 classical quotation；
+- 静默忽略未经 lineage 授权的 quote asset。
