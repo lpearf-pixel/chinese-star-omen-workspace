@@ -20,8 +20,9 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
 Current feature branch: codex/kaiyuan-b9-scientific-provider-v1
+Current PR: #34
 Current task: B9-PR-B
-Implementation status: IN_PROGRESS
+Implementation status: VERIFYING
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected legacy collection: local_kb_default
@@ -77,31 +78,44 @@ B9-PR-A closeout PR #33: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
 
 ### B9-PR-B — Scientific provider and asterism catalog
 
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `8bc8d0c8f91f78e4a4faceb22a037b9c526596c0`。
 - **Branch:** `codex/kaiyuan-b9-scientific-provider-v1`。
-- **Scope:**
-  - versioned scientific conventions;
-  - explicit local ephemeris file boundary with byte/hash verification and no runtime download;
-  - Skyfield provider for deterministic body/fixed-star coordinates and constrained scientific event calculations;
-  - toolchain provenance without machine absolute paths;
+- **PR:** #34，draft，base only `stable/kaiyuan-v2`。
+- **Delivered:**
+  - versioned UTC/TT/TDB、coordinate-frame、observer and refraction conventions;
+  - explicit local `.bsp` boundary with size/SHA-256 and file-identity revalidation;
+  - offline Skyfield 1.51 provider using pinned `skyfield-data==7.0.0`;
+  - deterministic body/fixed-star coordinates、moon phase、phase transitions、alt/az and angular separation;
+  - path-free toolchain provenance;
   - versioned Chinese asterism catalog with exact ID/alias lookup and no nearest-star fallback;
-  - scientific, metamorphic, catalog and offline integration fixtures/tests.
-- **Initial production catalog:** only source-backed entries are allowed. `HIP 65474 = 角宿一` is anchored to the pinned Stellarium Chinese sky-culture file and SIMBAD Spica coordinates; unresolved or unverified objects remain unresolved rather than guessed.
-- **Scientific fixtures:** fixed published Skyfield examples, independent SIMBAD identity coordinates, and location/time metamorphic checks. No unverified JPL/Horizons values may be invented.
-- **Excluded:** KB retrieval, RuleAssessment adapter, classical evidence, editorial generation, Stellarium execution, FFmpeg/media and publishing.
+  - canonical source snapshots and fixture manifests;
+  - source-backed `HIP 65474 / Spica = 角宿一` identity;
+  - deterministic `verified_identity|verified_membership|region_only|ambiguous|unresolved` narration boundaries;
+  - dedicated B9 Scientific Provider workflow with retained logs.
+- **Scientific source hashes:**
+  - Stellarium canonical snapshot SHA-256 `d036a7f37e3c27ca1197d93739d922808e2a0d60e57b96b7692e7d60ca711229`；
+  - Stellarium upstream Git blob SHA-1 `fe8761576dc6c5cd4a65e3551a81ead6122c895f`；
+  - SIMBAD canonical snapshot SHA-256 `ecaa14864c3e94648d61a28929ef7e5d729b51d4c387ff2c57b40caf2d9d533d`。
+- **User-side isolated validation:** Python 3.12.8、Skyfield 1.51、skyfield-data 7.0.0；`de421.bsp` 16,788,480 bytes，SHA-256 `a20a7139da04cbc462454634918e9a9ca69127044e2cc9d4f9c16e238d2deedc`。
+- **TDD/review evidence:**
+  - initial missing-module RED;
+  - strict enum/alias review RED;
+  - review boundary RED `18 failed / 22 passed`;
+  - user-side stale-source-hash RED `15 failed / 304 passed`;
+  - corrected focused exact-head gate `40 passed in 1.66s`;
+  - corrected full downstream exact-head regression `319 passed in 3.75s`。
+- **Successful evidence head:** `08f1f860637003e07ec0cb906ff85a47833afee4`。
+- **Exact-head workflows at evidence head:**
+  - Development Governance `30476222345` — success；
+  - B9 Scientific Provider `30476222362` — success；
+  - Kaiyuan Stable Core `30476222775` — success；
+  - Kaiyuan Upstream Runtime `30476222618` — success。
+- **Review:** zero review threads and zero submitted reviews at evidence head。
+- **Decision:** `docs/development/B9_PR_B_DECISION.md`。
 - **Start log:** `docs/development/B9_PR_B_START.md`。
-- **Acceptance:**
-  - task/tests are committed and RED is observed before production modules;
-  - missing/wrong-hash ephemeris fails before Skyfield load;
-  - provider cannot use default network loader or implicit download;
-  - UTC/TT/TDB, coordinate frame, observer and refraction conventions are explicit and versioned;
-  - toolchain manifest records logical name/version/size/hash, never absolute path;
-  - catalog validates unique IDs/aliases/source provenance and returns unresolved on unknown IDs;
-  - verified identities and region-only/ambiguous/unresolved narration boundaries are deterministic;
-  - fixed scientific examples and metamorphic checks pass;
-  - exact-head focused/full workflows and independent review pass;
-  - no Qdrant, ingest, corpus, candidate, `local_kb_default`, retrieval or media operation.
+- **Excluded:** KB retrieval、RuleAssessment adapter、classical evidence、omen judgment、editorial generation、Stellarium execution、FFmpeg/media、publishing、corpus/candidate/ingest/Qdrant and `local_kb_default` operations。
+- **Remaining:** final docs-only exact-head workflows，diff/review audit，ready transition，squash merge，then docs-only closeout before B9-PR-C。
 
 ### B9-PR-C — RuleAssessment and evidence lineage
 - **Status:** `BACKLOG`
@@ -151,13 +165,11 @@ B10 只有满足全书 inventory、eligibility、candidate/no-reason、候选终
 ## 当前执行顺序
 
 ```text
-B9-PR-B governance start commit
-→ tests-first RED
-→ minimal conventions/provider/catalog GREEN
-→ scientific/catalog fixtures and metamorphic checks
-→ focused and full regressions
-→ independent review and exact-head workflows
-→ squash merge and docs-only closeout
+B9-PR-B final docs-only exact-head workflows
+→ independent diff/review-thread audit
+→ mark PR #34 ready
+→ squash merge to stable/kaiyuan-v2
+→ docs-only closeout and stable HEAD recovery
 → only then B9-PR-C
 ```
 
