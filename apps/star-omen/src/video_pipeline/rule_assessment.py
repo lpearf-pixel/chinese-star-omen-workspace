@@ -1,10 +1,10 @@
 """Frozen RuleAssessment public adapter surface.
 
-Implementation lives in ``rule_assessment_impl`` so the public import path remains
-stable while internal projection logic can be reviewed independently.
+The runtime orchestrator validates external retrieval boundaries while the pure
+projection implementation remains isolated for deterministic review.
 """
 
-from .rule_assessment_impl import (
+from .rule_assessment_runtime import (
     AssessmentBuildResultV1,
     TwoStageRetriever,
     build_rule_assessment,
