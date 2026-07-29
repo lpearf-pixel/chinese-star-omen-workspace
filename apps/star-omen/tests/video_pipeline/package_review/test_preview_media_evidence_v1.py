@@ -166,6 +166,7 @@ def test_preview_media_evidence_rejects_wrong_name_symlink_and_oversized_file(
             ffprobe_payload=valid_ffprobe_payload(),
         )
 
+    linked.unlink()
     oversized = write_preview(tmp_path / "preview.mp4", b"x" * 17)
     with pytest.raises((ValidationError, ValueError), match="large|size"):
         inspect_preview_media_evidence(
