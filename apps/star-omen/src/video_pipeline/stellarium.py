@@ -237,6 +237,8 @@ def generate_stellarium_script(
     for object_name in editorial.render_object_names.values():
         if not _OBJECT_NAME_RE.fullmatch(object_name):
             raise ValueError("invalid Stellarium object name")
+    if not _OBJECT_NAME_RE.fullmatch(editorial.observer_label):
+        raise ValueError("invalid Stellarium observer label")
 
     observer = event.observer
     lines = [
@@ -247,7 +249,7 @@ def generate_stellarium_script(
         (
             "core.setObserverLocation("
             f"{observer.longitude_deg:.6f}, {observer.latitude_deg:.6f}, "
-            f'{observer.elevation_m:.3f}, 0.0, "Kaiyuan Observer", "Earth");'
+            f'{observer.elevation_m:.3f}, 0.0, "{editorial.observer_label}", "Earth");'
         ),
     ]
     total_wait_ms = 0
