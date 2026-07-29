@@ -28,9 +28,18 @@ class _ValidatedTwoStageRetriever:
         if not isinstance(stage2, dict):
             raise ValueError("two-stage retrieval stage2 must be a mapping")
         exact_hits = stage2.get("exact_hits", [])
+        primary_candidates = stage2.get("primary_candidates", [])
         if not isinstance(exact_hits, list):
             raise ValueError("stage2 exact_hits must be a list")
+        if not isinstance(primary_candidates, list):
+            raise ValueError("stage2 primary_candidates must be a list")
 
+        official_used = stage2.get("official_primary_used") is True
+        fallback_used = stage2.get("fallback_used") is True
+        if official_used and fallback_used:
+            raise ValueError("conflicting official/fallback retrieval provenance")
+
+        primary_rows = [item for item in primary_candidates if isinstance(item, dict)]
         filtered: list[dict[str, Any]] = []
         for raw in exact_hits:
             if not isinstance(raw, dict):
@@ -42,12 +51,11 @@ class _ValidatedTwoStageRetriever:
                 continue
             if raw.get("status") not in _ALLOWED_EXPLICIT_HIT_STATUSES:
                 continue
+            if not any(raw == candidate for candidate in primary_rows):
+                raise ValueError("exact hit is not present in primary candidate set")
             filtered.append(copy.deepcopy(raw))
 
-        if filtered and not (
-            stage2.get("official_primary_used") is True
-            or stage2.get("fallback_used") is True
-        ):
+        if filtered and not (official_used or fallback_used):
             raise ValueError(
                 "exact primary retrieval hit lacks official/fallback provenance"
             )
@@ -62,7 +70,7 @@ class _ValidatedTwoStageRetriever:
 def _prepare_candidate_rules(
     *,
     prepared_rules: list[dict[str, Any]],
-    candidate_rule_ids: Sequence[str],
+    candidate_rows: Sequence[Mapping[str, Any]],
     kb_root: str | Path | None,
     retriever: TwoStageRetriever | None,
     default_kb_book_id: str,
@@ -73,13 +81,25 @@ def _prepare_candidate_rules(
     validated_retriever = (
         _ValidatedTwoStageRetriever(retriever) if retriever is not None else None
     )
-    return _base._prepare_candidate_rules(
-        prepared_rules=prepared_rules,
-        candidate_rule_ids=candidate_rule_ids,
-        kb_root=kb_root,
-        retriever=validated_retriever,
-        default_kb_book_id=default_kb_book_id,
-    )
+    reports: list[_base.RuleRetrievalReportV1] = []
+    overrides: dict[str, _base.EvidenceProjectionRecordV1] = {}
+    for row in candidate_rows:
+        rule_id = str(row["rule_id"])
+        external = (
+            validated_retriever
+            if row.get("match_status") == "candidate_only"
+            else None
+        )
+        row_reports, row_overrides = _base._prepare_candidate_rules(
+            prepared_rules=prepared_rules,
+            candidate_rule_ids=[rule_id],
+            kb_root=kb_root,
+            retriever=external,
+            default_kb_book_id=default_kb_book_id,
+        )
+        reports.extend(row_reports)
+        overrides.update(row_overrides)
+    return reports, overrides
 
 
 def build_rule_assessment_result(
@@ -106,10 +126,11 @@ def build_rule_assessment_result(
         rules=prepared,
         kb_root=kb_root,
     )
-    candidate_ids = _base._candidate_rule_ids(initial_matcher)
+    candidate_rows = _base._validate_match_rows(initial_matcher)
+    candidate_ids = [row["rule_id"] for row in candidate_rows]
     reports, overrides = _prepare_candidate_rules(
         prepared_rules=prepared,
-        candidate_rule_ids=candidate_ids,
+        candidate_rows=candidate_rows,
         kb_root=kb_root,
         retriever=retriever,
         default_kb_book_id=default_kb_book_id,
