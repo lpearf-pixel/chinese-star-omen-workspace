@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
-
 import pytest
 from pydantic import ValidationError
 
@@ -152,7 +150,8 @@ def test_old_or_incomplete_capability_is_blocked() -> None:
 
 def test_object_name_injection_and_unknown_target_are_rejected() -> None:
     event, editorial = july_editorial()
-    payload = load_editorial_template(TEMPLATE_PATH).model_dump(mode="json")
+    snapshot = load_editorial_template(TEMPLATE_PATH)
+    payload = snapshot.template.model_dump(mode="json")
     payload["object_names"]["moon"] = 'Moon"); core.wait(99); //'
     with pytest.raises(ValidationError):
         load_editorial_template(payload)
