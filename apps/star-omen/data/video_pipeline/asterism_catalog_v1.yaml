@@ -19,7 +19,7 @@ sources:
     revision: '2026-07-22'
     path_or_record: SIMBAD/basic?Ident=Spica
     content_hash_algorithm: sha256
-    content_hash: 467a3c5ca8ae01d794c2fd394cfe059a40708815e98e9680ead2d863c5fbe957
+    content_hash: ecaa14864c3e94648d61a28929ef7e5d729b51d4c387ff2c57b40caf2d9d533d
     snapshot_path: data/video_pipeline/sources/simbad_spica_v1.json
     locator: HIP 65474 / Spica
     reference_frame: ICRS J2000
