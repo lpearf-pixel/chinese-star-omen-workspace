@@ -13,7 +13,11 @@ from src.video_pipeline.editorial import (
     load_editorial_template,
 )
 from src.video_pipeline.preview import PreviewCapabilityV1
-from src.video_pipeline.review import ReviewRecordV1, build_review_bundle
+from src.video_pipeline.review import (
+    ReviewRecordV1,
+    build_review_bundle,
+    expected_review_artifact_hashes,
+)
 from src.video_pipeline.stellarium import (
     StellariumCapabilityV1,
     generate_stellarium_script,
@@ -54,9 +58,15 @@ def preview_capability() -> PreviewCapabilityV1:
     )
 
 
-def approved_reviews(package_id: str, artifact_sha256: str):
+def approved_reviews(event, evidence_bundle, editorial, script):
+    hashes = expected_review_artifact_hashes(
+        astronomy_event=event,
+        evidence_bundle=evidence_bundle,
+        editorial=editorial,
+        stellarium_script=script,
+    )
     return build_review_bundle(
-        package_id=package_id,
+        package_id=editorial.video_package.package_id,
         records=[
             ReviewRecordV1(
                 dimension=dimension,
@@ -64,7 +74,7 @@ def approved_reviews(package_id: str, artifact_sha256: str):
                 decision="approved",
                 reviewed_at=datetime(2026, 7, 30, 0, 0, tzinfo=timezone.utc),
                 reason="reviewed against frozen B9 inputs",
-                artifact_sha256=artifact_sha256,
+                artifact_sha256=hashes[dimension],
             )
             for dimension in (
                 "astronomy",
@@ -78,7 +88,7 @@ def approved_reviews(package_id: str, artifact_sha256: str):
 
 def july_build():
     event, result, editorial, script = july_editorial_and_script()
-    reviews = approved_reviews(editorial.video_package.package_id, script.sha256)
+    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
     build = assemble_vertical_package(
         event=event,
         assessment=result.assessment,
@@ -121,7 +131,7 @@ def evidence_rich_build():
             stellarium_capability_payload()
         ),
     )
-    reviews = approved_reviews(editorial.video_package.package_id, script.sha256)
+    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
     build = assemble_vertical_package(
         event=event,
         assessment=result.assessment,
@@ -185,7 +195,7 @@ def test_vertical_package_rejects_cross_input_identity_drift() -> None:
     wrong_assessment = result.assessment.model_copy(
         update={"event_id": "event:other"}
     )
-    reviews = approved_reviews(editorial.video_package.package_id, script.sha256)
+    reviews = approved_reviews(event, result.evidence_bundle, editorial, script)
 
     with pytest.raises((ValueError, TypeError), match="event|assessment|identity"):
         assemble_vertical_package(
