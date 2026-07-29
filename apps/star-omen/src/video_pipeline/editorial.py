@@ -1,6 +1,6 @@
 """Stable public surface for B9 editorial compilation."""
 
-from .editorial_impl import (
+from .editorial_runtime import (
     ClassicalQuoteAssetV1,
     EditorialPackageV1,
     EditorialShotV1,
