@@ -7,9 +7,9 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c72aa7630f58c5828b8343bcdd39c369efe1df76
+Last verified stable HEAD: 38042b995e885101999c93c6698a9544f22a948b
 Verified at: 2026-07-30
-Current closeout branch: codex/kaiyuan-b9-scientific-provider-closeout-v1
+Current closeout branch: codex/kaiyuan-b9-rule-assessment-closeout-v1
 Forbidden release target: main
 Protected legacy collection: local_kb_default
 V2 collection: local_kb_kaiyuan_v2 or random ephemeral CI collection
@@ -28,9 +28,9 @@ B8-T01: DONE
 B8-T02: DONE
 PLAN-T01 / B9-B10 planning: DONE
 B9-PR-A Contract registry and compatibility: DONE
-B9-PR-B Scientific provider and asterism catalog: MERGED, closeout in progress
-B9-PR-C RuleAssessment and evidence lineage: READY after closeout
-B9-PR-D Editorial package and Stellarium script: BACKLOG
+B9-PR-B Scientific provider and asterism catalog: DONE
+B9-PR-C RuleAssessment and evidence lineage: MERGED, closeout in progress
+B9-PR-D Editorial package and Stellarium script: READY after closeout
 B9-PR-E Atomic package, review, preview and E2E: BACKLOG
 ```
 
@@ -47,15 +47,27 @@ Closeout squash: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
 
 ```text
 Implementation PR: #34
-Base before merge: 8bc8d0c8f91f78e4a4faceb22a037b9c526596c0
-Final feature head: 3493270f65f2d177a9c755078477512fa585c0bb
-Development Governance: 30476661474 — success
-B9 Scientific Provider: 30476655763 — success
-Kaiyuan Stable Core: 30476656261 — success
-Kaiyuan Upstream Runtime: 30476655660 — success
-Squash merge: c72aa7630f58c5828b8343bcdd39c369efe1df76
+Implementation squash: c72aa7630f58c5828b8343bcdd39c369efe1df76
+Closeout PR: #35
+Closeout squash: 48180f6239187b491e41d9f68be0a9aab8dde95d
 Focused tests: 40 passed
 Full downstream: 319 passed
+```
+
+### B9-PR-C
+
+```text
+Implementation PR: #36
+Base before merge: 48180f6239187b491e41d9f68be0a9aab8dde95d
+Final feature head: c218ce6d364d12964dff17b50d5f7605593d0fd1
+Development Governance: 30481026839 — success
+B9 RuleAssessment Lineage: 30481027508 — success
+Kaiyuan Stable Core: 30481026842 — success
+Kaiyuan Upstream Runtime: 30481027262 — success
+Squash merge: 38042b995e885101999c93c6698a9544f22a948b
+Focused tests: 35 passed
+Full downstream: 354 passed
+Changed files: 22 expected
 Review threads: 0
 Submitted reviews: 0
 ```
@@ -63,8 +75,8 @@ Submitted reviews: 0
 Detailed evidence:
 
 ```text
-docs/development/B9_PR_B_DECISION.md
-docs/development/B9_PR_B_CLOSEOUT.md
+docs/development/B9_PR_C_DECISION.md
+docs/development/B9_PR_C_CLOSEOUT.md
 ```
 
 ### Other open PRs
@@ -84,9 +96,9 @@ B9  契约先行＋2026-07-21 垂直样片
 
 ```text
 B9-PR-A Contract registry and compatibility              DONE
-→ B9-PR-B Scientific provider and asterism catalog       DONE after closeout
-→ B9-PR-C RuleAssessment and evidence lineage            next
-→ B9-PR-D Editorial package and Stellarium script
+→ B9-PR-B Scientific provider and asterism catalog       DONE
+→ B9-PR-C RuleAssessment and evidence lineage            DONE after closeout
+→ B9-PR-D Editorial package and Stellarium script        next
 → B9-PR-E Atomic package, review, preview and E2E
 ```
 
@@ -120,6 +132,19 @@ VideoPackage/v1
 - 星官映射只接受 exact identity/membership/region records，不做 nearest-star 推断；
 - ambiguous/unresolved 映射禁止正式星名口播；
 - `HIP 65474 / Spica = 角宿一` 是首个双来源、可哈希身份。
+
+### B9-PR-C 固化
+
+- `AstronomyEvent/v1` 显式投影到既有 matcher，不复制规则语义；
+- 第一遍 matcher 只识别候选；只有 `candidate_only` 行可调用外部 evidence hydration；
+- non-match、partial、insufficient-data 和已 citable 行不调用外部 retriever；
+- exact hit 必须属于 primary candidates，且只能声明 official 或 filesystem fallback 中一个来源；
+- overlay、structured fallback、non-exact、candidate-only、多 exact 或 resolver mismatch 不能升级为 citable；
+- formal recommendation 只允许 selected + matched + unsuppressed + citable；
+- manual review、candidate、partial、insufficient 和非 citable 结果最多暴露 provisional ID；
+- `EvidenceBundle/v1` 不含原文、excerpt 或绝对路径；
+- matcher diagnostics 是内存调试信息，序列化时排除；
+- July 21 无正式规则时保持 blocked classical narration。
 
 ## 5. B9 双轨验收
 
@@ -188,11 +213,11 @@ G7 Release
 ## 10. 下一动作
 
 ```text
-完成 B9-PR-B docs-only closeout
+完成 B9-PR-C docs-only closeout
 → 重新核验 stable HEAD 与开放 PR
-→ 从新 stable 建 B9-PR-C 独立分支
-→ 将 B9-PR-C 标记 IN_PROGRESS
-→ 按 TDD 实现 RuleAssessment adapter 和 claim-level evidence lineage
+→ 从新 stable 建 B9-PR-D 独立分支
+→ 将 B9-PR-D 标记 IN_PROGRESS
+→ 按 TDD 实现 claim compiler、editorial package 和 deterministic Stellarium .ssc
 ```
 
-禁止在 closeout 分支加入 B9-PR-C 功能代码。
+禁止在 closeout 分支加入 B9-PR-D 功能代码。
