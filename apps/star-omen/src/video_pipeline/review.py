@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Literal, Sequence
 
 from pydantic import Field, field_validator, model_validator
 
+from src.video_pipeline.contracts import AstronomyEventV1, canonical_contract_bytes
 from src.video_pipeline.contracts._common import StableId, StrictContractModel, ensure_unique
-from src.video_pipeline.editorial import EditorialPackageV1
-from src.video_pipeline.evidence_bundle import EvidenceBundleV1
+from src.video_pipeline.editorial import EditorialPackageV1, canonical_editorial_bytes
+from src.video_pipeline.evidence_bundle import (
+    EvidenceBundleV1,
+    canonical_evidence_bundle_bytes,
+)
 from src.video_pipeline.stellarium import StellariumScriptV1
 
 ReviewDimension = Literal["astronomy", "classical_evidence", "editorial", "render"]
@@ -50,7 +55,10 @@ class ReviewBundleV1(StrictContractModel):
         ensure_unique(dimensions, "review dimensions")
         if set(dimensions) != set(_REQUIRED_DIMENSIONS):
             raise ValueError("review bundle requires exactly one record per dimension")
-        ordered = sorted(self.records, key=lambda record: _REQUIRED_DIMENSIONS.index(record.dimension))
+        ordered = sorted(
+            self.records,
+            key=lambda record: _REQUIRED_DIMENSIONS.index(record.dimension),
+        )
         if ordered != self.records:
             raise ValueError("review records must use canonical dimension order")
         return self
@@ -95,13 +103,46 @@ def build_review_bundle(
     )
 
 
+def expected_review_artifact_hashes(
+    *,
+    astronomy_event: AstronomyEventV1,
+    evidence_bundle: EvidenceBundleV1,
+    editorial: EditorialPackageV1,
+    stellarium_script: StellariumScriptV1,
+) -> dict[ReviewDimension, str]:
+    event = AstronomyEventV1.model_validate(astronomy_event.model_dump(mode="json"))
+    evidence = EvidenceBundleV1.model_validate(
+        evidence_bundle.model_dump(mode="json")
+    )
+    editorial_package = EditorialPackageV1.model_validate(
+        editorial.model_dump(mode="json")
+    )
+    script = StellariumScriptV1.model_validate(
+        stellarium_script.model_dump(mode="json")
+    )
+    return {
+        "astronomy": hashlib.sha256(canonical_contract_bytes(event)).hexdigest(),
+        "classical_evidence": hashlib.sha256(
+            canonical_evidence_bundle_bytes(evidence)
+        ).hexdigest(),
+        "editorial": hashlib.sha256(
+            canonical_editorial_bytes(editorial_package)
+        ).hexdigest(),
+        "render": script.sha256,
+    }
+
+
 def evaluate_review_gate(
     *,
+    astronomy_event: AstronomyEventV1,
     editorial: EditorialPackageV1,
     evidence_bundle: EvidenceBundleV1,
     stellarium_script: StellariumScriptV1,
     reviews: ReviewBundleV1,
 ) -> ReviewGateResultV1:
+    astronomy_event = AstronomyEventV1.model_validate(
+        astronomy_event.model_dump(mode="json")
+    )
     editorial = EditorialPackageV1.model_validate(editorial.model_dump(mode="json"))
     evidence_bundle = EvidenceBundleV1.model_validate(
         evidence_bundle.model_dump(mode="json")
@@ -114,16 +155,28 @@ def evaluate_review_gate(
     package_id = editorial.video_package.package_id
     if reviews.package_id != package_id:
         raise ValueError("review bundle package does not match editorial package")
+    if astronomy_event.event_id != editorial.video_package.event_id:
+        raise ValueError("reviewed astronomy event does not match editorial package")
+    if stellarium_script.event_id != astronomy_event.event_id:
+        raise ValueError("reviewed script event does not match astronomy event")
     if stellarium_script.editorial_package_id != editorial.editorial_package_id:
         raise ValueError("reviewed script does not match editorial package")
-    if evidence_bundle.event_id != editorial.video_package.event_id:
-        raise ValueError("evidence bundle event does not match editorial package")
+    if evidence_bundle.event_id != astronomy_event.event_id:
+        raise ValueError("evidence bundle event does not match astronomy event")
     if evidence_bundle.assessment_id != editorial.video_package.assessment_id:
         raise ValueError("evidence bundle assessment does not match editorial package")
 
+    expected_hashes = expected_review_artifact_hashes(
+        astronomy_event=astronomy_event,
+        evidence_bundle=evidence_bundle,
+        editorial=editorial,
+        stellarium_script=stellarium_script,
+    )
     for record in reviews.records:
-        if record.artifact_sha256 != stellarium_script.sha256:
-            raise ValueError("review artifact hash does not match Stellarium script")
+        if record.artifact_sha256 != expected_hashes[record.dimension]:
+            raise ValueError(
+                f"review artifact hash does not match {record.dimension} artifact"
+            )
 
     blockers = [
         f"{record.dimension}: {record.decision}: {record.reason}"
@@ -158,4 +211,5 @@ __all__ = [
     "ReviewRecordV1",
     "build_review_bundle",
     "evaluate_review_gate",
+    "expected_review_artifact_hashes",
 ]
