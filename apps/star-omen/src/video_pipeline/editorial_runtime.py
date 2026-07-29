@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Annotated, Any, Mapping, Sequence
+
+from pydantic import Field, TypeAdapter
 
 from src.video_pipeline.asterisms import AsterismResolutionV1
 from src.video_pipeline.contracts import AstronomyEventV1, RuleAssessmentV1
@@ -19,13 +20,14 @@ HistoricalContextAssetV1 = _impl.HistoricalContextAssetV1
 ModernInterpretationAssetV1 = _impl.ModernInterpretationAssetV1
 canonical_editorial_bytes = _impl.canonical_editorial_bytes
 
-_SAFE_OBJECT_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 ._+\-]{0,79}$")
+_SAFE_OBJECT_NAME = TypeAdapter(
+    Annotated[str, Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9 ._+\-]{0,79}$")]
+)
 
 
 def _validate_object_names(template: EditorialTemplateV1) -> None:
-    for object_id, object_name in template.object_names.items():
-        if not _SAFE_OBJECT_NAME.fullmatch(object_name):
-            raise ValueError(f"unsafe Stellarium object name for {object_id!r}")
+    for object_name in template.object_names.values():
+        _SAFE_OBJECT_NAME.validate_python(object_name, strict=True)
 
 
 def load_editorial_template(
