@@ -37,6 +37,25 @@ _FORBIDDEN_TOKENS = (
     "/tmp/",
     "\\",
 )
+_SETUP_COMMANDS = (
+    "core.clear",
+    "core.setGuiVisible",
+    "core.setTimeRate",
+    "core.setDate",
+    "core.setObserverLocation",
+)
+_SHOT_COMMANDS = (
+    "core.selectObjectByName",
+    "StelMovementMgr.setFlagTracking",
+    "StelMovementMgr.zoomTo",
+    "core.wait",
+)
+_RESTORE_LINES = (
+    "StelMovementMgr.setFlagTracking(false);",
+    "core.setTimeRate(1.0);",
+    "core.setGuiVisible(true);",
+)
+_WAIT_RE = re.compile(r"^core\.wait\(([0-9]+)\.([0-9]{3})\);$")
 
 
 class StellariumCapabilityV1(StrictContractModel):
@@ -66,20 +85,26 @@ class StellariumScriptV1(StrictContractModel):
     script_id: StableId
     event_id: StableId
     editorial_package_id: StableId
-    stellarium_version: str
+    stellarium_version: str = Field(pattern=r"^[0-9]+\.[0-9]+\.[0-9]+$")
     commands: list[str]
     total_wait_ms: int = Field(strict=True, ge=0)
     content: str = Field(min_length=1)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
     @model_validator(mode="after")
-    def validate_hash(self) -> "StellariumScriptV1":
+    def validate_script(self) -> "StellariumScriptV1":
+        version = _version_tuple(self.stellarium_version)
+        if version < (26, 0, 0) or version >= (27, 0, 0):
+            raise ValueError("Stellarium script version is outside supported 26.x range")
         if not self.content.endswith("\n") or self.content.endswith("\n\n"):
             raise ValueError("Stellarium script must end with one newline")
         if hashlib.sha256(self.content.encode("utf-8")).hexdigest() != self.sha256:
             raise ValueError("Stellarium script hash mismatch")
-        if validate_stellarium_script(self.content) != self.commands:
+        commands, total_wait_ms = _analyze_canonical_script(self.content)
+        if commands != self.commands:
             raise ValueError("Stellarium script command inventory mismatch")
+        if total_wait_ms != self.total_wait_ms:
+            raise ValueError("Stellarium script wait duration metadata mismatch")
         return self
 
 
@@ -106,7 +131,7 @@ def _parse_command(line: str) -> str:
             "core.setDate",
             r'^core\.setDate\("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}", "utc", true\);$',
         ),
-        ("core.setTimeRate", r"^core\.setTimeRate\(0\.0\);$"),
+        ("core.setTimeRate", r"^core\.setTimeRate\((?:0\.0|1\.0)\);$"),
         (
             "core.setObserverLocation",
             r'^core\.setObserverLocation\(-?[0-9]+\.[0-9]{6}, -?[0-9]+\.[0-9]{6}, -?[0-9]+\.[0-9]{3}, 0\.0, "[A-Za-z0-9][A-Za-z0-9 ._+\-]{0,79}", "Earth"\);$',
@@ -118,7 +143,7 @@ def _parse_command(line: str) -> str:
         ("core.wait", r"^core\.wait\([0-9]+\.[0-9]{3}\);$"),
         (
             "StelMovementMgr.setFlagTracking",
-            r"^StelMovementMgr\.setFlagTracking\(true\);$",
+            r"^StelMovementMgr\.setFlagTracking\((?:true|false)\);$",
         ),
         (
             "StelMovementMgr.zoomTo",
@@ -149,6 +174,46 @@ def validate_stellarium_script(content: str) -> list[str]:
     return commands
 
 
+def _analyze_canonical_script(content: str) -> tuple[list[str], int]:
+    commands = validate_stellarium_script(content)
+    lines = content.splitlines()
+    if any(not line for line in lines):
+        raise ValueError("Stellarium script template cannot contain blank lines")
+    minimum_lines = len(_SETUP_COMMANDS) + len(_SHOT_COMMANDS) + len(_RESTORE_LINES)
+    if len(lines) < minimum_lines:
+        raise ValueError("Stellarium script template is incomplete")
+
+    setup = lines[: len(_SETUP_COMMANDS)]
+    if tuple(_parse_command(line) for line in setup) != _SETUP_COMMANDS:
+        raise ValueError("Stellarium script setup command order is not canonical")
+    if setup[0] != 'core.clear("natural");':
+        raise ValueError("Stellarium script clear command is not canonical")
+    if setup[1] != "core.setGuiVisible(false);":
+        raise ValueError("Stellarium script must hide the GUI during rendering")
+    if setup[2] != "core.setTimeRate(0.0);":
+        raise ValueError("Stellarium script must pause time during rendering")
+
+    if tuple(lines[-len(_RESTORE_LINES) :]) != _RESTORE_LINES:
+        raise ValueError("Stellarium script restore command order is not canonical")
+
+    shot_lines = lines[len(_SETUP_COMMANDS) : -len(_RESTORE_LINES)]
+    if not shot_lines or len(shot_lines) % len(_SHOT_COMMANDS) != 0:
+        raise ValueError("Stellarium script shot template is not canonical")
+
+    total_wait_ms = 0
+    for offset in range(0, len(shot_lines), len(_SHOT_COMMANDS)):
+        group = shot_lines[offset : offset + len(_SHOT_COMMANDS)]
+        if tuple(_parse_command(line) for line in group) != _SHOT_COMMANDS:
+            raise ValueError("Stellarium script shot command order is not canonical")
+        if group[1] != "StelMovementMgr.setFlagTracking(true);":
+            raise ValueError("Stellarium shot must enable tracking")
+        wait_match = _WAIT_RE.fullmatch(group[3])
+        if wait_match is None:
+            raise ValueError("Stellarium wait command is invalid")
+        total_wait_ms += int(wait_match.group(1)) * 1000 + int(wait_match.group(2))
+    return commands, total_wait_ms
+
+
 def canonical_stellarium_bytes(script: StellariumScriptV1) -> bytes:
     return script.content.encode("utf-8")
 
@@ -159,6 +224,7 @@ def generate_stellarium_script(
     editorial: EditorialPackageV1,
     capability: StellariumCapabilityV1,
 ) -> StellariumScriptV1:
+    editorial = EditorialPackageV1.model_validate(editorial.model_dump(mode="json"))
     if editorial.video_package.event_id != event.event_id:
         raise ValueError("editorial package event does not match astronomy event")
     version = _version_tuple(capability.stellarium_version)
@@ -181,7 +247,7 @@ def generate_stellarium_script(
         (
             "core.setObserverLocation("
             f"{observer.longitude_deg:.6f}, {observer.latitude_deg:.6f}, "
-            f"{observer.elevation_m:.3f}, 0.0, \"Kaiyuan Observer\", \"Earth\");"
+            f'{observer.elevation_m:.3f}, 0.0, "Kaiyuan Observer", "Earth");'
         ),
     ]
     total_wait_ms = 0
@@ -201,9 +267,13 @@ def generate_stellarium_script(
                 f"core.wait({duration_ms / 1000.0:.3f});",
             ]
         )
-    lines.append("core.setGuiVisible(true);")
+    if total_wait_ms != editorial.total_duration_ms:
+        raise ValueError("Stellarium shot waits do not match editorial duration")
+    lines.extend(_RESTORE_LINES)
     content = "\n".join(lines) + "\n"
-    commands = validate_stellarium_script(content)
+    commands, analyzed_wait_ms = _analyze_canonical_script(content)
+    if analyzed_wait_ms != total_wait_ms:
+        raise ValueError("Stellarium generated wait duration is inconsistent")
     digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
     script_id = f"stellarium-script:{digest[:32]}"
     return StellariumScriptV1(
