@@ -121,6 +121,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-ai-visual-review.md`
 - **Boundary:** AI cannot approve astronomy facts, classical evidence or a machine-rejected package.
 - **Implementation commits:** `f941539`, `6ff8775`, `acdd98a`, `009daef`
+- **Local verification:** focused assisted review `148 passed`; package review `80 passed`; contracts `6 passed`; text-core `22 passed`; downstream `475 passed`.
 - **Remaining:** exact-head local gates, remote Draft PR workflows and merge.
 
 ### B9-G6-E4 — Lightweight human confirmation

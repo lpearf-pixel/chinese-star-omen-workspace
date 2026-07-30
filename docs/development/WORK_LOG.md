@@ -23,6 +23,24 @@ Self-review found that the initial verifier proved the AI report matched observe
 
 B9-G6-E3 is now `VERIFYING`. No completion or merge claim is valid until the exact implementation head passes focused, shared-contract, text-core, downstream, governance, compile and runbook syntax gates and the resulting remote PR head passes its workflows.
 
+Fresh local verification on implementation head `6b34494918989b6262b3614a1753ef95056b7808`:
+
+```text
+B9 assisted renderer focused: 148 passed
+Package review: 80 passed
+Shared contracts: 6 passed
+Text core: 22 passed
+Full downstream: 475 passed
+Governance unit tests: 5 passed
+Development governance diff gate: passed (10 changed files, 3 code files)
+compileall: passed
+Runbook embedded Python: 6 blocks parsed
+git diff --check: passed
+Working tree: clean before this verification-evidence update
+```
+
+This evidence update creates a new docs-only head; the same gates are rerun on that exact head before remote publication.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.
