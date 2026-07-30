@@ -8,6 +8,17 @@ PR #45 was rechecked at exact remote head `944a55458aa06916f6751a462659e9f8a5826
 
 B9-G6-E4 starts on `codex/kaiyuan-b9-light-human-confirmation-v1`. The accepted scope is exactly three layperson checks plus a pure final resolver. No human input may alter scientific, evidence, media or AI fields, and no approval control is available after machine or AI rejection.
 
+TDD progress:
+
+```text
+Final decision contract RED: HumanExperienceConfirmationV1 missing
+Final decision contract GREEN: 8 passed
+macOS collector RED: repository script missing, 3 failed
+macOS collector GREEN: 3 passed; bash -n passed
+```
+
+The collector re-verifies the hard gate, normalized AI report, preview and ordered screenshot bytes before opening QuickTime, Preview or any native dialog. It contains no terminal stdin approval and writes canonical human/final reports with exclusive creation.
+
 ## 2026-07-30 — B9-G6-E3 AI visual review started
 
 PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.

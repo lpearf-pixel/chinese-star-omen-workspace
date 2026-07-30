@@ -22,7 +22,7 @@
 - Modify: `apps/star-omen/src/video_pipeline/assisted_review.py`
 - Test: `apps/star-omen/tests/video_pipeline/package_review/test_assisted_renderer_final_decision_v1.py`
 
-- [ ] Write RED tests for the exact three booleans, report hash bindings and the `approved|rejected|incomplete` truth table.
+- [x] Write RED tests for the exact three booleans, report hash bindings and the `approved|rejected|incomplete` truth table.
 
 ```python
 @pytest.mark.parametrize(
@@ -41,9 +41,9 @@ def test_final_review_truth_table(hard, ai, human, expected):
         human_confirmation=human_report(all_confirmed=human),
     ).status == expected
 ```
-- [ ] Implement `HumanExperienceConfirmationV1`, `AssistedRendererReviewV1` and `resolve_assisted_renderer_review(...)`.
-- [ ] Run focused GREEN.
-- [ ] Commit: `feat: resolve assisted renderer review`
+- [x] Implement `HumanExperienceConfirmationV1`, `AssistedRendererReviewV1` and `resolve_assisted_renderer_review(...)`.
+- [x] Run focused GREEN.
+- [x] Commit: `feat: resolve assisted renderer review`
 
 ### Task 2: Update macOS collector workflow
 
@@ -52,7 +52,7 @@ def test_final_review_truth_table(hard, ai, human, expected):
 - Create: `scripts/collect_b9_g6_macos_evidence.sh`
 - Test: `tests/test_collect_b9_g6_macos_evidence_script.py`
 
-- [ ] Write static RED tests for QuickTime/Preview app selection, three named checks, no stdin read, no approval after hard reject, persistent logs and bounded screenshots.
+- [x] Write static RED tests for QuickTime/Preview app selection, three named checks, no stdin read, no approval after hard reject, persistent logs and bounded screenshots.
 
 ```python
 def test_collector_uses_native_apps_and_has_no_terminal_approval():
@@ -64,9 +64,9 @@ def test_collector_uses_native_apps_and_has_no_terminal_approval():
     assert "no_obvious_visual_problem" in script
     assert "expression_matches_expectation" in script
 ```
-- [ ] Implement the collector script as a repository asset.
-- [ ] Run `bash -n` and static focused tests.
-- [ ] Commit: `feat: add lightweight macos g6 confirmation`
+- [x] Implement the collector script as a repository asset.
+- [x] Run `bash -n` and static focused tests.
+- [x] Commit: `feat: add lightweight macos g6 confirmation`
 
 ### Task 3: Regenerate and independently verify G6
 
