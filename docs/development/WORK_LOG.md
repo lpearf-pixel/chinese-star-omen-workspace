@@ -2,6 +2,12 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E3 AI visual review started
+
+PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.
+
+The only open repository pull requests remain legacy PR #1 and #7; neither targets `stable/kaiyuan-v2`. B9-G6-E3 starts on `codex/kaiyuan-b9-ai-visual-review-v1` under the approved provider-neutral AI visual review plan. The core accepts normalized JSON only, requires exact hard-gate/media/screenshot hash binding, and gives AI no scientific, classical-evidence or publication authority.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.
