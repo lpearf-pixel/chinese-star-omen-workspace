@@ -21,6 +21,8 @@ The collector re-verifies the hard gate, normalized AI report, preview and order
 
 E4 implementation is `VERIFYING`. Real G6 evidence remains blocked until the implementation is merged and the repository collector runs on macOS with a fresh run ID. Hosted or Linux verification must not mark the real-evidence plan steps complete.
 
+Self-review found that callers could construct a final-report reason without the report hashes that reason logically requires. Four regression cases first failed; the strict model now requires AI and/or human hashes for `ai_rejected`, `human_rejected`, `human_confirmation_missing`, `binding_mismatch` and `approved`, and forbids later hashes when the AI report is missing. Review-fix focused result: `12 passed`.
+
 ## 2026-07-30 — B9-G6-E3 AI visual review started
 
 PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.

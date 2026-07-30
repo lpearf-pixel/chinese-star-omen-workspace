@@ -336,6 +336,39 @@ class AssistedRendererReviewV1(StrictContractModel):
             or self.human_confirmation_sha256 is None
         ):
             raise ValueError("approved assisted review requires every report hash")
+        reasons_requiring_ai = {
+            "ai_rejected",
+            "human_rejected",
+            "human_confirmation_missing",
+            "binding_mismatch",
+            "approved",
+        }
+        if (
+            self.reason in reasons_requiring_ai
+            and self.ai_visual_review_sha256 is None
+        ):
+            raise ValueError(
+                "assisted renderer review reason requires the AI report hash"
+            )
+        if self.reason in {"human_rejected", "approved"} and (
+            self.human_confirmation_sha256 is None
+        ):
+            raise ValueError(
+                "assisted renderer review reason requires the human report hash"
+            )
+        if self.reason == "ai_report_missing" and (
+            self.ai_visual_review_sha256 is not None
+            or self.human_confirmation_sha256 is not None
+        ):
+            raise ValueError(
+                "missing AI report reason cannot include later report hashes"
+            )
+        if self.reason == "human_confirmation_missing" and (
+            self.human_confirmation_sha256 is not None
+        ):
+            raise ValueError(
+                "missing human confirmation reason cannot include its report hash"
+            )
         return self
 
 

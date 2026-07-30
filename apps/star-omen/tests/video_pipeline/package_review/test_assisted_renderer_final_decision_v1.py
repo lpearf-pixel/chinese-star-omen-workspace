@@ -8,6 +8,7 @@ from pydantic import ValidationError
 from src.video_pipeline.assisted_review import (
     AIAssistedVisualCheckV1,
     AIAssistedVisualReviewV1,
+    AssistedRendererReviewV1,
     HumanExperienceConfirmationV1,
     RendererArtifactBindingV1,
     RendererHardGateReportV1,
@@ -177,4 +178,29 @@ def test_human_confirmation_has_exactly_three_layperson_checks() -> None:
         HumanExperienceConfirmationV1(
             **report.model_dump(mode="json"),
             generic_approval=True,
+        )
+
+
+@pytest.mark.parametrize(
+    ("status", "reason", "ai_sha256", "human_sha256"),
+    [
+        ("rejected", "ai_rejected", None, None),
+        ("rejected", "human_rejected", "e" * 64, None),
+        ("incomplete", "human_confirmation_missing", None, None),
+        ("incomplete", "ai_report_missing", "e" * 64, None),
+    ],
+)
+def test_final_report_reason_requires_consistent_report_hashes(
+    status: str,
+    reason: str,
+    ai_sha256: str | None,
+    human_sha256: str | None,
+) -> None:
+    with pytest.raises(ValidationError, match="hash|reason|report"):
+        AssistedRendererReviewV1(
+            hard_gate_report_sha256="b" * 64,
+            ai_visual_review_sha256=ai_sha256,
+            human_confirmation_sha256=human_sha256,
+            status=status,
+            reason=reason,
         )
