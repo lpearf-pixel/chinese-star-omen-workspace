@@ -346,6 +346,48 @@ def canonical_ai_visual_review_bytes(
     )
 
 
+def verify_ai_visual_review(
+    *,
+    report: AIAssistedVisualReviewV1,
+    hard_gate: RendererHardGateReportV1,
+    preview_sha256: str,
+    screenshot_sha256: Sequence[str],
+) -> AIAssistedVisualReviewV1:
+    validated_report = AIAssistedVisualReviewV1.model_validate(
+        report.model_dump(mode="json")
+    )
+    validated_hard_gate = RendererHardGateReportV1.model_validate(
+        hard_gate.model_dump(mode="json")
+    )
+    if validated_hard_gate.status != "passed":
+        raise ValueError("AI visual review requires a passed hard gate")
+
+    if (
+        validated_report.review_input_sha256
+        != validated_hard_gate.review_input_sha256
+    ):
+        raise ValueError("AI visual review input hash differs from the hard gate")
+
+    expected_hard_gate_sha256 = hashlib.sha256(
+        canonical_renderer_hard_gate_bytes(validated_hard_gate)
+    ).hexdigest()
+    if validated_report.hard_gate_report_sha256 != expected_hard_gate_sha256:
+        raise ValueError("AI visual hard gate report hash does not match")
+
+    if validated_report.preview_sha256 != preview_sha256:
+        raise ValueError("AI visual preview hash does not match")
+
+    observed_screenshot_sha256 = list(screenshot_sha256)
+    ensure_unique(
+        observed_screenshot_sha256,
+        "observed AI visual screenshot hashes",
+    )
+    if validated_report.screenshot_sha256 != observed_screenshot_sha256:
+        raise ValueError("AI visual screenshot hashes do not match")
+
+    return validated_report
+
+
 def _astronomy_issue(
     *,
     code: ReviewIssueCode,
@@ -640,6 +682,7 @@ __all__ = [
     "canonical_ai_visual_review_bytes",
     "canonical_renderer_hard_gate_bytes",
     "canonical_renderer_review_input_bytes",
+    "verify_ai_visual_review",
     "verify_renderer_artifacts",
     "verify_recomputed_astronomy",
 ]
