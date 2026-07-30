@@ -174,3 +174,13 @@
 - **Decision:** B8-T02 在单个 hermetic pytest 门禁中使用确定性只读 adapters，并调用真实 observation、assembly、bundle 和 offline verification 纯 API。前态 active collection 使用随机安全 ephemeral 标识；门禁记录每次 adapter 调用。既有 capture contract 必须检查 `local_kb_default` 不变指纹，因此仅允许 hermetic fake inspection 返回合成指纹，禁止任何 live service/Qdrant 访问或 mutation。
 - **Reason:** 门禁需要发现 B7 组件间的契约漂移，但不得依赖凭据、改变路由、执行 ingest、修改 Qdrant，或把 synthetic CI 伪装成生产发布证据。
 - **Consequence:** live adapter 行为继续由独立测试覆盖。B8-T02 只证明契约组合与 fail-closed 语义；生产发布证据仍须使用实际 observation 和既有 operator workflow。
+
+## D-022 — G6 审核采用不可覆盖的三级门禁
+
+- **Status:** Accepted
+- **Decision:** G6 使用固定顺序 `machine hard gate → AI visual review → lightweight human confirmation`。科学事实、artifact lineage、媒体、截图和 OCR 属于 machine hard gate；任一 hard issue 直接 `rejected`，不得生成或展示批准入口。
+- **Scientific authority:** `AstronomyEvent/v1` 必须来自已校验本地星历、科学约定和星官目录的离线 provider，或通过同一 provider 对 exact input 重算。手写测量值、占位星历哈希或仅凭 Stellarium 画面不得成为 `verified` 科学事实。
+- **AI boundary:** AI 只检查画面、字幕、遮挡、对象与镜头匹配、黑屏/异常窗口和面向普通观众的表达。AI 报告必须绑定 exact preview、截图和 review-input hashes；AI 不批准天文学、古籍引用或发布。
+- **Human boundary:** 人只确认字幕肉眼可读、画面无明显异常、整体表达符合预期。人工选择不能改写专业结论，不能覆盖机器或 AI 的拒绝。
+- **Reason:** 首个真实 G6 归档在 hash/media 证据完整的情况下仍携带错误的 `3.25°` 天文断言，证明“文件绑定 + 泛化人工 y/n”不足以承担专业审核。
+- **Consequence:** 旧归档保持 `rejected`；修复前 B9 保持 `VERIFYING`、B10 保持 `BLOCKED`。新增审核记录必须结构化、path-free、canonical、可离线复验且 fail-closed。
