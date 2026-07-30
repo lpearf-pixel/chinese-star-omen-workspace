@@ -2,6 +2,46 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E4 lightweight human confirmation started
+
+PR #45 was rechecked at exact remote head `944a55458aa06916f6751a462659e9f8a5826494`: it was mergeable, had no reviews or unresolved threads, and all five applicable workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `f937c60c76f5e450279e05b3c04de67e296fa687`.
+
+B9-G6-E4 starts on `codex/kaiyuan-b9-light-human-confirmation-v1`. The accepted scope is exactly three layperson checks plus a pure final resolver. No human input may alter scientific, evidence, media or AI fields, and no approval control is available after machine or AI rejection.
+
+TDD progress:
+
+```text
+Final decision contract RED: HumanExperienceConfirmationV1 missing
+Final decision contract GREEN: 8 passed
+macOS collector RED: repository script missing, 3 failed
+macOS collector GREEN: 3 passed; bash -n passed
+```
+
+The collector re-verifies the hard gate, normalized AI report, preview and ordered screenshot bytes before opening QuickTime, Preview or any native dialog. It contains no terminal stdin approval and writes canonical human/final reports with exclusive creation.
+
+E4 implementation is `VERIFYING`. Real G6 evidence remains blocked until the implementation is merged and the repository collector runs on macOS with a fresh run ID. Hosted or Linux verification must not mark the real-evidence plan steps complete.
+
+Self-review found that callers could construct a final-report reason without the report hashes that reason logically requires. Four regression cases first failed; the strict model now requires AI and/or human hashes for `ai_rejected`, `human_rejected`, `human_confirmation_missing`, `binding_mismatch` and `approved`, and forbids later hashes when the AI report is missing. Review-fix focused result: `12 passed`.
+
+Fresh local verification on implementation head `8e403e8a42fc3a07164810e152d3bea5853532ab`:
+
+```text
+B9 assisted renderer focused: 160 passed
+macOS collector static tests: 3 passed
+bash -n collector: passed
+Shared contracts: 6 passed
+Text core: 22 passed
+Full downstream: 487 passed
+Governance unit tests: 5 passed
+Development governance diff gate: passed (9 changed files, 3 code files)
+compileall: passed
+Runbook embedded Python: 6 blocks parsed
+git diff --check: passed
+Working tree: clean before this verification-evidence update
+```
+
+The evidence update creates a docs-only head; every listed local gate is rerun on that exact head before remote publication.
+
 ## 2026-07-30 — B9-G6-E3 AI visual review started
 
 PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.

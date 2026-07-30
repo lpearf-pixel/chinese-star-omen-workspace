@@ -383,7 +383,43 @@ PY
 
 `rejected` stops the run. `needs_human_review` requires the later lightweight human gate. `passed` still does not authorize publishing or override any professional gate.
 
-## 10. Build media-bound local capability evidence
+## 10. Run lightweight human confirmation
+
+Run the repository collector from the current `apps/star-omen` shell. It re-verifies the hard gate, AI report and actual media before opening any approval dialog:
+
+```bash
+export B9_COLLECTOR_LOG="$B9_EVIDENCE_DIR/collector.log"
+
+nohup caffeinate -dimsu env \
+  B9_OUTPUT_DIR="$B9_OUTPUT_DIR" \
+  B9_EVIDENCE_DIR="$B9_EVIDENCE_DIR" \
+  B9_COLLECTOR_LOG="$B9_COLLECTOR_LOG" \
+  bash ../../scripts/collect_b9_g6_macos_evidence.sh \
+  >/dev/null 2>&1 </dev/null &
+
+echo "collector PID=$!"
+echo "collector log=$B9_COLLECTOR_LOG"
+tail -f "$B9_COLLECTOR_LOG"
+```
+
+QuickTime Player opens the exact preview and Preview opens the bounded screenshot set. Three separate native dialogs ask only:
+
+```text
+subtitles_readable
+no_obvious_visual_problem
+expression_matches_expectation
+```
+
+Choose `Confirm` or `Reject` in each dialog. Do not enter anything in the terminal. A machine rejection prevents every dialog; an AI rejection also prevents every dialog. The script writes, without overwriting:
+
+```text
+human-experience-confirmation.json
+assisted-renderer-review.json
+```
+
+Only `assisted-renderer-review.json` with `status=approved` permits the remaining evidence-assembly steps. It still does not authorize publishing.
+
+## 11. Build media-bound local capability evidence
 
 Record exact installed versions before building evidence:
 
@@ -485,9 +521,9 @@ print(out.resolve())
 PY
 ```
 
-The command fails if the media bytes, ffprobe metadata, preview command, script, tool versions, screenshots or approval state are inconsistent.
+Run this only after the assisted renderer review is approved. The command fails if the media bytes, ffprobe metadata, preview command, script, tool versions, screenshots or legacy capability approval state are inconsistent. `LocalCapabilityEvidence/v1.visual_review_status` remains readable for compatibility; the authoritative B9 decision is `AssistedRendererReview/v1`.
 
-## 11. Prepare the evidence handoff archive
+## 12. Prepare the evidence handoff archive
 
 Copy the exact non-structured media and package bindings into the evidence directory:
 
@@ -508,6 +544,8 @@ tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
   renderer-review-input.json \
   renderer-hard-gate.json \
   ai-assisted-visual-review.json \
+  human-experience-confirmation.json \
+  assisted-renderer-review.json \
   ocr-observations.json \
   ffprobe-preview.json \
   preview.mp4 \
@@ -520,7 +558,7 @@ tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
 
 The archive must not include `.env`, keys, corpus files, Qdrant data, private absolute paths or unrelated machine logs.
 
-## 12. Failure handling
+## 13. Failure handling
 
 - Existing output directory: choose a new run ID; never overwrite or delete it as part of this workflow.
 - Structured hash mismatch: preserve the failed evidence separately and rebuild a fresh package.
@@ -529,6 +567,8 @@ The archive must not include `.env`, keys, corpus files, Qdrant data, private ab
 - Scientific recomputation or hard-gate rejection: do not show or accept visual approval; preserve the rejected report and rebuild from source-backed inputs.
 - AI adapter failure or invalid normalized output: produce no AI report and do not convert the run-level error into a visual decision.
 - AI visual rejection: preserve the hash-bound report and do not show an approval control.
+- Human rejection: preserve both canonical human/final reports; do not build approved capability evidence.
+- Collector interruption: inspect the persistent collector log and start a fresh run rather than overwriting partial confirmation artifacts.
 - Stellarium version/capability mismatch: keep G6 blocked.
 - Missing screenshot or visual rejection: `visual_review_status` cannot be approved.
 - Any corpus, ingest, collection or production-Qdrant activity: stop immediately.
