@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: f937c60c76f5e450279e05b3c04de67e296fa687
+Last verified stable HEAD: 939c5272a84a1bf3dd2e9c72037ea180f76e8adf
 Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b9-light-human-confirmation-v1
-Current task: B9-G6-E4 lightweight human confirmation
+Current feature branch: docs/kaiyuan-b9-g6-assisted-collection-v1
+Current task: B9-G6 fresh assisted macOS collection
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -53,6 +53,7 @@ B10: BLOCKED until real G6 evidence and final B9 closeout
 #43  G6 media closeout       28f3b2a1ce5a9e324b6fc03060423bbacf1b917a
 #44  G6 scientific gate      d6f2f862d7cf45c1008925f6d4286aabb4e43077
 #45  G6 AI visual review     f937c60c76f5e450279e05b3c04de67e296fa687
+#46  G6 human confirmation   939c5272a84a1bf3dd2e9c72037ea180f76e8adf
 ```
 
 ## 4.1 First real G6 evidence disposition

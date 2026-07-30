@@ -8,6 +8,10 @@ PR #45 was rechecked at exact remote head `944a55458aa06916f6751a462659e9f8a5826
 
 B9-G6-E4 starts on `codex/kaiyuan-b9-light-human-confirmation-v1`. The accepted scope is exactly three layperson checks plus a pure final resolver. No human input may alter scientific, evidence, media or AI fields, and no approval control is available after machine or AI rejection.
 
+PR #46 was later rechecked at exact remote head `b719add4ce0cb664624fb09cd92a9fa31c5d7042`: it was mergeable, had no reviews or unresolved threads, and Development Governance, B9 Assisted Renderer Review, B9 Package Review Preview, Kaiyuan Stable Core and Kaiyuan Upstream Runtime all concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `939c5272a84a1bf3dd2e9c72037ea180f76e8adf`.
+
+Implementation is merged. E4 and B9 remain `VERIFYING`; the next action is a fresh macOS run, normalized AI visual report, three-check native confirmation and independent archive verification.
+
 TDD progress:
 
 ```text

@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: f937c60c76f5e450279e05b3c04de67e296fa687
-Current feature branch: codex/kaiyuan-b9-light-human-confirmation-v1
-Current task: B9-G6-E4 exact-head verification
+Last verified stable HEAD: 939c5272a84a1bf3dd2e9c72037ea180f76e8adf
+Current feature branch: docs/kaiyuan-b9-g6-assisted-collection-v1
+Current task: B9-G6 fresh assisted macOS collection
 B9 overall: VERIFYING
 B9-G6: BLOCKED after rejected first evidence review
 Release target: stable/kaiyuan-v2
@@ -132,7 +132,8 @@ B9 planning: DONE
 - **Boundary:** no terminal `read`; no generic `y` approval; no approval control is shown after a hard rejection.
 - **Implementation commits:** `80d8e1d`, `4bb6090`
 - **Local verification:** focused assisted review `160 passed`; collector `3 passed` plus `bash -n`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
-- **Remaining:** exact-head gates, implementation PR merge, fresh macOS collection and independent archive verification.
+- **Merged:** PR #46 into `stable/kaiyuan-v2` at `939c5272a84a1bf3dd2e9c72037ea180f76e8adf`; all five exact-head workflows passed.
+- **Remaining:** fresh macOS collection, normalized AI report, three-check confirmation and independent archive verification.
 
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
 
