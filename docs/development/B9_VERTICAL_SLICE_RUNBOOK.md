@@ -321,7 +321,62 @@ PY
 
 The old `3.25°` fixture, a placeholder ephemeris hash, missing OCR or any artifact drift must fail before visual approval.
 
-## 9. Build media-bound local capability evidence
+## 9. Verify the normalized AI visual report
+
+Follow `B9_AI_VISUAL_REVIEW_HANDOFF.md`. The external adapter must write only a normalized `AIAssistedVisualReview/v1` report to:
+
+```text
+$B9_EVIDENCE_DIR/ai-assisted-visual-review.json
+```
+
+Do not store a provider-native request/response, credentials, signed URLs or absolute paths. Then run:
+
+```bash
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python \
+python - <<'PY'
+import hashlib
+import os
+from pathlib import Path
+
+from src.video_pipeline.assisted_review import (
+    AIAssistedVisualReviewV1,
+    RendererHardGateReportV1,
+    canonical_ai_visual_review_bytes,
+    verify_ai_visual_review,
+)
+
+package = Path(os.environ["B9_OUTPUT_DIR"])
+evidence = Path(os.environ["B9_EVIDENCE_DIR"])
+
+def digest(path: Path) -> str:
+    value = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            value.update(chunk)
+    return value.hexdigest()
+
+hard_gate = RendererHardGateReportV1.model_validate_json(
+    (evidence / "renderer-hard-gate.json").read_text(encoding="utf-8")
+)
+report_path = evidence / "ai-assisted-visual-review.json"
+report = AIAssistedVisualReviewV1.model_validate_json(
+    report_path.read_text(encoding="utf-8")
+)
+screenshots = sorted((evidence / "screenshots").glob("*.png"))
+verified = verify_ai_visual_review(
+    report=report,
+    hard_gate=hard_gate,
+    preview_sha256=digest(package / "preview.mp4"),
+    screenshot_sha256=[digest(path) for path in screenshots],
+)
+report_path.write_bytes(canonical_ai_visual_review_bytes(verified))
+print(f"AI visual review: {verified.decision}")
+PY
+```
+
+`rejected` stops the run. `needs_human_review` requires the later lightweight human gate. `passed` still does not authorize publishing or override any professional gate.
+
+## 10. Build media-bound local capability evidence
 
 Record exact installed versions before building evidence:
 
@@ -425,7 +480,7 @@ PY
 
 The command fails if the media bytes, ffprobe metadata, preview command, script, tool versions, screenshots or approval state are inconsistent.
 
-## 10. Prepare the evidence handoff archive
+## 11. Prepare the evidence handoff archive
 
 Copy the exact non-structured media and package bindings into the evidence directory:
 
@@ -445,6 +500,7 @@ tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
   local-capability-evidence.json \
   renderer-review-input.json \
   renderer-hard-gate.json \
+  ai-assisted-visual-review.json \
   ocr-observations.json \
   ffprobe-preview.json \
   preview.mp4 \
@@ -457,13 +513,15 @@ tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
 
 The archive must not include `.env`, keys, corpus files, Qdrant data, private absolute paths or unrelated machine logs.
 
-## 11. Failure handling
+## 12. Failure handling
 
 - Existing output directory: choose a new run ID; never overwrite or delete it as part of this workflow.
 - Structured hash mismatch: preserve the failed evidence separately and rebuild a fresh package.
 - FFmpeg failure or timeout: record no approved capability evidence.
 - ffprobe mismatch: do not edit metadata; investigate or regenerate the preview.
 - Scientific recomputation or hard-gate rejection: do not show or accept visual approval; preserve the rejected report and rebuild from source-backed inputs.
+- AI adapter failure or invalid normalized output: produce no AI report and do not convert the run-level error into a visual decision.
+- AI visual rejection: preserve the hash-bound report and do not show an approval control.
 - Stellarium version/capability mismatch: keep G6 blocked.
 - Missing screenshot or visual rejection: `visual_review_status` cannot be approved.
 - Any corpus, ingest, collection or production-Qdrant activity: stop immediately.

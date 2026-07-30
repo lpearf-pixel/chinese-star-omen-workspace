@@ -8,6 +8,17 @@ PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: i
 
 The only open repository pull requests remain legacy PR #1 and #7; neither targets `stable/kaiyuan-v2`. B9-G6-E3 starts on `codex/kaiyuan-b9-ai-visual-review-v1` under the approved provider-neutral AI visual review plan. The core accepts normalized JSON only, requires exact hard-gate/media/screenshot hash binding, and gives AI no scientific, classical-evidence or publication authority.
 
+TDD progress:
+
+```text
+AI report contract RED: AIAssistedVisualCheckV1/AIAssistedVisualReviewV1 missing
+AI report contract GREEN: 9 passed
+AI binding verifier RED: verify_ai_visual_review missing
+AI contract plus binding verifier GREEN: 16 passed
+```
+
+The provider-neutral handoff records the exact request/response JSON, requires real provider/model/prompt-policy identifiers, and excludes secrets, machine paths and raw provider responses. Core code has no mandatory provider SDK and performs no network call.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.

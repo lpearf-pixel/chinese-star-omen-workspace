@@ -117,7 +117,7 @@ B9 planning: DONE
 ### B9-G6-E3 — AI visual review report
 - **Status:** `IN_PROGRESS`
 - **Entry gate:** B9-G6-E2 merged and source-backed evidence regenerated.
-- **Goal:** bind an externally produced AI visual assessment to exact preview and screenshot hashes, with `pass|reject|needs_human_review`, confidence and itemized evidence.
+- **Goal:** bind an externally produced AI visual assessment to exact preview and screenshot hashes, with `passed|rejected|needs_human_review`, confidence and itemized evidence.
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-ai-visual-review.md`
 - **Boundary:** AI cannot approve astronomy facts, classical evidence or a machine-rejected package.
 
