@@ -1,7 +1,8 @@
 UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
+PYTHON?=python3
 
-.PHONY: status up kb-search ingest health sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
+.PHONY: status up kb-search ingest health b9-preview sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
 
 status:
 	git status --short
@@ -17,6 +18,15 @@ ingest:
 
 health:
 	cd $(UPSTREAM_DIR) && bash scripts/healthcheck.sh
+
+b9-preview:
+	@test -n "$(B9_OUTPUT_DIR)" || { \
+	  printf 'B9_OUTPUT_DIR is required\n' >&2; \
+	  exit 2; \
+	}
+	B9_FFMPEG_BIN="$(B9_FFMPEG_BIN)" \
+	B9_FFPROBE_BIN="$(B9_FFPROBE_BIN)" \
+	$(PYTHON) scripts/b9_preview.py --package-dir "$(B9_OUTPUT_DIR)"
 
 sync-kaiyuan-source:
 	python scripts/sync_kaiyuan_source.py $(if $(KAIYUAN_SOURCE_DIR),--source-dir "$(KAIYUAN_SOURCE_DIR)",) --clean

@@ -184,3 +184,12 @@
 - **Human boundary:** 人只确认字幕肉眼可读、画面无明显异常、整体表达符合预期。人工选择不能改写专业结论，不能覆盖机器或 AI 的拒绝。
 - **Reason:** 首个真实 G6 归档在 hash/media 证据完整的情况下仍携带错误的 `3.25°` 天文断言，证明“文件绑定 + 泛化人工 y/n”不足以承担专业审核。
 - **Consequence:** 旧归档保持 `rejected`；修复前 B9 保持 `VERIFYING`、B10 保持 `BLOCKED`。新增审核记录必须结构化、path-free、canonical、可离线复验且 fail-closed。
+
+## D-023 — B9 FFmpeg 能力由真实运行时 preflight 证明
+
+- **Status:** Accepted
+- **Decision:** B9 在 80 秒 preview 前，对实际选中的 FFmpeg/ffprobe 执行版本、`subtitles`、`libx264` 和最小 SRT burn-in/ffprobe smoke。调用方可用 `B9_FFMPEG_BIN`、`B9_FFPROBE_BIN` 显式覆盖 PATH。
+- **Package boundary:** `preview-command.json` 继续以 `ffmpeg` 作为可移植 argv 首项，不写 Homebrew 路径、CPU 架构或机器绝对路径。runner 只在执行时替换 argv zero，不修改 structured member 或 manifest hash。
+- **Failure:** 可执行文件缺失、feature 缺失、advertised filter 实际不可运行、ffprobe 不可读、preview 已存在、真实命令失败或 timeout 均明确失败；不得继续截图或审核。
+- **Reason:** 真实 macOS 包已证明 manifest 正确不等于本机媒体工具链可用；PATH 和安装包名称也不能证明字幕滤镜能完成一次实际渲染。
+- **Consequence:** runbook 与 Makefile 只暴露一个正式预览入口。B9 不扩展为通用媒体编排器，批量渲染仍属于 B12。

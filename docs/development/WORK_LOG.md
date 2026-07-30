@@ -2,6 +2,72 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E5 FFmpeg runtime preflight started
+
+Remote `stable/kaiyuan-v2` was independently resolved as
+`23e9d0fce3c5f2609456430f9829234afe2e704b`. PR #45, #46 and #47 are merged;
+legacy PR #1 and #7 remain unrelated to the stable release line.
+
+The fresh macOS package reached `manifest verification: PASS`, then the selected
+FFmpeg failed before writing `preview.mp4`:
+
+```text
+No option name near 'subtitles.srt'
+Error parsing filterchain 'subtitles=subtitles.srt'
+subprocess.CalledProcessError: exit status 234
+```
+
+The earlier diagnosis was too narrow: this output proves FFmpeg started and the
+filtergraph failed, but does not alone prove a missing file, a PATH defect or
+one specific package formula. B9-G6-E5 therefore uses a real bounded subtitle
+smoke against the selected executables rather than trusting PATH, package
+labels or advertised feature lists alone.
+
+Accepted design: keep `PreviewCommand/v1` and package bytes machine-independent;
+resolve runtime binaries through optional `B9_FFMPEG_BIN` /
+`B9_FFPROBE_BIN` overrides or PATH; fail early on missing features or failed
+smoke; then execute the exact frozen argv with only argv zero replaced by the
+verified executable. No Qdrant, corpus, candidate, collection or publishing
+scope is added.
+
+TDD and verification:
+
+```text
+Runtime runner RED: scripts/b9_preview.py missing; 4 failed as expected
+Runtime runner GREEN: 4 passed
+Make entrypoint RED: no rule to make target b9-preview
+Runner plus Make GREEN: 5 passed
+B9 package-review plus collector/runner: 100 passed
+Runtime/collector/governance focused: 13 passed
+Shared contracts: 6 passed
+Text core: 22 passed
+Full downstream: 487 passed
+Governance diff gate: passed (11 changed files, 2 code files)
+compileall: passed
+Runbook embedded Python: 5 blocks parsed
+```
+
+The first final diff check correctly rejected one trailing blank line in each
+new spec/plan. Those two documentation-only defects were removed. Because this
+evidence update creates a new docs head, the complete gates are rerun before
+remote publication. B9-G6-E5 is `VERIFYING`; hosted tests do not prove the real
+macOS FFmpeg/Stellarium evidence run.
+
+Independent review then found three Important execution-boundary defects:
+
+1. a failed preview command could create `preview.mp4`, after which cleanup
+   unconditionally deleted that path and could race with another process;
+2. preview validation accepted any argv beginning with `ffmpeg` and ending in
+   `preview.mp4`, including network inputs, `-y` or extra outputs;
+3. missing-feature diagnostics did not identify the actual PATH-selected
+   executables.
+
+Three regressions first failed. The runner now never unlinks an output created
+during execution, requires the complete fixed B9 command and metadata shape,
+and includes resolved FFmpeg/ffprobe identities plus both override names in
+every post-resolution preflight failure. Focused package-review, collector and
+runner result after the review fix: `102 passed`.
+
 ## 2026-07-30 — B9-G6-E4 lightweight human confirmation started
 
 PR #45 was rechecked at exact remote head `944a55458aa06916f6751a462659e9f8a5826494`: it was mergeable, had no reviews or unresolved threads, and all five applicable workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `f937c60c76f5e450279e05b3c04de67e296fa687`.
