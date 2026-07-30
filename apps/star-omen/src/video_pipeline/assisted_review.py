@@ -41,6 +41,16 @@ AIVisualCheckCategory = Literal[
 ]
 AIVisualCheckStatus = Literal["passed", "rejected", "needs_human_review"]
 AIVisualDecision = Literal["passed", "rejected", "needs_human_review"]
+AssistedReviewStatus = Literal["approved", "rejected", "incomplete"]
+AssistedReviewReason = Literal[
+    "approved",
+    "hard_gate_rejected",
+    "ai_rejected",
+    "human_rejected",
+    "ai_report_missing",
+    "human_confirmation_missing",
+    "binding_mismatch",
+]
 
 _AI_VISUAL_CHECK_ORDER = (
     "celestial_object_shot_match",
@@ -267,6 +277,68 @@ class AIAssistedVisualReviewV1(StrictContractModel):
         return self
 
 
+class HumanExperienceConfirmationV1(StrictContractModel):
+    schema_version: Literal["human-experience-confirmation/v1"] = (
+        "human-experience-confirmation/v1"
+    )
+    hard_gate_report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    ai_visual_review_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    subtitles_readable: bool
+    no_obvious_visual_problem: bool
+    expression_matches_expectation: bool
+
+    @property
+    def all_confirmed(self) -> bool:
+        return (
+            self.subtitles_readable
+            and self.no_obvious_visual_problem
+            and self.expression_matches_expectation
+        )
+
+
+class AssistedRendererReviewV1(StrictContractModel):
+    schema_version: Literal["assisted-renderer-review/v1"] = (
+        "assisted-renderer-review/v1"
+    )
+    hard_gate_report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    ai_visual_review_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+    )
+    human_confirmation_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+    )
+    status: AssistedReviewStatus
+    reason: AssistedReviewReason
+
+    @model_validator(mode="after")
+    def validate_status_reason(self) -> "AssistedRendererReviewV1":
+        allowed_reasons = {
+            "approved": {"approved"},
+            "rejected": {
+                "hard_gate_rejected",
+                "ai_rejected",
+                "human_rejected",
+            },
+            "incomplete": {
+                "ai_report_missing",
+                "human_confirmation_missing",
+                "binding_mismatch",
+            },
+        }
+        if self.reason not in allowed_reasons[self.status]:
+            raise ValueError(
+                "assisted renderer review status does not match its reason"
+            )
+        if self.status == "approved" and (
+            self.ai_visual_review_sha256 is None
+            or self.human_confirmation_sha256 is None
+        ):
+            raise ValueError("approved assisted review requires every report hash")
+        return self
+
+
 class RendererHardGateReportV1(StrictContractModel):
     schema_version: Literal["renderer-hard-gate-report/v1"] = (
         "renderer-hard-gate-report/v1"
@@ -359,6 +431,28 @@ def canonical_ai_visual_review_bytes(
     )
 
 
+def canonical_human_experience_confirmation_bytes(
+    report: HumanExperienceConfirmationV1,
+) -> bytes:
+    validated = HumanExperienceConfirmationV1.model_validate(
+        report.model_dump(mode="json")
+    )
+    return _canonical_json_bytes(
+        validated.model_dump(mode="json", exclude_none=False)
+    )
+
+
+def canonical_assisted_renderer_review_bytes(
+    report: AssistedRendererReviewV1,
+) -> bytes:
+    validated = AssistedRendererReviewV1.model_validate(
+        report.model_dump(mode="json")
+    )
+    return _canonical_json_bytes(
+        validated.model_dump(mode="json", exclude_none=False)
+    )
+
+
 def verify_ai_visual_review(
     *,
     report: AIAssistedVisualReviewV1,
@@ -415,6 +509,75 @@ def verify_ai_visual_review(
         raise ValueError("hard gate screenshot bindings do not match")
 
     return validated_report
+
+
+def resolve_assisted_renderer_review(
+    *,
+    hard_gate: RendererHardGateReportV1,
+    ai_review: AIAssistedVisualReviewV1 | None,
+    human_confirmation: HumanExperienceConfirmationV1 | None,
+) -> AssistedRendererReviewV1:
+    validated_hard_gate = RendererHardGateReportV1.model_validate(
+        hard_gate.model_dump(mode="json")
+    )
+    hard_gate_sha256 = hashlib.sha256(
+        canonical_renderer_hard_gate_bytes(validated_hard_gate)
+    ).hexdigest()
+    ai_sha256 = (
+        hashlib.sha256(canonical_ai_visual_review_bytes(ai_review)).hexdigest()
+        if ai_review is not None
+        else None
+    )
+    human_sha256 = (
+        hashlib.sha256(
+            canonical_human_experience_confirmation_bytes(human_confirmation)
+        ).hexdigest()
+        if human_confirmation is not None
+        else None
+    )
+
+    def result(
+        status: AssistedReviewStatus,
+        reason: AssistedReviewReason,
+    ) -> AssistedRendererReviewV1:
+        return AssistedRendererReviewV1(
+            hard_gate_report_sha256=hard_gate_sha256,
+            ai_visual_review_sha256=ai_sha256,
+            human_confirmation_sha256=human_sha256,
+            status=status,
+            reason=reason,
+        )
+
+    if validated_hard_gate.status == "rejected":
+        return result("rejected", "hard_gate_rejected")
+    if ai_review is None:
+        return result("incomplete", "ai_report_missing")
+
+    validated_ai = AIAssistedVisualReviewV1.model_validate(
+        ai_review.model_dump(mode="json")
+    )
+    if (
+        validated_ai.review_input_sha256
+        != validated_hard_gate.review_input_sha256
+        or validated_ai.hard_gate_report_sha256 != hard_gate_sha256
+    ):
+        return result("incomplete", "binding_mismatch")
+    if validated_ai.decision == "rejected":
+        return result("rejected", "ai_rejected")
+    if human_confirmation is None:
+        return result("incomplete", "human_confirmation_missing")
+
+    validated_human = HumanExperienceConfirmationV1.model_validate(
+        human_confirmation.model_dump(mode="json")
+    )
+    if (
+        validated_human.hard_gate_report_sha256 != hard_gate_sha256
+        or validated_human.ai_visual_review_sha256 != ai_sha256
+    ):
+        return result("incomplete", "binding_mismatch")
+    if not validated_human.all_confirmed:
+        return result("rejected", "human_rejected")
+    return result("approved", "approved")
 
 
 def _astronomy_issue(
@@ -702,6 +865,8 @@ def verify_renderer_artifacts(
 __all__ = [
     "AIAssistedVisualCheckV1",
     "AIAssistedVisualReviewV1",
+    "AssistedRendererReviewV1",
+    "HumanExperienceConfirmationV1",
     "RendererArtifactBindingV1",
     "RendererHardGateReportV1",
     "RendererReviewInputV1",
@@ -709,9 +874,12 @@ __all__ = [
     "ReviewIssueV1",
     "build_renderer_hard_gate_report",
     "canonical_ai_visual_review_bytes",
+    "canonical_assisted_renderer_review_bytes",
+    "canonical_human_experience_confirmation_bytes",
     "canonical_renderer_hard_gate_bytes",
     "canonical_renderer_review_input_bytes",
     "verify_ai_visual_review",
+    "resolve_assisted_renderer_review",
     "verify_renderer_artifacts",
     "verify_recomputed_astronomy",
 ]
