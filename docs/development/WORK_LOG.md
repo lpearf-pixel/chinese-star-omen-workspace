@@ -23,6 +23,25 @@ E4 implementation is `VERIFYING`. Real G6 evidence remains blocked until the imp
 
 Self-review found that callers could construct a final-report reason without the report hashes that reason logically requires. Four regression cases first failed; the strict model now requires AI and/or human hashes for `ai_rejected`, `human_rejected`, `human_confirmation_missing`, `binding_mismatch` and `approved`, and forbids later hashes when the AI report is missing. Review-fix focused result: `12 passed`.
 
+Fresh local verification on implementation head `8e403e8a42fc3a07164810e152d3bea5853532ab`:
+
+```text
+B9 assisted renderer focused: 160 passed
+macOS collector static tests: 3 passed
+bash -n collector: passed
+Shared contracts: 6 passed
+Text core: 22 passed
+Full downstream: 487 passed
+Governance unit tests: 5 passed
+Development governance diff gate: passed (9 changed files, 3 code files)
+compileall: passed
+Runbook embedded Python: 6 blocks parsed
+git diff --check: passed
+Working tree: clean before this verification-evidence update
+```
+
+The evidence update creates a docs-only head; every listed local gate is rerun on that exact head before remote publication.
+
 ## 2026-07-30 — B9-G6-E3 AI visual review started
 
 PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.

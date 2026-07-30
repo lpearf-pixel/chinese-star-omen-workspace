@@ -131,6 +131,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-light-human-confirmation.md`
 - **Boundary:** no terminal `read`; no generic `y` approval; no approval control is shown after a hard rejection.
 - **Implementation commits:** `80d8e1d`, `4bb6090`
+- **Local verification:** focused assisted review `160 passed`; collector `3 passed` plus `bash -n`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
 - **Remaining:** exact-head gates, implementation PR merge, fresh macOS collection and independent archive verification.
 
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
