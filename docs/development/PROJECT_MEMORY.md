@@ -31,7 +31,7 @@ B9-G6-E1 preview-media evidence hardening and closeout: DONE (#42/#43)
 B9-G6 first real macOS evidence: REJECTED after archive verification
 B9-G6-E2 scientific hard gate: DONE (#44)
 B9-G6-E3 AI visual report: DONE (#45)
-B9-G6-E4 lightweight human confirmation: IN_PROGRESS
+B9-G6-E4 lightweight human confirmation: VERIFYING
 B9 overall: VERIFYING
 B10: BLOCKED until real G6 evidence and final B9 closeout
 ```

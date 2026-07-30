@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: f937c60c76f5e450279e05b3c04de67e296fa687
 Current feature branch: codex/kaiyuan-b9-light-human-confirmation-v1
-Current task: B9-G6-E4 lightweight human confirmation
+Current task: B9-G6-E4 exact-head verification
 B9 overall: VERIFYING
 B9-G6: BLOCKED after rejected first evidence review
 Release target: stable/kaiyuan-v2
@@ -125,11 +125,13 @@ B9 planning: DONE
 - **Merged:** PR #45 into `stable/kaiyuan-v2` at `f937c60c76f5e450279e05b3c04de67e296fa687`; all five exact-head workflows passed.
 
 ### B9-G6-E4 — Lightweight human confirmation
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Entry gate:** B9-G6-E2 merged; E3 report available or explicitly `needs_human_review`.
 - **Goal:** ask only three layperson checks after professional gates pass and bind the answer to exact review artifacts.
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-light-human-confirmation.md`
 - **Boundary:** no terminal `read`; no generic `y` approval; no approval control is shown after a hard rejection.
+- **Implementation commits:** `80d8e1d`, `4bb6090`
+- **Remaining:** exact-head gates, implementation PR merge, fresh macOS collection and independent archive verification.
 
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
 
