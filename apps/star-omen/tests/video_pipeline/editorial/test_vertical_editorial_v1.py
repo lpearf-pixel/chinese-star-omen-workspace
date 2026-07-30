@@ -41,7 +41,10 @@ def test_july_package_is_honest_non_classical_vertical_slice() -> None:
 
     assert package.schema_version == "editorial-package/v1"
     assert package.video_package.schema_version == "video-package/v1"
-    assert package.video_package.event_id == "event:2026-07-21:moon-spica"
+    assert (
+        package.video_package.event_id
+        == "event:separation:moon:hip:65474:20260721t110000z"
+    )
     classes = [claim.claim_class for claim in package.video_package.claims]
     assert "astronomy_fact" in classes
     assert "historical_context" in classes

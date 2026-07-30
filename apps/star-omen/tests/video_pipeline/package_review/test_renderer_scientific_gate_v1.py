@@ -86,7 +86,9 @@ def test_scientific_gate_rejects_hand_authored_july_separation() -> None:
 def test_scientific_gate_rejects_time_observer_target_and_provenance_drift() -> None:
     packaged = event(value=5.405)
     recomputed_payload = packaged.model_dump(mode="json")
+    recomputed_payload["start_utc"] = "2026-07-21T11:01:00Z"
     recomputed_payload["peak_utc"] = "2026-07-21T11:01:00Z"
+    recomputed_payload["end_utc"] = "2026-07-21T11:01:00Z"
     recomputed_payload["observer"]["longitude_deg"] = 120.0
     recomputed_payload["target_body_or_region"] = "mars"
     recomputed_payload["calculation_provenance"]["provider_version"] = "1.52"
