@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 28f3b2a1ce5a9e324b6fc03060423bbacf1b917a
 Current feature branch: codex/kaiyuan-b9-assisted-review-gate-v1
-Current task: B9-G6-E2 scientific hard gate
+Current task: B9-G6-E2 exact-head verification
 B9 overall: VERIFYING
 B9-G6: BLOCKED after rejected first evidence review
 Release target: stable/kaiyuan-v2
@@ -105,11 +105,14 @@ B9 planning: DONE
 - **Reason:** archive integrity passed, but `july-21-event.json` and generated narration asserted `3.25°`; independent recomputation for the recorded 2026-07-21 11:00 UTC Shanghai observation was approximately `5.4°`. The fixture also used placeholder ephemeris provenance.
 
 ### B9-G6-E2 — Scientific provenance and machine hard gate
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Goal:** replace the hand-authored July scientific assertion with verified offline provider output and make a deterministic hard gate reject any astronomy, lineage, media, screenshot or OCR inconsistency before approval is possible.
 - **Design:** `docs/superpowers/specs/2026-07-30-kaiyuan-assisted-renderer-review-design.md`
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-scientific-hard-gate.md`
 - **Acceptance:** the rejected `3.25°` sample fails with a stable issue code; a provider-generated source-backed sample passes; hard rejection cannot be overridden by AI or human input.
+- **Local implementation commits:** `69619b0`, `a91e91d`, `88bab18`, `2645fde`
+- **Verification:** focused `130 passed`; contracts `6 passed`; text-core `22 passed`; downstream `457 passed`
+- **Remaining:** independent review, exact-head rerun, remote PR workflows and merge.
 
 ### B9-G6-E3 — AI visual review report
 - **Status:** `BACKLOG`

@@ -97,6 +97,13 @@ def test_review_input_rejects_duplicate_or_unsafe_artifacts() -> None:
             sha256="b" * 64,
         )
 
+    with pytest.raises(ValidationError, match="canonical|order|sorted"):
+        RendererReviewInputV1(
+            review_input_id="renderer-review-input:unordered-v1",
+            created_at=datetime(2026, 7, 30, 4, 8, 56, tzinfo=timezone.utc),
+            artifacts=list(reversed(review_input().artifacts)),
+        )
+
 
 def test_review_issue_rejects_unknown_code_or_path_like_message() -> None:
     with pytest.raises(ValidationError, match="code|pattern"):

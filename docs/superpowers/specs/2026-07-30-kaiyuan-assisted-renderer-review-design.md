@@ -130,4 +130,3 @@ missing/invalid report                → incomplete
 - No raw model response, secret, absolute path or unrelated machine log in evidence.
 - Maximum 30 screenshots remains unchanged.
 - No automatic publishing or `final.mp4`.
-

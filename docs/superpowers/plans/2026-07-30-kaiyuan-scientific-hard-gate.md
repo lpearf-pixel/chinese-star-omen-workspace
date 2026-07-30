@@ -27,7 +27,7 @@
 **Interfaces:**
 - Produces: `ReviewIssueV1`, `RendererReviewInputV1`, `RendererHardGateReportV1`, `build_renderer_hard_gate_report(...)`, `canonical_renderer_hard_gate_bytes(...)`.
 
-- [ ] **Step 1: Write failing contract tests**
+- [x] **Step 1: Write failing contract tests**
 
 Cover strict status/issue enums, UTC and numeric validation, canonical bytes, sorted stable issues, duplicate artifact rejection, path-free output and rejection when any hard issue exists.
 
@@ -48,7 +48,7 @@ def test_hard_gate_derives_rejection_and_canonical_issue_order():
     assert canonical_renderer_hard_gate_bytes(report).endswith(b"\n")
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Run:
 
@@ -60,11 +60,11 @@ python -m pytest -q tests/video_pipeline/package_review/test_renderer_hard_gate_
 
 Expected: collection fails because `src.video_pipeline.assisted_review` does not exist.
 
-- [ ] **Step 3: Implement the minimum strict models and canonical serialization**
+- [x] **Step 3: Implement the minimum strict models and canonical serialization**
 
 Use `StrictContractModel`, `allow_nan=False`, sorted keys and a trailing newline. Issue order is `(code, artifact, field)`. `status` is derived, never caller-selected.
 
-- [ ] **Step 4: Run GREEN and commit**
+- [x] **Step 4: Run GREEN and commit**
 
 Expected: new focused file passes.
 
@@ -80,7 +80,7 @@ Commit: `feat: define renderer hard gate report`
 - Consumes: two `AstronomyEventV1` values: packaged and recomputed.
 - Produces: `verify_recomputed_astronomy(packaged, recomputed, angular_tolerance_deg=0.01) -> list[ReviewIssueV1]`.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Include exact pass plus failures for `3.25` versus approximately `5.4`, placeholder ephemeris hash, provider/toolchain drift, UTC drift, observer drift, body/target drift, reference-frame drift, duplicate/missing angular measurement and non-finite values.
 
@@ -96,15 +96,15 @@ def test_scientific_gate_rejects_hand_authored_july_separation():
     }
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
 Expected: missing verifier.
 
-- [ ] **Step 3: Implement exact identity checks and bounded numeric comparison**
+- [x] **Step 3: Implement exact identity checks and bounded numeric comparison**
 
 Treat an ephemeris hash made from one repeated character as `astronomy.provenance_placeholder`. Compare angular values with `Decimal` and `0.01°` maximum absolute difference.
 
-- [ ] **Step 4: Run GREEN and commit**
+- [x] **Step 4: Run GREEN and commit**
 
 Commit: `feat: reject astronomy recomputation drift`
 
@@ -121,7 +121,7 @@ Commit: `feat: reject astronomy recomputation drift`
 - Produces: `build_july_21_event(provider, observer, at_utc) -> AstronomyEventV1`.
 - Consumes: `SkyfieldEphemerisProvider.calculate_angular_separation_event(primary_body="moon", target_modern_object_id="spica", ...)`.
 
-- [ ] **Step 1: Add a regression test that the current `3.25°` fixture is rejected**
+- [x] **Step 1: Add a regression test that the current `3.25°` fixture is rejected**
 
 ```python
 def test_july_fixture_cannot_bypass_provider_recomputation(provider):
@@ -137,11 +137,11 @@ def test_july_fixture_cannot_bypass_provider_recomputation(provider):
     ]
 ```
 
-- [ ] **Step 2: Run RED and record the stable issue code**
+- [x] **Step 2: Run RED and record the stable issue code**
 
 Expected: `astronomy.recomputation_mismatch`.
 
-- [ ] **Step 3: Build the source-backed fixture from the verified provider**
+- [x] **Step 3: Build the source-backed fixture from the verified provider**
 
 Record real provider version, `de421.bsp` identity and `topocentric-apparent` frame. Update editorial/package expectations to derive narration from this verified event.
 
@@ -155,7 +155,7 @@ def build_july_21_event(*, provider, observer, at_utc):
     )
 ```
 
-- [ ] **Step 4: Run astronomy, editorial and package focused tests**
+- [x] **Step 4: Run astronomy, editorial and package focused tests**
 
 Run:
 
@@ -166,7 +166,7 @@ python -m pytest -q \
   tests/video_pipeline/package_review
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Commit: `fix: source july sample from verified astronomy`
 
@@ -179,7 +179,7 @@ Commit: `fix: source july sample from verified astronomy`
 **Interfaces:**
 - Produces: `OCRObservationV1` and `verify_renderer_artifacts(...)`.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Test exact artifact hashes, manifest membership, scene/event identity, preview-command/media agreement, screenshot inventory order and OCR subtitle presence/order/bounds.
 
@@ -199,13 +199,13 @@ def test_artifact_gate_rejects_missing_and_out_of_order_subtitles():
     }
 ```
 
-- [ ] **Step 2: Run RED**
+- [x] **Step 2: Run RED**
 
-- [ ] **Step 3: Implement pure verification**
+- [x] **Step 3: Implement pure verification**
 
 Accept caller-supplied OCR only. Do not import subprocess, shell, HTTP or an OCR SDK.
 
-- [ ] **Step 4: Run GREEN and commit**
+- [x] **Step 4: Run GREEN and commit**
 
 Commit: `feat: gate renderer artifact and OCR evidence`
 
@@ -220,15 +220,15 @@ Commit: `feat: gate renderer artifact and OCR evidence`
 **Interfaces:**
 - Produces: fresh archive members `renderer-review-input.json` and `renderer-hard-gate.json`.
 
-- [ ] **Step 1: Update the runbook**
+- [x] **Step 1: Update the runbook**
 
 Require verified local ephemeris inputs, provider recomputation and hard-gate `passed` before any visual confirmation.
 
-- [ ] **Step 2: Add focused CI**
+- [x] **Step 2: Add focused CI**
 
 Run the new hard-gate tests plus existing astronomy/editorial/package-review tests. CI stays hermetic and does not claim real renderer evidence.
 
-- [ ] **Step 3: Run full applicable gates**
+- [x] **Step 3: Run full applicable gates**
 
 ```bash
 make contracts-test
@@ -236,6 +236,6 @@ make text-core-test
 make downstream-test
 ```
 
-- [ ] **Step 4: Move task to `VERIFYING`, record exact results and commit**
+- [x] **Step 4: Move task to `VERIFYING`, record exact results and commit**
 
 Commit: `docs: record scientific hard gate verification`

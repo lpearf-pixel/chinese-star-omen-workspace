@@ -1,0 +1,54 @@
+name: B9 Assisted Renderer Review
+
+on:
+  pull_request:
+    branches:
+      - stable/kaiyuan-v2
+    paths:
+      - "apps/star-omen/src/video_pipeline/assisted_review.py"
+      - "apps/star-omen/src/video_pipeline/local_sample.py"
+      - "apps/star-omen/src/video_pipeline/astronomy/**"
+      - "apps/star-omen/src/video_pipeline/editorial*.py"
+      - "apps/star-omen/tests/video_pipeline/astronomy/**"
+      - "apps/star-omen/tests/video_pipeline/editorial/**"
+      - "apps/star-omen/tests/video_pipeline/package_review/**"
+      - "tests/fixtures/evidence/v1/july-21-event.json"
+      - ".github/workflows/b9-assisted-renderer-review.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  assisted-renderer-review-312:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/star-omen/pyproject.toml
+      - name: Install downstream project
+        run: python -m pip install -e apps/star-omen
+      - name: Run scientific and renderer review gates
+        shell: bash
+        env:
+          PYTHONPATH: ${{ github.workspace }}/packages/kb-contracts/python:${{ github.workspace }}/packages/kb-text-core/python
+        run: |
+          set -o pipefail
+          : > "$GITHUB_WORKSPACE/b9-assisted-renderer-review.log"
+          cd apps/star-omen
+          python -m pytest -q \
+            tests/video_pipeline/astronomy \
+            tests/video_pipeline/editorial \
+            tests/video_pipeline/package_review \
+            2>&1 | tee "$GITHUB_WORKSPACE/b9-assisted-renderer-review.log"
+      - name: Upload focused test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b9-assisted-renderer-review-log
+          path: b9-assisted-renderer-review.log
+          if-no-files-found: error
+          retention-days: 14

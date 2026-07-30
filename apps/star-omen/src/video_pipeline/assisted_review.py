@@ -95,14 +95,15 @@ class RendererReviewInputV1(StrictContractModel):
 
     @model_validator(mode="after")
     def validate_artifacts(self) -> "RendererReviewInputV1":
+        paths = [artifact.path for artifact in self.artifacts]
         ensure_unique(
-            [artifact.path for artifact in self.artifacts],
+            paths,
             "renderer review artifact paths",
         )
-        ensure_unique(
-            [artifact.sha256 for artifact in self.artifacts],
-            "renderer review artifact hashes",
-        )
+        if paths != sorted(paths):
+            raise ValueError(
+                "renderer review artifacts must use canonical path order"
+            )
         return self
 
 
@@ -159,6 +160,12 @@ class RendererHardGateReportV1(StrictContractModel):
             ],
             "renderer hard gate issues",
         )
+        artifact_paths = [artifact.path for artifact in self.checked_artifacts]
+        ensure_unique(artifact_paths, "renderer hard gate artifact paths")
+        if artifact_paths != sorted(artifact_paths):
+            raise ValueError(
+                "renderer hard gate artifacts must use canonical path order"
+            )
         return self
 
 
@@ -312,10 +319,14 @@ def verify_recomputed_astronomy(
         )
 
     if (
+        packaged.calculation_id,
+        packaged.event_id,
         packaged.event_type,
         packaged.primary_body,
         packaged.target_body_or_region,
     ) != (
+        recomputed.calculation_id,
+        recomputed.event_id,
         recomputed.event_type,
         recomputed.primary_body,
         recomputed.target_body_or_region,

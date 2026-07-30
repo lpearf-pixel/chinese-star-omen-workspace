@@ -119,3 +119,13 @@ def test_scientific_gate_rejects_missing_or_duplicate_angular_measurement() -> N
 
     assert issue_codes(missing, packaged) == ["astronomy.measurement_mismatch"]
     assert issue_codes(duplicate, packaged) == ["astronomy.measurement_mismatch"]
+
+
+def test_scientific_gate_rejects_event_and_calculation_identity_drift() -> None:
+    packaged = event(value=5.405)
+    recomputed_payload = packaged.model_dump(mode="json")
+    recomputed_payload["event_id"] = "event:separation:moon:hip:65474:other"
+    recomputed_payload["calculation_id"] = "calc:separation:moon:hip:65474:other"
+    recomputed = AstronomyEventV1.model_validate(recomputed_payload)
+
+    assert issue_codes(packaged, recomputed) == ["astronomy.target_mismatch"]

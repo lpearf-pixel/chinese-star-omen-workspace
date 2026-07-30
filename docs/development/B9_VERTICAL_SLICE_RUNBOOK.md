@@ -172,7 +172,156 @@ $B9_EVIDENCE_DIR/screenshots/
 
 Do not add screenshots or media to the structured package directory.
 
-## 8. Build media-bound local capability evidence
+## 8. Run the scientific and renderer hard gate
+
+G6 cannot enter visual approval until the packaged astronomy has been recomputed through the verified offline provider and every supplied artifact/OCR check passes. Prepare normalized caller-supplied OCR observations:
+
+```text
+$B9_EVIDENCE_DIR/ocr-observations.json
+```
+
+The file is a JSON array of `OCRObservationV1` objects. OCR execution remains outside the evidence model; missing, reordered or clipped subtitles reject the gate.
+
+Run:
+
+```bash
+PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python \
+python - <<'PY'
+import hashlib
+import json
+import os
+from datetime import datetime, timezone
+from pathlib import Path
+
+from skyfield_data import get_skyfield_data_path
+
+from src.video_pipeline.asterisms import load_asterism_catalog
+from src.video_pipeline.astronomy import (
+    EphemerisFileSpecV1,
+    SkyfieldEphemerisProvider,
+    load_scientific_conventions,
+)
+from src.video_pipeline.assisted_review import (
+    OCRObservationV1,
+    RendererArtifactBindingV1,
+    RendererReviewInputV1,
+    build_renderer_hard_gate_report,
+    canonical_renderer_hard_gate_bytes,
+    canonical_renderer_review_input_bytes,
+    verify_recomputed_astronomy,
+    verify_renderer_artifacts,
+)
+from src.video_pipeline.contracts import AstronomyEventV1
+from src.video_pipeline.local_sample import build_july_21_event
+
+app = Path.cwd()
+package = Path(os.environ["B9_OUTPUT_DIR"])
+evidence = Path(os.environ["B9_EVIDENCE_DIR"])
+
+def digest(path: Path) -> str:
+    value = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            value.update(chunk)
+    return value.hexdigest()
+
+ephemeris = Path(get_skyfield_data_path()) / "de421.bsp"
+ephemeris_sha256 = digest(ephemeris)
+provider = SkyfieldEphemerisProvider.from_local_ephemeris(
+    ephemeris_path=ephemeris,
+    ephemeris_spec=EphemerisFileSpecV1(
+        logical_name="de421.bsp",
+        expected_sha256=ephemeris_sha256,
+        expected_size_bytes=ephemeris.stat().st_size,
+        max_size_bytes=32 * 1024 * 1024,
+    ),
+    conventions=load_scientific_conventions(
+        app / "data/video_pipeline/scientific_conventions_v1.yaml"
+    ),
+    catalog=load_asterism_catalog(
+        app / "data/video_pipeline/asterism_catalog_v1.yaml"
+    ),
+)
+packaged_event = AstronomyEventV1.model_validate_json(
+    (package / "astronomy-event.json").read_text(encoding="utf-8")
+)
+recomputed_event = build_july_21_event(
+    provider=provider,
+    observer=packaged_event.observer,
+    at_utc=packaged_event.peak_utc,
+)
+issues = verify_recomputed_astronomy(
+    packaged=packaged_event,
+    recomputed=recomputed_event,
+)
+
+manifest = json.loads((package / "manifest.json").read_text(encoding="utf-8"))
+declared = [
+    RendererArtifactBindingV1(path=item["path"], sha256=item["sha256"])
+    for item in manifest["members"]
+]
+observed = [
+    RendererArtifactBindingV1(path=item.path, sha256=digest(package / item.path))
+    for item in declared
+]
+preview_sha256 = digest(package / "preview.mp4")
+declared.append(
+    RendererArtifactBindingV1(path="preview.mp4", sha256=preview_sha256)
+)
+observed.append(
+    RendererArtifactBindingV1(path="preview.mp4", sha256=preview_sha256)
+)
+declared = sorted(declared, key=lambda item: item.path)
+observed = sorted(observed, key=lambda item: item.path)
+
+screenshots = sorted((evidence / "screenshots").glob("*.png"))
+screenshot_sha256 = [digest(path) for path in screenshots]
+ocr = [
+    OCRObservationV1.model_validate(item)
+    for item in json.loads(
+        (evidence / "ocr-observations.json").read_text(encoding="utf-8")
+    )
+]
+video_package = json.loads(
+    (package / "video-package.json").read_text(encoding="utf-8")
+)
+issues.extend(
+    verify_renderer_artifacts(
+        declared_artifacts=declared,
+        observed_artifacts=observed,
+        declared_screenshot_sha256=screenshot_sha256,
+        observed_screenshot_sha256=screenshot_sha256,
+        ocr=ocr,
+        expected_subtitles=[claim["text"] for claim in video_package["claims"]],
+    )
+)
+review_input = RendererReviewInputV1(
+    review_input_id=f"renderer-review-input:{os.environ['B9_RUN_ID'].lower()}",
+    created_at=datetime.now(timezone.utc),
+    artifacts=observed,
+)
+(evidence / "renderer-review-input.json").write_bytes(
+    canonical_renderer_review_input_bytes(review_input)
+)
+report = build_renderer_hard_gate_report(
+    review_input=review_input,
+    issues=issues,
+)
+(evidence / "renderer-hard-gate.json").write_bytes(
+    canonical_renderer_hard_gate_bytes(report)
+)
+if report.status != "passed":
+    raise SystemExit(
+        "renderer hard gate rejected: "
+        + ",".join(item.code for item in report.issues)
+    )
+print("renderer hard gate: PASS")
+PY
+```
+
+The old `3.25°` fixture, a placeholder ephemeris hash, missing OCR or any artifact drift must fail before visual approval.
+
+## 9. Build media-bound local capability evidence
 
 Record exact installed versions before building evidence:
 
@@ -276,7 +425,7 @@ PY
 
 The command fails if the media bytes, ffprobe metadata, preview command, script, tool versions, screenshots or approval state are inconsistent.
 
-## 9. Prepare the evidence handoff archive
+## 10. Prepare the evidence handoff archive
 
 Copy the exact non-structured media and package bindings into the evidence directory:
 
@@ -294,6 +443,9 @@ find "$B9_EVIDENCE_DIR/screenshots" -type f -name '*.png' -print0 \
 tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
   -C "$B9_EVIDENCE_DIR" \
   local-capability-evidence.json \
+  renderer-review-input.json \
+  renderer-hard-gate.json \
+  ocr-observations.json \
   ffprobe-preview.json \
   preview.mp4 \
   scene.ssc \
@@ -305,12 +457,13 @@ tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
 
 The archive must not include `.env`, keys, corpus files, Qdrant data, private absolute paths or unrelated machine logs.
 
-## 10. Failure handling
+## 11. Failure handling
 
 - Existing output directory: choose a new run ID; never overwrite or delete it as part of this workflow.
 - Structured hash mismatch: preserve the failed evidence separately and rebuild a fresh package.
 - FFmpeg failure or timeout: record no approved capability evidence.
 - ffprobe mismatch: do not edit metadata; investigate or regenerate the preview.
+- Scientific recomputation or hard-gate rejection: do not show or accept visual approval; preserve the rejected report and rebuild from source-backed inputs.
 - Stellarium version/capability mismatch: keep G6 blocked.
 - Missing screenshot or visual rejection: `visual_review_status` cannot be approved.
 - Any corpus, ingest, collection or production-Qdrant activity: stop immediately.
