@@ -31,6 +31,25 @@ ReviewIssueCode = Literal[
     "ocr.subtitle_order_mismatch",
     "ocr.subtitle_out_of_frame",
 ]
+AIVisualCheckCategory = Literal[
+    "celestial_object_shot_match",
+    "subtitle_readability",
+    "playback_integrity",
+    "unexpected_window_or_cursor",
+    "internal_field_leakage",
+    "audience_coherence",
+]
+AIVisualCheckStatus = Literal["passed", "rejected", "needs_human_review"]
+AIVisualDecision = Literal["passed", "rejected", "needs_human_review"]
+
+_AI_VISUAL_CHECK_ORDER = (
+    "celestial_object_shot_match",
+    "subtitle_readability",
+    "playback_integrity",
+    "unexpected_window_or_cursor",
+    "internal_field_leakage",
+    "audience_coherence",
+)
 
 _MACHINE_PATH_MARKERS = (
     "/Users/",
@@ -136,6 +155,105 @@ class OCRObservationV1(StrictContractModel):
     fully_in_frame: bool
 
 
+class AIAssistedVisualCheckV1(StrictContractModel):
+    schema_version: Literal["ai-assisted-visual-check/v1"] = (
+        "ai-assisted-visual-check/v1"
+    )
+    category: AIVisualCheckCategory
+    status: AIVisualCheckStatus
+    evidence_frame_sha256: list[str] = Field(
+        min_length=1,
+        max_length=30,
+    )
+    summary: str = Field(min_length=1, max_length=320)
+
+    @field_validator("evidence_frame_sha256")
+    @classmethod
+    def validate_frame_hashes(cls, value: list[str]) -> list[str]:
+        for frame_sha256 in value:
+            if (
+                len(frame_sha256) != 64
+                or any(character not in "0123456789abcdef" for character in frame_sha256)
+            ):
+                raise ValueError(
+                    "AI visual evidence frame hashes must be lowercase SHA-256"
+                )
+        ensure_unique(value, "AI visual evidence frame hashes")
+        return value
+
+    @field_validator("summary")
+    @classmethod
+    def reject_machine_paths(cls, value: str) -> str:
+        if any(marker in value for marker in _MACHINE_PATH_MARKERS):
+            raise ValueError("AI visual check summary must not contain a machine path")
+        return value
+
+
+class AIAssistedVisualReviewV1(StrictContractModel):
+    schema_version: Literal["ai-assisted-visual-review/v1"] = (
+        "ai-assisted-visual-review/v1"
+    )
+    review_input_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    hard_gate_report_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    preview_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    screenshot_sha256: list[str] = Field(min_length=1, max_length=30)
+    provider: StableId
+    model: StableId
+    prompt_policy_version: StableId
+    decision: AIVisualDecision
+    confidence: float = Field(strict=True, ge=0, le=1, allow_inf_nan=False)
+    checks: list[AIAssistedVisualCheckV1] = Field(min_length=1, max_length=6)
+
+    @field_validator("screenshot_sha256")
+    @classmethod
+    def validate_screenshot_hashes(cls, value: list[str]) -> list[str]:
+        for screenshot_sha256 in value:
+            if (
+                len(screenshot_sha256) != 64
+                or any(
+                    character not in "0123456789abcdef"
+                    for character in screenshot_sha256
+                )
+            ):
+                raise ValueError("AI visual screenshot hashes must be lowercase SHA-256")
+        ensure_unique(value, "AI visual screenshot hashes")
+        return value
+
+    @model_validator(mode="after")
+    def validate_checks_and_decision(self) -> "AIAssistedVisualReviewV1":
+        categories = [check.category for check in self.checks]
+        ensure_unique(categories, "AI visual check categories")
+        expected_order = sorted(
+            categories,
+            key=_AI_VISUAL_CHECK_ORDER.index,
+        )
+        if categories != expected_order:
+            raise ValueError("AI visual checks must use canonical category order")
+
+        screenshot_hashes = set(self.screenshot_sha256)
+        referenced_frames = {
+            frame_sha256
+            for check in self.checks
+            for frame_sha256 in check.evidence_frame_sha256
+        }
+        if not referenced_frames.issubset(screenshot_hashes):
+            raise ValueError(
+                "AI visual evidence frames must reference declared screenshots"
+            )
+
+        statuses = {check.status for check in self.checks}
+        expected_decision: AIVisualDecision
+        if "rejected" in statuses:
+            expected_decision = "rejected"
+        elif "needs_human_review" in statuses:
+            expected_decision = "needs_human_review"
+        else:
+            expected_decision = "passed"
+        if self.decision != expected_decision:
+            raise ValueError("AI visual decision does not match its checks")
+        return self
+
+
 class RendererHardGateReportV1(StrictContractModel):
     schema_version: Literal["renderer-hard-gate-report/v1"] = (
         "renderer-hard-gate-report/v1"
@@ -210,6 +328,17 @@ def canonical_renderer_hard_gate_bytes(
     report: RendererHardGateReportV1,
 ) -> bytes:
     validated = RendererHardGateReportV1.model_validate(
+        report.model_dump(mode="json")
+    )
+    return _canonical_json_bytes(
+        validated.model_dump(mode="json", exclude_none=False)
+    )
+
+
+def canonical_ai_visual_review_bytes(
+    report: AIAssistedVisualReviewV1,
+) -> bytes:
+    validated = AIAssistedVisualReviewV1.model_validate(
         report.model_dump(mode="json")
     )
     return _canonical_json_bytes(
@@ -500,12 +629,15 @@ def verify_renderer_artifacts(
 
 
 __all__ = [
+    "AIAssistedVisualCheckV1",
+    "AIAssistedVisualReviewV1",
     "RendererArtifactBindingV1",
     "RendererHardGateReportV1",
     "RendererReviewInputV1",
     "OCRObservationV1",
     "ReviewIssueV1",
     "build_renderer_hard_gate_report",
+    "canonical_ai_visual_review_bytes",
     "canonical_renderer_hard_gate_bytes",
     "canonical_renderer_review_input_bytes",
     "verify_renderer_artifacts",
