@@ -23,7 +23,7 @@
 - Modify: `apps/star-omen/src/video_pipeline/assisted_review.py`
 - Test: `apps/star-omen/tests/video_pipeline/package_review/test_ai_visual_review_v1.py`
 
-- [ ] Write RED tests for exact hash binding, confidence bounds, fixed check categories, frame references and canonical serialization.
+- [x] Write RED tests for exact hash binding, confidence bounds, fixed check categories, frame references and canonical serialization.
 
 ```python
 def test_ai_report_is_hash_bound_and_canonical():
@@ -41,9 +41,9 @@ def test_ai_report_is_hash_bound_and_canonical():
     )
     assert canonical_ai_visual_review_bytes(report).endswith(b"\n")
 ```
-- [ ] Implement strict models and derived decision validation.
-- [ ] Run focused GREEN.
-- [ ] Commit: `feat: define hash bound ai visual review`
+- [x] Implement strict models and derived decision validation.
+- [x] Run focused GREEN.
+- [x] Commit: `feat: define hash bound ai visual review`
 
 ### Task 2: Add normalized report verifier
 
@@ -51,7 +51,7 @@ def test_ai_report_is_hash_bound_and_canonical():
 - Modify: `apps/star-omen/src/video_pipeline/assisted_review.py`
 - Test: `apps/star-omen/tests/video_pipeline/package_review/test_ai_visual_review_binding_v1.py`
 
-- [ ] Write RED tests proving hard rejection, hash drift, missing frames and unsupported checks invalidate the report.
+- [x] Write RED tests proving hard rejection, hash drift, missing frames and unsupported checks invalidate the report.
 
 ```python
 def test_ai_report_cannot_override_hard_rejection():
@@ -63,9 +63,9 @@ def test_ai_report_cannot_override_hard_rejection():
             screenshot_sha256=["d" * 64],
         )
 ```
-- [ ] Implement `verify_ai_visual_review(...)`.
-- [ ] Run focused GREEN.
-- [ ] Commit: `feat: verify ai visual report bindings`
+- [x] Implement `verify_ai_visual_review(...)`.
+- [x] Run focused GREEN.
+- [x] Commit: `feat: verify ai visual report bindings`
 
 ### Task 3: Add provider-neutral handoff
 
@@ -75,7 +75,7 @@ def test_ai_report_cannot_override_hard_rejection():
 - Modify: `docs/development/TASKS.md`
 - Modify: `docs/development/WORK_LOG.md`
 
-- [ ] Document the exact normalized request and response JSON.
+- [x] Document the exact normalized request and response JSON.
 
 ```json
 {
@@ -92,6 +92,6 @@ def test_ai_report_cannot_override_hard_rejection():
   "checks": []
 }
 ```
-- [ ] Require the adapter to supply model ID and prompt-policy version.
-- [ ] Explicitly forbid secrets, absolute paths and raw model responses.
-- [ ] Run package-review regression and commit: `docs: add ai visual review handoff`
+- [x] Require the adapter to supply model ID and prompt-policy version.
+- [x] Explicitly forbid secrets, absolute paths and raw model responses.
+- [x] Run package-review regression and commit: `docs: add ai visual review handoff`

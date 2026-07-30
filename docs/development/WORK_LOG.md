@@ -2,6 +2,45 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E3 AI visual review started
+
+PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.
+
+The only open repository pull requests remain legacy PR #1 and #7; neither targets `stable/kaiyuan-v2`. B9-G6-E3 starts on `codex/kaiyuan-b9-ai-visual-review-v1` under the approved provider-neutral AI visual review plan. The core accepts normalized JSON only, requires exact hard-gate/media/screenshot hash binding, and gives AI no scientific, classical-evidence or publication authority.
+
+TDD progress:
+
+```text
+AI report contract RED: AIAssistedVisualCheckV1/AIAssistedVisualReviewV1 missing
+AI report contract GREEN: 9 passed
+AI binding verifier RED: verify_ai_visual_review missing
+AI contract plus binding verifier GREEN: 16 passed
+```
+
+The provider-neutral handoff records the exact request/response JSON, requires real provider/model/prompt-policy identifiers, and excludes secrets, machine paths and raw provider responses. Core code has no mandatory provider SDK and performs no network call.
+
+Self-review found that the initial verifier proved the AI report matched observed media but did not prove the passed hard-gate report had checked those same bytes. New regressions first failed `3` cases, then the verifier required exact `preview.mp4` and ordered `screenshots/*` bindings in the hard-gate artifact set. The runbook now adds screenshot bindings to `RendererReviewInputV1`. Evidence-frame order is also canonicalized against the screenshot inventory. Review-fix focused result: `18 passed`.
+
+B9-G6-E3 is now `VERIFYING`. No completion or merge claim is valid until the exact implementation head passes focused, shared-contract, text-core, downstream, governance, compile and runbook syntax gates and the resulting remote PR head passes its workflows.
+
+Fresh local verification on implementation head `6b34494918989b6262b3614a1753ef95056b7808`:
+
+```text
+B9 assisted renderer focused: 148 passed
+Package review: 80 passed
+Shared contracts: 6 passed
+Text core: 22 passed
+Full downstream: 475 passed
+Governance unit tests: 5 passed
+Development governance diff gate: passed (10 changed files, 3 code files)
+compileall: passed
+Runbook embedded Python: 6 blocks parsed
+git diff --check: passed
+Working tree: clean before this verification-evidence update
+```
+
+This evidence update creates a new docs-only head; the same gates are rerun on that exact head before remote publication.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.
