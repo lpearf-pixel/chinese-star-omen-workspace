@@ -127,6 +127,14 @@ class ReviewIssueV1(StrictContractModel):
         return value
 
 
+class OCRObservationV1(StrictContractModel):
+    schema_version: Literal["ocr-observation/v1"] = "ocr-observation/v1"
+    frame_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    text: str = Field(min_length=1, max_length=2000)
+    order: int = Field(strict=True, ge=1, le=256)
+    fully_in_frame: bool
+
+
 class RendererHardGateReportV1(StrictContractModel):
     schema_version: Literal["renderer-hard-gate-report/v1"] = (
         "renderer-hard-gate-report/v1"
@@ -375,13 +383,120 @@ def verify_recomputed_astronomy(
     )
 
 
+def verify_renderer_artifacts(
+    *,
+    declared_artifacts: Sequence[RendererArtifactBindingV1],
+    observed_artifacts: Sequence[RendererArtifactBindingV1],
+    declared_screenshot_sha256: Sequence[str],
+    observed_screenshot_sha256: Sequence[str],
+    ocr: Sequence[OCRObservationV1],
+    expected_subtitles: Sequence[str],
+) -> list[ReviewIssueV1]:
+    declared = [
+        RendererArtifactBindingV1.model_validate(item.model_dump(mode="json"))
+        for item in declared_artifacts
+    ]
+    observed = [
+        RendererArtifactBindingV1.model_validate(item.model_dump(mode="json"))
+        for item in observed_artifacts
+    ]
+    ensure_unique([item.path for item in declared], "declared renderer artifact paths")
+    ensure_unique([item.path for item in observed], "observed renderer artifact paths")
+    declared_by_path = {item.path: item.sha256 for item in declared}
+    observed_by_path = {item.path: item.sha256 for item in observed}
+    issues: list[ReviewIssueV1] = []
+
+    for path in sorted(set(declared_by_path) | set(observed_by_path)):
+        if declared_by_path.get(path) == observed_by_path.get(path):
+            continue
+        if path == "preview.mp4":
+            issues.append(
+                ReviewIssueV1(
+                    code="media.contract_mismatch",
+                    artifact="preview.mp4",
+                    field="sha256",
+                    message="observed preview does not match its declared hash",
+                )
+            )
+        else:
+            issues.append(
+                ReviewIssueV1(
+                    code="lineage.hash_mismatch",
+                    artifact=path,
+                    field="sha256",
+                    message="observed artifact does not match its declared hash",
+                )
+            )
+
+    declared_screenshots = list(declared_screenshot_sha256)
+    observed_screenshots = list(observed_screenshot_sha256)
+    ensure_unique(declared_screenshots, "declared screenshot hashes")
+    ensure_unique(observed_screenshots, "observed screenshot hashes")
+    normalized_ocr = [
+        OCRObservationV1.model_validate(item.model_dump(mode="json"))
+        for item in ocr
+    ]
+    ocr_frames = {item.frame_sha256 for item in normalized_ocr}
+    if (
+        declared_screenshots != observed_screenshots
+        or not ocr_frames.issubset(set(observed_screenshots))
+    ):
+        issues.append(
+            ReviewIssueV1(
+                code="screenshot.inventory_mismatch",
+                artifact="screenshots/inventory.json",
+                field="sha256",
+                message="observed screenshots do not match the declared inventory",
+            )
+        )
+
+    ensure_unique([item.order for item in normalized_ocr], "OCR subtitle order")
+    ordered_ocr = sorted(normalized_ocr, key=lambda item: item.order)
+    observed_text = [item.text for item in ordered_ocr]
+    expected_text = list(expected_subtitles)
+    if sorted(observed_text) != sorted(expected_text):
+        issues.append(
+            ReviewIssueV1(
+                code="ocr.subtitle_missing",
+                artifact="subtitles.srt",
+                field="text",
+                message="OCR observations do not cover the expected subtitles",
+            )
+        )
+    elif observed_text != expected_text:
+        issues.append(
+            ReviewIssueV1(
+                code="ocr.subtitle_order_mismatch",
+                artifact="subtitles.srt",
+                field="order",
+                message="OCR subtitle order differs from the expected timeline",
+            )
+        )
+    if any(not item.fully_in_frame for item in ordered_ocr):
+        issues.append(
+            ReviewIssueV1(
+                code="ocr.subtitle_out_of_frame",
+                artifact="subtitles.srt",
+                field="bounds",
+                message="one or more OCR subtitles extend outside the frame",
+            )
+        )
+
+    return sorted(
+        issues,
+        key=lambda issue: (issue.code, issue.artifact, issue.field),
+    )
+
+
 __all__ = [
     "RendererArtifactBindingV1",
     "RendererHardGateReportV1",
     "RendererReviewInputV1",
+    "OCRObservationV1",
     "ReviewIssueV1",
     "build_renderer_hard_gate_report",
     "canonical_renderer_hard_gate_bytes",
     "canonical_renderer_review_input_bytes",
+    "verify_renderer_artifacts",
     "verify_recomputed_astronomy",
 ]
