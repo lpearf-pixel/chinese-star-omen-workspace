@@ -10,11 +10,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 23e9d0fce3c5f2609456430f9829234afe2e704b
-Current feature branch: codex/kaiyuan-b9-ffmpeg-runtime-preflight-v1
-Current task: B9-G6-E5 FFmpeg runtime preflight
+Last verified stable HEAD: c2be80c2adbf307178c353a6769ab98c170d1930
+Current feature branch: codex/kaiyuan-b9-g6-handoff-integrity-v1
+Current task: B9-G6-E6 evidence handoff integrity
 B9 overall: VERIFYING
-B9-G6: BLOCKED after rejected first evidence review
+B9-G6: BLOCKED after handoff archive integrity rejection
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected collection: local_kb_default
@@ -136,7 +136,7 @@ B9 planning: DONE
 - **Remaining:** fresh macOS collection, normalized AI report, three-check confirmation and independent archive verification.
 
 ### B9-G6-E5 — FFmpeg runtime preflight
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Trigger:** the source-backed macOS package passed manifest verification but FFmpeg rejected `subtitles=subtitles.srt` at filtergraph execution.
 - **Goal:** verify the selected FFmpeg/ffprobe toolchain with a real bounded subtitle smoke before the 80-second preview and expose one repeatable repository entrypoint.
 - **Design:** `docs/superpowers/specs/2026-07-30-kaiyuan-ffmpeg-runtime-preflight-design.md`
@@ -147,7 +147,20 @@ B9 planning: DONE
 - **Local verification:** runtime/collector/governance `15 passed`; B9 package-review plus runner `102 passed`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
 - **Follow-up trigger:** the first source-backed preview reached the AI visual gate and was correctly rejected because the audience-facing historical subtitle exposed internal `source_type` and English `source_title` values.
 - **Audience-copy follow-up:** internal source metadata is removed from the historical subtitle while the structured asset fields and `historical_source` reference remain intact; focused editorial and B9 review regression `170 passed`.
-- **Remaining:** rerun full exact-head gates and Draft PR workflows, merge, then regenerate the source-backed package with a new run ID on the real macOS toolchain.
+- **Merged:** PR #48 into `stable/kaiyuan-v2` at `c2be80c2adbf307178c353a6769ab98c170d1930`.
+
+### B9-G6-E6 — Evidence handoff integrity
+- **Status:** `VERIFYING`
+- **Trigger:** independently verified run `20260730T121805Z` has a valid canonical review/media/hash chain, but its handoff archive records Stellarium `26.2.0` while the bound overview shows `26.1`, includes five `/Users/...` screenshot inventory paths, and carries sixteen `._*` AppleDouble members.
+- **Rejected archive:** `b9-local-g6-evidence-20260730T121805Z.tar.gz`, SHA-256 `0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918`.
+- **Goal:** bind capability evidence to the actual `.app` version and create a fixed-member, relative-path, AppleDouble-free, deterministic no-overwrite archive.
+- **Design:** `docs/superpowers/specs/2026-07-30-kaiyuan-b9-g6-handoff-integrity-design.md`
+- **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-b9-g6-handoff-integrity.md`
+- **Boundary:** do not rerender or reinterpret approved review evidence; do not change corpus, Qdrant, `local_kb_default`, publishing authority, B10–B12, or `main`.
+- **Acceptance:** actual Info.plist version must equal capability JSON; inventory paths are relative; archive contains no `._*` or unrelated members; existing output is never overwritten; focused/full gates and independent regenerated-archive review pass.
+- **Local verification:** 10 handoff behaviors plus 10 preview/collector regressions passed through the same plain-assert functions; `compileall`, collector `bash -n`, CLI help and `git diff --check` passed.
+- **Pressure test:** uploaded mismatch rejected without output; canonical capability version `26.1.0` produced 19 fixed members, five relative inventory entries and zero AppleDouble members.
+- **Remaining:** exact-head pytest/full repository/CI gates, merge, then regenerate the Mac capability JSON and handoff archive using the actual installed `.app`.
 
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
 
@@ -177,6 +190,7 @@ implement and merge B9-G6-E2 scientific hard gate
 → add B9-G6-E4 lightweight human confirmation
 → harden FFmpeg runtime preflight and regenerate the preview
 → independently verify the resulting evidence archive
+→ correct handoff version provenance and archive privacy/minimality
 → final B9 closeout
 → only then B10
 ```
