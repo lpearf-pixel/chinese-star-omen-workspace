@@ -129,3 +129,14 @@ def test_ai_report_requires_canonical_unique_hash_and_check_order() -> None:
                 ),
             ]
         )
+
+    with pytest.raises(ValidationError, match="frame|canonical|order"):
+        ai_report(
+            checks=[
+                visual_check(
+                    "subtitle_readability",
+                    "passed",
+                    ["e" * 64, "d" * 64],
+                )
+            ]
+        )

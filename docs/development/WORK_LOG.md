@@ -19,6 +19,8 @@ AI contract plus binding verifier GREEN: 16 passed
 
 The provider-neutral handoff records the exact request/response JSON, requires real provider/model/prompt-policy identifiers, and excludes secrets, machine paths and raw provider responses. Core code has no mandatory provider SDK and performs no network call.
 
+Self-review found that the initial verifier proved the AI report matched observed media but did not prove the passed hard-gate report had checked those same bytes. New regressions first failed `3` cases, then the verifier required exact `preview.mp4` and ordered `screenshots/*` bindings in the hard-gate artifact set. The runbook now adds screenshot bindings to `RendererReviewInputV1`. Evidence-frame order is also canonicalized against the screenshot inventory. Review-fix focused result: `18 passed`.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.

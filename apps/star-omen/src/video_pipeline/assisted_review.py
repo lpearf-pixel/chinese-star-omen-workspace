@@ -240,6 +240,19 @@ class AIAssistedVisualReviewV1(StrictContractModel):
             raise ValueError(
                 "AI visual evidence frames must reference declared screenshots"
             )
+        screenshot_order = {
+            frame_sha256: index
+            for index, frame_sha256 in enumerate(self.screenshot_sha256)
+        }
+        for check in self.checks:
+            expected_frame_order = sorted(
+                check.evidence_frame_sha256,
+                key=screenshot_order.__getitem__,
+            )
+            if check.evidence_frame_sha256 != expected_frame_order:
+                raise ValueError(
+                    "AI visual evidence frames must use canonical screenshot order"
+                )
 
         statuses = {check.status for check in self.checks}
         expected_decision: AIVisualDecision
@@ -384,6 +397,22 @@ def verify_ai_visual_review(
     )
     if validated_report.screenshot_sha256 != observed_screenshot_sha256:
         raise ValueError("AI visual screenshot hashes do not match")
+
+    hard_gate_preview = [
+        artifact.sha256
+        for artifact in validated_hard_gate.checked_artifacts
+        if artifact.path == "preview.mp4"
+    ]
+    if hard_gate_preview != [preview_sha256]:
+        raise ValueError("hard gate preview binding does not match")
+
+    hard_gate_screenshots = [
+        artifact.sha256
+        for artifact in validated_hard_gate.checked_artifacts
+        if artifact.path.startswith("screenshots/")
+    ]
+    if hard_gate_screenshots != observed_screenshot_sha256:
+        raise ValueError("hard gate screenshot bindings do not match")
 
     return validated_report
 

@@ -161,3 +161,48 @@ def test_ai_report_verifier_rejects_missing_or_reordered_frames() -> None:
             preview_sha256="c" * 64,
             screenshot_sha256=["e" * 64, "d" * 64],
         )
+
+
+@pytest.mark.parametrize(
+    "checked_artifacts",
+    [
+        [
+            RendererArtifactBindingV1(
+                path="preview.mp4",
+                sha256="f" * 64,
+            ),
+            RendererArtifactBindingV1(
+                path="screenshots/frame-01.png",
+                sha256="d" * 64,
+            ),
+        ],
+        [
+            RendererArtifactBindingV1(
+                path="preview.mp4",
+                sha256="c" * 64,
+            ),
+            RendererArtifactBindingV1(
+                path="screenshots/frame-01.png",
+                sha256="f" * 64,
+            ),
+        ],
+    ],
+)
+def test_ai_report_verifier_rejects_hard_gate_media_drift(
+    checked_artifacts: list[RendererArtifactBindingV1],
+) -> None:
+    gate = RendererHardGateReportV1(
+        review_input_sha256="a" * 64,
+        checked_artifacts=checked_artifacts,
+        status="passed",
+        issues=[],
+    )
+    report = ai_report(gate=gate)
+
+    with pytest.raises(ValueError, match="hard gate.*(preview|screenshot)"):
+        verify_ai_visual_review(
+            report=report,
+            hard_gate=gate,
+            preview_sha256="c" * 64,
+            screenshot_sha256=["d" * 64],
+        )

@@ -295,10 +295,17 @@ issues.extend(
         expected_subtitles=[claim["text"] for claim in video_package["claims"]],
     )
 )
+review_artifacts = observed + [
+    RendererArtifactBindingV1(
+        path=path.relative_to(evidence).as_posix(),
+        sha256=sha256,
+    )
+    for path, sha256 in zip(screenshots, screenshot_sha256, strict=True)
+]
 review_input = RendererReviewInputV1(
     review_input_id=f"renderer-review-input:{os.environ['B9_RUN_ID'].lower()}",
     created_at=datetime.now(timezone.utc),
-    artifacts=observed,
+    artifacts=sorted(review_artifacts, key=lambda item: item.path),
 )
 (evidence / "renderer-review-input.json").write_bytes(
     canonical_renderer_review_input_bytes(review_input)
