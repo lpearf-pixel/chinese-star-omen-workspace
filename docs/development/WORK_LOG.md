@@ -2,6 +2,12 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E4 lightweight human confirmation started
+
+PR #45 was rechecked at exact remote head `944a55458aa06916f6751a462659e9f8a5826494`: it was mergeable, had no reviews or unresolved threads, and all five applicable workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `f937c60c76f5e450279e05b3c04de67e296fa687`.
+
+B9-G6-E4 starts on `codex/kaiyuan-b9-light-human-confirmation-v1`. The accepted scope is exactly three layperson checks plus a pure final resolver. No human input may alter scientific, evidence, media or AI fields, and no approval control is available after machine or AI rejection.
+
 ## 2026-07-30 — B9-G6-E3 AI visual review started
 
 PR #44 was rechecked at exact head `6304f88b0a42d3ded9a5c67276495177fc7fd579`: it was mergeable, had no reviews or unresolved threads, and all seven pull-request workflows concluded `success`. It was marked ready and merged into `stable/kaiyuan-v2` as `d6f2f862d7cf45c1008925f6d4286aabb4e43077`.

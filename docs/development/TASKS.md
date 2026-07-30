@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: d6f2f862d7cf45c1008925f6d4286aabb4e43077
-Current feature branch: codex/kaiyuan-b9-ai-visual-review-v1
-Current task: B9-G6-E3 exact-head verification
+Last verified stable HEAD: f937c60c76f5e450279e05b3c04de67e296fa687
+Current feature branch: codex/kaiyuan-b9-light-human-confirmation-v1
+Current task: B9-G6-E4 lightweight human confirmation
 B9 overall: VERIFYING
 B9-G6: BLOCKED after rejected first evidence review
 Release target: stable/kaiyuan-v2
@@ -115,17 +115,17 @@ B9 planning: DONE
 - **Merged:** PR #44 into `stable/kaiyuan-v2` at `d6f2f862d7cf45c1008925f6d4286aabb4e43077`; all seven exact-head workflows passed.
 
 ### B9-G6-E3 — AI visual review report
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Entry gate:** B9-G6-E2 merged and source-backed evidence regenerated.
 - **Goal:** bind an externally produced AI visual assessment to exact preview and screenshot hashes, with `passed|rejected|needs_human_review`, confidence and itemized evidence.
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-ai-visual-review.md`
 - **Boundary:** AI cannot approve astronomy facts, classical evidence or a machine-rejected package.
 - **Implementation commits:** `f941539`, `6ff8775`, `acdd98a`, `009daef`
 - **Local verification:** focused assisted review `148 passed`; package review `80 passed`; contracts `6 passed`; text-core `22 passed`; downstream `475 passed`.
-- **Remaining:** exact-head local gates, remote Draft PR workflows and merge.
+- **Merged:** PR #45 into `stable/kaiyuan-v2` at `f937c60c76f5e450279e05b3c04de67e296fa687`; all five exact-head workflows passed.
 
 ### B9-G6-E4 — Lightweight human confirmation
-- **Status:** `BACKLOG`
+- **Status:** `IN_PROGRESS`
 - **Entry gate:** B9-G6-E2 merged; E3 report available or explicitly `needs_human_review`.
 - **Goal:** ask only three layperson checks after professional gates pass and bind the answer to exact review artifacts.
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-light-human-confirmation.md`
