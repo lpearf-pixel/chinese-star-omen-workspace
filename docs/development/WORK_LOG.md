@@ -21,6 +21,8 @@ The provider-neutral handoff records the exact request/response JSON, requires r
 
 Self-review found that the initial verifier proved the AI report matched observed media but did not prove the passed hard-gate report had checked those same bytes. New regressions first failed `3` cases, then the verifier required exact `preview.mp4` and ordered `screenshots/*` bindings in the hard-gate artifact set. The runbook now adds screenshot bindings to `RendererReviewInputV1`. Evidence-frame order is also canonicalized against the screenshot inventory. Review-fix focused result: `18 passed`.
 
+B9-G6-E3 is now `VERIFYING`. No completion or merge claim is valid until the exact implementation head passes focused, shared-contract, text-core, downstream, governance, compile and runbook syntax gates and the resulting remote PR head passes its workflows.
+
 ## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
 
 PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.
