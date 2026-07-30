@@ -2,6 +2,46 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E2 scientific hard gate verifying
+
+PR #43 was confirmed merged into `stable/kaiyuan-v2`; independent `git ls-remote` resolved the actual stable ref as `28f3b2a1ce5a9e324b6fc03060423bbacf1b917a`. The isolated branch is `codex/kaiyuan-b9-assisted-review-gate-v1`.
+
+The first real macOS G6 archive `b9-local-g6-evidence-20260730T040856Z.tar.gz` passed archive SHA-256, safe member paths, media properties, screenshot hashes, scene hash and capture timing. Content review rejected it because the fixture and narration asserted `3.25°` while verified offline Skyfield 1.51 with `de421.bsp` computes `5.40412185407934°` for the exact 2026-07-21 11:00 UTC Shanghai topocentric observation. The old fixture also contained a placeholder ephemeris hash and incorrect `icrs` measurement frame.
+
+TDD evidence:
+
+```text
+Renderer hard-gate contract RED: assisted_review module missing
+Renderer hard-gate contract GREEN: 4 passed
+Scientific verifier RED: verify_recomputed_astronomy missing
+Scientific verifier GREEN with hard-gate regressions: 8 passed
+Local sample RED 1: local_sample module missing
+Local sample RED 2: source-backed fixture differed from hand-authored fixture
+Astronomy/editorial/package-review after fixture migration: 126 passed
+Artifact/OCR gate RED: OCRObservationV1 missing
+Artifact/OCR plus hard/scientific gates GREEN: 11 passed
+Post-review RED: unordered review artifacts and event/calculation identity drift were accepted
+Post-review GREEN: canonical artifact ordering and event/calculation identity are enforced
+Final focused astronomy/editorial/package-review: 130 passed
+Workflow YAML, all five runbook Python blocks and compileall: PASS
+Contracts: 6 passed
+Text core: 22 passed
+Downstream first run: 455 passed / 1 failed because fixture manifest retained the old event SHA-256
+Downstream after canonical manifest migration: 456 passed
+Final exact-workspace downstream after review fixes: 457 passed
+```
+
+Delivered locally:
+
+- canonical path-free `RendererReviewInputV1` and `RendererHardGateReportV1`;
+- stable hard issue codes and non-overridable derived status;
+- placeholder provenance, exact event identity and `0.01°` recomputation checks;
+- provider-built July event with `de421.bsp` SHA-256 `a20a7139da04cbc462454634918e9a9ca69127044e2cc9d4f9c16e238d2deedc`;
+- artifact, preview, screenshot inventory and normalized caller-supplied OCR checks;
+- hermetic focused workflow and runbook hard-gate stage before visual approval.
+
+The task is `VERIFYING`, not `DONE`. Remaining: independent code review, exact-head local rerun, explicit user authorization to publish the committed branch contents, remote PR workflows and merge. No corpus, candidate, ingest, Qdrant, collection, `local_kb_default`, `main`, publishing or B10–B12 behavior changed.
+
 ## 2026-07-18 — B8-T02 merged
 
 ```text

@@ -7,9 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: b0a39ff4ec243aefb324287e1ab1b1a564fc38b6
+Last verified stable HEAD: 28f3b2a1ce5a9e324b6fc03060423bbacf1b917a
 Verified at: 2026-07-30
-Current closeout branch: codex/kaiyuan-b9-preview-media-closeout-v1
+Current feature branch: codex/kaiyuan-b9-assisted-review-gate-v1
+Current task: B9-G6-E2 scientific hard gate
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -26,8 +27,11 @@ B9-PR-B science/asterisms: DONE
 B9-PR-C RuleAssessment/lineage: DONE
 B9-PR-D editorial/Stellarium script: DONE
 B9-PR-E package/review/preview machinery: DONE implementation
-B9-G6-E1 preview-media evidence hardening: MERGED, closeout in progress
-B9-G6 real macOS renderer evidence: READY after closeout
+B9-G6-E1 preview-media evidence hardening and closeout: DONE (#42/#43)
+B9-G6 first real macOS evidence: REJECTED after archive verification
+B9-G6-E2 scientific hard gate: IN_PROGRESS
+B9-G6-E3 AI visual report: BACKLOG
+B9-G6-E4 lightweight human confirmation: BACKLOG
 B9 overall: VERIFYING
 B10: BLOCKED until real G6 evidence and final B9 closeout
 ```
@@ -46,7 +50,22 @@ B10: BLOCKED until real G6 evidence and final B9 closeout
 #40  B9-PR-E implementation  92e3c08371bb52651ea0fd5e4357fb9ce7dcd82f
 #41  B9-PR-E closeout        41a613a1606cbbf8a77336fa01ea4c98236b57c7
 #42  G6 preview-media fix    b0a39ff4ec243aefb324287e1ab1b1a564fc38b6
+#43  G6 media closeout       28f3b2a1ce5a9e324b6fc03060423bbacf1b917a
 ```
+
+## 4.1 First real G6 evidence disposition
+
+The archive `b9-local-g6-evidence-20260730T040856Z.tar.gz` passed outer SHA-256, archive safety, internal hash, media and capture-timing checks. It was rejected for content:
+
+```text
+Archive SHA-256: fc49031dc98083e46aad912b3cfaa43cea611ec80934c37352ba9691cf9eff52
+Recorded fixture separation: 3.25 deg
+Independent Shanghai topocentric separation: approximately 5.4 deg
+Fixture ephemeris SHA-256: placeholder aaaaaaaaaa...
+Disposition: rejected; never use for B9 closeout
+```
+
+The accepted remediation is a three-level gate: deterministic scientific/media/OCR hard checks, hash-bound AI visual review, then three layperson experience checks. Neither AI nor a person can override a machine rejection.
 
 ### PR #42 final evidence
 
