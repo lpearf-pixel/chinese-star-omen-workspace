@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 23e9d0fce3c5f2609456430f9829234afe2e704b
+Last verified stable HEAD: c2be80c2adbf307178c353a6769ab98c170d1930
 Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b9-ffmpeg-runtime-preflight-v1
-Current task: B9-G6-E5 FFmpeg runtime preflight
+Current feature branch: codex/kaiyuan-b9-g6-handoff-integrity-v1
+Current task: B9-G6-E6 evidence handoff integrity
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -32,7 +32,8 @@ B9-G6 first real macOS evidence: REJECTED after archive verification
 B9-G6-E2 scientific hard gate: DONE (#44)
 B9-G6-E3 AI visual report: DONE (#45)
 B9-G6-E4 lightweight human confirmation: VERIFYING
-B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: VERIFYING
+B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: DONE (#48)
+B9-G6-E6 evidence handoff integrity: VERIFYING
 B9 overall: VERIFYING
 B10: BLOCKED until real G6 evidence and final B9 closeout
 ```
@@ -56,7 +57,29 @@ B10: BLOCKED until real G6 evidence and final B9 closeout
 #45  G6 AI visual review     f937c60c76f5e450279e05b3c04de67e296fa687
 #46  G6 human confirmation   939c5272a84a1bf3dd2e9c72037ea180f76e8adf
 #47  G6 collection readiness 23e9d0fce3c5f2609456430f9829234afe2e704b
+#48  G6 FFmpeg preflight     c2be80c2adbf307178c353a6769ab98c170d1930
 ```
+
+## 4.2 Second real G6 evidence disposition
+
+Run `20260730T121805Z` passed the canonical renderer hard gate, hash-bound AI
+review, three human confirmations, final assisted review, media inspection and
+all evidence byte bindings. Its first uploaded handoff archive is not accepted:
+
+```text
+Archive SHA-256: 0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918
+Core review and media chain: valid
+Capability Stellarium version: 26.2.0
+Bound overview window title: Stellarium 26.1
+Absolute inventory paths: 5
+AppleDouble archive members: 16
+Disposition: handoff rejected; preserve evidence bytes and rebuild capability/archive
+```
+
+The preview, screenshots and assisted-review reports do not need regeneration.
+The actual application version must be read from the `.app`, capability
+evidence rebuilt with that version, and the archive recreated from a fixed
+member list with a relative screenshot inventory.
 
 ## 4.1 First real G6 evidence disposition
 
@@ -213,10 +236,10 @@ G6 完成前：
 ## 10. 下一动作
 
 ```text
-合并 preview-media docs-only closeout
-→ 运行 macOS G6 collector
-→ 上传 evidence archive
-→ 独立验证媒体、脚本、命令、截图和工具版本
+完成 B9-G6-E6 handoff integrity
+→ 使用实际 Stellarium `.app` 版本重建 capability evidence
+→ 生成并上传无绝对路径和 AppleDouble 的 evidence archive
+→ 独立复验媒体、脚本、命令、截图、工具版本和归档成员
 → final B9 closeout
 → only then B10
 ```
