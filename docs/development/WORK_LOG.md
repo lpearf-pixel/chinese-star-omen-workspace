@@ -2,6 +2,86 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9-G6-E6 evidence handoff integrity started
+
+Remote `stable/kaiyuan-v2` was resolved as
+`c2be80c2adbf307178c353a6769ab98c170d1930`, the merge commit of PR #48.
+The only open pull requests remain legacy #1 and #7; neither targets the stable
+release line.
+
+The uploaded archive
+`b9-local-g6-evidence-20260730T121805Z.tar.gz` has SHA-256
+`0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918`.
+Safe extraction and exact stable-model verification proved:
+
+```text
+unsafe archive paths or links: 0
+canonical renderer review input/report: passed
+renderer hard gate: passed, 0 issues
+AI visual review: needs_human_review
+human experience checks: all true
+resolved assisted review: approved
+preview: 1080x1920, H.264, 80000 ms, 1 video, 0 audio
+preview SHA-256: eaf290ef84630c5a8bc80cf675c7279c61da76f360c19f58b557e71c6b9c9bd3
+screenshots: 5, all review/capability/OCR hashes bound
+```
+
+The handoff itself failed closed for three independently reproduced reasons:
+
+1. the capability JSON records Stellarium `26.2.0`, while the bound overview
+   window title shows Stellarium `26.1`;
+2. all five lines in `screenshot-sha256.txt` contain a private `/Users/...`
+   absolute path;
+3. macOS tar added sixteen AppleDouble `._*` members, including five entries
+   that become extra `screenshots/*.png` files after Linux extraction.
+
+The core evidence bytes remain preserved. B9-G6-E6 will replace manual version
+entry and platform tar behavior with a tested, dependency-free handoff
+packager. B9 remains `VERIFYING`; run `20260730T121805Z` is not accepted and
+B10 remains blocked until a corrected archive passes independent verification
+and final B9 closeout merges.
+
+TDD and pressure verification:
+
+```text
+RED: real CLI invocation failed because scripts/b9_g6_handoff.py did not exist
+Initial GREEN: 8 handoff behaviors passed
+Version-only RED: argparse required archive inputs
+Version-only GREEN: 9 behaviors passed
+Identity-binding RED: capability validation and archived bytes used separate file snapshots
+Final handoff GREEN: 10 behaviors passed
+Preview/collector related regressions: 10 passed
+Combined direct plain-assert harness: 20 passed
+compileall: passed
+collector bash -n: passed
+CLI help: passed
+git diff --check: passed
+```
+
+The current execution environment does not provide pytest and cannot reach the
+package index, so the same pytest-compatible functions were invoked directly
+with isolated temporary directories. Exact-head pytest, full repository gates
+and remote workflows remain required before merge.
+
+The new packager then pressure-tested the actual extracted evidence:
+
+```text
+Claimed 26.2.0 with synthetic actual app 26.1:
+  rejected; no output created
+Canonical capability rebuilt as 26.1.0:
+  archive members: 19
+  relative screenshot inventory entries: 5
+  AppleDouble members: 0
+```
+
+The command reads `CFBundleShortVersionString`, normalizes `26.1` to `26.1.0`,
+requires capability equality, enumerates only fixed regular non-symlink
+members, derives the inventory in memory, normalizes tar/gzip metadata and
+publishes with exclusive no-overwrite semantics. Post-review hardening also
+archives the exact bounded capability bytes used for version validation,
+preventing a changed capability file from crossing the validation-to-archive
+boundary. B9-G6-E6 is `VERIFYING`.
+
 ## 2026-07-30 — B9-G6-E5 FFmpeg runtime preflight started
 
 The first source-backed preview later reached the hash-bound AI visual gate and
