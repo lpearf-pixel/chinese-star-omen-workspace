@@ -4,6 +4,29 @@
 
 ## 2026-07-30 — B9-G6-E5 FFmpeg runtime preflight started
 
+The first source-backed preview later reached the hash-bound AI visual gate and
+was correctly rejected: the historical subtitle exposed the internal
+`catalog_context` value and English catalog title. The rejected run
+`20260730T073457Z` remains immutable and must never enter the collector.
+
+The root cause was `_prepare_historical_assets()` concatenating
+`source_type/source_title` into audience copy. TDD changed the existing
+consumer-level regression first:
+
+```text
+Audience-copy RED: expected `历史背景：...`, received the subtitle containing
+`catalog_context` and `Chinese sky-culture catalog context`
+Audience-copy GREEN: 1 passed
+Editorial regression: 41 passed
+Astronomy/editorial/package-review/runner/collector regression: 170 passed
+```
+
+The minimal implementation now emits only `历史背景：{approved text}` while
+retaining the original structured source fields and exact `historical_source`
+asset reference. D-024 records the separation between audience copy and
+provenance. Full exact-head gates and a new-run macOS evidence chain remain
+required.
+
 Remote `stable/kaiyuan-v2` was independently resolved as
 `23e9d0fce3c5f2609456430f9829234afe2e704b`. PR #45, #46 and #47 are merged;
 legacy PR #1 and #7 remain unrelated to the stable release line.

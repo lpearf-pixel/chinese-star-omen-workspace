@@ -32,7 +32,7 @@ B9-G6 first real macOS evidence: REJECTED after archive verification
 B9-G6-E2 scientific hard gate: DONE (#44)
 B9-G6-E3 AI visual report: DONE (#45)
 B9-G6-E4 lightweight human confirmation: VERIFYING
-B9-G6-E5 FFmpeg runtime preflight: VERIFYING
+B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: VERIFYING
 B9 overall: VERIFYING
 B10: BLOCKED until real G6 evidence and final B9 closeout
 ```

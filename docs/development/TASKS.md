@@ -145,7 +145,9 @@ B9 planning: DONE
 - **Acceptance:** explicit binary overrides, missing-feature and smoke-failure diagnostics, no-overwrite preview execution, focused/full gates and an updated macOS runbook.
 - **Implementation commits:** `ac9ee58`, `ab7aaa5`, `d4f29ce`
 - **Local verification:** runtime/collector/governance `15 passed`; B9 package-review plus runner `102 passed`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
-- **Remaining:** exact-head documentation gate, Draft PR workflows, merge, then rerun the source-backed package on the real macOS toolchain.
+- **Follow-up trigger:** the first source-backed preview reached the AI visual gate and was correctly rejected because the audience-facing historical subtitle exposed internal `source_type` and English `source_title` values.
+- **Audience-copy follow-up:** internal source metadata is removed from the historical subtitle while the structured asset fields and `historical_source` reference remain intact; focused editorial and B9 review regression `170 passed`.
+- **Remaining:** rerun full exact-head gates and Draft PR workflows, merge, then regenerate the source-backed package with a new run ID on the real macOS toolchain.
 
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
 
