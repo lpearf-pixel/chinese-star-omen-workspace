@@ -3,11 +3,13 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 from pathlib import PurePosixPath
 from typing import Literal, Sequence
 
 from pydantic import Field, field_validator, model_validator
 
+from src.video_pipeline.contracts import AstronomyEventV1
 from src.video_pipeline.contracts._common import (
     StableId,
     StrictContractModel,
@@ -16,6 +18,7 @@ from src.video_pipeline.contracts._common import (
 
 ReviewIssueCode = Literal[
     "astronomy.provenance_placeholder",
+    "astronomy.provenance_mismatch",
     "astronomy.recomputation_mismatch",
     "astronomy.observer_mismatch",
     "astronomy.time_mismatch",
@@ -199,6 +202,179 @@ def canonical_renderer_hard_gate_bytes(
     )
 
 
+def _astronomy_issue(
+    *,
+    code: ReviewIssueCode,
+    field: str,
+    message: str,
+) -> ReviewIssueV1:
+    return ReviewIssueV1(
+        code=code,
+        artifact="astronomy-event.json",
+        field=field,
+        message=message,
+    )
+
+
+def _angular_measurements(event: AstronomyEventV1):
+    accepted = {"angular-distance-deg", "angular-separation-deg"}
+    return [
+        measurement
+        for measurement in event.measurements
+        if measurement.kind.replace("_", "-") in accepted
+    ]
+
+
+def verify_recomputed_astronomy(
+    *,
+    packaged: AstronomyEventV1,
+    recomputed: AstronomyEventV1,
+    angular_tolerance_deg: Decimal | float | str = Decimal("0.01"),
+) -> list[ReviewIssueV1]:
+    packaged = AstronomyEventV1.model_validate(packaged.model_dump(mode="json"))
+    recomputed = AstronomyEventV1.model_validate(
+        recomputed.model_dump(mode="json")
+    )
+    tolerance = Decimal(str(angular_tolerance_deg))
+    if not tolerance.is_finite() or tolerance < 0:
+        raise ValueError("astronomy angular tolerance must be finite and non-negative")
+
+    issues: list[ReviewIssueV1] = []
+    packaged_hash = packaged.calculation_provenance.ephemeris_sha256
+    placeholder_hash = len(set(packaged_hash)) == 1
+    if placeholder_hash:
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.provenance_placeholder",
+                field="calculation_provenance.ephemeris_sha256",
+                message="packaged astronomy uses a placeholder ephemeris hash",
+            )
+        )
+
+    packaged_provenance = packaged.calculation_provenance.model_dump(mode="json")
+    recomputed_provenance = recomputed.calculation_provenance.model_dump(mode="json")
+    provenance_fields = (
+        "provider",
+        "provider_version",
+        "ephemeris_id",
+        "timescale_source",
+    )
+    provenance_mismatch = any(
+        packaged_provenance[field] != recomputed_provenance[field]
+        for field in provenance_fields
+    )
+    if not placeholder_hash:
+        provenance_mismatch = provenance_mismatch or (
+            packaged_hash
+            != recomputed.calculation_provenance.ephemeris_sha256
+        )
+    if provenance_mismatch:
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.provenance_mismatch",
+                field="calculation_provenance",
+                message="packaged astronomy provenance differs from recomputation",
+            )
+        )
+
+    if (
+        packaged.start_utc,
+        packaged.peak_utc,
+        packaged.end_utc,
+    ) != (
+        recomputed.start_utc,
+        recomputed.peak_utc,
+        recomputed.end_utc,
+    ):
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.time_mismatch",
+                field="start_utc",
+                message="packaged astronomy time window differs from recomputation",
+            )
+        )
+
+    if packaged.observer != recomputed.observer:
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.observer_mismatch",
+                field="observer",
+                message="packaged observer differs from recomputation",
+            )
+        )
+
+    if (
+        packaged.event_type,
+        packaged.primary_body,
+        packaged.target_body_or_region,
+    ) != (
+        recomputed.event_type,
+        recomputed.primary_body,
+        recomputed.target_body_or_region,
+    ):
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.target_mismatch",
+                field="target_body_or_region",
+                message="packaged event identity differs from recomputation",
+            )
+        )
+
+    packaged_measurements = _angular_measurements(packaged)
+    recomputed_measurements = _angular_measurements(recomputed)
+    if len(packaged_measurements) != 1 or len(recomputed_measurements) != 1:
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.measurement_mismatch",
+                field="measurements",
+                message="astronomy review requires one angular measurement",
+            )
+        )
+    else:
+        packaged_measurement = packaged_measurements[0]
+        recomputed_measurement = recomputed_measurements[0]
+        if (
+            packaged_measurement.kind.replace("_", "-")
+            != recomputed_measurement.kind.replace("_", "-")
+            or packaged_measurement.unit != recomputed_measurement.unit
+            or packaged_measurement.reference_frame
+            != recomputed_measurement.reference_frame
+        ):
+            issues.append(
+                _astronomy_issue(
+                    code="astronomy.measurement_mismatch",
+                    field="measurements",
+                    message="angular measurement semantics differ from recomputation",
+                )
+            )
+        difference = abs(
+            Decimal(str(packaged_measurement.value))
+            - Decimal(str(recomputed_measurement.value))
+        )
+        if difference > tolerance:
+            issues.append(
+                _astronomy_issue(
+                    code="astronomy.recomputation_mismatch",
+                    field="measurements",
+                    message="angular separation differs from provider recomputation",
+                )
+            )
+
+    if packaged.quality_status != "verified" or recomputed.quality_status != "verified":
+        issues.append(
+            _astronomy_issue(
+                code="astronomy.measurement_mismatch",
+                field="quality_status",
+                message="astronomy hard gate requires verified event quality",
+            )
+        )
+
+    return sorted(
+        issues,
+        key=lambda issue: (issue.code, issue.artifact, issue.field),
+    )
+
+
 __all__ = [
     "RendererArtifactBindingV1",
     "RendererHardGateReportV1",
@@ -207,4 +383,5 @@ __all__ = [
     "build_renderer_hard_gate_report",
     "canonical_renderer_hard_gate_bytes",
     "canonical_renderer_review_input_bytes",
+    "verify_recomputed_astronomy",
 ]
