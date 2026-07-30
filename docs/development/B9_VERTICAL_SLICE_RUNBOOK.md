@@ -108,28 +108,28 @@ Any changed member invalidates the package, review hashes and later renderer evi
 
 ## 5. Generate the bounded preview without a shell
 
-```bash
-PYTHONPATH=../../packages/kb-contracts/python:../../packages/kb-text-core/python \
-python - <<'PY'
-import json
-import os
-import subprocess
-from pathlib import Path
+Use the repository runner. It resolves `B9_FFMPEG_BIN` and
+`B9_FFPROBE_BIN` when supplied, otherwise PATH, then verifies version output,
+the `subtitles` filter, the `libx264` encoder and a real tiny SRT burn-in before
+starting the 80-second preview.
 
-root = Path(os.environ["B9_OUTPUT_DIR"])
-payload = json.loads((root / "preview-command.json").read_text(encoding="utf-8"))
-assert payload["shell"] is False
-assert payload["output_path"] == "preview.mp4"
-subprocess.run(
-    payload["argv"],
-    cwd=root,
-    check=True,
-    timeout=payload["timeout_seconds"],
-    shell=False,
-)
-print((root / "preview.mp4").resolve())
-PY
+```bash
+make -C ../.. b9-preview \
+  B9_OUTPUT_DIR="$PWD/$B9_OUTPUT_DIR"
 ```
+
+If more than one FFmpeg installation exists, set both executable overrides
+before running the Make target:
+
+```bash
+export B9_FFMPEG_BIN="/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg"
+export B9_FFPROBE_BIN="/opt/homebrew/opt/ffmpeg-full/bin/ffprobe"
+```
+
+The override paths are runtime configuration only. Never edit
+`preview-command.json` to contain an absolute executable path. A preflight
+failure is terminal for this evidence attempt; do not continue to ffprobe,
+screenshots or review gates.
 
 The expected preview is silent, 1080x1920, H.264, approximately 80 seconds, with readable ordered subtitles and zero audio streams. It is `preview.mp4`, never `final.mp4`.
 
@@ -140,7 +140,7 @@ The evidence model does not launch ffprobe. Run ffprobe separately with only the
 ```bash
 (
   cd "$B9_OUTPUT_DIR"
-  ffprobe \
+  "${B9_FFPROBE_BIN:-ffprobe}" \
     -v error \
     -show_entries 'stream=index,codec_name,codec_type,width,height:format=filename,duration,size,format_name' \
     -of json \

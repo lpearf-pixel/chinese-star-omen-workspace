@@ -35,7 +35,7 @@ def _history(*, asset_id: str = "history:traditional-asterism-context-v1") -> Hi
     return HistoricalContextAssetV1.model_validate(payload)
 
 
-def test_historical_claim_discloses_source_type_and_title() -> None:
+def test_historical_claim_keeps_lineage_without_exposing_internal_source_fields() -> None:
     event, result, mapping = july_inputs()
     historical = _history()
     package = compile_editorial_package(
@@ -54,8 +54,13 @@ def test_historical_claim_discloses_source_type_and_title() -> None:
         for item in package.video_package.claims
         if item.claim_class == "historical_context"
     )
-    assert historical.source_type in claim.text
-    assert historical.source_title in claim.text
+    assert claim.text == f"历史背景：{historical.text}"
+    assert historical.source_type not in claim.text
+    assert historical.source_title not in claim.text
+    assert [
+        (reference.reference_type, reference.reference_id)
+        for reference in claim.source_refs
+    ] == [("historical_source", historical.asset_id)]
 
 
 def test_verified_membership_uses_membership_limited_wording() -> None:

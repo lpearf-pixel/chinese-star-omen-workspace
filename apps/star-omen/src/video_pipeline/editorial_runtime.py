@@ -217,10 +217,7 @@ def _prepare_historical_assets(
     if not assets:
         return []
     asset = assets[0]
-    disclosed_text = (
-        f"历史背景（来源类型：{asset.source_type}；来源：{asset.source_title}）："
-        f"{asset.text}"
-    )
+    disclosed_text = f"历史背景：{asset.text}"
     payload = asset.model_dump(mode="json")
     payload["text"] = disclosed_text
     return [HistoricalContextAssetV1.model_validate(payload)]

@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 939c5272a84a1bf3dd2e9c72037ea180f76e8adf
+Last verified stable HEAD: 23e9d0fce3c5f2609456430f9829234afe2e704b
 Verified at: 2026-07-30
-Current feature branch: docs/kaiyuan-b9-g6-assisted-collection-v1
-Current task: B9-G6 fresh assisted macOS collection
+Current feature branch: codex/kaiyuan-b9-ffmpeg-runtime-preflight-v1
+Current task: B9-G6-E5 FFmpeg runtime preflight
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -32,6 +32,7 @@ B9-G6 first real macOS evidence: REJECTED after archive verification
 B9-G6-E2 scientific hard gate: DONE (#44)
 B9-G6-E3 AI visual report: DONE (#45)
 B9-G6-E4 lightweight human confirmation: VERIFYING
+B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: VERIFYING
 B9 overall: VERIFYING
 B10: BLOCKED until real G6 evidence and final B9 closeout
 ```
@@ -54,6 +55,7 @@ B10: BLOCKED until real G6 evidence and final B9 closeout
 #44  G6 scientific gate      d6f2f862d7cf45c1008925f6d4286aabb4e43077
 #45  G6 AI visual review     f937c60c76f5e450279e05b3c04de67e296fa687
 #46  G6 human confirmation   939c5272a84a1bf3dd2e9c72037ea180f76e8adf
+#47  G6 collection readiness 23e9d0fce3c5f2609456430f9829234afe2e704b
 ```
 
 ## 4.1 First real G6 evidence disposition
@@ -152,6 +154,16 @@ VideoPackage/v1
 - ffprobe JSON 由外部调用者提供，模型不启动进程；空 programs/stream_groups 可兼容，非空即失败；
 - `preview_observed=true` 必须有 media evidence；approved 还必须有截图；
 - capability evidence 不保存机器绝对路径。
+
+### FFmpeg runtime
+
+- `preview-command.json` 保持机器无关，不写 Homebrew 或绝对二进制路径；
+- B9 预览必须先对实际选中的 FFmpeg/ffprobe 执行字幕滤镜、`libx264`
+  和最小字幕 burn-in smoke；
+- `B9_FFMPEG_BIN`、`B9_FFPROBE_BIN` 可覆盖 PATH，但覆盖值本身不进入
+  structured package；
+- 仅检查 `ffmpeg -filters` 不足以证明可渲染；真实 smoke 失败必须在
+  80 秒 preview 之前 fail-closed。
 
 ## 7. 当前唯一未完成门禁：B9-G6
 

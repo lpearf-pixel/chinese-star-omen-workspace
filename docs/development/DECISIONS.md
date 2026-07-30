@@ -184,3 +184,19 @@
 - **Human boundary:** 人只确认字幕肉眼可读、画面无明显异常、整体表达符合预期。人工选择不能改写专业结论，不能覆盖机器或 AI 的拒绝。
 - **Reason:** 首个真实 G6 归档在 hash/media 证据完整的情况下仍携带错误的 `3.25°` 天文断言，证明“文件绑定 + 泛化人工 y/n”不足以承担专业审核。
 - **Consequence:** 旧归档保持 `rejected`；修复前 B9 保持 `VERIFYING`、B10 保持 `BLOCKED`。新增审核记录必须结构化、path-free、canonical、可离线复验且 fail-closed。
+
+## D-023 — B9 FFmpeg 能力由真实运行时 preflight 证明
+
+- **Status:** Accepted
+- **Decision:** B9 在 80 秒 preview 前，对实际选中的 FFmpeg/ffprobe 执行版本、`subtitles`、`libx264` 和最小 SRT burn-in/ffprobe smoke。调用方可用 `B9_FFMPEG_BIN`、`B9_FFPROBE_BIN` 显式覆盖 PATH。
+- **Package boundary:** `preview-command.json` 继续以 `ffmpeg` 作为可移植 argv 首项，不写 Homebrew 路径、CPU 架构或机器绝对路径。runner 只在执行时替换 argv zero，不修改 structured member 或 manifest hash。
+- **Failure:** 可执行文件缺失、feature 缺失、advertised filter 实际不可运行、ffprobe 不可读、preview 已存在、真实命令失败或 timeout 均明确失败；不得继续截图或审核。
+- **Reason:** 真实 macOS 包已证明 manifest 正确不等于本机媒体工具链可用；PATH 和安装包名称也不能证明字幕滤镜能完成一次实际渲染。
+- **Consequence:** runbook 与 Makefile 只暴露一个正式预览入口。B9 不扩展为通用媒体编排器，批量渲染仍属于 B12。
+
+## D-024 — 面向观众的字幕不直接暴露内部来源元数据
+
+- **Status:** Accepted
+- **Decision:** `HistoricalContextAssetV1.source_type`、`source_title` 和 `asset_id` 继续保留在结构化资产与 lineage 中，但受众字幕只显示自然语言前缀 `历史背景：` 和已审核正文；不得把内部枚举值、英文 catalog 标签或机器字段名拼入受众文案。
+- **Reason:** 首次 source-backed AI 视觉复核正确拒绝了包含 `catalog_context` 与 `Chinese sky-culture catalog context` 的字幕。结构化可追溯性与面向普通观众的表达是两个不同界面，不应通过屏幕文字混合。
+- **Consequence:** `historical_source` 引用仍必须绑定原 asset ID；移除受众显示不等于删除或弱化 provenance。旧批次 `20260730T073457Z` 保持 rejected，新文案必须以新 run ID 重建完整包、预览和审核证据。

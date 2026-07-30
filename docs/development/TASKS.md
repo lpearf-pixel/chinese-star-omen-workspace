@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 939c5272a84a1bf3dd2e9c72037ea180f76e8adf
-Current feature branch: docs/kaiyuan-b9-g6-assisted-collection-v1
-Current task: B9-G6 fresh assisted macOS collection
+Last verified stable HEAD: 23e9d0fce3c5f2609456430f9829234afe2e704b
+Current feature branch: codex/kaiyuan-b9-ffmpeg-runtime-preflight-v1
+Current task: B9-G6-E5 FFmpeg runtime preflight
 B9 overall: VERIFYING
 B9-G6: BLOCKED after rejected first evidence review
 Release target: stable/kaiyuan-v2
@@ -135,6 +135,20 @@ B9 planning: DONE
 - **Merged:** PR #46 into `stable/kaiyuan-v2` at `939c5272a84a1bf3dd2e9c72037ea180f76e8adf`; all five exact-head workflows passed.
 - **Remaining:** fresh macOS collection, normalized AI report, three-check confirmation and independent archive verification.
 
+### B9-G6-E5 — FFmpeg runtime preflight
+- **Status:** `VERIFYING`
+- **Trigger:** the source-backed macOS package passed manifest verification but FFmpeg rejected `subtitles=subtitles.srt` at filtergraph execution.
+- **Goal:** verify the selected FFmpeg/ffprobe toolchain with a real bounded subtitle smoke before the 80-second preview and expose one repeatable repository entrypoint.
+- **Design:** `docs/superpowers/specs/2026-07-30-kaiyuan-ffmpeg-runtime-preflight-design.md`
+- **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-ffmpeg-runtime-preflight.md`
+- **Boundary:** do not change `PreviewCommand/v1`, package hashes, B10–B12 scope, Qdrant, corpus or `local_kb_default`.
+- **Acceptance:** explicit binary overrides, missing-feature and smoke-failure diagnostics, no-overwrite preview execution, focused/full gates and an updated macOS runbook.
+- **Implementation commits:** `ac9ee58`, `ab7aaa5`, `d4f29ce`
+- **Local verification:** runtime/collector/governance `15 passed`; B9 package-review plus runner `102 passed`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
+- **Follow-up trigger:** the first source-backed preview reached the AI visual gate and was correctly rejected because the audience-facing historical subtitle exposed internal `source_type` and English `source_title` values.
+- **Audience-copy follow-up:** internal source metadata is removed from the historical subtitle while the structured asset fields and `historical_source` reference remain intact; focused editorial and B9 review regression `170 passed`.
+- **Remaining:** rerun full exact-head gates and Draft PR workflows, merge, then regenerate the source-backed package with a new run ID on the real macOS toolchain.
+
 B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
 
 ## Governance
@@ -161,6 +175,7 @@ implement and merge B9-G6-E2 scientific hard gate
 → regenerate source-backed macOS G6 evidence
 → add B9-G6-E3 hash-bound AI visual report
 → add B9-G6-E4 lightweight human confirmation
+→ harden FFmpeg runtime preflight and regenerate the preview
 → independently verify the resulting evidence archive
 → final B9 closeout
 → only then B10
