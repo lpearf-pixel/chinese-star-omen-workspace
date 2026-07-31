@@ -13,7 +13,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: e5a5315fcea72ea878bf62968170d4f262fabc5d
 Current feature branch: docs/kaiyuan-b9-final-closeout-v1
 Current task: B9-FINAL-CLOSEOUT
-B9 overall: VERIFYING
+B9 overall: DONE when PR #50 merges
 B9-G6: DONE with accepted corrected archive
 Release target: stable/kaiyuan-v2
 Forbidden target: main
@@ -166,13 +166,18 @@ B9 planning: DONE
 - **Independent archive verification:** corrected archive SHA-256 `8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214` passed archive safety, privacy, fixed-member, stable schema, canonical binding, media, screenshot, OCR and visual checks.
 
 ### B9-FINAL-CLOSEOUT — Final B9 evidence and governance closeout
-- **Status:** `IN_PROGRESS`
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `e5a5315fcea72ea878bf62968170d4f262fabc5d`
 - **Goal:** record the accepted exact G6 archive, final B9 completion matrix, PR #49 exact-head evidence and unchanged safety boundaries in an independent docs-only PR.
 - **Acceptance:** changed-file audit is docs-only; local docs/governance checks pass; the closeout PR targets only `stable/kaiyuan-v2`; exact-head required workflows and review pass; the PR is merged before B10 starts.
 - **Boundary:** do not commit the local archive; do not change code, contracts, corpus, Qdrant, `local_kb_default`, `main`, media or publishing authority.
+- **Closeout PR:** #50; initial exact head `a2f2c9c668f5a9b0da4ee13a424b9eea93fa1093`.
+- **Initial exact-head workflows:** Development Governance `30598928710`, Kaiyuan Stable Core `30598928837` and Kaiyuan Upstream Runtime `30598928873` all succeeded.
+- **Review:** four expected documentation files; no submitted reviews or review threads; mergeable.
+- **Effective boundary:** B9 becomes `DONE` on stable only when PR #50 merges. The final status-only head must rerun all required workflows before merge.
 
-B9 remains `VERIFYING`; B10 cannot start until B9-FINAL-CLOSEOUT is merged.
+B9 is complete in the PR #50 merge candidate. B10 cannot start until PR #50 is
+merged and the resulting stable head is reverified.
 
 ## Governance
 
@@ -182,7 +187,7 @@ B9 remains `VERIFYING`; B10 cannot start until B9-FINAL-CLOSEOUT is merged.
 
 ## B10 — Whole-book rule structuring
 - **Status:** `BACKLOG`
-- **Entry gate:** accepted B9-G6 evidence plus final B9 closeout
+- **Entry gate:** accepted B9-G6 evidence plus merged PR #50 final closeout
 
 ## B11 — Rule engine 2.0
 - **Status:** `BACKLOG`

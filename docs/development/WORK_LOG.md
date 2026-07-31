@@ -54,9 +54,21 @@ and
 `0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918`
 remain rejected and immutable.
 
-B9-G6-E4 and B9-G6-E6 are now `DONE`. B9-FINAL-CLOSEOUT is
-`IN_PROGRESS`; B9 overall remains `VERIFYING` and B10 remains `BLOCKED` until
-this independent docs-only closeout passes exact-head gates and merges.
+B9-G6-E4 and B9-G6-E6 are now `DONE`. Draft PR #50 targets only
+`stable/kaiyuan-v2`. Its initial exact head
+`a2f2c9c668f5a9b0da4ee13a424b9eea93fa1093` had four expected documentation
+files, no submitted reviews or review threads, was mergeable, and passed:
+
+```text
+Development Governance 30598928710: success
+Kaiyuan Stable Core 30598928837: success
+Kaiyuan Upstream Runtime 30598928873: success
+```
+
+B9-FINAL-CLOSEOUT and B9 overall are `DONE` in the PR #50 merge candidate.
+The final status-only documentation head must rerun the same required
+workflows. B10 remains `BLOCKED` until PR #50 is actually merged and the
+resulting stable head is independently reverified.
 
 ## 2026-07-30 — B9-G6-E6 evidence handoff integrity started
 

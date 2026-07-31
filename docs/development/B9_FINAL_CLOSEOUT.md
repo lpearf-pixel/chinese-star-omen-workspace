@@ -10,7 +10,7 @@ Final implementation squash merge: e5a5315fcea72ea878bf62968170d4f262fabc5d
 Accepted local run: 20260730T121805Z
 Accepted archive: b9-local-g6-evidence-20260730T121805Z-corrected-v1.tar.gz
 Accepted archive SHA-256: 8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214
-Closeout state: VERIFYING
+Closeout state: DONE when PR #50 merges
 ```
 
 The archive itself is not committed to Git. Its exact hash identifies the
@@ -53,6 +53,25 @@ Submitted reviews: 0
 Squash merge: e5a5315fcea72ea878bf62968170d4f262fabc5d
 ```
 
+## PR #50 closeout verification
+
+The initial docs-only closeout head
+`a2f2c9c668f5a9b0da4ee13a424b9eea93fa1093` passed:
+
+```text
+Development Governance: 30598928710 — success
+Kaiyuan Stable Core: 30598928837 — success
+Kaiyuan Upstream Runtime: 30598928873 — success
+Changed files: 4 expected documentation files
+Review threads: 0
+Submitted reviews: 0
+Mergeable: true
+```
+
+The final status-only documentation head must pass the same required workflows
+before merge. B9 completion becomes effective on `stable/kaiyuan-v2` only when
+PR #50 merges; B10 must start from that resulting stable head.
+
 ## Safety and scope
 
 - The release target remains only `stable/kaiyuan-v2`; `main` is untouched.
@@ -63,9 +82,9 @@ Squash merge: e5a5315fcea72ea878bf62968170d4f262fabc5d
 - Stellarium remains a renderer rather than the scientific authority.
 - The accepted evidence decision does not authorize automatic publication.
 
-## Final gate
+## Final state
 
-B9 remains `VERIFYING` until this independent docs-only closeout PR has passed
-its exact-head governance and review checks and is merged into
-`stable/kaiyuan-v2`. Only that merge may change B9 to `DONE` and make B10
-eligible to start from the new stable head.
+The accepted archive and initial PR #50 exact-head gates satisfy the B9
+completion definition. This closeout records B9 as `DONE` in the merge
+candidate. B10 remains blocked until PR #50 is actually merged and the
+resulting `stable/kaiyuan-v2` head is independently reverified.

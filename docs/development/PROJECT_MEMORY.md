@@ -35,9 +35,9 @@ B9-G6-E4 lightweight human confirmation: DONE (#46 plus accepted local evidence)
 B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: DONE (#48)
 B9-G6-E6 evidence handoff integrity: DONE (#49 plus accepted corrected archive)
 B9-G6 run 20260730T121805Z: ACCEPTED
-B9 final closeout: IN_PROGRESS
-B9 overall: VERIFYING
-B10: BLOCKED until final B9 closeout merges
+B9 final closeout: DONE in PR #50 merge candidate
+B9 overall: DONE when PR #50 merges
+B10: BACKLOG; entry gate satisfied only after PR #50 merges and stable is reverified
 ```
 
 ## 3. B9 merge chain
@@ -215,17 +215,19 @@ VideoPackage/v1
 - 仅检查 `ffmpeg -filters` 不足以证明可渲染；真实 smoke 失败必须在
   80 秒 preview 之前 fail-closed。
 
-## 7. 当前唯一未完成门禁：B9 final closeout
+## 7. B9 final closeout merge boundary
 
 真实 macOS G6 已由修正归档
 `8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214`
 完成并通过独立复验。Hosted CI 只验证代码与契约，未被用来替代
 Stellarium、FFmpeg、截图或人工播放证据。
 
-当前只剩独立 docs-only B9 final closeout PR 的 exact-head governance、
-review 和 merge。该 PR 合并前：
+PR #50 的首个 exact head 已通过 Development Governance、Kaiyuan Stable
+Core 和 Kaiyuan Upstream Runtime，4 个变更文件均为预期治理文档，且无
+review 或 unresolved thread。最终状态文档 head 仍必须重复通过相同门禁。
+该 PR 合并前：
 
-- B9 保持 `VERIFYING`；
+- B9 的 `DONE` 只存在于 merge candidate，尚未对 stable 生效；
 - B10 保持 `BLOCKED`；
 - 不得声称 B9 授权自动发布或生成 `final.mp4`。
 
@@ -255,6 +257,7 @@ review 和 merge。该 PR 合并前：
 ## 10. 下一动作
 
 ```text
-完成 B9 final closeout exact-head gates and merge
-→ only then B10
+完成 PR #50 final exact-head gates and merge
+→ reverify the resulting stable head
+→ start B10 from that head
 ```
