@@ -227,6 +227,9 @@ merged and the resulting stable head is reverified.
 - **Acceptance:** existing locator/hash semantics; provenance-preserving duplicate handling; ambiguous anchor fail-closed; deterministic bytes independent of input order; batch size `100–500` with default `200`; stable batch identity; checkpoint tamper/concurrency/resume/idempotence/no-overwrite tests.
 - **Boundary:** no full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
 - **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed; hosted gates remain.
+- **PR:** #53, initial exact head `9de85036ef0ab1ed35477de69ce56e30a613f01e`.
+- **Initial exact-head workflows:** Development Governance `30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime `30601232778` all succeeded.
+- **Review:** nine expected files; zero submitted reviews and review threads; mergeable. Final status-only exact-head gates remain.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `BACKLOG`

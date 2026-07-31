@@ -53,9 +53,16 @@ The final pass also completed governance unit tests `5/5`, development
 governance with `changed_files=9 code_files=6`, strict schema inspection and
 the external integration boundary scan.
 
-B10-PR-B is now `VERIFYING`. Remaining work is commit, Draft PR, exact-head
-gates, review and merge. No extraction, model, review queue, corpus, Qdrant,
-ingest, `local_kb_default`, B11/B12 or `main` operation occurred.
+B10-PR-B Draft PR #53 was published at initial exact head
+`9de85036ef0ab1ed35477de69ce56e30a613f01e`. Development Governance
+`30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime
+`30601232778` all succeeded on that exact head. The PR contains the expected
+nine files, is mergeable and has zero submitted reviews or review threads.
+
+B10-PR-B remains `VERIFYING` until this status-only merge-candidate commit
+passes a fresh final exact-head workflow set. No extraction, model, review
+queue, corpus, Qdrant, ingest, `local_kb_default`, B11/B12 or `main` operation
+occurred.
 
 ## 2026-07-30 — B10-PR-A contract work started
 
