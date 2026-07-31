@@ -2,6 +2,48 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-C calibration infrastructure started
+
+PR #53 final exact head `3059748aab26efe00a1d87a5e58cf06ea7013acd`
+passed Development Governance `30601310046`, Kaiyuan Stable Core
+`30601310041` and Kaiyuan Upstream Runtime `30601310051`. It contained the
+expected nine files, zero reviews or threads and was expected-head squash
+merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+
+B10-PR-C starts from that exact stable commit. Existing PR-A annotation cases
+are contract examples without human reviewer identity, dataset split or pilot
+measurements. They cannot truthfully authorize a threshold freeze. This PR may
+implement strict manifests, sealed-holdout isolation, calibration metrics and
+canonical no-overwrite freeze generation, but the produced decision must
+remain `needs_human_approval` until reviewed fixtures and an actual approval
+record exist. PR-D remains blocked.
+
+The infrastructure checkpoint now has strict models/loaders for golden cases
+and manifests, sealed holdout labels, split disjointness, calibration reports,
+threshold freezes and atomic no-overwrite publication. Holdout access verifies
+the sealed asset hash, exact case IDs and guide version. Approval requires
+passing validation metrics, citable false positives equal to zero, and a
+non-placeholder approval identity plus decision reference.
+
+TDD first failed because `src.rule_structuring.calibration` did not exist.
+Focused GREEN is `8 passed`, including unknown fields, missing labels, hash
+tamper, parent-directory symlink escape, ordinary holdout denial, split
+overlap, metric denominator tamper, threshold floor and no-overwrite cases.
+Fresh full gates:
+
+```text
+contracts: 23 passed
+text-core: 26 passed
+downstream: 503 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+governance unit tests: 5 passed
+```
+
+B10-PR-C is `BLOCKED`, not complete: no reviewed stratified pilot fixtures,
+two verified human reviewer identities, validation decisions or approval
+record have been supplied. No fake fixtures or approved threshold freeze were
+created. PR-D remains blocked.
+
 ## 2026-07-30 — B10-PR-B passage inventory and batch work started
 
 PR #52 final exact head

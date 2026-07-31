@@ -221,7 +221,7 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #52 squash merged as `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
 
 ### B10-PR-B — Passage inventory, source invalidation and resumable batches
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
 - **Goal:** build deterministic primary passage inventory, explicit source-change invalidation and stable resumable batch/checkpoint contracts.
 - **Acceptance:** existing locator/hash semantics; provenance-preserving duplicate handling; ambiguous anchor fail-closed; deterministic bytes independent of input order; batch size `100–500` with default `200`; stable batch identity; checkpoint tamper/concurrency/resume/idempotence/no-overwrite tests.
@@ -230,9 +230,17 @@ merged and the resulting stable head is reverified.
 - **PR:** #53, initial exact head `9de85036ef0ab1ed35477de69ce56e30a613f01e`.
 - **Initial exact-head workflows:** Development Governance `30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime `30601232778` all succeeded.
 - **Review:** nine expected files; zero submitted reviews and review threads; mergeable. Final status-only exact-head gates remain.
+- **Final exact-head workflows:** Development Governance `30601310046`, Kaiyuan Stable Core `30601310041` and Kaiyuan Upstream Runtime `30601310051` all succeeded.
+- **Merged:** PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
-- **Status:** `BACKLOG`
+- **Status:** `BLOCKED`
+- **Base:** `stable/kaiyuan-v2` at `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+- **Goal:** add strict golden-set manifests, sealed-holdout isolation, deterministic calibration metrics and canonical threshold-freeze generation.
+- **Boundary:** existing contract examples are not human pilot evidence. Infrastructure may proceed, but `threshold-freeze.json` remains `needs_human_approval` until reviewed split fixtures, calibration decisions and an actual approver are supplied. PR-D stays blocked.
+- **Implemented checkpoint:** strict golden case/manifest, sealed holdout, split isolation, calibration report, threshold-freeze and atomic no-overwrite boundaries; focused `8 passed`.
+- **Local verification:** contracts `23 passed`; text-core `26 passed`; downstream `503 passed`; upstream `188 passed, 3 skipped`; governance tests `5 passed`.
+- **Blocker:** no reviewed stratified pilot fixtures, two verified human reviewer identities, validation decisions or approval record have been supplied.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
