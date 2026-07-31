@@ -195,12 +195,15 @@ merged and the resulting stable head is reverified.
 - **Completion boundary:** all six whole-book denominators must reach terminal coverage; infrastructure or one release batch cannot mark B10 `DONE`.
 
 ### B10-T00 — Program charter and threshold governance
-- **Status:** `VERIFYING`
+- **Status:** `DONE` in PR #51 merge candidate
 - **Base:** `stable/kaiyuan-v2` at `a10e33118c2e34f947a099492bb01e13a07a98a8`
 - **Goal:** freeze the whole-book completion denominators, PR-A through PR-H sequence, resumable batch policy, calibration/threshold process and B11 input boundary before contract implementation.
 - **Acceptance:** program charter, D-025 decision, task/memory/work-log state; citable false-positive gate fixed at `0`; post-pilot `threshold-freeze.json` required before full extraction; docs/governance gates and a docs-only PR targeting stable.
 - **Boundary:** no rule contract implementation, corpus modification, candidate extraction, model call, Qdrant access, `local_kb_default` access or B11/B12 implementation.
 - **Local verification:** charter acceptance scan, 5 governance unit tests, development governance checker, `compileall` and `git diff --check` passed on 2026-07-30; exact-head hosted gates remain required before merge.
+- **PR:** #51, initial exact head `fb7fb012a98a7d6d75d37354da3b9ca73d743e76`.
+- **Initial exact-head workflows:** Development Governance `30599473112`, Kaiyuan Stable Core `30599473165` and Kaiyuan Upstream Runtime `30599473127` all succeeded.
+- **Effective boundary:** Task 0 becomes `DONE` on stable only when PR #51 merges; the final status-only head must pass the same exact-head workflows first.
 
 ### B10-PR-A — OmenRule/v2, identity and annotation contract
 - **Status:** `BACKLOG`
