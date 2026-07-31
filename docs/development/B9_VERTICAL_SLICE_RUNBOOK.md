@@ -421,12 +421,21 @@ Only `assisted-renderer-review.json` with `status=approved` permits the remainin
 
 ## 11. Build media-bound local capability evidence
 
-Record exact installed versions before building evidence:
+Read the exact installed Stellarium application version before building
+evidence. Do not type or infer this value from the runbook:
 
 ```bash
 export B9_FFMPEG_VERSION="$(ffmpeg -version | awk 'NR==1 {print $3}')"
-# Set the exact installed 26.x semantic version reported by the local application.
-export B9_STELLARIUM_VERSION="26.2.0"
+export B9_STELLARIUM_APP="/Applications/Stellarium.app"
+export B9_STELLARIUM_VERSION="$(
+  python ../../scripts/b9_g6_handoff.py \
+    --stellarium-app "$B9_STELLARIUM_APP" \
+    --print-stellarium-version
+)"
+
+printf 'FFmpeg: %s\nStellarium: %s\n' \
+  "$B9_FFMPEG_VERSION" \
+  "$B9_STELLARIUM_VERSION"
 ```
 
 Then build canonical evidence:
@@ -525,7 +534,8 @@ Run this only after the assisted renderer review is approved. The command fails 
 
 ## 12. Prepare the evidence handoff archive
 
-Copy the exact non-structured media and package bindings into the evidence directory:
+Copy the exact non-structured media and package bindings into the evidence
+directory:
 
 ```bash
 cp "$B9_OUTPUT_DIR/preview.mp4" "$B9_EVIDENCE_DIR/preview.mp4"
@@ -533,30 +543,20 @@ cp "$B9_OUTPUT_DIR/scene.ssc" "$B9_EVIDENCE_DIR/scene.ssc"
 cp "$B9_OUTPUT_DIR/preview-command.json" "$B9_EVIDENCE_DIR/preview-command.json"
 cp "$B9_OUTPUT_DIR/manifest.json" "$B9_EVIDENCE_DIR/package-manifest.json"
 
-find "$B9_EVIDENCE_DIR/screenshots" -type f -name '*.png' -print0 \
-  | sort -z \
-  | xargs -0 shasum -a 256 \
-  > "$B9_EVIDENCE_DIR/screenshot-sha256.txt"
-
-tar -czf "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz" \
-  -C "$B9_EVIDENCE_DIR" \
-  local-capability-evidence.json \
-  renderer-review-input.json \
-  renderer-hard-gate.json \
-  ai-assisted-visual-review.json \
-  human-experience-confirmation.json \
-  assisted-renderer-review.json \
-  ocr-observations.json \
-  ffprobe-preview.json \
-  preview.mp4 \
-  scene.ssc \
-  preview-command.json \
-  package-manifest.json \
-  screenshot-sha256.txt \
-  screenshots
+python ../../scripts/b9_g6_handoff.py \
+  --evidence-dir "$B9_EVIDENCE_DIR" \
+  --stellarium-app "$B9_STELLARIUM_APP" \
+  --output "data/b9-local-g6-evidence-${B9_RUN_ID}.tar.gz"
 ```
 
-The archive must not include `.env`, keys, corpus files, Qdrant data, private absolute paths or unrelated machine logs.
+The handoff command rejects a capability version that differs from the actual
+application bundle. It derives `screenshot-sha256.txt` with relative
+`screenshots/...` names, enumerates only the fixed evidence member set, excludes
+Finder `._*` metadata and unrelated files, and refuses to overwrite an existing
+archive.
+
+The archive must not include `.env`, keys, corpus files, Qdrant data, private
+absolute paths or unrelated machine logs.
 
 ## 13. Failure handling
 
