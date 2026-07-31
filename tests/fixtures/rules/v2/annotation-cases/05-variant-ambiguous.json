@@ -1,0 +1,18 @@
+{
+  "case_id": "annotation:variant-ambiguous",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:033:0001",
+      "heading": "异文",
+      "raw_text": "客星出于□，其占阙。"
+    }
+  ],
+  "decision": "retain_without_formal_candidate",
+  "expected_candidate_count": 0,
+  "expected_groups": [],
+  "eligibility": "needs_review",
+  "computability": "unknown",
+  "review_status": "contract_frozen",
+  "review_note": "target 缺字且 effect 缺失；保留 passage 和 ambiguity，不补造语义。"
+}

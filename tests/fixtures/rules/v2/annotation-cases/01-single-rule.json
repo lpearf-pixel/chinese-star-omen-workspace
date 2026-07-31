@@ -1,0 +1,19 @@
+{
+  "case_id": "annotation:single-rule",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:031:0001",
+      "heading": "五星占",
+      "raw_text": "荧惑守心，主君忧。"
+    }
+  ],
+  "decision": "one_passage_one_rule",
+  "expected_candidate_count": 1,
+  "expected_groups": [
+    ["passage:kaiyuan:031:0001"]
+  ],
+  "computability": "partially_computable",
+  "review_status": "contract_frozen",
+  "review_note": "唯一 trigger 和唯一 effect；古文未给角距阈值。"
+}

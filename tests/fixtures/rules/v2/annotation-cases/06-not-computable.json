@@ -1,0 +1,19 @@
+{
+  "case_id": "annotation:not-computable",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:034:0001",
+      "heading": "云气占",
+      "raw_text": "气如天门开，王者德衰。"
+    }
+  ],
+  "decision": "one_passage_one_rule",
+  "expected_candidate_count": 1,
+  "expected_groups": [
+    ["passage:kaiyuan:034:0001"]
+  ],
+  "computability": "not_computable",
+  "review_status": "contract_frozen",
+  "review_note": "核心比喻和政治占应不能操作化；不可计算是研究结论，不是失败。"
+}

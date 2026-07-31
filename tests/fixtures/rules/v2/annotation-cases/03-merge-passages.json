@@ -1,0 +1,27 @@
+{
+  "case_id": "annotation:merge-passages",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:031:0003",
+      "heading": "五星占",
+      "raw_text": "荧惑留守心。"
+    },
+    {
+      "passage_id": "passage:kaiyuan:031:0004",
+      "heading": "五星占",
+      "raw_text": "七日以上，主君忧。"
+    }
+  ],
+  "decision": "multiple_passages_one_rule",
+  "expected_candidate_count": 1,
+  "expected_groups": [
+    [
+      "passage:kaiyuan:031:0003",
+      "passage:kaiyuan:031:0004"
+    ]
+  ],
+  "computability": "partially_computable",
+  "review_status": "contract_frozen",
+  "review_note": "第二段提供前段不可缺少的 duration 和 effect，不是同文重复。"
+}

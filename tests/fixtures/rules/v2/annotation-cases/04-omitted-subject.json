@@ -1,0 +1,20 @@
+{
+  "case_id": "annotation:omitted-subject",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:032:0001",
+      "heading": "太白占",
+      "raw_text": "入昴，兵起。"
+    }
+  ],
+  "decision": "resolve_subject_from_heading",
+  "expected_candidate_count": 1,
+  "expected_groups": [
+    ["passage:kaiyuan:032:0001"]
+  ],
+  "resolved_actor": "venus",
+  "computability": "partially_computable",
+  "review_status": "contract_frozen",
+  "review_note": "heading 唯一限定太白；原文不补字，editorial note 记录补全来源。"
+}
