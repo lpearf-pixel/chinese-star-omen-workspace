@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 0df8c70551c1746d073a390e3fcd9371a5de8e5d
+Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
 Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b10-omen-rule-v2
-Current task: B10-PR-A OmenRule/v2, identity and annotation contract
+Current feature branch: codex/kaiyuan-b10-passage-batches-v2
+Current task: B10-PR-B passage inventory, source invalidation and resumable batches
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -38,7 +38,8 @@ B9-G6 run 20260730T121805Z: ACCEPTED
 B9 final closeout: DONE (#50)
 B9 overall: DONE
 B10-T00 program charter and threshold governance: DONE (#51)
-B10-PR-A OmenRule/v2, identity and annotation contract: DONE in PR #52 merge candidate
+B10-PR-A OmenRule/v2, identity and annotation contract: DONE (#52)
+B10-PR-B passage inventory, source invalidation and resumable batches: VERIFYING
 B10 overall: IN_PROGRESS
 ```
 
@@ -260,6 +261,6 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-完成并合并 PR #52 B10-PR-A OmenRule/v2、identity 和 annotation contract
-→ start B10-PR-B passage inventory and resumable batches from the resulting stable head
+完成 B10-PR-B passage inventory、source invalidation 和 resumable batches
+→ verify and merge an independent PR targeting stable/kaiyuan-v2
 ```

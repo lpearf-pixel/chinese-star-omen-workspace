@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 0df8c70551c1746d073a390e3fcd9371a5de8e5d
-Current feature branch: codex/kaiyuan-b10-omen-rule-v2
-Current task: B10-PR-A OmenRule/v2, identity and annotation contract
+Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
+Current feature branch: codex/kaiyuan-b10-passage-batches-v2
+Current task: B10-PR-B passage inventory, source invalidation and resumable batches
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -207,7 +207,7 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #51 squash merged as `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
 
 ### B10-PR-A — OmenRule/v2, identity and annotation contract
-- **Status:** `DONE` in PR #52 merge candidate
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
 - **Entry gate:** satisfied by merged B10-T00 and independently fetched exact stable commit.
 - **Goal:** create strict `OmenRule/v2` and `RuleCandidate/v2` contracts, deterministic candidate identity, approval-only rule identity/version history, explicit v1 migration reporting, and a frozen annotation guide with reviewed cases.
@@ -217,10 +217,16 @@ merged and the resulting stable head is reverified.
 - **PR:** #52, initial exact head `cbb2fc7c82e7b73404089bca0fd4ecae2915b422`.
 - **Initial exact-head workflows:** Development Governance `30600436677`, Kaiyuan Stable Core `30600436719` and Kaiyuan Upstream Runtime `30600436650` all succeeded.
 - **Review:** 18 expected files; zero submitted reviews and review threads; mergeable.
-- **Effective boundary:** PR-A becomes `DONE` on stable only when PR #52 merges; this final evidence-only head must repeat the same workflows.
+- **Final exact-head workflows:** Development Governance `30600525915`, Kaiyuan Stable Core `30600525882` and Kaiyuan Upstream Runtime `30600525861` all succeeded.
+- **Merged:** PR #52 squash merged as `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
 
 ### B10-PR-B — Passage inventory, source invalidation and resumable batches
-- **Status:** `BACKLOG`
+- **Status:** `VERIFYING`
+- **Base:** `stable/kaiyuan-v2` at `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
+- **Goal:** build deterministic primary passage inventory, explicit source-change invalidation and stable resumable batch/checkpoint contracts.
+- **Acceptance:** existing locator/hash semantics; provenance-preserving duplicate handling; ambiguous anchor fail-closed; deterministic bytes independent of input order; batch size `100–500` with default `200`; stable batch identity; checkpoint tamper/concurrency/resume/idempotence/no-overwrite tests.
+- **Boundary:** no full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
+- **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed; hosted gates remain.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `BACKLOG`
