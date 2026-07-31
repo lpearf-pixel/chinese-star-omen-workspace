@@ -9,8 +9,9 @@ and applicable local verification, while remote/self-hosted Runner is reserved
 for one final unified validation of the exact major-version candidate
 immediately before merge into `stable/kaiyuan-v2`.
 
-The durable rule is recorded in root `AGENTS.md` and
-`docs/development/DEVELOPMENT_MANUAL.md`. It also requires:
+The durable rule is recorded in root `AGENTS.md`,
+`docs/development/DEVELOPMENT_MANUAL.md` and
+`docs/development/B9_B10_TEST_STRATEGY.md`. It also requires:
 
 ```text
 no per-commit or per-PR-head Runner scheduling/retry/wait for routine work
@@ -20,15 +21,24 @@ special real-device/science/corpus/human/migration/security evidence remains ind
 gh is optional when an authenticated GitHub App/API is equivalent and auditable
 ```
 
+The older B10-PR-B work-log entry below is preserved as historical evidence of
+the policy in force at that time; its statement that a status-only head must
+rerun workflows is superseded by GOV-T03. PR #53 subsequently merged as
+`7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+
+Existing pull-request-triggered workflows are a transitional implementation.
+GOV-T04 records their separate migration to an explicit major-version unified
+Runner entrypoint; this policy batch does not silently alter workflow YAML.
+
 This governance-only batch does not modify workflows, product code, corpus,
 Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable refs.
 Per the rule being adopted, no Runner was invoked for this task. Local
-verification on the complete four-file change set:
+verification on the complete five-file change set:
 
 ```text
 governance unit tests: 5 passed
-development governance: passed, changed_files=4, code_files=0
-policy consistency assertions: 10/10 passed
+development governance: passed, changed_files=5, code_files=0
+policy consistency assertions: 16/16 passed
 git diff --check: passed
 Runner: NOT RUN (routine governance documentation; not a major-version merge)
 ```

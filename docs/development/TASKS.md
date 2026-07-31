@@ -189,8 +189,14 @@ merged and the resulting stable head is reverified.
 ### GOV-T03 — Local-first verification and major-version Runner gate
 - **Status:** `VERIFYING`
 - **Goal:** make local verification the default for routine work and reserve one final unified Runner validation for the exact major-version candidate immediately before merging into `stable/kaiyuan-v2`.
-- **Acceptance:** root `AGENTS.md` and the long-lived development manual define the same policy; missing Runner evidence is recorded as `NOT RUN`/`BLOCKED`, never passed; `gh` is explicitly optional when the GitHub App or API provides an equivalent auditable operation.
+- **Acceptance:** root `AGENTS.md`, the long-lived development manual and B9–B10 test strategy define the same policy; missing Runner evidence is recorded as `NOT RUN`/`BLOCKED`, never passed; `gh` is explicitly optional when the GitHub App or API provides an equivalent auditable operation.
 - **Boundary:** documentation/governance only; no workflow, product code, corpus, Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable ref mutation.
+
+### GOV-T04 — Major-version unified Runner workflow migration
+- **Status:** `BACKLOG`
+- **Goal:** replace transitional per-PR automatic Runner triggers with one explicit exact-head major-version stable merge gate while retaining independently scheduled nightly and task-specific real-environment evidence.
+- **Acceptance:** ordinary PR events do not consume or block on Runner; the release operator can launch one documented unified validation against an exact candidate SHA; results are hash/SHA bound and fail closed.
+- **Boundary:** requires a separate workflow design and review; GOV-T03 does not silently change existing workflow YAML.
 
 ## B10 — Whole-book rule structuring
 - **Status:** `IN_PROGRESS`
@@ -227,15 +233,16 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #52 squash merged as `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
 
 ### B10-PR-B — Passage inventory, source invalidation and resumable batches
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
 - **Goal:** build deterministic primary passage inventory, explicit source-change invalidation and stable resumable batch/checkpoint contracts.
 - **Acceptance:** existing locator/hash semantics; provenance-preserving duplicate handling; ambiguous anchor fail-closed; deterministic bytes independent of input order; batch size `100–500` with default `200`; stable batch identity; checkpoint tamper/concurrency/resume/idempotence/no-overwrite tests.
 - **Boundary:** no full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
-- **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed; hosted gates remain.
+- **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed.
 - **PR:** #53, initial exact head `9de85036ef0ab1ed35477de69ce56e30a613f01e`.
 - **Initial exact-head workflows:** Development Governance `30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime `30601232778` all succeeded.
-- **Review:** nine expected files; zero submitted reviews and review threads; mergeable. Final status-only exact-head gates remain.
+- **Review:** nine expected files; zero submitted reviews and review threads; mergeable.
+- **Final head and merge:** final head `3059748`; Development Governance `30601310046`, Kaiyuan Stable Core `30601310041` and Kaiyuan Upstream Runtime `30601310051` succeeded under the pre-GOV-T03 policy; PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `BACKLOG`
