@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
+Last verified stable HEAD: 7ed60487a9a77e93578f14e27e35dc7612dcc054
 Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b10-passage-batches-v2
-Current task: B10-PR-B passage inventory, source invalidation and resumable batches
+Current feature branch: codex/kaiyuan-b10-calibration-v2
+Current task: B10-PR-C golden sets, calibration pilot and threshold freeze
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -39,7 +39,9 @@ B9 final closeout: DONE (#50)
 B9 overall: DONE
 B10-T00 program charter and threshold governance: DONE (#51)
 B10-PR-A OmenRule/v2, identity and annotation contract: DONE (#52)
-B10-PR-B passage inventory, source invalidation and resumable batches: VERIFYING
+B10-PR-B passage inventory, source invalidation and resumable batches: DONE (#53)
+B10-PR-C infrastructure and anonymous reviewer slots: VERIFYING in draft #54;
+actual threshold freeze remains blocked on two independent human pilot submissions
 B10 overall: IN_PROGRESS
 ```
 

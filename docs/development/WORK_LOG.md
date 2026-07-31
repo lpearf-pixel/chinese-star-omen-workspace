@@ -2,6 +2,124 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-C real-corpus pilot handoff implementation
+
+PR-C now provides a deterministic offline handoff instead of requiring an
+operator to assemble A/B worksheets manually. The implementation consumes a
+real `PassageInventoryV1`, a caller-reviewed `pilot-selection/v1` and the
+existing anonymous slot manifest. It enforces the frozen celestial, relation,
+complexity, computability, evidence-risk, difficult-case, split and cross-volume
+coverage before emitting exactly two slot-specific worksheets.
+
+The tool does not select passages, infer strata, prefill expected labels, call
+a model/extractor, open sealed holdout labels or mutate the corpus. It rejects
+source fingerprint drift, unknown/source-ambiguous passages, duplicate case or
+passage identities, incomplete coverage, cross-slot content drift and output
+overwrite. Generated inventory and worksheets may contain real source text and
+therefore remain caller-selected local artifacts outside Git.
+
+TDD evidence:
+
+```text
+RED 1: ModuleNotFoundError for src.rule_structuring.pilot_worksheets
+GREEN: deterministic selection/worksheet and no-overwrite behavior
+RED 2: ModuleNotFoundError for src.rule_structuring.pilot_handoff
+GREEN: real-corpus handoff function and path-free result
+RED 3: inventory subcommand rejected as unknown positional input
+GREEN: inventory and worksheets CLI subcommands
+RED 4: tampered reviewer_b case was accepted with a stale declared shared hash
+GREEN: actual shared content is rehashed by model validation and publication
+focused calibration/inventory/pilot suite: 25 passed
+contracts: 23 passed
+text-core: 26 passed
+downstream: 512 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+```
+
+The real full-book inventory and worksheets are not generated in CI because the
+immutable source corpus is intentionally absent from the repository. Two
+different people must still complete the returned A/B worksheets independently;
+PR-C remains incomplete and PR-D remains blocked.
+
+## 2026-07-30 — B10-PR-C external reviewer ID prerequisite removed
+
+The user has no pre-existing reviewer account IDs. B10 does not need GitHub,
+email, employee or other external identifiers for a private human pilot, so
+the project now deterministically issues two pseudonymous audit slots from the
+pilot ID:
+
+```text
+pilot:kaiyuan-b10-pr-c-v1
+reviewer_a: reviewer:anon:a3ed615d9706befdec85569f
+reviewer_b: reviewer:anon:c6d751fedc80e326e652a5ef
+```
+
+The canonical slot manifest fixes `external_account_required=false` and
+`human_review_completed=false`. The two IDs are stable, distinct and bound to
+the exact pilot. Creating them does not claim that either worksheet was
+completed, and the same person may not fill both slots.
+
+TDD first failed at collection because `ReviewerSlotV1` did not exist. The
+minimum implementation then passed the focused suite. A canonical-byte test
+also caught and removed a trailing newline from the manifest.
+
+Fresh verification checkpoint:
+
+```text
+focused calibration: 10 passed
+contracts: 23 passed
+text-core: 26 passed
+downstream: 505 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+```
+
+The repository intentionally does not contain the immutable full-book source
+text, so no contract fixture was relabeled as a real pilot case. The remaining
+external evidence is now precisely two independent human submissions over a
+real stratified pilot, followed by validation and an approval decision; it is
+no longer an ID provisioning problem.
+
+## 2026-07-30 — B10-PR-C calibration infrastructure started
+
+PR #53 final exact head `3059748aab26efe00a1d87a5e58cf06ea7013acd`
+passed Development Governance `30601310046`, Kaiyuan Stable Core
+`30601310041` and Kaiyuan Upstream Runtime `30601310051`. It contained the
+expected nine files, zero reviews or threads and was expected-head squash
+merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+
+B10-PR-C starts from that exact stable commit. Existing PR-A annotation cases
+are contract examples without human reviewer identity, dataset split or pilot
+measurements. They cannot truthfully authorize a threshold freeze. This PR may
+implement strict manifests, sealed-holdout isolation, calibration metrics and
+canonical no-overwrite freeze generation, but the produced decision must
+remain `needs_human_approval` until reviewed fixtures and an actual approval
+record exist. PR-D remains blocked.
+
+The infrastructure checkpoint now has strict models/loaders for golden cases
+and manifests, sealed holdout labels, split disjointness, calibration reports,
+threshold freezes and atomic no-overwrite publication. Holdout access verifies
+the sealed asset hash, exact case IDs and guide version. Approval requires
+passing validation metrics, citable false positives equal to zero, and a
+non-placeholder approval identity plus decision reference.
+
+TDD first failed because `src.rule_structuring.calibration` did not exist.
+Focused GREEN is `8 passed`, including unknown fields, missing labels, hash
+tamper, parent-directory symlink escape, ordinary holdout denial, split
+overlap, metric denominator tamper, threshold floor and no-overwrite cases.
+Fresh full gates:
+
+```text
+contracts: 23 passed
+text-core: 26 passed
+downstream: 503 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+governance unit tests: 5 passed
+```
+
+B10-PR-C is `BLOCKED`, not complete: no reviewed stratified pilot fixtures,
+two verified human reviewer identities, validation decisions or approval
+record have been supplied. No fake fixtures or approved threshold freeze were
+created. PR-D remains blocked.
 ## 2026-07-30 — GOV-T03 local-first verification policy
 
 The user approved a repository-wide delivery rule: routine work uses focused
