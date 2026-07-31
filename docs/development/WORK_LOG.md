@@ -2,6 +2,62 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B9 final closeout started after corrected G6 acceptance
+
+Remote `stable/kaiyuan-v2` was independently fetched as
+`e5a5315fcea72ea878bf62968170d4f262fabc5d`, the squash merge of PR #49.
+The only open pull requests remain legacy #1 and #7; neither targets
+`stable/kaiyuan-v2`. The closeout branch is
+`docs/kaiyuan-b9-final-closeout-v1`.
+
+PR #49 exact-head evidence at
+`69faf14ee60c43bd65b36d67b1f23ab4f779d298`:
+
+```text
+Development Governance 30566529753: success
+Kaiyuan Stable Core 30566529828: success
+Kaiyuan Upstream Runtime 30566529785: success
+Changed files: 8 expected
+Review threads: 0
+Submitted reviews: 0
+Squash merge: e5a5315fcea72ea878bf62968170d4f262fabc5d
+```
+
+The uploaded corrected archive
+`b9-local-g6-evidence-20260730T121805Z-corrected-v1.tar.gz` has SHA-256
+`8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214`.
+Fresh independent verification against the exact merged stable models proved:
+
+```text
+archive members: 19 fixed members
+unsafe paths, links or devices: 0
+absolute machine paths: 0
+AppleDouble members: 0
+screenshot inventory: 5 relative entries, all hashes matched
+stable modeled artifacts: 8/8 canonical
+renderer hard gate: passed, 0 issues
+AI visual review: needs_human_review
+human experience checks: all true
+resolved assisted review: approved
+Stellarium: 26.1.0, matching the visible Stellarium 26.1 window
+FFmpeg: 8.1.2
+preview: 1080x1920, H.264, 80000 ms, 1 video, 0 audio
+preview SHA-256: eaf290ef84630c5a8bc80cf675c7279c61da76f360c19f58b557e71c6b9c9bd3
+screenshots: 5, all capability/review/OCR hashes byte-bound
+visual contact-sheet review: no clipping, internal field leakage or path leakage
+disposition: accepted for B9-G6
+```
+
+The earlier archives with SHA-256
+`fc49031dc98083e46aad912b3cfaa43cea611ec80934c37352ba9691cf9eff52`
+and
+`0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918`
+remain rejected and immutable.
+
+B9-G6-E4 and B9-G6-E6 are now `DONE`. B9-FINAL-CLOSEOUT is
+`IN_PROGRESS`; B9 overall remains `VERIFYING` and B10 remains `BLOCKED` until
+this independent docs-only closeout passes exact-head gates and merges.
+
 ## 2026-07-30 — B9-G6-E6 evidence handoff integrity started
 
 Remote `stable/kaiyuan-v2` was resolved as

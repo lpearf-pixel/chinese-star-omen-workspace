@@ -10,11 +10,11 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c2be80c2adbf307178c353a6769ab98c170d1930
-Current feature branch: codex/kaiyuan-b9-g6-handoff-integrity-v1
-Current task: B9-G6-E6 evidence handoff integrity
+Last verified stable HEAD: e5a5315fcea72ea878bf62968170d4f262fabc5d
+Current feature branch: docs/kaiyuan-b9-final-closeout-v1
+Current task: B9-FINAL-CLOSEOUT
 B9 overall: VERIFYING
-B9-G6: BLOCKED after handoff archive integrity rejection
+B9-G6: DONE with accepted corrected archive
 Release target: stable/kaiyuan-v2
 Forbidden target: main
 Protected collection: local_kb_default
@@ -96,13 +96,15 @@ B9 planning: DONE
 - **Closeout:** `docs/development/B9_G6_E1_CLOSEOUT.md`
 
 ### B9-G6 — Local/self-hosted renderer evidence
-- **Status:** `BLOCKED`
+- **Status:** `DONE`
 - **Goal:** on macOS run the exact `.ssc` and preview argv, validate actual preview media, inspect the result, capture at most 30 screenshots, and create canonical media-bound `LocalCapabilityEvidence/v1`
 - **Runbook:** `docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`
 - **Required archive:** capability JSON、ffprobe JSON、preview.mp4、scene.ssc、preview command、package manifest、screenshot inventory and screenshots
 - **Boundary:** synthetic CI is not real renderer evidence and does not authorize publication
 - **Rejected evidence:** `b9-local-g6-evidence-20260730T040856Z.tar.gz`, archive SHA-256 `fc49031dc98083e46aad912b3cfaa43cea611ec80934c37352ba9691cf9eff52`
 - **Reason:** archive integrity passed, but `july-21-event.json` and generated narration asserted `3.25°`; independent recomputation for the recorded 2026-07-21 11:00 UTC Shanghai observation was approximately `5.4°`. The fixture also used placeholder ephemeris provenance.
+- **Accepted evidence:** `b9-local-g6-evidence-20260730T121805Z-corrected-v1.tar.gz`, archive SHA-256 `8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214`.
+- **Acceptance:** 19 fixed safe members; no absolute paths or AppleDouble files; actual Stellarium `26.1.0`; FFmpeg `8.1.2`; 1080x1920 H.264 80-second preview; five byte-bound screenshots; renderer hard gate passed; all human confirmations true; final assisted review approved.
 
 ### B9-G6-E2 — Scientific provenance and machine hard gate
 - **Status:** `DONE`
@@ -125,7 +127,7 @@ B9 planning: DONE
 - **Merged:** PR #45 into `stable/kaiyuan-v2` at `f937c60c76f5e450279e05b3c04de67e296fa687`; all five exact-head workflows passed.
 
 ### B9-G6-E4 — Lightweight human confirmation
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Entry gate:** B9-G6-E2 merged; E3 report available or explicitly `needs_human_review`.
 - **Goal:** ask only three layperson checks after professional gates pass and bind the answer to exact review artifacts.
 - **Plan:** `docs/superpowers/plans/2026-07-30-kaiyuan-light-human-confirmation.md`
@@ -133,7 +135,7 @@ B9 planning: DONE
 - **Implementation commits:** `80d8e1d`, `4bb6090`
 - **Local verification:** focused assisted review `160 passed`; collector `3 passed` plus `bash -n`; contracts `6 passed`; text-core `22 passed`; downstream `487 passed`.
 - **Merged:** PR #46 into `stable/kaiyuan-v2` at `939c5272a84a1bf3dd2e9c72037ea180f76e8adf`; all five exact-head workflows passed.
-- **Remaining:** fresh macOS collection, normalized AI report, three-check confirmation and independent archive verification.
+- **Completion evidence:** accepted corrected run `20260730T121805Z` contains the hash-bound AI report, all three confirmations and final `approved` resolver output.
 
 ### B9-G6-E5 — FFmpeg runtime preflight
 - **Status:** `DONE`
@@ -150,7 +152,7 @@ B9 planning: DONE
 - **Merged:** PR #48 into `stable/kaiyuan-v2` at `c2be80c2adbf307178c353a6769ab98c170d1930`.
 
 ### B9-G6-E6 — Evidence handoff integrity
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Trigger:** independently verified run `20260730T121805Z` has a valid canonical review/media/hash chain, but its handoff archive records Stellarium `26.2.0` while the bound overview shows `26.1`, includes five `/Users/...` screenshot inventory paths, and carries sixteen `._*` AppleDouble members.
 - **Rejected archive:** `b9-local-g6-evidence-20260730T121805Z.tar.gz`, SHA-256 `0271e15b99151811123ff47f25e5254dec42703001e6bc8079344e6f66916918`.
 - **Goal:** bind capability evidence to the actual `.app` version and create a fixed-member, relative-path, AppleDouble-free, deterministic no-overwrite archive.
@@ -160,9 +162,17 @@ B9 planning: DONE
 - **Acceptance:** actual Info.plist version must equal capability JSON; inventory paths are relative; archive contains no `._*` or unrelated members; existing output is never overwritten; focused/full gates and independent regenerated-archive review pass.
 - **Local verification:** 10 handoff behaviors plus 10 preview/collector regressions passed through the same plain-assert functions; `compileall`, collector `bash -n`, CLI help and `git diff --check` passed.
 - **Pressure test:** uploaded mismatch rejected without output; canonical capability version `26.1.0` produced 19 fixed members, five relative inventory entries and zero AppleDouble members.
-- **Remaining:** exact-head pytest/full repository/CI gates, merge, then regenerate the Mac capability JSON and handoff archive using the actual installed `.app`.
+- **Merged:** PR #49 into `stable/kaiyuan-v2` at `e5a5315fcea72ea878bf62968170d4f262fabc5d`; exact-head Development Governance `30566529753`, Kaiyuan Stable Core `30566529828` and Kaiyuan Upstream Runtime `30566529785` all succeeded.
+- **Independent archive verification:** corrected archive SHA-256 `8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214` passed archive safety, privacy, fixed-member, stable schema, canonical binding, media, screenshot, OCR and visual checks.
 
-B9 remains `VERIFYING`; B10 cannot start until G6 evidence is accepted and final B9 closeout is merged.
+### B9-FINAL-CLOSEOUT — Final B9 evidence and governance closeout
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `e5a5315fcea72ea878bf62968170d4f262fabc5d`
+- **Goal:** record the accepted exact G6 archive, final B9 completion matrix, PR #49 exact-head evidence and unchanged safety boundaries in an independent docs-only PR.
+- **Acceptance:** changed-file audit is docs-only; local docs/governance checks pass; the closeout PR targets only `stable/kaiyuan-v2`; exact-head required workflows and review pass; the PR is merged before B10 starts.
+- **Boundary:** do not commit the local archive; do not change code, contracts, corpus, Qdrant, `local_kb_default`, `main`, media or publishing authority.
+
+B9 remains `VERIFYING`; B10 cannot start until B9-FINAL-CLOSEOUT is merged.
 
 ## Governance
 
@@ -191,7 +201,7 @@ implement and merge B9-G6-E2 scientific hard gate
 → harden FFmpeg runtime preflight and regenerate the preview
 → independently verify the resulting evidence archive
 → correct handoff version provenance and archive privacy/minimality
-→ final B9 closeout
+→ merge final B9 closeout
 → only then B10
 ```
 
