@@ -207,13 +207,17 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #51 squash merged as `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
 
 ### B10-PR-A — OmenRule/v2, identity and annotation contract
-- **Status:** `VERIFYING`
+- **Status:** `DONE` in PR #52 merge candidate
 - **Base:** `stable/kaiyuan-v2` at `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
 - **Entry gate:** satisfied by merged B10-T00 and independently fetched exact stable commit.
 - **Goal:** create strict `OmenRule/v2` and `RuleCandidate/v2` contracts, deterministic candidate identity, approval-only rule identity/version history, explicit v1 migration reporting, and a frozen annotation guide with reviewed cases.
 - **Acceptance:** all ontology, identity lifecycle, split/merge/history, strict JSON, duplicate-ID, illegal-state, unknown-field, non-finite-number, v1 migration and annotation-case requirements in the B10 plan.
 - **Boundary:** contracts and fixtures only; no passage inventory, full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
 - **Local verification checkpoint:** TDD RED observed for missing v2 modules; shared contracts `23 passed`; downstream `487 passed`; upstream `188 passed, 3 skipped`; final fresh rerun, governance and hosted exact-head gates remain.
+- **PR:** #52, initial exact head `cbb2fc7c82e7b73404089bca0fd4ecae2915b422`.
+- **Initial exact-head workflows:** Development Governance `30600436677`, Kaiyuan Stable Core `30600436719` and Kaiyuan Upstream Runtime `30600436650` all succeeded.
+- **Review:** 18 expected files; zero submitted reviews and review threads; mergeable.
+- **Effective boundary:** PR-A becomes `DONE` on stable only when PR #52 merges; this final evidence-only head must repeat the same workflows.
 
 ### B10-PR-B — Passage inventory, source invalidation and resumable batches
 - **Status:** `BACKLOG`

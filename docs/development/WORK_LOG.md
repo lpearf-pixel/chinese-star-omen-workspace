@@ -56,6 +56,27 @@ B10-PR-A is now `VERIFYING`. Remaining work is commit, Draft PR, exact-head
 hosted gates, review/thread audit and merge. No corpus, Qdrant, collection,
 ingest, model call, B11/B12, `local_kb_default` or `main` operation occurred.
 
+Draft PR #52 targets only `stable/kaiyuan-v2`. Its initial exact head
+`cbb2fc7c82e7b73404089bca0fd4ecae2915b422` is one commit ahead of the exact
+base, and its remote tree
+`aa317a5da706bb53ac896815ecb620db0561de8a` exactly matches the locally
+verified tree. All 18 remote blob SHA values were checked during publication.
+
+```text
+Development Governance 30600436677: success
+Kaiyuan Stable Core 30600436719: success
+Kaiyuan Upstream Runtime 30600436650: success
+changed files: 18 expected
+submitted reviews: 0
+review threads: 0
+mergeable: true
+```
+
+B10-PR-A is `DONE` in the PR #52 merge candidate. This evidence-only status
+update creates a new exact head; it must repeat all required workflows and the
+review/thread/diff audit before expected-head squash merge. PR-B cannot start
+from the feature branch.
+
 ## 2026-07-30 — B10-T00 program charter started
 
 PR #50 was rechecked as merged into `stable/kaiyuan-v2`. Independent fetch
