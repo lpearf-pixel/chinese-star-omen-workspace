@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: e5a5315fcea72ea878bf62968170d4f262fabc5d
+Last verified stable HEAD: a10e33118c2e34f947a099492bb01e13a07a98a8
 Verified at: 2026-07-30
-Current feature branch: docs/kaiyuan-b9-final-closeout-v1
-Current task: B9-FINAL-CLOSEOUT
+Current feature branch: docs/kaiyuan-b10-planning-v1
+Current task: B10-T00 program charter and threshold governance
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -35,9 +35,10 @@ B9-G6-E4 lightweight human confirmation: DONE (#46 plus accepted local evidence)
 B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: DONE (#48)
 B9-G6-E6 evidence handoff integrity: DONE (#49 plus accepted corrected archive)
 B9-G6 run 20260730T121805Z: ACCEPTED
-B9 final closeout: DONE in PR #50 merge candidate
-B9 overall: DONE when PR #50 merges
-B10: BACKLOG; entry gate satisfied only after PR #50 merges and stable is reverified
+B9 final closeout: DONE (#50)
+B9 overall: DONE
+B10-T00 program charter and threshold governance: DONE in PR #51 merge candidate
+B10 overall: IN_PROGRESS
 ```
 
 ## 3. B9 merge chain
@@ -61,6 +62,7 @@ B10: BACKLOG; entry gate satisfied only after PR #50 merges and stable is reveri
 #47  G6 collection readiness 23e9d0fce3c5f2609456430f9829234afe2e704b
 #48  G6 FFmpeg preflight     c2be80c2adbf307178c353a6769ab98c170d1930
 #49  G6 handoff integrity   e5a5315fcea72ea878bf62968170d4f262fabc5d
+#50  B9 final closeout      a10e33118c2e34f947a099492bb01e13a07a98a8
 ```
 
 ## 4.2 Second real G6 evidence disposition
@@ -215,21 +217,21 @@ VideoPackage/v1
 - 仅检查 `ffmpeg -filters` 不足以证明可渲染；真实 smoke 失败必须在
   80 秒 preview 之前 fail-closed。
 
-## 7. B9 final closeout merge boundary
+## 7. B9 final closeout result
 
 真实 macOS G6 已由修正归档
 `8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214`
 完成并通过独立复验。Hosted CI 只验证代码与契约，未被用来替代
 Stellarium、FFmpeg、截图或人工播放证据。
 
-PR #50 的首个 exact head 已通过 Development Governance、Kaiyuan Stable
-Core 和 Kaiyuan Upstream Runtime，4 个变更文件均为预期治理文档，且无
-review 或 unresolved thread。最终状态文档 head 仍必须重复通过相同门禁。
-该 PR 合并前：
+PR #50 的最终 exact head
+`bec4b0a9c5b5d878367ef14341a9ba93752ec417` 通过 Development
+Governance、Kaiyuan Stable Core 和 Kaiyuan Upstream Runtime，4 个变更
+文件均为预期治理文档，且无 review 或 unresolved thread。PR #50
+squash merged 为 `a10e33118c2e34f947a099492bb01e13a07a98a8`。
 
-- B9 的 `DONE` 只存在于 merge candidate，尚未对 stable 生效；
-- B10 保持 `BLOCKED`；
-- 不得声称 B9 授权自动发布或生成 `final.mp4`。
+B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒体或
+`final.mp4`。
 
 ## 8. 永久安全边界
 
@@ -257,7 +259,6 @@ review 或 unresolved thread。最终状态文档 head 仍必须重复通过相�
 ## 10. 下一动作
 
 ```text
-完成 PR #50 final exact-head gates and merge
-→ reverify the resulting stable head
-→ start B10 from that head
+完成并合并 PR #51 B10-T00 program charter and threshold governance
+→ start B10-PR-A OmenRule/v2 from the resulting stable head
 ```

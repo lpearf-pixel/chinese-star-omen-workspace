@@ -2,6 +2,63 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-T00 program charter started
+
+PR #50 was rechecked as merged into `stable/kaiyuan-v2`. Independent fetch
+resolved the stable ref to
+`a10e33118c2e34f947a099492bb01e13a07a98a8`; the merged closeout file is
+present. The only open pull requests remain legacy #1 and #7, neither of which
+targets the stable release line.
+
+B10 now starts on the independent branch
+`docs/kaiyuan-b10-planning-v1`. Task B10-T00 freezes governance before
+`OmenRule/v2` implementation:
+
+```text
+whole-book denominators: 6 explicit terminal-coverage conditions
+implementation sequence: B10-PR-A through B10-PR-H
+citable evidence false-positive gate: 0
+deterministic formal-candidate precision target before pilot: >= 0.90
+threshold authority: canonical threshold-freeze.json after B10-PR-C pilot
+long jobs: stable batch ID, checkpoint/resume, idempotent no-overwrite outputs
+model extraction: optional and disabled by default
+B11 input: approved/citable engine-gap-report only
+```
+
+No contract, extractor, corpus, candidate, review queue, model, Qdrant,
+collection, B11 or B12 behavior changes in B10-T00. `main` and
+`local_kb_default` remain outside scope.
+
+Local verification completed before publication:
+
+```text
+charter acceptance scan: PASS
+governance unit tests: 5/5 PASS
+development governance checker: PASS (changed_files=5, code_files=0)
+compileall: PASS
+git diff --check: PASS
+```
+
+B10-T00 is now `VERIFYING`. It remains incomplete until the final feature head
+passes hosted exact-head gates, changed-file/review/thread audit and merges into
+`stable/kaiyuan-v2`.
+
+Draft PR #51 targets only `stable/kaiyuan-v2`. Its initial exact head
+`fb7fb012a98a7d6d75d37354da3b9ca73d743e76` contains exactly five expected
+documentation files, with remote blob SHA values identical to the locally
+verified files. The first exact-head workflows completed successfully:
+
+```text
+Development Governance 30599473112: success
+Kaiyuan Stable Core 30599473165: success
+Kaiyuan Upstream Runtime 30599473127: success
+```
+
+B10-T00 is `DONE` in the PR #51 merge candidate. This evidence-only status
+update creates a new head, so the same workflows, changed-file audit,
+review/thread audit and mergeability check must pass again before merge. PR-A
+must start from the resulting stable squash SHA, not from this feature branch.
+
 ## 2026-07-30 — B9 final closeout started after corrected G6 acceptance
 
 Remote `stable/kaiyuan-v2` was independently fetched as
