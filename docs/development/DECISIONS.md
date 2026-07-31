@@ -200,3 +200,35 @@
 - **Decision:** `HistoricalContextAssetV1.source_type`、`source_title` 和 `asset_id` 继续保留在结构化资产与 lineage 中，但受众字幕只显示自然语言前缀 `历史背景：` 和已审核正文；不得把内部枚举值、英文 catalog 标签或机器字段名拼入受众文案。
 - **Reason:** 首次 source-backed AI 视觉复核正确拒绝了包含 `catalog_context` 与 `Chinese sky-culture catalog context` 的字幕。结构化可追溯性与面向普通观众的表达是两个不同界面，不应通过屏幕文字混合。
 - **Consequence:** `historical_source` 引用仍必须绑定原 asset ID；移除受众显示不等于删除或弱化 provenance。旧批次 `20260730T073457Z` 保持 rejected，新文案必须以新 run ID 重建完整包、预览和审核证据。
+
+## D-025 — B10 以全书显式分母、冻结阈值和可恢复批次为完成依据
+
+- **Status:** Accepted
+- **Decision:** B10 的完成依据固定为六项全书分母：全部 primary passage
+  进入稳定 inventory；每个 passage 有 eligibility 状态；每个 eligible
+  passage 有候选或结构化无候选原因；每个候选进入审核终态；每个
+  approved rule 通过 citable、去重/冲突和 release validation；所有
+  unresolved/ambiguous 内容继续保留在分母和报告中。
+- **Thresholds:** pilot 前指标只是候选目标，不得当作可移动的 release
+  threshold。B10-PR-C 必须发布 canonical `threshold-freeze.json` 后才可
+  开始全书抽取。确定性抽取正式候选 precision 候选目标不低于 `0.90`；
+  citable evidence false-positive gate 固定为 `0`，不允许通过阈值调整
+  放宽。
+- **Threshold change:** 冻结后任何 extractor、review 或 release 阈值
+  变化必须独立决策，并保存 before/after、原因、validation/holdout
+  影响和批准记录；不得在失败批次中临时调阈值后覆盖旧结果。
+- **Recovery:** 长任务使用输入集合与工具版本绑定的稳定 batch ID、
+  canonical checkpoint、幂等 resume 和 caller-selected no-overwrite
+  输出。失败、deferred、checkpoint mismatch 和并发冲突必须显式记录，
+  不得静默从头重跑、跳过困难项或覆盖历史。
+- **Model boundary:** 模型适配默认 disabled，只能生成候选，不能批准、
+  分配正式 rule ID、promote、ingest 或写正式知识库。禁用模型时 B10
+  仍可完成。
+- **B11 boundary:** B11 只消费最终 release 中基于 approved/citable
+  rules 的 `engine-gap-report.json`；不得根据未审核候选或主观需求提前
+  扩展执行器。
+- **Reason:** 单批规则或基础设施完成不能证明全书覆盖；可移动阈值、
+  不可恢复批次和候选驱动的执行器扩展会制造虚假进度与不可审计结果。
+- **Consequence:** B10-PR-A 至 PR-H 分阶段独立 review/merge/closeout。
+  覆盖率报告必须公开分母，sealed holdout 不参与日常调参，所有历史
+  review、release 和 checkpoint 保持可追溯。
