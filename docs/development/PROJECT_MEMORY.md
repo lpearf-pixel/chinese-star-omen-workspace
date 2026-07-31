@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c2be80c2adbf307178c353a6769ab98c170d1930
+Last verified stable HEAD: e5a5315fcea72ea878bf62968170d4f262fabc5d
 Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b9-g6-handoff-integrity-v1
-Current task: B9-G6-E6 evidence handoff integrity
+Current feature branch: docs/kaiyuan-b9-final-closeout-v1
+Current task: B9-FINAL-CLOSEOUT
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -31,11 +31,13 @@ B9-G6-E1 preview-media evidence hardening and closeout: DONE (#42/#43)
 B9-G6 first real macOS evidence: REJECTED after archive verification
 B9-G6-E2 scientific hard gate: DONE (#44)
 B9-G6-E3 AI visual report: DONE (#45)
-B9-G6-E4 lightweight human confirmation: VERIFYING
+B9-G6-E4 lightweight human confirmation: DONE (#46 plus accepted local evidence)
 B9-G6-E5 FFmpeg runtime preflight and audience-copy follow-up: DONE (#48)
-B9-G6-E6 evidence handoff integrity: VERIFYING
-B9 overall: VERIFYING
-B10: BLOCKED until real G6 evidence and final B9 closeout
+B9-G6-E6 evidence handoff integrity: DONE (#49 plus accepted corrected archive)
+B9-G6 run 20260730T121805Z: ACCEPTED
+B9 final closeout: DONE in PR #50 merge candidate
+B9 overall: DONE when PR #50 merges
+B10: BACKLOG; entry gate satisfied only after PR #50 merges and stable is reverified
 ```
 
 ## 3. B9 merge chain
@@ -58,6 +60,7 @@ B10: BLOCKED until real G6 evidence and final B9 closeout
 #46  G6 human confirmation   939c5272a84a1bf3dd2e9c72037ea180f76e8adf
 #47  G6 collection readiness 23e9d0fce3c5f2609456430f9829234afe2e704b
 #48  G6 FFmpeg preflight     c2be80c2adbf307178c353a6769ab98c170d1930
+#49  G6 handoff integrity   e5a5315fcea72ea878bf62968170d4f262fabc5d
 ```
 
 ## 4.2 Second real G6 evidence disposition
@@ -80,6 +83,30 @@ The preview, screenshots and assisted-review reports do not need regeneration.
 The actual application version must be read from the `.app`, capability
 evidence rebuilt with that version, and the archive recreated from a fixed
 member list with a relative screenshot inventory.
+
+The corrected archive was subsequently regenerated with the merged PR #49
+handoff command and independently verified:
+
+```text
+Archive: b9-local-g6-evidence-20260730T121805Z-corrected-v1.tar.gz
+Archive SHA-256: 8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214
+Archive members: 19 fixed members
+Unsafe paths, links or devices: 0
+Absolute machine paths: 0
+AppleDouble members: 0
+Screenshot inventory: 5 relative paths, all byte hashes matched
+Stellarium: 26.1.0, matching the bound Stellarium 26.1 overview
+FFmpeg: 8.1.2
+Preview: 1080x1920, H.264, 80000 ms, 1 video, 0 audio
+Renderer hard gate: passed, 0 issues
+AI visual review: needs_human_review
+Human confirmations: all true
+Resolved assisted review: approved
+Disposition: accepted for B9-G6
+```
+
+This acceptance applies only to the exact corrected archive hash above. It
+does not change the rejected disposition of either earlier archive.
 
 ## 4.1 First real G6 evidence disposition
 
@@ -188,27 +215,21 @@ VideoPackage/v1
 - 仅检查 `ffmpeg -filters` 不足以证明可渲染；真实 smoke 失败必须在
   80 秒 preview 之前 fail-closed。
 
-## 7. 当前唯一未完成门禁：B9-G6
+## 7. B9 final closeout merge boundary
 
-Hosted CI 没有启动 Stellarium 或 FFmpeg，不能作为真实 G6 证据。仍需在 macOS 完成：
+真实 macOS G6 已由修正归档
+`8a4af09210961fada5cb6e8ac1a3344d4055307bb7d8c48920c90f71c4020214`
+完成并通过独立复验。Hosted CI 只验证代码与契约，未被用来替代
+Stellarium、FFmpeg、截图或人工播放证据。
 
-```text
-加载 exact scene.ssc
-生成 exact preview.mp4
-使用受限 ffprobe 字段验证媒体
-人工核对 UTC、地点、对象、字幕和画面
-最多 30 张截图及 size/SHA-256 inventory
-canonical media-bound LocalCapabilityEvidence/v1
-```
+PR #50 的首个 exact head 已通过 Development Governance、Kaiyuan Stable
+Core 和 Kaiyuan Upstream Runtime，4 个变更文件均为预期治理文档，且无
+review 或 unresolved thread。最终状态文档 head 仍必须重复通过相同门禁。
+该 PR 合并前：
 
-Runbook：`docs/development/B9_VERTICAL_SLICE_RUNBOOK.md`。
-
-G6 完成前：
-
-- B9 不得标记 DONE；
-- B10 不得启动；
-- 不得声称已有正式视频或可自动发布；
-- synthetic CI review records 不是发布审核。
+- B9 的 `DONE` 只存在于 merge candidate，尚未对 stable 生效；
+- B10 保持 `BLOCKED`；
+- 不得声称 B9 授权自动发布或生成 `final.mp4`。
 
 ## 8. 永久安全边界
 
@@ -236,10 +257,7 @@ G6 完成前：
 ## 10. 下一动作
 
 ```text
-完成 B9-G6-E6 handoff integrity
-→ 使用实际 Stellarium `.app` 版本重建 capability evidence
-→ 生成并上传无绝对路径和 AppleDouble 的 evidence archive
-→ 独立复验媒体、脚本、命令、截图、工具版本和归档成员
-→ final B9 closeout
-→ only then B10
+完成 PR #50 final exact-head gates and merge
+→ reverify the resulting stable head
+→ start B10 from that head
 ```
