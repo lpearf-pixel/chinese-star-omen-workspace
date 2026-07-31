@@ -37,7 +37,7 @@ B9-G6-E6 evidence handoff integrity: DONE (#49 plus accepted corrected archive)
 B9-G6 run 20260730T121805Z: ACCEPTED
 B9 final closeout: DONE (#50)
 B9 overall: DONE
-B10-T00 program charter and threshold governance: VERIFYING
+B10-T00 program charter and threshold governance: DONE in PR #51 merge candidate
 B10 overall: IN_PROGRESS
 ```
 
@@ -259,7 +259,6 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-完成 B10-T00 program charter and threshold governance
-→ merge planning/governance PR
+完成并合并 PR #51 B10-T00 program charter and threshold governance
 → start B10-PR-A OmenRule/v2 from the resulting stable head
 ```
