@@ -2,6 +2,68 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-B passage inventory and batch work started
+
+PR #52 final exact head
+`893a935f837a000041bd87ae18055851b3a164da` passed Development Governance
+`30600525915`, Kaiyuan Stable Core `30600525882` and Kaiyuan Upstream Runtime
+`30600525861`. The final audit found 18 expected files, zero reviews, zero
+threads and a mergeable expected head. GitHub squash merged it as
+`108e0d5fe42403e66b2f2c2a6e0c24585df955b8`.
+
+B10-PR-B started from that exact commit on
+`codex/kaiyuan-b10-passage-batches-v2`. Scope is deterministic passage
+inventory, source-change invalidation and stable batch/checkpoint/resume
+contracts only. Full extraction, models, review queues, Qdrant, official
+ingest, B11/B12 and corpus mutation remain out of scope. Tests must fail first
+before implementation.
+
+TDD RED was observed when focused collection could not import the absent
+`kb_text_core.rule_passages` module. The GREEN checkpoint now provides:
+
+```text
+stable passage IDs over existing locator/paragraph/normalized-hash semantics
+split-volume preference with duplicate fulltext provenance retained
+same-anchor/different-content ambiguity preservation
+path-safe canonical inventory and per-passage source fingerprint binding
+explicit added/removed/changed/invalidated passage reporting
+stable 100–500 passage batches, default 200
+batch identity bound to input set, source fingerprint, tool version and params
+strict checkpoint identity, disjoint outcomes and idempotent resume
+failed/deferred/finalize transitions
+atomic hard-link no-overwrite publication with one concurrent winner
+```
+
+Inventory hashes and parses the same byte snapshot, avoiding a fingerprint/
+content TOCTOU window, and rejects symlinked primary sources. Preliminary
+verification:
+
+```text
+focused rule passages: 4 passed
+focused inventory/batches: 8 passed
+contracts: 23 passed
+text-core: 26 passed
+downstream: 495 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+compileall: passed
+git diff --check: passed
+```
+
+The final pass also completed governance unit tests `5/5`, development
+governance with `changed_files=9 code_files=6`, strict schema inspection and
+the external integration boundary scan.
+
+B10-PR-B Draft PR #53 was published at initial exact head
+`9de85036ef0ab1ed35477de69ce56e30a613f01e`. Development Governance
+`30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime
+`30601232778` all succeeded on that exact head. The PR contains the expected
+nine files, is mergeable and has zero submitted reviews or review threads.
+
+B10-PR-B remains `VERIFYING` until this status-only merge-candidate commit
+passes a fresh final exact-head workflow set. No extraction, model, review
+queue, corpus, Qdrant, ingest, `local_kb_default`, B11/B12 or `main` operation
+occurred.
+
 ## 2026-07-30 — B10-PR-A contract work started
 
 PR #51 final exact head
