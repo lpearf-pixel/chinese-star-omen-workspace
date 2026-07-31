@@ -2,6 +2,40 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — GOV-T03 local-first verification policy
+
+The user approved a repository-wide delivery rule: routine work uses focused
+and applicable local verification, while remote/self-hosted Runner is reserved
+for one final unified validation of the exact major-version candidate
+immediately before merge into `stable/kaiyuan-v2`.
+
+The durable rule is recorded in root `AGENTS.md` and
+`docs/development/DEVELOPMENT_MANUAL.md`. It also requires:
+
+```text
+no per-commit or per-PR-head Runner scheduling/retry/wait for routine work
+Runner unavailable or incomplete = NOT RUN or BLOCKED, never passed
+any final-candidate head change invalidates earlier final Runner evidence
+special real-device/science/corpus/human/migration/security evidence remains independent
+gh is optional when an authenticated GitHub App/API is equivalent and auditable
+```
+
+This governance-only batch does not modify workflows, product code, corpus,
+Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable refs.
+Per the rule being adopted, no Runner was invoked for this task. Local
+verification on the complete four-file change set:
+
+```text
+governance unit tests: 5 passed
+development governance: passed, changed_files=4, code_files=0
+policy consistency assertions: 10/10 passed
+git diff --check: passed
+Runner: NOT RUN (routine governance documentation; not a major-version merge)
+```
+
+GOV-T03 remains `VERIFYING` until the documentation commit and review reference
+are recorded.
+
 ## 2026-07-30 — B10-PR-B passage inventory and batch work started
 
 PR #52 final exact head
