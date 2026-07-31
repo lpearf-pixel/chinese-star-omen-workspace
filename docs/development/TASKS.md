@@ -234,13 +234,16 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
-- **Status:** `BLOCKED`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 - **Goal:** add strict golden-set manifests, sealed-holdout isolation, deterministic calibration metrics and canonical threshold-freeze generation.
 - **Boundary:** existing contract examples are not human pilot evidence. Infrastructure may proceed, but `threshold-freeze.json` remains `needs_human_approval` until reviewed split fixtures, calibration decisions and an actual approver are supplied. PR-D stays blocked.
 - **Implemented checkpoint:** strict golden case/manifest, sealed holdout, split isolation, calibration report, threshold-freeze and atomic no-overwrite boundaries; focused `8 passed`.
 - **Local verification:** contracts `23 passed`; text-core `26 passed`; downstream `503 passed`; upstream `188 passed, 3 skipped`; governance tests `5 passed`.
-- **Blocker:** no reviewed stratified pilot fixtures, two verified human reviewer identities, validation decisions or approval record have been supplied.
+- **Current work:** remove the unnecessary external-account-ID prerequisite by issuing two stable project-local anonymous reviewer slots. Slot issuance must not be treated as a human annotation or approval.
+- **Anonymous slots:** `reviewer:anon:a3ed615d9706befdec85569f` and `reviewer:anon:c6d751fedc80e326e652a5ef`; canonical manifest `eval/rules/v2/manifests/reviewer-slots.json`.
+- **Verification checkpoint:** anonymous-slot focused suite `10 passed`; contracts `23 passed`; text-core `26 passed`; downstream `505 passed`; upstream `188 passed, 3 skipped`.
+- **Remaining external evidence:** no reviewed stratified pilot fixtures, two independent human submissions, validation decisions or approval record have been supplied.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`

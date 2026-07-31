@@ -2,6 +2,44 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-C external reviewer ID prerequisite removed
+
+The user has no pre-existing reviewer account IDs. B10 does not need GitHub,
+email, employee or other external identifiers for a private human pilot, so
+the project now deterministically issues two pseudonymous audit slots from the
+pilot ID:
+
+```text
+pilot:kaiyuan-b10-pr-c-v1
+reviewer_a: reviewer:anon:a3ed615d9706befdec85569f
+reviewer_b: reviewer:anon:c6d751fedc80e326e652a5ef
+```
+
+The canonical slot manifest fixes `external_account_required=false` and
+`human_review_completed=false`. The two IDs are stable, distinct and bound to
+the exact pilot. Creating them does not claim that either worksheet was
+completed, and the same person may not fill both slots.
+
+TDD first failed at collection because `ReviewerSlotV1` did not exist. The
+minimum implementation then passed the focused suite. A canonical-byte test
+also caught and removed a trailing newline from the manifest.
+
+Fresh verification checkpoint:
+
+```text
+focused calibration: 10 passed
+contracts: 23 passed
+text-core: 26 passed
+downstream: 505 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+```
+
+The repository intentionally does not contain the immutable full-book source
+text, so no contract fixture was relabeled as a real pilot case. The remaining
+external evidence is now precisely two independent human submissions over a
+real stratified pilot, followed by validation and an approval decision; it is
+no longer an ID provisioning problem.
+
 ## 2026-07-30 — B10-PR-C calibration infrastructure started
 
 PR #53 final exact head `3059748aab26efe00a1d87a5e58cf06ea7013acd`

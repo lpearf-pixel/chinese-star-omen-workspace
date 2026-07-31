@@ -4,7 +4,10 @@
 2. Write failing tests for strict golden cases/manifests and sealed holdout.
 3. Implement canonical calibration metrics and threshold-freeze contracts.
 4. Add policy/runbook documentation for the human pilot handoff.
-5. Run focused, full, governance and exact-head hosted gates.
+5. Add deterministic project-local anonymous reviewer slots so reviewers do
+   not need external account IDs; keep two-person independence as a human
+   evidence gate.
+6. Run focused, full, governance and exact-head hosted gates.
 
 PR-D must not start until an approved freeze backed by reviewed pilot evidence
 is committed and independently verified.

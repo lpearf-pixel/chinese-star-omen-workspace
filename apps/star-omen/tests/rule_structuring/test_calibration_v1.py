@@ -14,6 +14,7 @@ from src.rule_structuring.calibration import (
     GoldenLabelV1,
     GoldenManifestEntryV1,
     GoldenManifestV1,
+    ReviewerSlotV1,
     SealedGoldenLabelV1,
     ThresholdFreezeV1,
     build_calibration_report,
@@ -21,8 +22,10 @@ from src.rule_structuring.calibration import (
     canonical_calibration_bytes,
     load_golden_manifest,
     load_sealed_holdout_labels,
+    issue_anonymous_reviewer_slots,
     publish_no_overwrite,
     validate_disjoint_splits,
+    validate_reviewer_slots,
 )
 
 
@@ -66,6 +69,65 @@ def test_cases_are_strict_and_holdout_labels_are_sealed() -> None:
         GoldenCaseV1.model_validate(
             {**_case(label=_label()).model_dump(mode="json"), "unknown": True}
         )
+
+
+def test_project_issues_stable_anonymous_reviewer_slots_without_external_ids() -> None:
+    pilot_id = "pilot:kaiyuan-b10-pr-c-v1"
+    first = issue_anonymous_reviewer_slots(pilot_id)
+    second = issue_anonymous_reviewer_slots(pilot_id)
+
+    assert first == second
+    assert [slot.slot for slot in first] == ["reviewer_a", "reviewer_b"]
+    assert len({slot.reviewer_id for slot in first}) == 2
+    assert all(slot.reviewer_id.startswith("reviewer:anon:") for slot in first)
+    assert all(slot.pilot_id == pilot_id for slot in first)
+    assert all(slot.external_account_required is False for slot in first)
+    assert all(slot.human_review_completed is False for slot in first)
+    assert canonical_calibration_bytes(
+        {"slots": [slot.model_dump(mode="json") for slot in first]}
+    ) == canonical_calibration_bytes(
+        {"slots": [slot.model_dump(mode="json") for slot in second]}
+    )
+
+    validate_reviewer_slots(
+        pilot_id=pilot_id,
+        reviewer_ids=[slot.reviewer_id for slot in first],
+        slots=first,
+    )
+    with pytest.raises(ValueError, match="pilot"):
+        validate_reviewer_slots(
+            pilot_id="pilot:other",
+            reviewer_ids=[slot.reviewer_id for slot in first],
+            slots=first,
+        )
+    with pytest.raises(ValueError, match="exactly two distinct"):
+        validate_reviewer_slots(
+            pilot_id=pilot_id,
+            reviewer_ids=[first[0].reviewer_id, first[0].reviewer_id],
+            slots=first,
+        )
+    with pytest.raises(ValidationError):
+        ReviewerSlotV1.model_validate(
+            {
+                **first[0].model_dump(mode="json"),
+                "human_review_completed": True,
+            }
+        )
+
+
+def test_pilot_reviewer_slot_manifest_is_canonical_and_unreviewed() -> None:
+    path = (
+        Path(__file__).resolve().parents[4]
+        / "eval/rules/v2/manifests/reviewer-slots.json"
+    )
+    data = path.read_bytes()
+    payload = json.loads(data)
+    slots = [ReviewerSlotV1.model_validate(item) for item in payload["slots"]]
+
+    assert payload["schema_version"] == "reviewer-slot-set/v1"
+    assert slots == list(issue_anonymous_reviewer_slots(payload["pilot_id"]))
+    assert data == canonical_calibration_bytes(payload)
+    assert all(slot.human_review_completed is False for slot in slots)
 
 
 def test_manifest_verifies_case_hash_and_split(tmp_path: Path) -> None:

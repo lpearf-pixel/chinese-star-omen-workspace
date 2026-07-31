@@ -74,6 +74,67 @@ class GoldenLabelV1(StrictCalibrationModel):
         return self
 
 
+ReviewerSlot = Literal["reviewer_a", "reviewer_b"]
+
+
+def _anonymous_reviewer_id(pilot_id: str, slot: ReviewerSlot) -> str:
+    seed = {
+        "namespace": "kaiyuan-anonymous-reviewer/v1",
+        "pilot_id": pilot_id,
+        "slot": slot,
+    }
+    digest = _sha256(canonical_calibration_bytes(seed))
+    return f"reviewer:anon:{digest[:24]}"
+
+
+class ReviewerSlotV1(StrictCalibrationModel):
+    schema_version: Literal["reviewer-slot/v1"]
+    pilot_id: StableId
+    slot: ReviewerSlot
+    reviewer_id: StableId
+    external_account_required: Literal[False] = False
+    human_review_completed: Literal[False] = False
+
+    @model_validator(mode="after")
+    def validate_reviewer_id(self) -> "ReviewerSlotV1":
+        expected = _anonymous_reviewer_id(self.pilot_id, self.slot)
+        if self.reviewer_id != expected:
+            raise ValueError("reviewer_id does not match pilot and slot")
+        return self
+
+
+def issue_anonymous_reviewer_slots(pilot_id: str) -> tuple[ReviewerSlotV1, ReviewerSlotV1]:
+    pilot_id = TypeAdapter(StableId).validate_python(pilot_id)
+    return tuple(
+        ReviewerSlotV1(
+            schema_version="reviewer-slot/v1",
+            pilot_id=pilot_id,
+            slot=slot,
+            reviewer_id=_anonymous_reviewer_id(pilot_id, slot),
+        )
+        for slot in ("reviewer_a", "reviewer_b")
+    )
+
+
+def validate_reviewer_slots(
+    *,
+    pilot_id: str,
+    reviewer_ids: Sequence[str],
+    slots: Sequence[ReviewerSlotV1],
+) -> None:
+    if len(reviewer_ids) != 2 or len(set(reviewer_ids)) != 2:
+        raise ValueError("reviewer_ids must contain exactly two distinct IDs")
+    if len(slots) != 2:
+        raise ValueError("pilot must contain exactly two reviewer slots")
+    validated = [ReviewerSlotV1.model_validate(slot) for slot in slots]
+    if any(slot.pilot_id != pilot_id for slot in validated):
+        raise ValueError("reviewer slot pilot does not match requested pilot")
+    if {slot.slot for slot in validated} != {"reviewer_a", "reviewer_b"}:
+        raise ValueError("pilot must contain reviewer_a and reviewer_b")
+    if set(reviewer_ids) != {slot.reviewer_id for slot in validated}:
+        raise ValueError("reviewer IDs do not match the issued pilot slots")
+
+
 class GoldenCaseV1(StrictCalibrationModel):
     schema_version: Literal["golden-case/v1"]
     case_id: StableId
@@ -476,13 +537,16 @@ __all__ = [
     "GoldenLabelV1",
     "GoldenManifestEntryV1",
     "GoldenManifestV1",
+    "ReviewerSlotV1",
     "SealedGoldenLabelV1",
     "ThresholdFreezeV1",
     "build_calibration_report",
     "build_threshold_freeze",
     "canonical_calibration_bytes",
+    "issue_anonymous_reviewer_slots",
     "load_golden_manifest",
     "load_sealed_holdout_labels",
     "publish_no_overwrite",
     "validate_disjoint_splits",
+    "validate_reviewer_slots",
 ]

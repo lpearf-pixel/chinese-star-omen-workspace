@@ -40,7 +40,8 @@ B9 overall: DONE
 B10-T00 program charter and threshold governance: DONE (#51)
 B10-PR-A OmenRule/v2, identity and annotation contract: DONE (#52)
 B10-PR-B passage inventory, source invalidation and resumable batches: DONE (#53)
-B10-PR-C golden sets, calibration pilot and threshold freeze: BLOCKED on human pilot evidence
+B10-PR-C infrastructure and anonymous reviewer slots: VERIFYING in draft #54;
+actual threshold freeze remains blocked on two independent human pilot submissions
 B10 overall: IN_PROGRESS
 ```
 
