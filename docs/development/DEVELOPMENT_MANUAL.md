@@ -31,7 +31,8 @@ corpus/kaiyuan_zhanjing
 - `stable/kaiyuan-v2` 是 v2 稳定发布基线。
 - 所有功能从 `stable/kaiyuan-v2` 建立 `codex/*` 或其他 feature branch。
 - 功能通过 PR 合入 `stable/kaiyuan-v2`，不得直接 push 稳定分支。
-- PR 在全部门禁通过前保持 draft。
+- 普通任务 PR 以适用的本地门禁为主要验证依据；不得为每个提交或
+  PR head 调度、重试或等待远端/self-hosted Runner。
 - 不得把 v2 release PR 的 base 改为 `main`。
 - `dev-test` 仅作为历史集成参考，不是 v2 release target。
 
@@ -318,7 +319,9 @@ hash_mismatch
 
 ## 12. 门禁矩阵
 
-按改动选择 focused test，合并前运行全部适用门禁：
+### 12.1 日常开发：本地优先
+
+按改动选择 focused test，并在本地运行全部适用回归：
 
 ```text
 make contracts-test
@@ -327,7 +330,18 @@ make downstream-test
 make upstream-test
 ```
 
-CI 还包括：
+普通开发、修复、文档、任务级 feature PR 和中间 head：
+
+- 不以 Runner 可用作为开始或继续开发的条件；
+- 不在每次提交或 PR 更新后调度、重试或等待 Runner；
+- 本地不能运行的门禁必须记录为 `NOT RUN` 或 `BLOCKED`，不得记为通过；
+- 可以继续不依赖该远端环境的功能开发。
+
+### 12.2 大版本合并 stable：一次最终统一 Runner
+
+只有当一个大版本的最终候选已完成代码、文档、review 和本地门禁，并
+准备合入 `stable/kaiyuan-v2` 时，才对该 exact head 运行一次最终统一
+Runner。该统一验证覆盖：
 
 ```text
 Python 3.9 text-core compatibility
@@ -341,7 +355,20 @@ CText local spot-check audit
 development governance
 ```
 
-完成声明必须依据最新 commit 的结果，不能引用旧 commit 的绿色 CI。
+最终 Runner 结果只绑定该 exact head。之后任何代码、测试或状态文档
+变化都会使证据过期；大版本合入 stable 前必须在新 head 上重新运行。
+Runner 不可用或未完成时，状态只能是 `NOT RUN`/`BLOCKED`，不得把旧
+commit 的绿色结果或本地通过写成 Runner 通过，也不得合并该大版本
+stable 候选。
+
+### 12.3 独立专项证据
+
+真实设备、Stellarium/FFmpeg、科学复算、语料审核、双人标注、数据库
+迁移、安全检查和生产发布等证据继续遵循各任务显式契约。这些证据不能
+被 Runner 替代，也不得反过来把 Runner 变成日常开发前置依赖。
+
+`gh` 只是 GitHub 客户端之一，不是项目门禁。已认证 GitHub App 或 API
+能提供等价、可审计操作时，应直接使用，不得因本机缺少 `gh` 阻塞工作。
 
 ## 13. 文档与决策
 
@@ -378,7 +405,8 @@ PR 必须说明：
 
 1. 验收条件全部满足；
 2. focused 和 required regression 通过；
-3. 最新 head 的所有 required CI 为绿色；
+3. 验证结果按第 12 节准确记录；若该任务是大版本 stable 合并候选，
+   其 exact head 的最终统一 Runner 必须为绿色；
 4. `TASKS.md` 和 `WORK_LOG.md` 已更新；
 5. 无未解释的安全、语料、兼容或数据风险；
 6. PR review 完成并只合入 `stable/kaiyuan-v2`。

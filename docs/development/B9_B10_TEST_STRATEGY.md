@@ -2,24 +2,24 @@
 
 ## 1. 目的
 
-B9 和 B10 同时引入科学计算、传统星官映射、古籍规则标注、内容声明和媒体渲染。仅靠现有单元测试不足以证明科学正确性、引用正确性和研究质量。本策略定义长期稳定的七层门禁、黄金数据管理、CI 分工和变更控制。
+B9 和 B10 同时引入科学计算、传统星官映射、古籍规则标注、内容声明和媒体渲染。仅靠现有单元测试不足以证明科学正确性、引用正确性和研究质量。本策略定义长期稳定的七层门禁、黄金数据管理、验证分工和变更控制。GOV-T03 起，普通任务以本地执行这些门禁为默认；远端/self-hosted Runner 只用于大版本合入 stable 前的最终统一验证。
 
 ## 2. 七层门禁
 
-| Gate | 名称 | 主要目标 | 普通 PR | Nightly | 本地/self-hosted |
+| Gate | 名称 | 主要目标 | 普通任务本地 | Nightly | 大版本最终 Runner |
 |---|---|---|---:|---:|---:|
-| G0 | Governance | 分支、台账、安全边界、禁止写旧 collection | 必须 | 必须 | 可选 |
-| G1 | Contract | Schema、严格 JSON、兼容性、迁移 | 必须 | 必须 | 可选 |
-| G2 | Scientific | 星历、坐标、时间、可见性、容差 | smoke | 完整 | 可选 |
-| G3 | Corpus/Retrieval | passage、检索、引用与负向黄金集 | 必须 | 完整 | 可选 |
-| G4 | Rule Quality | 抽取、审核、去重、冲突、覆盖率 | smoke | 完整 | 可选 |
-| G5 | Hermetic E2E | 组件组合、不联网、不写正式系统 | 必须 | 必须 | 可选 |
-| G6 | Renderer | Stellarium、截图、FFmpeg、视觉检查 | 不启动 GUI | 可选 | 必须 |
-| G7 | Release | hash、manifest、审核、离线复验 | 必须 | 必须 | release 时必须 |
+| G0 | Governance | 分支、台账、安全边界、禁止写旧 collection | 必须 | 可选 | 必须 |
+| G1 | Contract | Schema、严格 JSON、兼容性、迁移 | 必须 | 可选 | 必须 |
+| G2 | Scientific | 星历、坐标、时间、可见性、容差 | smoke | 可选 | 完整 |
+| G3 | Corpus/Retrieval | passage、检索、引用与负向黄金集 | 必须 | 可选 | 完整 |
+| G4 | Rule Quality | 抽取、审核、去重、冲突、覆盖率 | smoke | 可选 | 完整 |
+| G5 | Hermetic E2E | 组件组合、不联网、不写正式系统 | 必须 | 可选 | 必须 |
+| G6 | Renderer | Stellarium、截图、FFmpeg、视觉检查 | 按专项契约 | 可选 | 按专项契约 |
+| G7 | Release | hash、manifest、审核、离线复验 | 必须 | 可选 | 必须 |
 
-## 3. 普通 PR 门禁
+## 3. 普通任务本地门禁
 
-普通 PR 目标在约十分钟内给出高信号结果：
+普通任务目标是在本地约十分钟内给出高信号结果：
 
 ```text
 Development Governance
@@ -34,10 +34,13 @@ Release/package verifier
 
 原则：
 
-- GUI 和大型模型不得进入普通 PR CI；
+- GUI 和大型模型不得进入普通任务的默认门禁；
 - 不访问真实生产服务；
 - Qdrant 集成只使用 ephemeral collection；
 - 测试失败不能通过吞异常、放宽断言或更新黄金文件解决。
+- 不为普通提交或 PR head 调度、重试或等待 Runner；
+- 过渡期内既有 GitHub workflow 若被仓库事件自动触发，其结果仅作补充信息，不是普通任务继续、完成或合并的前置条件；
+- 自动触发 workflow 的迁移由 GOV-T04 单独实施，不在业务 PR 中静默修改。
 
 ## 4. Nightly 门禁
 
@@ -71,7 +74,7 @@ manual visual review
 asset hash recording
 ```
 
-普通 Ubuntu PR CI 只验证 `.ssc` 生成和命令边界，不强行运行 GUI。
+普通本地门禁只验证 `.ssc` 生成和命令边界，不强行运行 GUI。
 
 ## 6. 测试类型
 
@@ -262,5 +265,7 @@ workflow run IDs
 merge SHA
 remaining risks
 ```
+
+其中 `workflow run IDs` 只对大版本 stable 最终 Runner、显式 nightly 或任务契约明确要求的专项运行必填。普通任务的 Runner 应记录为 `NOT RUN`，不能沿用旧 head 的 workflow ID 冒充当前证据。
 
 B9 的本地视觉 smoke 和 B10 的 sealed holdout/release verification 是各自完成定义的一部分，不能用普通单元测试替代。
