@@ -43,8 +43,11 @@ git diff --check: passed
 Runner: NOT RUN (routine governance documentation; not a major-version merge)
 ```
 
-GOV-T03 remains `VERIFYING` until the documentation commit and review reference
-are recorded.
+The policy implementation is published as PR #55. Independent review initially
+found two Important inconsistencies in the active B10 task and test strategy;
+both were corrected. Final re-review found zero Critical, Important or Minor
+findings and judged the five-file documentation change ready to merge.
+GOV-T03 is `DONE`; GOV-T04 retains the separate workflow-trigger migration.
 
 ## 2026-07-30 — B10-PR-B passage inventory and batch work started
 

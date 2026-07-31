@@ -187,10 +187,11 @@ merged and the resulting stable head is reverified.
 - **Boundary:** compare against stable v2 before closure; does not block G6
 
 ### GOV-T03 — Local-first verification and major-version Runner gate
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Goal:** make local verification the default for routine work and reserve one final unified Runner validation for the exact major-version candidate immediately before merging into `stable/kaiyuan-v2`.
 - **Acceptance:** root `AGENTS.md`, the long-lived development manual and B9–B10 test strategy define the same policy; missing Runner evidence is recorded as `NOT RUN`/`BLOCKED`, never passed; `gh` is explicitly optional when the GitHub App or API provides an equivalent auditable operation.
 - **Boundary:** documentation/governance only; no workflow, product code, corpus, Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable ref mutation.
+- **PR and review:** PR #55; independent review found zero Critical, Important or Minor findings after the B9–B10 strategy reconciliation.
 
 ### GOV-T04 — Major-version unified Runner workflow migration
 - **Status:** `BACKLOG`
