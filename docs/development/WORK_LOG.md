@@ -43,6 +43,22 @@ B10-T00 is now `VERIFYING`. It remains incomplete until the final feature head
 passes hosted exact-head gates, changed-file/review/thread audit and merges into
 `stable/kaiyuan-v2`.
 
+Draft PR #51 targets only `stable/kaiyuan-v2`. Its initial exact head
+`fb7fb012a98a7d6d75d37354da3b9ca73d743e76` contains exactly five expected
+documentation files, with remote blob SHA values identical to the locally
+verified files. The first exact-head workflows completed successfully:
+
+```text
+Development Governance 30599473112: success
+Kaiyuan Stable Core 30599473165: success
+Kaiyuan Upstream Runtime 30599473127: success
+```
+
+B10-T00 is `DONE` in the PR #51 merge candidate. This evidence-only status
+update creates a new head, so the same workflows, changed-file audit,
+review/thread audit and mergeability check must pass again before merge. PR-A
+must start from the resulting stable squash SHA, not from this feature branch.
+
 ## 2026-07-30 — B9 final closeout started after corrected G6 acceptance
 
 Remote `stable/kaiyuan-v2` was independently fetched as
