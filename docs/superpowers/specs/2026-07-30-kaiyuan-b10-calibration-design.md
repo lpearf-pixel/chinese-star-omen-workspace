@@ -25,6 +25,19 @@ atomic and no-overwrite.
   false positives and a non-placeholder human approval record. Otherwise it is
   `needs_human_approval` and cannot unlock PR-D.
 - Existing contract examples are test inputs, not pilot evidence.
+- Pilot handoff uses a separate strict selection contract. A human prepares the
+  passage IDs and stratum metadata against a real passage inventory; the
+  builder validates source identity, unique/non-ambiguous passages and the
+  frozen category/relation/computability/risk coverage. It does not infer
+  strata or labels.
+- The builder emits exactly two canonical worksheets, one per issued anonymous
+  slot. The case content and ordering are identical while the reviewer ID is
+  slot-specific. Annotation fields remain absent and
+  `human_review_completed=false`; worksheet creation is not review evidence.
+- Worksheets may contain the selected raw passage snapshots required by a
+  human reviewer, but are caller-selected local outputs and are never committed
+  as repository fixtures. Holdout cases and sealed labels are not accepted by
+  the handoff builder.
 
 ## Acceptance
 
@@ -33,3 +46,6 @@ manifest/hash binding, ordinary holdout denial, release-gate holdout access,
 deterministic canonical bytes, tamper rejection, atomic no-overwrite and
 threshold floors all have tests. Anonymous reviewer slot IDs must be stable,
 distinct, namespace-confined and rejected when supplied outside their pilot.
+Pilot selection/worksheet contracts must reject incomplete coverage, inventory
+drift, unknown or ambiguous passage IDs, duplicate cases, cross-slot content
+drift, prefilled annotations, holdout selection and output overwrite.

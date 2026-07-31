@@ -186,6 +186,19 @@ merged and the resulting stable head is reverified.
 - **Status:** `BACKLOG`
 - **Boundary:** compare against stable v2 before closure; does not block G6
 
+### GOV-T03 — Local-first verification and major-version Runner gate
+- **Status:** `DONE`
+- **Goal:** make local verification the default for routine work and reserve one final unified Runner validation for the exact major-version candidate immediately before merging into `stable/kaiyuan-v2`.
+- **Acceptance:** root `AGENTS.md`, the long-lived development manual and B9–B10 test strategy define the same policy; missing Runner evidence is recorded as `NOT RUN`/`BLOCKED`, never passed; `gh` is explicitly optional when the GitHub App or API provides an equivalent auditable operation.
+- **Boundary:** documentation/governance only; no workflow, product code, corpus, Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable ref mutation.
+- **PR and review:** PR #55; independent review found zero Critical, Important or Minor findings after the B9–B10 strategy reconciliation.
+
+### GOV-T04 — Major-version unified Runner workflow migration
+- **Status:** `BACKLOG`
+- **Goal:** replace transitional per-PR automatic Runner triggers with one explicit exact-head major-version stable merge gate while retaining independently scheduled nightly and task-specific real-environment evidence.
+- **Acceptance:** ordinary PR events do not consume or block on Runner; the release operator can launch one documented unified validation against an exact candidate SHA; results are hash/SHA bound and fail closed.
+- **Boundary:** requires a separate workflow design and review; GOV-T03 does not silently change existing workflow YAML.
+
 ## B10 — Whole-book rule structuring
 - **Status:** `IN_PROGRESS`
 - **Entry gate:** satisfied by accepted B9-G6 evidence and merged PR #50 at `a10e33118c2e34f947a099492bb01e13a07a98a8`
@@ -226,12 +239,11 @@ merged and the resulting stable head is reverified.
 - **Goal:** build deterministic primary passage inventory, explicit source-change invalidation and stable resumable batch/checkpoint contracts.
 - **Acceptance:** existing locator/hash semantics; provenance-preserving duplicate handling; ambiguous anchor fail-closed; deterministic bytes independent of input order; batch size `100–500` with default `200`; stable batch identity; checkpoint tamper/concurrency/resume/idempotence/no-overwrite tests.
 - **Boundary:** no full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
-- **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed; hosted gates remain.
+- **Local verification checkpoint:** TDD RED observed for missing `rule_passages`; focused core `4 passed`; focused inventory/batch `8 passed`; contracts `23 passed`; text-core `26 passed`; downstream `495 passed`; upstream `188 passed, 3 skipped`; governance/schema/boundary checks passed.
 - **PR:** #53, initial exact head `9de85036ef0ab1ed35477de69ce56e30a613f01e`.
 - **Initial exact-head workflows:** Development Governance `30601232781`, Kaiyuan Stable Core `30601232820` and Kaiyuan Upstream Runtime `30601232778` all succeeded.
-- **Review:** nine expected files; zero submitted reviews and review threads; mergeable. Final status-only exact-head gates remain.
-- **Final exact-head workflows:** Development Governance `30601310046`, Kaiyuan Stable Core `30601310041` and Kaiyuan Upstream Runtime `30601310051` all succeeded.
-- **Merged:** PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+- **Review:** nine expected files; zero submitted reviews and review threads; mergeable.
+- **Final head and merge:** final head `3059748`; Development Governance `30601310046`, Kaiyuan Stable Core `30601310041` and Kaiyuan Upstream Runtime `30601310051` succeeded under the pre-GOV-T03 policy; PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `VERIFYING`
@@ -240,9 +252,14 @@ merged and the resulting stable head is reverified.
 - **Boundary:** existing contract examples are not human pilot evidence. Infrastructure may proceed, but `threshold-freeze.json` remains `needs_human_approval` until reviewed split fixtures, calibration decisions and an actual approver are supplied. PR-D stays blocked.
 - **Implemented checkpoint:** strict golden case/manifest, sealed holdout, split isolation, calibration report, threshold-freeze and atomic no-overwrite boundaries; focused `8 passed`.
 - **Local verification:** contracts `23 passed`; text-core `26 passed`; downstream `503 passed`; upstream `188 passed, 3 skipped`; governance tests `5 passed`.
-- **Current work:** remove the unnecessary external-account-ID prerequisite by issuing two stable project-local anonymous reviewer slots. Slot issuance must not be treated as a human annotation or approval.
+- **Current work:** add a deterministic pilot handoff builder that consumes a
+  caller-reviewed selection plus a real passage inventory and emits two
+  independent, content-identical, unlabelled A/B worksheets. The builder must
+  validate the frozen coverage matrix, bind exact passage/source hashes, reject
+  holdout input, avoid model/extractor calls and publish only to caller-selected
+  no-overwrite outputs.
 - **Anonymous slots:** `reviewer:anon:a3ed615d9706befdec85569f` and `reviewer:anon:c6d751fedc80e326e652a5ef`; canonical manifest `eval/rules/v2/manifests/reviewer-slots.json`.
-- **Verification checkpoint:** anonymous-slot focused suite `10 passed`; contracts `23 passed`; text-core `26 passed`; downstream `505 passed`; upstream `188 passed, 3 skipped`.
+- **Pilot handoff checkpoint:** focused calibration/inventory/handoff `25 passed`; contracts `23 passed`; text-core `26 passed`; downstream `512 passed`; upstream `188 passed, 3 skipped`.
 - **Remaining external evidence:** no reviewed stratified pilot fixtures, two independent human submissions, validation decisions or approval record have been supplied.
 
 ### B10-PR-D — Full-book deterministic extraction

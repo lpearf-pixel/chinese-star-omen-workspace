@@ -2,6 +2,45 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-C real-corpus pilot handoff implementation
+
+PR-C now provides a deterministic offline handoff instead of requiring an
+operator to assemble A/B worksheets manually. The implementation consumes a
+real `PassageInventoryV1`, a caller-reviewed `pilot-selection/v1` and the
+existing anonymous slot manifest. It enforces the frozen celestial, relation,
+complexity, computability, evidence-risk, difficult-case, split and cross-volume
+coverage before emitting exactly two slot-specific worksheets.
+
+The tool does not select passages, infer strata, prefill expected labels, call
+a model/extractor, open sealed holdout labels or mutate the corpus. It rejects
+source fingerprint drift, unknown/source-ambiguous passages, duplicate case or
+passage identities, incomplete coverage, cross-slot content drift and output
+overwrite. Generated inventory and worksheets may contain real source text and
+therefore remain caller-selected local artifacts outside Git.
+
+TDD evidence:
+
+```text
+RED 1: ModuleNotFoundError for src.rule_structuring.pilot_worksheets
+GREEN: deterministic selection/worksheet and no-overwrite behavior
+RED 2: ModuleNotFoundError for src.rule_structuring.pilot_handoff
+GREEN: real-corpus handoff function and path-free result
+RED 3: inventory subcommand rejected as unknown positional input
+GREEN: inventory and worksheets CLI subcommands
+RED 4: tampered reviewer_b case was accepted with a stale declared shared hash
+GREEN: actual shared content is rehashed by model validation and publication
+focused calibration/inventory/pilot suite: 25 passed
+contracts: 23 passed
+text-core: 26 passed
+downstream: 512 passed
+upstream: 188 passed, 3 skipped by existing integration flags
+```
+
+The real full-book inventory and worksheets are not generated in CI because the
+immutable source corpus is intentionally absent from the repository. Two
+different people must still complete the returned A/B worksheets independently;
+PR-C remains incomplete and PR-D remains blocked.
+
 ## 2026-07-30 — B10-PR-C external reviewer ID prerequisite removed
 
 The user has no pre-existing reviewer account IDs. B10 does not need GitHub,
@@ -81,6 +120,52 @@ B10-PR-C is `BLOCKED`, not complete: no reviewed stratified pilot fixtures,
 two verified human reviewer identities, validation decisions or approval
 record have been supplied. No fake fixtures or approved threshold freeze were
 created. PR-D remains blocked.
+## 2026-07-30 — GOV-T03 local-first verification policy
+
+The user approved a repository-wide delivery rule: routine work uses focused
+and applicable local verification, while remote/self-hosted Runner is reserved
+for one final unified validation of the exact major-version candidate
+immediately before merge into `stable/kaiyuan-v2`.
+
+The durable rule is recorded in root `AGENTS.md`,
+`docs/development/DEVELOPMENT_MANUAL.md` and
+`docs/development/B9_B10_TEST_STRATEGY.md`. It also requires:
+
+```text
+no per-commit or per-PR-head Runner scheduling/retry/wait for routine work
+Runner unavailable or incomplete = NOT RUN or BLOCKED, never passed
+any final-candidate head change invalidates earlier final Runner evidence
+special real-device/science/corpus/human/migration/security evidence remains independent
+gh is optional when an authenticated GitHub App/API is equivalent and auditable
+```
+
+The older B10-PR-B work-log entry below is preserved as historical evidence of
+the policy in force at that time; its statement that a status-only head must
+rerun workflows is superseded by GOV-T03. PR #53 subsequently merged as
+`7ed60487a9a77e93578f14e27e35dc7612dcc054`.
+
+Existing pull-request-triggered workflows are a transitional implementation.
+GOV-T04 records their separate migration to an explicit major-version unified
+Runner entrypoint; this policy batch does not silently alter workflow YAML.
+
+This governance-only batch does not modify workflows, product code, corpus,
+Qdrant, `local_kb_default`, PR #54 implementation, `main`, or stable refs.
+Per the rule being adopted, no Runner was invoked for this task. Local
+verification on the complete five-file change set:
+
+```text
+governance unit tests: 5 passed
+development governance: passed, changed_files=5, code_files=0
+policy consistency assertions: 16/16 passed
+git diff --check: passed
+Runner: NOT RUN (routine governance documentation; not a major-version merge)
+```
+
+The policy implementation is published as PR #55. Independent review initially
+found two Important inconsistencies in the active B10 task and test strategy;
+both were corrected. Final re-review found zero Critical, Important or Minor
+findings and judged the five-file documentation change ready to merge.
+GOV-T03 is `DONE`; GOV-T04 retains the separate workflow-trigger migration.
 
 ## 2026-07-30 — B10-PR-B passage inventory and batch work started
 

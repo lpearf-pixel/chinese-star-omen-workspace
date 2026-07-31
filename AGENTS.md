@@ -55,7 +55,31 @@ Do not begin implementation until the active task is recorded in `TASKS.md` and 
 5. Implement the smallest change that satisfies the accepted design.
 6. Run focused tests, then repository gates relevant to the change.
 7. Update `WORK_LOG.md` with evidence and remaining risks.
-8. Keep the pull request in draft until every required gate is green.
+8. Apply the local-first verification and Runner policy below.
+
+## Local-first verification and Runner policy
+
+- Routine development, bug fixes, documentation changes, task-sized feature
+  pull requests, and intermediate heads use focused tests plus all applicable
+  local regression and governance gates.
+- Do not schedule, retry, or wait for a remote/self-hosted Runner after every
+  routine commit or pull-request update. Runner availability is not a
+  prerequisite for continuing locally verifiable product work.
+- Run one final unified Runner validation only when a major-version merge
+  candidate is ready to merge into `stable/kaiyuan-v2`. The validation must
+  target the exact candidate head after all intended code and documentation
+  changes.
+- Any change to that exact head invalidates the final Runner evidence and
+  requires one new final unified run before the major-version stable merge.
+- If the final Runner validation is unavailable or incomplete, record it as
+  `NOT RUN` or `BLOCKED`, never as passed. Continue unrelated routine
+  development, but do not merge that major-version candidate into stable.
+- Real-device, scientific, corpus, human-review, migration, security, or
+  production-release evidence remains governed by its explicit task contract.
+  Such evidence cannot be replaced by Runner output and does not make Runner a
+  routine development dependency.
+- `gh` is an optional GitHub client, not a project gate. Use an authenticated
+  GitHub App or API when it provides an equivalent auditable operation.
 
 ## B9–B12 scope-control rule
 
