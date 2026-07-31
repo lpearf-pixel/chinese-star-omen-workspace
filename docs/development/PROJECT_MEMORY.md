@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: a10e33118c2e34f947a099492bb01e13a07a98a8
+Last verified stable HEAD: 0df8c70551c1746d073a390e3fcd9371a5de8e5d
 Verified at: 2026-07-30
-Current feature branch: docs/kaiyuan-b10-planning-v1
-Current task: B10-T00 program charter and threshold governance
+Current feature branch: codex/kaiyuan-b10-omen-rule-v2
+Current task: B10-PR-A OmenRule/v2, identity and annotation contract
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -37,7 +37,8 @@ B9-G6-E6 evidence handoff integrity: DONE (#49 plus accepted corrected archive)
 B9-G6 run 20260730T121805Z: ACCEPTED
 B9 final closeout: DONE (#50)
 B9 overall: DONE
-B10-T00 program charter and threshold governance: DONE in PR #51 merge candidate
+B10-T00 program charter and threshold governance: DONE (#51)
+B10-PR-A OmenRule/v2, identity and annotation contract: VERIFYING
 B10 overall: IN_PROGRESS
 ```
 
@@ -259,6 +260,6 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-完成并合并 PR #51 B10-T00 program charter and threshold governance
-→ start B10-PR-A OmenRule/v2 from the resulting stable head
+完成 B10-PR-A OmenRule/v2、candidate identity 和 annotation contract
+→ verify and merge an independent PR targeting stable/kaiyuan-v2
 ```

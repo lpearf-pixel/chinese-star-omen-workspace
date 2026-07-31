@@ -18,6 +18,24 @@ Exports:
 - `load_candidate_manifest(path)` / `save_candidate_manifest(path, manifest)`
 - `merge_candidate_item(manifest, item)`
 - `ReviewStatus` and `SyncStatus` enums
+- strict `RuleCandidateV2` and deterministic `derive_candidate_id(...)`
+- strict approval-only `OmenRuleV2` and canonical JSON helpers
+- explicit `migrate_omen_rule_v1(...)` reports; v1 input is never silently promoted
+
+## Omen rule v2 boundary
+
+`RuleCandidateV2` binds extractor identity, stable source passage IDs, raw spans
+and the proposal hash. `OmenRuleV2` is a separate formal asset that requires
+human approval, fully citable evidence and an immutable version history.
+
+Import these contracts explicitly from `kb_contracts.rule_candidate_v2` and
+`kb_contracts.omen_rule_v2`. They are not eagerly imported by
+`kb_contracts.__init__`, so existing lightweight sync/index consumers keep
+their previous dependency boundary.
+
+Models may create candidates only. They cannot assign a formal `rule_id`.
+Passage inventory, extraction batches, review queues and release behavior are
+implemented in later B10 stages rather than in this contract package.
 
 ## Schemas
 

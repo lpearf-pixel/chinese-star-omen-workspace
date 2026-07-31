@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: a10e33118c2e34f947a099492bb01e13a07a98a8
-Current feature branch: docs/kaiyuan-b10-planning-v1
-Current task: B10-T00 program charter and threshold governance
+Last verified stable HEAD: 0df8c70551c1746d073a390e3fcd9371a5de8e5d
+Current feature branch: codex/kaiyuan-b10-omen-rule-v2
+Current task: B10-PR-A OmenRule/v2, identity and annotation contract
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -195,7 +195,7 @@ merged and the resulting stable head is reverified.
 - **Completion boundary:** all six whole-book denominators must reach terminal coverage; infrastructure or one release batch cannot mark B10 `DONE`.
 
 ### B10-T00 — Program charter and threshold governance
-- **Status:** `DONE` in PR #51 merge candidate
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `a10e33118c2e34f947a099492bb01e13a07a98a8`
 - **Goal:** freeze the whole-book completion denominators, PR-A through PR-H sequence, resumable batch policy, calibration/threshold process and B11 input boundary before contract implementation.
 - **Acceptance:** program charter, D-025 decision, task/memory/work-log state; citable false-positive gate fixed at `0`; post-pilot `threshold-freeze.json` required before full extraction; docs/governance gates and a docs-only PR targeting stable.
@@ -203,11 +203,17 @@ merged and the resulting stable head is reverified.
 - **Local verification:** charter acceptance scan, 5 governance unit tests, development governance checker, `compileall` and `git diff --check` passed on 2026-07-30; exact-head hosted gates remain required before merge.
 - **PR:** #51, initial exact head `fb7fb012a98a7d6d75d37354da3b9ca73d743e76`.
 - **Initial exact-head workflows:** Development Governance `30599473112`, Kaiyuan Stable Core `30599473165` and Kaiyuan Upstream Runtime `30599473127` all succeeded.
-- **Effective boundary:** Task 0 becomes `DONE` on stable only when PR #51 merges; the final status-only head must pass the same exact-head workflows first.
+- **Final exact-head workflows:** Development Governance `30599537056`, Kaiyuan Stable Core `30599537037` and Kaiyuan Upstream Runtime `30599537036` all succeeded.
+- **Merged:** PR #51 squash merged as `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
 
 ### B10-PR-A — OmenRule/v2, identity and annotation contract
-- **Status:** `BACKLOG`
-- **Entry gate:** B10-T00 merged and new stable head verified.
+- **Status:** `VERIFYING`
+- **Base:** `stable/kaiyuan-v2` at `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
+- **Entry gate:** satisfied by merged B10-T00 and independently fetched exact stable commit.
+- **Goal:** create strict `OmenRule/v2` and `RuleCandidate/v2` contracts, deterministic candidate identity, approval-only rule identity/version history, explicit v1 migration reporting, and a frozen annotation guide with reviewed cases.
+- **Acceptance:** all ontology, identity lifecycle, split/merge/history, strict JSON, duplicate-ID, illegal-state, unknown-field, non-finite-number, v1 migration and annotation-case requirements in the B10 plan.
+- **Boundary:** contracts and fixtures only; no passage inventory, full-book extraction, model call, review queue, Qdrant access, official ingest, B11/B12 implementation or corpus mutation.
+- **Local verification checkpoint:** TDD RED observed for missing v2 modules; shared contracts `23 passed`; downstream `487 passed`; upstream `188 passed, 3 skipped`; final fresh rerun, governance and hosted exact-head gates remain.
 
 ### B10-PR-B — Passage inventory, source invalidation and resumable batches
 - **Status:** `BACKLOG`

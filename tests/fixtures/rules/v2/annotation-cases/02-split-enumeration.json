@@ -1,0 +1,20 @@
+{
+  "case_id": "annotation:split-enumeration",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "source_passages": [
+    {
+      "passage_id": "passage:kaiyuan:031:0002",
+      "heading": "五星占",
+      "raw_text": "荧惑犯心，主忧；犯房，兵起。"
+    }
+  ],
+  "decision": "one_passage_multiple_rules",
+  "expected_candidate_count": 2,
+  "expected_groups": [
+    ["passage:kaiyuan:031:0002"],
+    ["passage:kaiyuan:031:0002"]
+  ],
+  "computability": "partially_computable",
+  "review_status": "contract_frozen",
+  "review_note": "两个 target 分别对应不同 effect，必须拆分并保留各自 raw span。"
+}

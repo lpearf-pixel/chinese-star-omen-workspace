@@ -2,6 +2,60 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-07-30 — B10-PR-A contract work started
+
+PR #51 final exact head
+`909b24c3738f0d300c3c66be296d07095b2b4e10` passed Development Governance
+`30599537056`, Kaiyuan Stable Core `30599537037` and Kaiyuan Upstream Runtime
+`30599537036`. It had five expected documentation files, zero reviews, zero
+review threads and matching local/remote blob SHA values. GitHub squash merged
+it as `0df8c70551c1746d073a390e3fcd9371a5de8e5d`.
+
+B10-PR-A started from that exact commit on
+`codex/kaiyuan-b10-omen-rule-v2`. Scope is limited to strict
+`OmenRule/v2`/`RuleCandidate/v2` contracts, identity and immutable history,
+explicit v1 migration reports, an annotation guide and frozen reviewed
+fixtures. Passage inventory, extraction, model use, review queues, Qdrant,
+official ingest, B11/B12 and corpus mutation remain out of scope. Tests must
+fail first before implementation.
+
+TDD RED was observed when the focused test could not import the absent
+`kb_contracts.omen_rule_v2` module. The implemented checkpoint now includes:
+
+```text
+RuleCandidate/v2 deterministic identity and canonical JSON
+proposal-hash-bound append-only candidate history
+model/extractor approval rejection
+OmenRule/v2 human approval and complete citable evidence
+immutable rule versions and content hashes
+explicit fail-closed v1 migration reports
+annotation guide plus 6 manually inspected hash-frozen cases
+canonical candidate/rule contract fixtures
+```
+
+Compatibility review removed eager v2 imports from `kb_contracts.__init__`, so
+existing lightweight sync/index consumers do not gain an undeclared Pydantic
+dependency. Preliminary verification:
+
+```text
+shared contract tests: 23 passed
+downstream tests: 487 passed
+upstream tests: 188 passed, 3 skipped by existing integration flags
+compileall: passed
+git diff --check: passed
+```
+
+The fresh final local pass repeated all three suites with the same results.
+Additional checks passed: v2 JSON schema `$id` and
+`additionalProperties=false`, governance unit tests `5/5`, development
+governance `changed_files=18 code_files=5`, canonical fixture/annotation hash
+bindings, legacy `kb_contracts` import without site packages, external
+I/O/mutation scan and exact changed-path audit.
+
+B10-PR-A is now `VERIFYING`. Remaining work is commit, Draft PR, exact-head
+hosted gates, review/thread audit and merge. No corpus, Qdrant, collection,
+ingest, model call, B11/B12, `local_kb_default` or `main` operation occurred.
+
 ## 2026-07-30 — B10-T00 program charter started
 
 PR #50 was rechecked as merged into `stable/kaiyuan-v2`. Independent fetch

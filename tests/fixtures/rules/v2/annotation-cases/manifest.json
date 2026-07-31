@@ -1,0 +1,33 @@
+{
+  "schema_version": "annotation-case-manifest/v1",
+  "guide_version": "kaiyuan-rule-annotation/v1",
+  "guide_path": "docs/research/KAIYUAN_RULE_ANNOTATION_GUIDE_V1.md",
+  "guide_sha256": "d6cc1ba25b9d85d15c9ed4e60167e49ca347387bb5da04453da0f634a8ff7eac",
+  "status": "frozen",
+  "cases": [
+    {
+      "path": "01-single-rule.json",
+      "sha256": "8190142ecf537f8214c98c24d0a8eadaee1476472e007a8c5612a7265f9832bb"
+    },
+    {
+      "path": "02-split-enumeration.json",
+      "sha256": "f06ccfa7e404ebb7983f1332f30edc7ddc9506a40bf6740ae451bb64a104c890"
+    },
+    {
+      "path": "03-merge-passages.json",
+      "sha256": "53d72d017417341090707735e0954cbac76e3ab2e11d8d242420664871c2de72"
+    },
+    {
+      "path": "04-omitted-subject.json",
+      "sha256": "1ba4efa347d5a72de0783bdfdab25df58bd1f2921b7f1fc3fd8cf15390efbe93"
+    },
+    {
+      "path": "05-variant-ambiguous.json",
+      "sha256": "e84c9502605308becbcf7756f1cd2e1c1299815857e85c830c92e2a0ca98f609"
+    },
+    {
+      "path": "06-not-computable.json",
+      "sha256": "339be95c1a9e4f4764f088fe4fb8facc2706eeba9190cf536c7b44761c44b9b3"
+    }
+  ]
+}
