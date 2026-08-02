@@ -397,7 +397,7 @@ Expected result: PASS with 16 source objects, 20 evidence links, exact reverse p
 - [ ] Step 6: Commit
 
 ~~~bash
-git add apps/star-omen/src/research_sources/source_graph.py apps/star-omen/src/research_sources/projector.py apps/star-omen/tests/research_sources/test_source_graph_v0.py apps/star-omen/tests/research_sources/test_projector_roundtrip.py
+git add apps/star-omen/src/research_sources apps/star-omen/tests/research_sources/test_source_graph_v0.py apps/star-omen/tests/research_sources/test_projector_roundtrip.py
 git commit -m "feat(research): project reversible source bundle"
 ~~~
 
