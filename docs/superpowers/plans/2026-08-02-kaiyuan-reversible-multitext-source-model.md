@@ -517,7 +517,7 @@ git commit -m "feat(research): add B10 R04 source projection pilot"
 - Check completed plan boxes through Task 4.
 - Commit all implementation, artifacts, report, and governance state before independent review.
 
-- [ ] Step 2: Run the complete suite on the intended implementation head
+- [x] Step 2: Run the complete suite on the intended implementation head
 
 ~~~bash
 make contracts-test
@@ -531,7 +531,7 @@ git status --short
 
 Record the exact implementation commit SHA, commands, exit codes, and test counts. Any failure returns B10-R04 to IN_PROGRESS.
 
-- [ ] Step 3: Perform an independent review of that exact implementation SHA
+- [x] Step 3: Perform an independent review of that exact implementation SHA
 
 Independently recompute:
 
@@ -551,7 +551,7 @@ Independently recompute:
 
 Write the reviewed implementation SHA, Critical/Important/Minor counts, and Ready: YES or NO to final-branch-review.md. Fix and repeat until Critical 0 / Important 0.
 
-- [ ] Step 4: Commit the immutable review record and governance evidence
+- [x] Step 4: Commit the immutable review record and governance evidence
 
 Commit only the review record and governance documents:
 
@@ -562,7 +562,7 @@ git commit -m "docs(research): verify B10 R04 source projection pilot"
 
 The review record binds the immediately preceding implementation SHA. After this commit, no source, test, artifact, or report file may change without a new full review.
 
-- [ ] Step 5: Open a Draft PR to stable/kaiyuan-v2
+- [x] Step 5: Open a Draft PR to stable/kaiyuan-v2
 
 Title:
 

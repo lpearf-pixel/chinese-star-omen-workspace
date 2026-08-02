@@ -13,7 +13,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 090f1b95d1c0b798077162408cea3d3bedd975a5
 Current feature branch: codex/kaiyuan-b10-multitext-source-model-v1
 Current task: B10-R04 VERIFYING; reversible source-model pilot and natural-boundary expansion policy
-Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked; #57 merged
+Open PRs: #1, #7, #54, #58; #54 remains Draft and human-review blocked; #58 is the B10-R04 verifying Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -319,8 +319,9 @@ merged and the resulting stable head is reverified.
 - **Acceptance:** three architecture options and a system blueprint are recorded; research-accession invariants and deferred authority fields are explicit; 16/16 source objects and 20/20 mappings can round-trip through the shadow model without information loss; no title-based silent merge, no unreviewed independent-witness claim, and no rule/candidate identity change.
 - **Source-scope findings:** 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13 already meet their natural treatise boundaries. 《乙巳占》 has 3/10 volumes captured; 《後漢書·天文志》 needs volumes 101–102 after the model pilot. The whole 30-volume 《後漢紀》 and full standard histories are not automatic expansion targets.
 - **P1/P2 finding:** no new high-confidence P1 source object was found. The six-volume Wikisource `幽明錄` page has unknown base identity while the ancient thirty-volume work is lost; the `玉函山房叢書` page is a catalog whose relevant latitude-text entries are red links. They remain P2 carrier excerpts or bibliographic clues.
-- **Implementation checkpoint:** implementation head lineage through `ae760553fa42503c03decefcd0abf1fc0d5cad1d` contains the strict accession contract, immutable 16-object inventory, 46-node/39-edge/80-assertion shadow graph and true 20/20 reverse projection. The regenerated 141,956-byte pilot artifact is `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b` and binds the complete 34-file Layer A package snapshot.
-- **Local verification checkpoint:** combined Task 1–4 contract/inventory/graph/artifact suite `166 passed`; builder `--check` and `compileall` passed. Two targeted implementation re-reviews both report Critical 0 / Important 0 / Minor 0, but the exact branch-wide final gates and immutable review record remain pending.
+- **Reviewed implementation head:** `df424128a5cbd530daa5dd23f7232f2da23c92f4`; strict accession contract, immutable 16-object inventory, 46-node/39-edge/80-assertion shadow graph, true 20/20 reverse projection and the 141,956-byte pilot artifact `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`, bound to the complete 34-file Layer A package snapshot.
+- **Verification:** local Task 1–4 suite `166 passed`; builder `--check` and `compileall` passed. Exact-head Actions: Development Governance `30749422233`, Kaiyuan Stable Core `30749422195` and Kaiyuan Upstream Runtime `30749422194`, all success; hosted counts include contracts 93, text-core 26 on Python 3.9/3.12, downstream 591 and upstream 188 passed / 3 skipped.
+- **Independent review:** Critical 0 / Important 0 / Minor 1, Ready YES. The sole Minor is stale PR-description metadata and is handled after the docs-only final head; it does not authorize merge. Draft PR #58 remains `VERIFYING`.
 - **Pending:** production multi-text schema and the bounded 15-accession expansion are not implemented or approved; B10-R04 remains `VERIFYING` until exact-head gates, final independent review and Draft PR verification complete.
 - **Boundary:** design and research-source tooling only; no PR #54 completion claim, threshold freeze, B10-PR-D start, Reviewer A/B substitution, production schema freeze, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
 
