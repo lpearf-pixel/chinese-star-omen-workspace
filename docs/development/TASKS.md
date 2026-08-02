@@ -249,7 +249,7 @@ merged and the resulting stable head is reverified.
 - **Status:** `BACKLOG`
 
 ### B10-R01 — C24 source accession and parallel-text pilot
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Locator:** `卷38 / KR3g0018_WYG_038-13b`.
 - **Goal:** preserve a revision-bound public source snapshot, record every cited
   ancient source, separate observation from emendation hypotheses, and compare
@@ -263,7 +263,7 @@ merged and the resulting stable head is reverified.
   `local_kb_default` mutation, source-text normalization, B11/B12, or `main`.
 
 ### B10-R02 — Core14 source audit and mapping preparation
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Cases:** `C02`, `C03`, `C09`, `C11`, `C13`, `C14`, `C24`,
   `C31`, `C33`, `C41`, `C43`, `C44`, `C45`, `C47`.
 - **Goal:** extend each frozen passage to source-section boundaries, preserve
