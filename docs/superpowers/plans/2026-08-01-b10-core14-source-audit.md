@@ -4,7 +4,7 @@
 **Task:** B10-R02  
 **Branch:** `codex/kaiyuan-b10-c24-source-mapping-v1`  
 **Target:** `stable/kaiyuan-v2`  
-**Status:** VERIFYING
+**Status:** DONE
 
 ## Objective
 
@@ -53,7 +53,7 @@ the philological findings are visible.
 | 3 | Cross-review boundary, source, relation and citation findings | DONE |
 | 4 | Merge case JSON, ancient-source register and cross-case report | DONE |
 | 5 | Verify hashes, JSON, links, raw glyph preservation and branch scope | DONE |
-| 6 | Mark B10-R02 VERIFYING/DONE and open a Draft PR | VERIFYING |
+| 6 | Mark B10-R02 VERIFYING/DONE and open a Draft PR | DONE |
 
 ## Per-case acceptance contract
 
