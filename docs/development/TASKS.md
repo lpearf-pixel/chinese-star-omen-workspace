@@ -295,7 +295,9 @@ merged and the resulting stable head is reverified.
 - **Priority:** P0 starts with 《乙巳占》, 《史記·天官書》,
   《漢書·天文志》, 《宋書·天文志》, 《晉書·天文志》,
   袁宏《後漢紀》 and 《後漢書》 because they directly affect Core14
-  boundary or variant decisions.
+  boundary or variant decisions. Exact known scopes include C03, C09, C11,
+  C13, C14, C41, C43, C45 and C47; accession review may add only evidence-backed
+  scope, never inferred associations.
 - **Acceptance:** each localized object has an oldid-bound source snapshot,
   replayable URL, access date, SHA-256, version-family identity and explicit
   mapping scope; lost works or carrier-only quotations are recorded as excerpts
