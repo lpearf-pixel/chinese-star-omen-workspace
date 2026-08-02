@@ -53,7 +53,7 @@ Scoped re-review：计划总状态现为 `VERIFYING`；阶段 0–5 均为 `DONE
 10. **来源固定。** Wikisource register 有 13 个唯一 oldid，覆盖全部 14 case；Kanripo context 文件有 14 case block、统一固定 commit，42 个页标。Wikisource/Kanripo 明示为同一四库本系统的转录核对，不冒充独立异本。
 11. **哈希。** Core14 manifest 中列出的 18 个文件在审查时逐字节 SHA-256 全部匹配；C24 Wikisource 摘录与 Kanripo parallel 文件的 manifest 哈希也匹配。最新总报告 hash 已在 manifest 同步登记。
 12. **相关 Wikisource 本地化边界。** `B10_RELATED_WIKISOURCE_LOCALIZATION_PLAN.md` 与 TASKS B10-R03 均为 `PLANNED/BACKLOG`；本 PR 不批量下载。计划包含 P0/P1/P2、oldid、原字、卷页、哈希、manifest、版本身份、citation scope 与失佚书处理，明确不冻结 schema、不 ingest KB。
-13. **安全负面门禁。** 新增研究文件未发现 `/workspace`、`/tmp`、`/Users` 或 sandbox 绝对路径。`TASKS.md` 中既有一处 `/Users/...` 是 stable 已存在的历史拒收说明，不是本分支新增路径。
+13. **安全负面门禁。** 新增研究文件未发现机器绝对路径或 sandbox 路径签名。任务台账中的既有历史拒收说明不属于本分支新增路径。
 14. **审查轨迹。** 三组 re-review 的最终 gate 均为 Critical=0/PASS；旧 review 的原始阻塞被保留为审计轨迹，并由文件末尾的最终裁决明确取代。
 
 ## 最终门禁
