@@ -1,0 +1,119 @@
+{
+  "schema": "ancient-source-register/v1",
+  "case_id": "C24",
+  "locator_scope": [
+    "KR3g0018_WYG_038-13a",
+    "KR3g0018_WYG_038-13b",
+    "KR3g0018_WYG_038-14a"
+  ],
+  "status": "research_only",
+  "entries": [
+    {
+      "label": "雒書",
+      "normalized_title": "洛書",
+      "role": "quoted source",
+      "location": "038-13a",
+      "survival": "fragmentary/uncertain",
+      "note": "The same volume writes 雒書 here and 洛書 in the next section; do not silently normalize the witness."
+    },
+    {
+      "label": "元命包",
+      "normalized_title": "春秋元命包",
+      "role": "quoted source",
+      "location": "038-13a",
+      "survival": "fragmentary",
+      "note": "Title expansion is a cataloging hypothesis, not a transcription replacement."
+    },
+    {
+      "label": "晉陽秋",
+      "normalized_title": "晉陽秋",
+      "role": "historical verification note",
+      "location": "038-13a",
+      "survival": "extant/compiled witnesses",
+      "note": "Appears inside a note attributed to 宋均."
+    },
+    {
+      "label": "春秋緯",
+      "normalized_title": "春秋緯",
+      "role": "quoted source class",
+      "location": "038-13a",
+      "survival": "fragmentary/collective label",
+      "note": "Generic label; a specific sub-title is not identified in this passage."
+    },
+    {
+      "label": "鈎命决",
+      "normalized_title": "鉤命決",
+      "role": "quoted source",
+      "location": "038-13a",
+      "survival": "fragmentary",
+      "note": "Preserve witness glyphs in the source layer."
+    },
+    {
+      "label": "石氏",
+      "normalized_title": "石氏星占傳統",
+      "role": "authority/source label",
+      "location": "038-13a..13b",
+      "survival": "fragmentary",
+      "note": "Do not assume every 石氏曰 sentence comes from one stable extant book."
+    },
+    {
+      "label": "荆州占",
+      "normalized_title": "荊州占",
+      "role": "quoted source",
+      "location": "038-13b..14a",
+      "survival": "lost/fragmentary",
+      "note": "Provides both the Saturn movement omen and the four-丈 黃穰 observation."
+    },
+    {
+      "label": "郗萌",
+      "normalized_title": "郗萌占辭",
+      "role": "named authority",
+      "location": "038-13b..14a",
+      "survival": "quotation tradition",
+      "note": "Source title is not given; record person/authority separately from book title."
+    },
+    {
+      "label": "洛書",
+      "normalized_title": "洛書",
+      "role": "quoted source",
+      "location": "038-13b",
+      "survival": "fragmentary/uncertain",
+      "note": "黃帝起填星珥魚 survives here as a quotation; no independent complete witness was located in this pass."
+    },
+    {
+      "label": "黄帝占",
+      "normalized_title": "黃帝占 / possible 黃帝五星占 catalog family",
+      "role": "quoted source",
+      "location": "038-13b",
+      "survival": "lost/fragmentary",
+      "note": "No independent complete text was located; cite 開元占經 as the extant carrier. Association with 黃帝五星占 remains a hypothesis."
+    },
+    {
+      "label": "孝經内記",
+      "normalized_title": "孝經內記",
+      "role": "quoted source",
+      "location": "038-13b..14a",
+      "survival": "fragmentary",
+      "note": "Contains the 黃穰, weather, grain-price and illness sequence."
+    },
+    {
+      "label": "巫咸",
+      "normalized_title": "巫咸星占傳統",
+      "role": "authority/source label",
+      "location": "038-14a",
+      "survival": "fragmentary",
+      "note": "Source title is not stated in this passage."
+    }
+  ],
+  "people_or_commentators": [
+    {
+      "label": "宋均",
+      "role": "commentarial attribution in note"
+    },
+    {
+      "label": "郗萌",
+      "role": "named omen authority"
+    }
+  ],
+  "rule": "A normalized title never replaces the witness label; both fields must remain queryable."
+}
