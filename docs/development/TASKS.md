@@ -262,6 +262,24 @@ merged and the resulting stable head is reverified.
   freeze, full-book extraction, model approval, official ingest, Qdrant access,
   `local_kb_default` mutation, source-text normalization, B11/B12, or `main`.
 
+### B10-R02 — Core14 source audit and mapping preparation
+- **Status:** `IN_PROGRESS`
+- **Cases:** `C02`, `C03`, `C09`, `C11`, `C13`, `C14`, `C24`,
+  `C31`, `C33`, `C41`, `C43`, `C44`, `C45`, `C47`.
+- **Goal:** extend each frozen passage to source-section boundaries, preserve
+  revision-bound public carriers, register quoted ancient works, compare
+  parallel formulae, propose atomic splits, and separate formal-candidate value
+  from current citation eligibility.
+- **Acceptance:** all fourteen cases have source identities, boundary findings,
+  ancient-source registers, atomic-rule proposals, unresolved readings and
+  explicit recommendations; a cross-case report records consistent
+  computability and threshold semantics; archived public excerpts are
+  hash-bound and the deliverables pass an independent review.
+- **Boundary:** AI research pre-review only; no substitution for Reviewer A/B,
+  no threshold freeze, no official ingest or evidence promotion, no Qdrant or
+  `local_kb_default` mutation, no silent source normalization, no B11/B12 and
+  no `main`.
+
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
 
