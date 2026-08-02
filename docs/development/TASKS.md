@@ -249,7 +249,7 @@ merged and the resulting stable head is reverified.
 - **Status:** `BACKLOG`
 
 ### B10-R01 — C24 source accession and parallel-text pilot
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Locator:** `卷38 / KR3g0018_WYG_038-13b`.
 - **Goal:** preserve a revision-bound public source snapshot, record every cited
   ancient source, separate observation from emendation hypotheses, and compare
