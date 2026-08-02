@@ -2,6 +2,16 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-01 — B10-R03 P0 related Wikisource localization closeout
+
+- Initial whole-branch review at `e7be9bbf323f95a849b410d3d46218a8b809fc80`: Critical 0 / Important 2 / Minor 1. Source bytes, provenance and mappings passed; findings were limited to stale PROJECT_MEMORY, absent WORK_LOG closeout evidence and M17's summary-like excerpt.
+- Remediation head `48d7b0f796041931f25c44c9595f25264709096d` changed only the mapping excerpt, PROJECT_MEMORY, WORK_LOG and the archived initial review.
+- Targeted re-review: Critical 0 / Important 0 / Minor 0; Ready YES. M17 now quotes exact 《晉書》 raw lines 142/148; the two governance findings and Group C repository-scope concern are closed.
+- Exact remediation-head workflows: Development Governance `30738547750` success; Kaiyuan Stable Core `30738547752` success; Kaiyuan Upstream Runtime `30738547749` success.
+- P0 is DONE: 7 work families, 16 fixed-revision objects, 645,044 raw bytes, 20 reversible mappings over 9 Core14 cases. Draft PR #57 remains the review/integration surface and targets only `stable/kaiyuan-v2`.
+- Deferred: whole-book expansion beyond the captured P0 pages and the formal multi-text structure. Neither is started or frozen.
+- Runner remains `NOT RUN` under the local-first policy; no official KB, Reviewer A/B, Qdrant, `local_kb_default`, B11/B12 or `main` operation occurred.
+
 ## 2026-08-01 — B10-R03 P0 related Wikisource package verifying
 
 - Draft PR #57 targets only `stable/kaiyuan-v2`; reviewed data head `e7be9bbf323f95a849b410d3d46218a8b809fc80` was ahead 47 / behind 0, open, Draft and mergeable.
