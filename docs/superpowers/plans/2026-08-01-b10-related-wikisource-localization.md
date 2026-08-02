@@ -1,7 +1,7 @@
 # B10-R03 Related Wikisource localization execution plan
 
 Date: 2026-08-01
-Status: IN_PROGRESS
+Status: VERIFYING
 Base: `stable/kaiyuan-v2` at `6cffa1e4adf428f068149a31e7f2572dce4a2069`
 Target branch: `codex/kaiyuan-b10-related-wikisource-localization-v1`
 
