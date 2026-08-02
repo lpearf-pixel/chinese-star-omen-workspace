@@ -3257,14 +3257,14 @@
     },
     "graph_node_count": 46,
     "layer_a_after": {
-      "file_count": 32,
-      "sha256": "bb609e4604684778920769fb9aa5bd4fa0193984a16a540753ebcf86574958d4",
-      "total_byte_count": 703933
+      "file_count": 34,
+      "sha256": "b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74",
+      "total_byte_count": 708406
     },
     "layer_a_before": {
-      "file_count": 32,
-      "sha256": "bb609e4604684778920769fb9aa5bd4fa0193984a16a540753ebcf86574958d4",
-      "total_byte_count": 703933
+      "file_count": 34,
+      "sha256": "b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74",
+      "total_byte_count": 708406
     },
     "orphan_assertion_count": 0,
     "orphan_evidence_link_count": 0,

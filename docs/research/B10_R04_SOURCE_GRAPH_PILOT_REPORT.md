@@ -15,7 +15,7 @@ Layer A 仍以 accession、固定 oldid、raw path、SHA-256 和字节数为权�
 
 - `accession-manifest.json`: `49dac42d29d8c560e15bf16dc98880b29f5f8287fd16e806d542587533b82c4f`
 - `core14-mapping.json`: `3a79afb3cd4559236eb9869dc3b0080d6d92ebb3984b6b0c46e9a33edb056250`
-- Layer A 包快照：32 文件、703,933 字节，聚合 SHA-256 `bb609e4604684778920769fb9aa5bd4fa0193984a16a540753ebcf86574958d4`
+- Layer A 包快照：34 文件、708,406 字节，聚合 SHA-256 `b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74`
 
 构建前后 Layer A 快照完全相同。生成器排除自身输出文件后计算快照，不改写任何 accession、metadata 或 raw 文件。
 

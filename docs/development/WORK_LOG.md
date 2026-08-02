@@ -1735,7 +1735,8 @@ PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactl
 - Strict frozen `ResearchAccession/v1` contract and immutable B10-R03 accession loader.
 - Rebuildable research-only WorkCandidate–TextVersionCandidate–Carrier–SourceObject graph with 46 nodes, 39 bibliographic edges, 80 assertions and 20 evidence links.
 - True in-memory B→A reverse projection for all 16 accession records and 20 Core14 mappings; C14, C45 and C47 retain exact relation, source and atom/case boundaries.
-- Deterministic no-overwrite builder and committed `source-projection-bundle/pilot-v0` artifact: 141,956 bytes, SHA-256 `abec414abf8f22d7369907f785dae6bca31b167b70706cebcc08b90caebca155`.
+- Deterministic no-overwrite builder and regenerated `source-projection-bundle/pilot-v0` artifact: 141,956 bytes, SHA-256 `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`.
+- Complete immutable Layer A package denominator: 34 files, 708,406 bytes, aggregate SHA-256 `b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74`; this includes the package README and accession working contract as well as all manifest, mapping, metadata, notes and raw files.
 - Task 4 implementation commit: `b61ffc5fef283fe3427e1972a6e4d80930d8a240`; six implementation/artifact/report files were fetched from that exact commit and matched local bytes and Git blob SHAs.
 
 ### Verification checkpoint before final exact-head gates
@@ -1757,3 +1758,10 @@ PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactl
 - PR #54 completion claim and threshold freeze: `NOT_RUN`; the PR remains human-review blocked.
 - B10-PR-D, B10-PR-E and B10-PR-F start: `NOT_RUN`.
 - The bounded 15-accession expansion and any production multi-text model remain pending; this checkpoint is research-layer verification only.
+
+### Exact-head CI diagnosis before final review
+
+- Pre-review head `83adfe9dcb493d76ba889e8505fdfee6bedfd6b6` passed Development Governance run `30749086591` but failed Stable Core `30749086623` and Upstream Runtime `30749086574`: three research tests defaulted to a coordination-only `fixture-repo` path. The failure was reproducible as 30 missing-path tests; the other 561 downstream tests and all text-core, Qdrant, candidate-roundtrip and upstream jobs passed.
+- Test-root fix head `ae760553fa42503c03decefcd0abf1fc0d5cad1d` passed Development Governance run `30749209292` and reduced the repository regression to two byte-rebuild failures. Stable Core `30749209294` and Upstream Runtime `30749209293` proved the committed artifact had been generated from an incomplete 32-file local fixture while the merged Layer A package contains 34 files.
+- Root cause: the coordination fixture omitted the already-merged `README.md` and `accession-working-contract.json`. They are not raw accessions but are part of the immutable source-package denominator and therefore must participate in Layer A snapshot evidence.
+- Corrective scope: load those exact stable bytes into the test fixture, regenerate only the research pilot artifact and report, bind the exact 34-file snapshot in tests, and rerun all three workflows on the next exact head. No Layer A repository file is modified.
