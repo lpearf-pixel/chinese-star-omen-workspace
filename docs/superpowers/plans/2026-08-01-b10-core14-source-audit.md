@@ -4,7 +4,7 @@
 **Task:** B10-R02  
 **Branch:** `codex/kaiyuan-b10-c24-source-mapping-v1`  
 **Target:** `stable/kaiyuan-v2`  
-**Status:** IN_PROGRESS
+**Status:** VERIFYING
 
 ## Objective
 
@@ -46,14 +46,14 @@ the philological findings are visible.
 | Stage | Deliverable | State |
 |---|---|---|
 | 0 | Recover and verify the repaired AI-prefill workbook; freeze fourteen IDs | DONE |
-| 1 | Pin thirteen Wikisource revisions and Kanripo carrier commit | IN_PROGRESS |
-| 2A | Audit C02, C03, C09, C11 and C13 | IN_PROGRESS |
-| 2B | Audit C14, C31, C33, C41 and C43 | IN_PROGRESS |
-| 2C | Audit C24, C44, C45 and C47 | IN_PROGRESS |
-| 3 | Cross-review boundary, source, relation and citation findings | PENDING |
-| 4 | Merge case JSON, ancient-source register and cross-case report | PENDING |
-| 5 | Verify hashes, JSON, links, raw glyph preservation and branch scope | PENDING |
-| 6 | Mark B10-R02 VERIFYING/DONE and open a Draft PR | PENDING |
+| 1 | Pin thirteen Wikisource revisions and Kanripo carrier commit | DONE |
+| 2A | Audit C02, C03, C09, C11 and C13 | DONE |
+| 2B | Audit C14, C31, C33, C41 and C43 | DONE |
+| 2C | Audit C24, C44, C45 and C47 | DONE |
+| 3 | Cross-review boundary, source, relation and citation findings | DONE |
+| 4 | Merge case JSON, ancient-source register and cross-case report | DONE |
+| 5 | Verify hashes, JSON, links, raw glyph preservation and branch scope | DONE |
+| 6 | Mark B10-R02 VERIFYING/DONE and open a Draft PR | VERIFYING |
 
 ## Per-case acceptance contract
 
