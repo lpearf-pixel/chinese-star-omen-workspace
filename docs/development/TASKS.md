@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
-Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
-Current task: B10-R03 P0 DONE on Draft PR #57; whole-book expansion and multi-text structure discussion are not started
-Open PRs: #1, #7, #54, #57; #54 remains Draft and human-review blocked; #57 is B10-R03 Draft
+Last verified stable HEAD: 090f1b95d1c0b798077162408cea3d3bedd975a5
+Current feature branch: codex/kaiyuan-b10-multitext-source-model-v1
+Current task: B10-R04 IN_PROGRESS; reversible source-model pilot and natural-boundary expansion policy
+Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked; #57 merged
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -306,6 +306,20 @@ merged and the resulting stable head is reverified.
 - **Draft PR:** #57 targets only `stable/kaiyuan-v2`; remote readback passed and targeted final re-review is approved at `48d7b0f796041931f25c44c9595f25264709096d` with Critical 0 / Important 0 / Minor 0.
 - **Follow-up:** whole-book expansion and formal multi-text structure discussion remain `BACKLOG`; P0 does not claim whole-book completion.
 - **Boundary:** P0 research sources only; no production schema freeze, official ingest, Reviewer A/B change, Qdrant access or `local_kb_default` access.
+
+### B10-R04 — Reversible multi-text source model and natural-boundary expansion policy
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `090f1b95d1c0b798077162408cea3d3bedd975a5`.
+- **Branch:** `codex/kaiyuan-b10-multitext-source-model-v1`.
+- **Entry gate:** satisfied by merged B10-R03 P0 PR #57 and live replay of its 16 fixed source objects.
+- **Goal:** preserve the accession package as the immutable source layer, design a reversible Work–TextVersion–Carrier–SourceObject shadow graph, define natural scholarly localization boundaries, and prepare a lossless pilot before any broader source expansion.
+- **Recommended architecture:** immutable accession bytes remain authoritative; the bibliographic graph is a rebuildable sidecar; research mappings and alignment hypotheses remain separate from `OmenRule/v2` and `RuleCandidate/v2`; formal projection is deferred until B10-PR-F and human approval.
+- **Natural-boundary policy:** provenance rigor equal to 《唐開元占經》 does not require mirroring an entire container history. Standalone omen works may be localized as whole works; large histories stop at the complete relevant treatise or directly evidenced chapter unless a later task establishes a broader research denominator.
+- **Pilot denominator:** all 7 P0 families, 16 source objects and 20 mappings, with C45/C47/C14 as relation stress cases.
+- **Acceptance:** three architecture options and a system blueprint are recorded; research-accession invariants and deferred authority fields are explicit; 16/16 source objects and 20/20 mappings can round-trip through the shadow model without information loss; no title-based silent merge, no unreviewed independent-witness claim, and no rule/candidate identity change.
+- **Source-scope findings:** 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13 already meet their natural treatise boundaries. 《乙巳占》 has 3/10 volumes captured; 《後漢書·天文志》 needs volumes 101–102 after the model pilot. The whole 30-volume 《後漢紀》 and full standard histories are not automatic expansion targets.
+- **P1/P2 finding:** no new high-confidence P1 source object was found. The six-volume Wikisource `幽明錄` page has unknown base identity while the ancient thirty-volume work is lost; the `玉函山房叢書` page is a catalog whose relevant latitude-text entries are red links. They remain P2 carrier excerpts or bibliographic clues.
+- **Boundary:** design and research-source tooling only; no PR #54 completion claim, threshold freeze, B10-PR-D start, Reviewer A/B substitution, production schema freeze, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
