@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 090f1b95d1c0b798077162408cea3d3bedd975a5
 Verified at: 2026-08-02
 Current feature branch: codex/kaiyuan-b10-multitext-source-model-v1
-Current task: B10-R04 reversible multi-text source model and natural-boundary expansion policy IN_PROGRESS
+Current task: B10-R04 reversible multi-text source model and natural-boundary expansion policy VERIFYING
 Open PRs: #1, #7, #54; #54 is Draft and human-review blocked; #57 merged as 090f1b95d1c0b798077162408cea3d3bedd975a5
 Forbidden target: main
 Protected collection: local_kb_default
@@ -44,7 +44,7 @@ B10-PR-B passage inventory, source invalidation and resumable batches: DONE (#53
 B10-PR-C calibration pilot: BLOCKED on two independent human reviews (#54)
 B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
-B10-R04 reversible multi-text source model: IN_PROGRESS
+B10-R04 reversible multi-text source model: VERIFYING
 B10 overall: IN_PROGRESS
 ```
 
@@ -266,7 +266,7 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-完成 B10-R04 设计规格：保留 immutable accession 底座，试点可重建的 Work–TextVersion–Carrier–SourceObject 影子图，并固定自然研究边界
-→ 先以现有 16 个来源对象和 20 条映射做无损往返，再补《乙巳占》缺失7卷、七族缺失根页与《後漢書·天文志》卷101–102
+对 B10-R04 待终审头执行完整本地门禁与独立分支审查，再建立只读 Draft PR
+→ 当前 pilot 已覆盖 16 个来源对象、20 条映射、46 个节点、39 条书目边和 80 条研究断言；生产 schema 与 15 个新 accession 仍未执行
 → B10-PR-C #54 继续等待两位真人独立审核；不得启动 B10-PR-D 或以 AI 研究替代真人审核
 ```

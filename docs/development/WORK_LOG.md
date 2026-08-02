@@ -1727,3 +1727,33 @@ PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactl
 - Recommended architecture: immutable accession preservation (A), a rebuildable Work–TextVersion–Carrier–SourceObject shadow graph (B), and a delayed rule adapter (C) only after B10-PR-F and human approval.
 - PR #54 remains Draft and human-review blocked. B10-PR-D remains forbidden until the two independent human worksheets and threshold freeze pass.
 - This start changes governance documentation only. No source download, production schema freeze, model call, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main` operation was run.
+
+## 2026-08-02 — B10-R04 implementation entered VERIFYING
+
+### Implemented scope
+
+- Strict frozen `ResearchAccession/v1` contract and immutable B10-R03 accession loader.
+- Rebuildable research-only WorkCandidate–TextVersionCandidate–Carrier–SourceObject graph with 46 nodes, 39 bibliographic edges, 80 assertions and 20 evidence links.
+- True in-memory B→A reverse projection for all 16 accession records and 20 Core14 mappings; C14, C45 and C47 retain exact relation, source and atom/case boundaries.
+- Deterministic no-overwrite builder and committed `source-projection-bundle/pilot-v0` artifact: 141,956 bytes, SHA-256 `abec414abf8f22d7369907f785dae6bca31b167b70706cebcc08b90caebca155`.
+- Task 4 implementation commit: `b61ffc5fef283fe3427e1972a6e4d80930d8a240`; six implementation/artifact/report files were fetched from that exact commit and matched local bytes and Git blob SHAs.
+
+### Verification checkpoint before final exact-head gates
+
+- Combined Task 1–4 suite: `166 passed in 5.37s`.
+- Hermetic builder `--check`: exit 0; committed artifact rebuilt byte-identically.
+- `compileall` for research-source modules and builder: exit 0.
+- Targeted specification re-review: Critical 0 / Important 0 / Minor 0, Ready YES.
+- Targeted publication/security re-review: Critical 0 / Important 0 / Minor 0, Ready YES; symlink-chain, link failure, post-link cleanup and post-link directory-fsync fault probes all fail closed with path-safe status.
+- Remaining before the immutable final review record: full repository contract/downstream/governance gates on the exact pre-review head and independent branch-wide verification.
+
+### Safety and deferred work
+
+- Production schema freeze: `NOT_RUN`.
+- Official KB ingest: `NOT_RUN`.
+- Qdrant access: `NOT_RUN`.
+- `local_kb_default` access: `NOT_RUN`.
+- Reviewer A/B modification: `NOT_RUN`.
+- PR #54 completion claim and threshold freeze: `NOT_RUN`; the PR remains human-review blocked.
+- B10-PR-D, B10-PR-E and B10-PR-F start: `NOT_RUN`.
+- The bounded 15-accession expansion and any production multi-text model remain pending; this checkpoint is research-layer verification only.

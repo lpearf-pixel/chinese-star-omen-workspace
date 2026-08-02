@@ -31,7 +31,7 @@
 - Modify: packages/kb-contracts/python/kb_contracts/__init__.py
 - Create: packages/kb-contracts/tests/test_research_accession_v1.py
 
-- [ ] Step 1: Write failing contract tests
+- [x] Step 1: Write failing contract tests
 
 Create tests that instantiate one complete accession and assert all of these behaviors:
 
@@ -109,7 +109,7 @@ def test_partial_accession_requires_reason_and_forbids_fake_raw_object() -> None
     assert item.failure_reason
 ~~~
 
-- [ ] Step 2: Run the test and confirm the import fails
+- [x] Step 2: Run the test and confirm the import fails
 
 Run:
 
@@ -119,7 +119,7 @@ PYTHONPATH=packages/kb-contracts/python pytest -q packages/kb-contracts/tests/te
 
 Expected result: FAIL because research_accession_v1 and its exports do not exist.
 
-- [ ] Step 3: Implement the smallest strict model
+- [x] Step 3: Implement the smallest strict model
 
 Implement:
 
@@ -139,7 +139,7 @@ Implement:
 
 Do not add any rule-approval, reviewer, production-ingest, normalized-text, or witness-independence boolean field.
 
-- [ ] Step 4: Run focused and regression tests
+- [x] Step 4: Run focused and regression tests
 
 Run:
 
@@ -150,7 +150,7 @@ make contracts-test
 
 Expected result: both commands PASS.
 
-- [ ] Step 5: Commit
+- [x] Step 5: Commit
 
 ~~~bash
 git add packages/kb-contracts/python/kb_contracts/research_accession_v1.py packages/kb-contracts/python/kb_contracts/__init__.py packages/kb-contracts/tests/test_research_accession_v1.py
@@ -165,7 +165,7 @@ git commit -m "feat(contracts): add research accession v1"
 - Create: apps/star-omen/src/research_sources/source_inventory.py
 - Create: apps/star-omen/tests/research_sources/test_source_inventory.py
 
-- [ ] Step 1: Write a failing test against the merged package
+- [x] Step 1: Write a failing test against the merged package
 
 Define the repository root inside the test file; do not assume a global fixture:
 
@@ -207,7 +207,7 @@ Add negative tests using complete temporary repositories rooted at tmp/repo for:
 - malformed JSON and non-array family metadata;
 - before/after hashes proving the loader is read-only.
 
-- [ ] Step 2: Run the test and confirm the loader import fails
+- [x] Step 2: Run the test and confirm the loader import fails
 
 ~~~bash
 cd apps/star-omen
@@ -216,7 +216,7 @@ PYTHONPATH=src:../../packages/kb-contracts/python:../../packages/kb-text-core/py
 
 Expected result: FAIL because research_sources.source_inventory does not exist.
 
-- [ ] Step 3: Implement deterministic joining and replay validation
+- [x] Step 3: Implement deterministic joining and replay validation
 
 Expose:
 
@@ -263,7 +263,7 @@ source-inventory[{code}] accession_id='{id}' field='{field}' expected={expected!
 
 Messages must use repository-relative paths and must not expose machine-absolute paths.
 
-- [ ] Step 4: Run focused tests and compile checks
+- [x] Step 4: Run focused tests and compile checks
 
 ~~~bash
 cd apps/star-omen
@@ -273,7 +273,7 @@ python -m compileall -q src/research_sources
 
 Expected result: PASS.
 
-- [ ] Step 5: Commit
+- [x] Step 5: Commit
 
 ~~~bash
 git add apps/star-omen/src/research_sources apps/star-omen/tests/research_sources/test_source_inventory.py
@@ -290,7 +290,7 @@ git commit -m "feat(research): load immutable source inventory"
 - Create: apps/star-omen/tests/research_sources/test_source_graph_v0.py
 - Create: apps/star-omen/tests/research_sources/test_projector_roundtrip.py
 
-- [ ] Step 1: Write failing model tests
+- [x] Step 1: Write failing model tests
 
 Define these separate contracts:
 
@@ -319,7 +319,7 @@ Tests must prove:
 - printed labels are observations while normalized candidates remain hypothesized or deferred;
 - fields named rule_status, reviewer_decision, citation_eligible, canonical_text, or independent_witness are rejected as extras.
 
-- [ ] Step 2: Write failing projector and reverse-projector tests
+- [x] Step 2: Write failing projector and reverse-projector tests
 
 Load Core14TargetIndexV0 from the repository and project the real Layer-A inventory plus core14-mapping.json and assert:
 
@@ -358,7 +358,7 @@ Also assert:
 - Hashes of current RuleCandidate/OmenRule fixtures remain unchanged.
 - load_core14_target_index(repo_root) loads exactly corpus/research_sources/b10-core14/audit-early.json, audit-middle.json, and audit-late.json, recomputes the SHA-256 values declared by b10-core14/accession-manifest.json, binds the accession-manifest SHA itself, and rejects duplicate case or atom IDs.
 
-- [ ] Step 3: Implement strict bibliography and evidence contracts
+- [x] Step 3: Implement strict bibliography and evidence contracts
 
 Use frozen Pydantic models with extra="forbid". Bibliographic node and edge IDs must be deterministic ASCII slugs. Carrier IDs derive from provider plus page_title/floating identity and exclude oldid. SourceObject IDs derive from accession IDs. Work and TextVersion candidates use graph-local IDs and never merge on normalized-title equality.
 
@@ -368,7 +368,7 @@ ResearchEvidenceLinkV0 is not a bibliographic edge. It preserves every original 
 
 load_core14_target_index(repo_root) is the only path-aware Core14 loader. project_source_bundle receives the resulting immutable Core14TargetIndexV0 explicitly and never infers paths from CWD.
 
-- [ ] Step 4: Implement both directions
+- [x] Step 4: Implement both directions
 
 project_source_bundle(inventory, manifest_document, mapping_document, source_manifest_sha, source_mapping_sha, core14_index) must:
 
@@ -385,7 +385,7 @@ project_source_bundle(inventory, manifest_document, mapping_document, source_man
 
 project_compatibility(bundle) must reconstruct accession-manifest.json and core14-mapping.json as in-memory JSON objects from the bundle alone. It must not read files. Canonical JSON equality and identical recursive object-key sets with the original objects are the round-trip gates.
 
-- [ ] Step 5: Run focused tests
+- [x] Step 5: Run focused tests
 
 ~~~bash
 cd apps/star-omen
@@ -394,7 +394,7 @@ PYTHONPATH=src:../../packages/kb-contracts/python:../../packages/kb-text-core/py
 
 Expected result: PASS with 16 source objects, 20 evidence links, exact reverse projection, and pilot cases C14/C45/C47.
 
-- [ ] Step 6: Commit
+- [x] Step 6: Commit
 
 ~~~bash
 git add apps/star-omen/src/research_sources apps/star-omen/tests/research_sources/test_source_graph_v0.py apps/star-omen/tests/research_sources/test_projector_roundtrip.py
@@ -410,7 +410,7 @@ git commit -m "feat(research): project reversible source bundle"
 - Create: docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md
 - Create: apps/star-omen/tests/research_sources/test_pilot_artifact.py
 
-- [ ] Step 1: Write a failing artifact test
+- [x] Step 1: Write a failing artifact test
 
 The test must read the committed bundle and report and assert:
 
@@ -429,7 +429,7 @@ The test must read the committed bundle and report and assert:
 - project_compatibility(bundle) reconstructs both original JSON documents without file reads;
 - rebuilding produces byte-identical canonical bytes.
 
-- [ ] Step 2: Run and confirm artifact absence fails
+- [x] Step 2: Run and confirm artifact absence fails
 
 ~~~bash
 cd apps/star-omen
@@ -438,7 +438,7 @@ PYTHONPATH=src:../../packages/kb-contracts/python:../../packages/kb-text-core/py
 
 Expected result: FAIL because the artifact and builder do not exist.
 
-- [ ] Step 3: Implement a deterministic no-overwrite builder
+- [x] Step 3: Implement a deterministic no-overwrite builder
 
 The script accepts only:
 
@@ -459,7 +459,7 @@ Behavior:
 - Tests cover an existing final target and a concurrent final-path placeholder and prove no partial final artifact is left or overwritten.
 - No network access is allowed.
 
-- [ ] Step 4: Generate artifacts and write the research report
+- [x] Step 4: Generate artifacts and write the research report
 
 Run once:
 
@@ -482,7 +482,7 @@ Write B10_R04_SOURCE_GRAPH_PILOT_REPORT.md with these sections:
 
 The report must not claim a production schema, canonical edition, independent witness, human review, formal rule approval, or implemented Layer C.
 
-- [ ] Step 5: Run artifact and focused tests
+- [x] Step 5: Run artifact and focused tests
 
 ~~~bash
 PYTHONPATH=apps/star-omen/src:packages/kb-contracts/python:packages/kb-text-core/python python scripts/build_b10_r04_source_projection.py --repo-root . --check
@@ -492,7 +492,7 @@ PYTHONPATH=src:../../packages/kb-contracts/python:../../packages/kb-text-core/py
 
 Expected result: PASS and no file changes after --check.
 
-- [ ] Step 6: Commit
+- [x] Step 6: Commit
 
 ~~~bash
 git add scripts/build_b10_r04_source_projection.py corpus/research_sources/related-wikisource/source-projection-pilot-v0.json docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md apps/star-omen/tests/research_sources/test_pilot_artifact.py
@@ -509,7 +509,7 @@ git commit -m "feat(research): add B10 R04 source projection pilot"
 - Modify: docs/superpowers/plans/2026-08-02-kaiyuan-reversible-multitext-source-model.md
 - Create: docs/research/b10-r04-reviews/final-branch-review.md
 
-- [ ] Step 1: Enter VERIFYING before final gates
+- [x] Step 1: Enter VERIFYING before final gates
 
 - Mark B10-R04 as VERIFYING, not DONE.
 - Record the completed implementation scope and all NOT_RUN safety fields in WORK_LOG.md.

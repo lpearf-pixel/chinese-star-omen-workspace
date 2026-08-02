@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 090f1b95d1c0b798077162408cea3d3bedd975a5
 Current feature branch: codex/kaiyuan-b10-multitext-source-model-v1
-Current task: B10-R04 IN_PROGRESS; reversible source-model pilot and natural-boundary expansion policy
+Current task: B10-R04 VERIFYING; reversible source-model pilot and natural-boundary expansion policy
 Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked; #57 merged
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -308,7 +308,7 @@ merged and the resulting stable head is reverified.
 - **Boundary:** P0 research sources only; no production schema freeze, official ingest, Reviewer A/B change, Qdrant access or `local_kb_default` access.
 
 ### B10-R04 — Reversible multi-text source model and natural-boundary expansion policy
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `090f1b95d1c0b798077162408cea3d3bedd975a5`.
 - **Branch:** `codex/kaiyuan-b10-multitext-source-model-v1`.
 - **Entry gate:** satisfied by merged B10-R03 P0 PR #57 and live replay of its 16 fixed source objects.
@@ -319,6 +319,9 @@ merged and the resulting stable head is reverified.
 - **Acceptance:** three architecture options and a system blueprint are recorded; research-accession invariants and deferred authority fields are explicit; 16/16 source objects and 20/20 mappings can round-trip through the shadow model without information loss; no title-based silent merge, no unreviewed independent-witness claim, and no rule/candidate identity change.
 - **Source-scope findings:** 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13 already meet their natural treatise boundaries. 《乙巳占》 has 3/10 volumes captured; 《後漢書·天文志》 needs volumes 101–102 after the model pilot. The whole 30-volume 《後漢紀》 and full standard histories are not automatic expansion targets.
 - **P1/P2 finding:** no new high-confidence P1 source object was found. The six-volume Wikisource `幽明錄` page has unknown base identity while the ancient thirty-volume work is lost; the `玉函山房叢書` page is a catalog whose relevant latitude-text entries are red links. They remain P2 carrier excerpts or bibliographic clues.
+- **Implementation checkpoint:** implementation head `b61ffc5fef283fe3427e1972a6e4d80930d8a240` contains the strict accession contract, immutable 16-object inventory, 46-node/39-edge/80-assertion shadow graph, true 20/20 reverse projection and the 141,956-byte pilot artifact (`abec414abf8f22d7369907f785dae6bca31b167b70706cebcc08b90caebca155`).
+- **Local verification checkpoint:** combined Task 1–4 contract/inventory/graph/artifact suite `166 passed`; builder `--check` and `compileall` passed. Two targeted implementation re-reviews both report Critical 0 / Important 0 / Minor 0, but the exact branch-wide final gates and immutable review record remain pending.
+- **Pending:** production multi-text schema and the bounded 15-accession expansion are not implemented or approved; B10-R04 remains `VERIFYING` until exact-head gates, final independent review and Draft PR verification complete.
 - **Boundary:** design and research-source tooling only; no PR #54 completion claim, threshold freeze, B10-PR-D start, Reviewer A/B substitution, production schema freeze, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
 
 ### B10-PR-D — Full-book deterministic extraction
