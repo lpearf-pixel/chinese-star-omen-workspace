@@ -248,6 +248,58 @@ merged and the resulting stable head is reverified.
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `BACKLOG`
 
+### B10-R01 — C24 source accession and parallel-text pilot
+- **Status:** `DONE`
+- **Locator:** `卷38 / KR3g0018_WYG_038-13b`.
+- **Goal:** preserve a revision-bound public source snapshot, record every cited
+  ancient source, separate observation from emendation hypotheses, and compare
+  the repeated Jupiter/Mars/Saturn formula before any C24 citation decision.
+- **Acceptance:** source bytes and hashes are recorded; Wikisource revision and
+  Kanripo commit/blob identities are pinned; sections eight and nine are split;
+  `客環守` alternatives remain explicit; a staged multi-text mapping plan has
+  entry/exit gates and does not pre-empt the later schema decision.
+- **Boundary:** research support only; no human-review substitution, threshold
+  freeze, full-book extraction, model approval, official ingest, Qdrant access,
+  `local_kb_default` mutation, source-text normalization, B11/B12, or `main`.
+
+### B10-R02 — Core14 source audit and mapping preparation
+- **Status:** `DONE`
+- **Cases:** `C02`, `C03`, `C09`, `C11`, `C13`, `C14`, `C24`,
+  `C31`, `C33`, `C41`, `C43`, `C44`, `C45`, `C47`.
+- **Goal:** extend each frozen passage to source-section boundaries, preserve
+  revision-bound public carriers, register quoted ancient works, compare
+  parallel formulae, propose atomic splits, and separate formal-candidate value
+  from current citation eligibility.
+- **Acceptance:** all fourteen cases have source identities, boundary findings,
+  ancient-source registers, atomic-rule proposals, unresolved readings and
+  explicit recommendations; a cross-case report records consistent
+  computability and threshold semantics; archived public excerpts are
+  hash-bound and the deliverables pass an independent review.
+- **Boundary:** AI research pre-review only; no substitution for Reviewer A/B,
+  no threshold freeze, no official ingest or evidence promotion, no Qdrant or
+  `local_kb_default` mutation, no silent source normalization, no B11/B12 and
+  no `main`.
+
+
+### B10-R03 — Related Wikisource source localization
+- **Status:** `BACKLOG`
+- **Goal:** localize the related ancient works that have identifiable Wikisource
+  texts with the same provenance treatment as 《唐開元占經》: permanent
+  revisions, original text, volume/section locators, hashes, accession manifests,
+  collation notes and GitHub auditability.
+- **Plan:** `docs/research/B10_RELATED_WIKISOURCE_LOCALIZATION_PLAN.md`.
+- **Priority:** P0 starts with 《乙巳占》, 《史記·天官書》,
+  《漢書·天文志》, 《宋書·天文志》, 《晉書·天文志》,
+  袁宏《後漢紀》 and 《後漢書》 because they directly affect Core14
+  boundary or variant decisions.
+- **Acceptance:** each localized object has an oldid-bound source snapshot,
+  replayable URL, access date, SHA-256, version-family identity and explicit
+  mapping scope; lost works or carrier-only quotations are recorded as excerpts
+  and are never fabricated as complete standalone books.
+- **Boundary:** planning only in B10-R02; no bulk download, schema freeze,
+  official ingest, Qdrant or `local_kb_default` write until this separate task
+  is started and reviewed.
+
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
 

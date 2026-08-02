@@ -1,0 +1,892 @@
+{
+  "report_id": "B10-late-four-case-audit",
+  "review_state": "AI_PRE_REVIEW_REVISED_AFTER_INDEPENDENT_REVIEW",
+  "access_date": "2026-08-01",
+  "carrier_baseline": {
+    "repository": "Kanripo/KR3g0018",
+    "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734"
+  },
+  "scope_model": ["original_row", "repaired_section", "atomic_rule"],
+  "schema_enums": {
+    "relation_terms": ["合", "犯", "入", "守", "掩", "离", "留", "逆"],
+    "special_case_tags": ["ambiguous", "duplicate", "conflict"]
+  },
+  "citation_policy": {
+    "annotation_citation_scalar": "Case-level annotation recommendation; it does not make the frozen row citable as a whole.",
+    "whole_row_citation": "Whether the frozen workbook row can be quoted as one evidentiary unit.",
+    "atomic_citation": "Each atom states its own citation status and permitted scope."
+  },
+  "cases": [
+    {
+      "case_id": "C24",
+      "locator": "卷38 / KR3g0018_WYG_038-13b",
+      "sources": [
+        {
+          "role": "extant_carrier_primary",
+          "name": "Kanripo KR3g0018_038",
+          "version": "commit eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_038.txt#L214-L244",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "extant_carrier_collation",
+          "name": "Wikisource 唐開元占經卷038",
+          "version": "oldid 655950",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷038&oldid=655950",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "internal_structural_parallel",
+          "name": "卷23 嵗星流與列星鬬八",
+          "version": "Wikisource oldid 655920; Kanripo same fixed commit",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷023&oldid=655920",
+          "kanripo_url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_023.txt#L368-L382",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "internal_structural_parallel",
+          "name": "卷30 熒惑躍而沉浮與列星鬬八",
+          "version": "Wikisource oldid 655934; Kanripo same fixed commit",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷030&oldid=655934",
+          "kanripo_url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_030.txt#L376-L388",
+          "accessed": "2026-08-01"
+        }
+      ],
+      "original_row": {
+        "scope_note": "The frozen row begins inside S8, crosses the title 填星穰氣暈彗九, and ends inside S9-R3. Section repairs below do not overwrite these row-level labels.",
+        "frozen_text_extent": "則填星為之動…填星與列舍鬬不出其年分亡地死將｜填星穰氣暈彗九｜洛書曰黄帝起填星珥魚（氣如魚形在填星旁）…填星生氣而為黄穰…見此者不出五日",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "NO",
+        "whole_row_citation": "NO",
+        "atomic_citation": "mixed",
+        "has_citable_atoms": true,
+        "eligibility": "ambiguous",
+        "celestial": ["five_planets", "lunar_mansions", "cloud_qi"],
+        "relation_terms": ["离", "逆"],
+        "relation_guard": "守 occurs only inside the unresolved carrier sequence 㑹客環守 and is withheld from the formal enum pending adjudication.",
+        "native_relation_terms": ["動", "動摇", "離舍", "變色", "逆行", "凌", "鬬", "㑹客環守", "珥魚", "旁有雲", "生氣"],
+        "complexity": "cross_passage",
+        "risk": "high",
+        "computability": "partially_computable",
+        "special_tags": ["ambiguous"]
+      },
+      "sections": [
+        {
+          "section_id": "C24-S8",
+          "title": "填星流動與列星鬬八",
+          "source_labels_as_printed": ["雒書", "元命包", "晉陽秋（按語内）", "春秋緯", "鈎命决", "石氏", "荆州占", "郗萌"],
+          "celestial": ["five_planets", "lunar_mansions"],
+          "formal_candidate": "YES",
+          "whole_section_citation": "NO",
+          "atomic_citation": "mixed",
+          "eligibility": "ambiguous",
+          "relation_terms": ["离", "逆"],
+          "native_relation_terms": ["動", "動摇", "離舍", "變色", "逆行", "凌", "鬬", "㑹客環守"],
+          "complexity": "compound",
+          "risk": "high",
+          "computability": "partially_computable",
+          "special_tags": ["ambiguous"],
+          "atom_ids": ["C24-S8-R1", "C24-S8-R2", "C24-S8-R3", "C24-S8-R4", "C24-S8-R5"]
+        },
+        {
+          "section_id": "C24-S9",
+          "title": "填星穰氣暈彗九",
+          "source_labels_as_printed": ["洛書", "黄帝占", "孝經内記", "荆州占", "巫咸", "郗萌"],
+          "source_identity_note": "Preserve S8 雒書 versus S9 洛書. The printed 黄帝占 is not silently identified with 黃帝五星占.",
+          "celestial": ["five_planets", "cloud_qi"],
+          "object_guard": "In S9-R6, 彗 is retained as an unresolved morphology/type term of 填星出彗, not flattened into a separate comet object.",
+          "formal_candidate": "NO",
+          "whole_section_citation": "NO",
+          "atomic_citation": "YES_WITH_LIMITS",
+          "eligibility": "no_candidate",
+          "eligibility_policy_note": "Research record retained; current formal relation schema has no morphology/cloud-qi relation for these atoms. Revisit only after schema policy is discussed.",
+          "relation_terms": [],
+          "native_relation_terms": ["珥魚", "旁有雲", "生氣", "出穰氣", "自暈", "出彗"],
+          "complexity": "compound",
+          "risk": "high",
+          "computability": "partially_computable",
+          "special_tags": [],
+          "atom_ids": ["C24-S9-R1", "C24-S9-R2", "C24-S9-R3", "C24-S9-R4", "C24-S9-R5", "C24-S9-R6"]
+        }
+      ],
+      "atomic_rules": [
+        {
+          "id": "C24-S8-R1",
+          "section": "C24-S8",
+          "legacy_alias": null,
+          "row_membership": "left_restoration",
+          "source": "石氏",
+          "text": "石氏曰禮德義刑殺盡失則填星為之動",
+          "fact": "填星為之動",
+          "omen_or_condition": "禮德義刑殺盡失",
+          "relation_terms": [],
+          "native_relation_terms": ["動"],
+          "citation": {"status": "YES", "scope": "restored complete atom with title/source context", "reason": "The omitted left edge is recoverable from the fixed carrier."}
+        },
+        {
+          "id": "C24-S8-R2",
+          "section": "C24-S8",
+          "legacy_alias": null,
+          "row_membership": "inside",
+          "source": "continuing attribution under 石氏 (not repeated; confidence medium)",
+          "text": "填星動摇離舍使者交接道路",
+          "fact": "填星動摇離舍",
+          "omen_or_condition": "使者交接道路",
+          "relation_terms": ["离"],
+          "native_relation_terms": ["動摇", "離舍"],
+          "citation": {"status": "YES", "scope": "complete carrier string; attribution confidence must be stated", "reason": "The sentence lies between 石氏曰 and the next explicit source marker."}
+        },
+        {
+          "id": "C24-S8-R3",
+          "section": "C24-S8",
+          "legacy_alias": null,
+          "row_membership": "inside",
+          "source": "荆州占",
+          "text": "荆州占曰填星動女主有怒若有怨",
+          "fact": "填星動",
+          "omen_or_condition": "女主有怒若有怨",
+          "relation_terms": [],
+          "native_relation_terms": ["動"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "Source, protasis, and apodosis are intact."}
+        },
+        {
+          "id": "C24-S8-R4",
+          "section": "C24-S8",
+          "legacy_alias": "C24-A",
+          "row_membership": "inside",
+          "source": "郗萌",
+          "text": "郗萌曰填星變色逆行相凌而鬬㑹客環守其國無道",
+          "fact": "填星變色逆行相凌而鬬; 㑹客環守 unresolved",
+          "omen_or_condition": "其國無道",
+          "relation_terms": ["逆"],
+          "relation_guard": "Do not promote 守 while 㑹客環守 remains unresolved.",
+          "native_relation_terms": ["變色", "逆行", "凌", "鬬", "㑹客環守"],
+          "parallel_variants": [
+            "卷23：嵗星變色逆行相凌而鬬舍合留舍環守其國無道",
+            "卷30：熒惑變色逆行相凌而鬬㑹舍還其國無道"
+          ],
+          "citation": {"status": "NO", "scope": "not citable as an adjudicated reading; raw string may be displayed as a textual problem", "reason": "The carrier sequence 㑹客環守 is unresolved and the structural parallels diverge."}
+        },
+        {
+          "id": "C24-S8-R5",
+          "section": "C24-S8",
+          "legacy_alias": null,
+          "row_membership": "inside",
+          "source": "荆州占",
+          "text": "荆州占曰填星與列舍鬬不出其年分亡地死將",
+          "fact": "填星與列舍鬬",
+          "omen_or_condition": "不出其年分亡地死將",
+          "relation_terms": [],
+          "native_relation_terms": ["與列舍鬬"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "Source, protasis, apodosis, and horizon are intact."}
+        },
+        {
+          "id": "C24-S9-R1",
+          "section": "C24-S9",
+          "legacy_alias": "C24-B",
+          "row_membership": "inside",
+          "source": "洛書",
+          "text": "洛書曰黄帝起填星珥魚氣如魚形在填星旁",
+          "fact": "填星珥魚; 氣如魚形在填星旁",
+          "omen_or_condition": null,
+          "relation_terms": [],
+          "native_relation_terms": ["珥魚"],
+          "citation": {"status": "YES", "scope": "carrier string and morphology only; punctuation/source syntax remains conservative", "reason": "The row preserves the full morphology record."}
+        },
+        {
+          "id": "C24-S9-R2",
+          "section": "C24-S9",
+          "legacy_alias": "C24-C",
+          "row_membership": "inside",
+          "source": "黄帝占",
+          "text": "黄帝占曰填星旁有雲如狗狀有土功期一月",
+          "fact": "填星旁有雲如狗狀",
+          "omen_or_condition": "有土功; 期一月",
+          "relation_terms": [],
+          "native_relation_terms": ["旁有雲"],
+          "citation": {"status": "YES", "scope": "complete atomic research record", "reason": "Source, morphology, omen, and horizon are intact."}
+        },
+        {
+          "id": "C24-S9-R3",
+          "section": "C24-S9",
+          "legacy_alias": "C24-D",
+          "row_membership": "inside",
+          "source": "孝經内記",
+          "text": "孝經内記曰填星生氣而為黄穰者明日大温旦霧夕雨見此者不出五日五榖賤所見之國尤甚不出三旬中民多疾病亦死",
+          "segments": [
+            {"membership": "inside", "text": "孝經内記曰填星生氣而為黄穰者明日大温旦霧夕雨見此者不出五日"},
+            {"membership": "right_restoration", "text": "五榖賤所見之國尤甚不出三旬中民多疾病亦死"}
+          ],
+          "fact": "填星生氣而為黄穰",
+          "omen_or_condition": "明日大温旦霧夕雨; 五日五榖賤; 三旬中民多疾病亦死",
+          "relation_terms": [],
+          "native_relation_terms": ["生氣", "為黄穰"],
+          "citation": {"status": "YES", "scope": "restored full atom only; do not cite the frozen D fragment as complete", "reason": "The fixed 14a continuation repairs the clipped apodosis."}
+        },
+        {
+          "id": "C24-S9-R4",
+          "section": "C24-S9",
+          "legacy_alias": "C24-E",
+          "row_membership": "right_restoration",
+          "source": "荆州占",
+          "text": "荆州占曰填星出穰氣長四丈一曰雨土",
+          "fact": "填星出穰氣長四丈",
+          "omen_or_condition": "一曰雨土",
+          "relation_terms": [],
+          "native_relation_terms": ["出穰氣"],
+          "citation": {"status": "YES", "scope": "restored right-context atomic research record", "reason": "The full atom is present after the frozen row boundary."}
+        },
+        {
+          "id": "C24-S9-R5",
+          "section": "C24-S9",
+          "legacy_alias": "C24-F",
+          "row_membership": "right_restoration",
+          "source": "巫咸",
+          "text": "巫咸曰填星自暈有土功有䘮",
+          "fact": "填星自暈",
+          "omen_or_condition": "有土功有䘮",
+          "relation_terms": [],
+          "native_relation_terms": ["自暈"],
+          "citation": {"status": "YES", "scope": "restored right-context atomic research record", "reason": "The source sentence is complete."}
+        },
+        {
+          "id": "C24-S9-R6",
+          "section": "C24-S9",
+          "legacy_alias": "C24-G",
+          "row_membership": "right_restoration",
+          "source": "郗萌",
+          "text": "郗萌曰填星出彗所居下國受兵亡地不出一年",
+          "fact": "填星出彗; 彗 is morphology/type pending adjudication",
+          "omen_or_condition": "所居下國受兵亡地; 不出一年",
+          "relation_terms": [],
+          "native_relation_terms": ["出彗"],
+          "citation": {"status": "YES", "scope": "restored right-context carrier string; object taxonomy remains unresolved", "reason": "The textual atom is complete even though 彗 must not yet be flattened into a separate object."}
+        }
+      ],
+      "legacy_alias_coverage": {
+        "C24-A": "C24-S8-R4",
+        "C24-B": "C24-S9-R1",
+        "C24-C": "C24-S9-R2",
+        "C24-D": "C24-S9-R3",
+        "C24-E": "C24-S9-R4",
+        "C24-F": "C24-S9-R5",
+        "C24-G": "C24-S9-R6"
+      },
+      "recommendation": {
+        "scope": "original_row",
+        "citation_scalar_scope": "annotation_case; not whole-row quotation",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "NO",
+        "citation_eligible": "NO",
+        "whole_row_citation": "NO",
+        "atomic_citation": "mixed",
+        "has_citable_atoms": true,
+        "eligibility": "ambiguous",
+        "celestial": ["five_planets", "lunar_mansions", "cloud_qi"],
+        "relation_terms": ["离", "逆"],
+        "native_relation_terms": ["動", "凌", "鬬", "環", "珥魚", "旁有雲", "生氣"],
+        "complexity": "cross_passage",
+        "computability": "partially_computable",
+        "risk": "high",
+        "special_tags": ["ambiguous"]
+      },
+      "unresolved": [
+        "Whether 㑹客環守 is corrupt, and if so which structural parallel is relevant; no carrier glyph is silently emended.",
+        "S9 morphology/cloud records are research records rather than formal relation candidates under the current enum.",
+        "Operational definitions for motion, lodge boundaries, color, angular proximity, shape, and missing observations remain external modeling decisions."
+      ]
+    },
+    {
+      "case_id": "C44",
+      "locator": "卷8 / KR3g0018_WYG_008-11b",
+      "sources": [
+        {
+          "role": "extant_carrier_primary",
+          "name": "Kanripo KR3g0018_008",
+          "version": "commit eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_008.txt#L187-L214",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "extant_carrier_collation",
+          "name": "Wikisource 唐開元占經卷008",
+          "version": "oldid 655890",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷008&oldid=655890",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "punctuation_comparison",
+          "name": "識典古籍卷八影印頁",
+          "version": "current access",
+          "url": "https://www.shidianguji.com/zh/book/NGJ892411999012282111706/chapter/1lo8shfrruya1",
+          "accessed": "2026-08-01"
+        }
+      ],
+      "source_labels_as_printed": ["甘氏", "髙宗日傍氣圖", "春秋感精符", "洛書摘亡辟", "春秋緯", "黄帝兵法", "太公隂祕"],
+      "original_row": {
+        "scope_note": "The frozen row lacks the left start of the first 甘氏 sentence and clips the first 太公隂祕 sentence at the right edge.",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES_AFTER_REPAIR_WITH_STRING_ONLY_LIMITS",
+        "eligibility": "eligible",
+        "celestial": ["sun", "moon", "cloud_qi"],
+        "relation_terms": ["入"],
+        "native_relation_terms": ["暈", "珥", "穿", "貫", "出"],
+        "complexity": "compound",
+        "risk": "medium",
+        "computability": "partially_computable",
+        "special_tags": []
+      },
+      "repaired_section": {
+        "left_restoration": "甘氏曰日暈而珥有雲穿之者天下名士死",
+        "right_restoration": "太公隂祕曰日暈有五色雲如杵貫日從外入外人歸勝從内出内人勝欲知姓字白者商赤者徵青者角黒者羽黄者宫",
+        "whole_section_citation": "NO",
+        "atomic_citation": "YES_AFTER_REPAIR_WITH_STRING_ONLY_LIMITS",
+        "formal_candidate": "YES",
+        "relation_terms": ["入"],
+        "native_relation_terms": ["暈", "珥", "穿", "貫", "出"],
+        "complexity": "compound",
+        "risk": "medium"
+      },
+      "atomic_rules": [
+        {
+          "id": "C44-R1",
+          "source": "甘氏",
+          "text": "甘氏曰日暈而珥有雲穿之者天下名士死",
+          "fact": "日暈而珥、有雲穿之",
+          "omen_or_condition": "天下名士死",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥", "穿"],
+          "citation": {"status": "YES", "scope": "left-restored complete atom", "reason": "The fixed carrier supplies the clipped source and protasis."}
+        },
+        {
+          "id": "C44-R2",
+          "source": "髙宗日傍氣圖",
+          "text": "髙宗日傍氣圖曰日暈兩珥而下有黄雲人主有喜期百二十日逺年中",
+          "fact": "日暈兩珥而下有黄雲",
+          "omen_or_condition": "人主有喜; 期百二十日逺年中",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "Source, phenomenon, omen, and horizons are intact."}
+        },
+        {
+          "id": "C44-R3",
+          "source": "甘氏",
+          "text": "甘氏曰日暈而兩珥在外有聚雲在中與外不出三日城圍出戰",
+          "fact": "日暈而兩珥在外、有聚雲在中與外",
+          "omen_or_condition": "不出三日城圍出戰",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥", "出"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The atom is internally complete."}
+        },
+        {
+          "id": "C44-R4",
+          "source": "春秋感精符",
+          "text": "春秋感精符曰日一暈兩珥有立雲貫日出國多妖孽",
+          "fact": "日一暈兩珥、有立雲貫日…",
+          "omen_or_condition": "…國多妖孽",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥", "貫", "出"],
+          "punctuation_candidates": ["有立雲貫日，出國多妖孽", "有立雲貫日出，國多妖孽"],
+          "interpretation_guard": "Do not translate 出國 as a settled unit. The unpunctuated carrier string remains primary pending image or independent-edition adjudication.",
+          "citation": {"status": "YES", "scope": "original unpunctuated carrier string only", "reason": "The text is quotable, but neither punctuation nor semantic paraphrase is adjudicated."}
+        },
+        {
+          "id": "C44-R5",
+          "source": "洛書摘亡辟",
+          "text": "洛書摘亡辟曰日暈而兩珥立雲貫之國有大疾",
+          "fact": "日暈而兩珥、立雲貫之",
+          "omen_or_condition": "國有大疾",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥", "貫"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The carrier string is complete."}
+        },
+        {
+          "id": "C44-R6",
+          "source": "春秋緯",
+          "text": "春秋緯曰日暈有兩珥黄雲貫之不出三月貴人有死者",
+          "fact": "日暈有兩珥、黄雲貫之",
+          "omen_or_condition": "不出三月貴人有死者",
+          "relation_terms": [],
+          "native_relation_terms": ["暈", "珥", "貫"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The attribution, phenomenon, and response horizon are intact."}
+        },
+        {
+          "id": "C44-R7",
+          "source": "黄帝兵法",
+          "text": "黄帝兵法曰日月暈仰視之須臾忽有雲氣從傍入者急隨雲以攻之大勝",
+          "fact": "日月暈、有雲氣從傍入",
+          "omen_or_condition": "急隨雲以攻之大勝",
+          "relation_terms": ["入"],
+          "native_relation_terms": ["暈", "從傍入"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The operational instruction and claimed outcome are intact as a historical omen rule."}
+        },
+        {
+          "id": "C44-R8",
+          "source": "太公隂祕",
+          "text": "太公隂祕曰日暈有五色雲如杵貫日從外入外人歸勝從内出内人勝欲知姓字白者商赤者徵青者角黒者羽黄者宫",
+          "fact": "日暈、有五色雲如杵貫日、從外入或從内出",
+          "omen_or_condition": "外人歸勝或内人勝; 五色配五音",
+          "relation_terms": ["入"],
+          "native_relation_terms": ["暈", "貫", "從外入", "從内出"],
+          "citation": {"status": "YES", "scope": "right-restored complete atom", "reason": "The fixed carrier supplies the clipped comparison and color mapping."}
+        }
+      ],
+      "recommendation": {
+        "scope": "original_row",
+        "citation_scalar_scope": "annotation_case; not whole-row quotation",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "citation_eligible": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES_AFTER_REPAIR_WITH_STRING_ONLY_LIMITS",
+        "has_citable_atoms": true,
+        "eligibility": "eligible",
+        "celestial": ["sun", "moon", "cloud_qi"],
+        "relation_terms": ["入"],
+        "native_relation_terms": ["暈", "珥", "穿", "貫", "出"],
+        "complexity": "compound",
+        "computability": "partially_computable",
+        "risk": "medium",
+        "special_tags": []
+      },
+      "unresolved": [
+        "C44-R4 remains unpunctuated: 有立雲貫日出國多妖孽; its semantic parse is not fixed.",
+        "暈、珥、立雲、聚雲、五色、如杵 and directional cloud entry require externally versioned image and timing thresholds."
+      ]
+    },
+    {
+      "case_id": "C45",
+      "locator": "卷83 / KR3g0018_WYG_083-7b",
+      "sources": [
+        {
+          "role": "extant_carrier_primary",
+          "name": "Kanripo KR3g0018_083",
+          "version": "commit eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_083.txt#L115-L141",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "extant_carrier_collation",
+          "name": "Wikisource 唐開元占經卷083",
+          "version": "oldid 656040",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷083&oldid=656040",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "reliable_transmitted_parallel",
+          "name": "後漢書卷83 嚴光傳",
+          "version": "Wikisource oldid 1458140",
+          "url": "https://zh.wikisource.org/w/index.php?title=後漢書/卷83&oldid=1458140",
+          "accessed": "2026-08-01"
+        }
+      ],
+      "source_labels_as_printed": ["文曜鈎", "荆州占", "石氏", "幽明錄", "後漢書", "郄萌"],
+      "original_row": {
+        "scope_note": "The frozen row is clipped inside the 幽明錄 note. It contains complete main-rule atoms but is not a citable whole.",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES",
+        "eligibility": "eligible",
+        "celestial": ["guest_star", "lunar_mansions"],
+        "relation_terms": ["入", "犯", "守", "掩"],
+        "native_relation_terms": ["至", "還", "舍", "抵"],
+        "complexity": "compound",
+        "risk": "high",
+        "computability": "partially_computable",
+        "special_tags": []
+      },
+      "repaired_section": {
+        "title": "客星犯黃帝座四十六",
+        "right_boundary": "郄萌曰黑星抵留座星者曰天子惡之; stop before 客星犯四帝四十七",
+        "formal_candidate": "YES",
+        "whole_section_citation": "NO",
+        "atomic_citation": "YES",
+        "eligibility": "eligible",
+        "celestial": ["guest_star", "lunar_mansions"],
+        "relation_terms": ["入", "犯", "守", "掩", "留"],
+        "native_relation_terms": ["至", "還", "舍", "抵"],
+        "complexity": "compound",
+        "risk": "high",
+        "computability": "partially_computable",
+        "special_tags": []
+      },
+      "lexical_scope_guard": {
+        "human_lodging_not_celestial": [
+          {"text": "仍留宿夜與婢臥", "source": "幽明錄 note", "disposition": "exclude from celestial 留"},
+          {"text": "上留遵俱寢", "source": "後漢書 note in carrier", "disposition": "exclude from celestial 留"}
+        ],
+        "celestial_lodging": {
+          "text": "郄萌曰黑星抵留座星者曰天子惡之",
+          "source": "8a repaired continuation",
+          "disposition": "include formal 留 in repaired full section"
+        }
+      },
+      "atomic_rules": [
+        {
+          "id": "C45-R1",
+          "source": "文曜鈎",
+          "text": "文曜鈎曰客星入太微犯黃帝座天子有憂臣謀主",
+          "fact": "客星入太微、犯黃帝座",
+          "omen_or_condition": "天子有憂、臣謀主",
+          "relation_terms": ["入", "犯"],
+          "native_relation_terms": [],
+          "citation": {"status": "YES", "scope": "complete main-rule atom", "reason": "The atom is intact inside the frozen row."}
+        },
+        {
+          "id": "C45-R2",
+          "source": "continuing attribution under 文曜鈎",
+          "text": "至座而還謀不成反受其殃",
+          "fact": "客星至座而還",
+          "omen_or_condition": "謀不成反受其殃",
+          "relation_terms": [],
+          "native_relation_terms": ["至", "還"],
+          "citation": {"status": "YES", "scope": "complete continuation atom", "reason": "The trajectory and apodosis are intact."}
+        },
+        {
+          "id": "C45-R3",
+          "source": "continuing attribution under 文曜鈎",
+          "text": "守犯三十日已上臣謀成期不出一年",
+          "fact": "守犯三十日已上",
+          "omen_or_condition": "臣謀成; 期不出一年",
+          "relation_terms": ["守", "犯"],
+          "native_relation_terms": [],
+          "citation": {"status": "YES", "scope": "complete duration rule", "reason": "The 30-day threshold and one-year response horizon are explicit."}
+        },
+        {
+          "id": "C45-R4",
+          "source": "荆州占",
+          "text": "荆州占曰客星舍五帝座有聖人與君並治在蜀秦",
+          "fact": "客星舍五帝座",
+          "omen_or_condition": "有聖人與君並治在蜀秦",
+          "relation_terms": [],
+          "native_relation_terms": ["舍"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The source sentence is intact."}
+        },
+        {
+          "id": "C45-R5",
+          "source": "石氏",
+          "text": "石氏曰蒼白星抵座天子有喪憂抵座旁臣有反之者",
+          "fact": "蒼白星抵座或抵座旁",
+          "omen_or_condition": "天子有喪憂或臣反",
+          "relation_terms": [],
+          "native_relation_terms": ["抵"],
+          "citation": {"status": "YES", "scope": "complete two-branch atom", "reason": "Both position clauses and outcomes are present."}
+        },
+        {
+          "id": "C45-H1",
+          "source": "幽明錄",
+          "kind": "historical_or_anecdotal_note",
+          "text": "仍留宿夜與婢臥…客星移掩帝座甚逼…客星應時即退",
+          "fact": "客星移掩帝座甚逼、應時即退",
+          "omen_or_condition": null,
+          "relation_terms": ["掩"],
+          "native_relation_terms": ["移", "退"],
+          "lexical_guard": "仍留宿夜 is human lodging and is excluded from celestial 留.",
+          "citation": {"status": "YES", "scope": "historical-note atom only; not a main omen rule", "reason": "The astronomical clause may be cited only with its anecdotal layer identified."}
+        },
+        {
+          "id": "C45-H2",
+          "source": "後漢書 note in carrier",
+          "kind": "historical_note_parallel",
+          "text": "其夜客星犯天子宿…上留遵俱寢",
+          "fact": "客星犯天子宿",
+          "omen_or_condition": null,
+          "relation_terms": ["犯"],
+          "native_relation_terms": [],
+          "variant": "Transmitted 後漢書卷83 has 客星犯御坐甚急 and 嚴光; the carrier note has 客星犯天子宿 and 嚴遵.",
+          "lexical_guard": "上留遵俱寢 is human lodging and is excluded from celestial 留.",
+          "citation": {"status": "YES", "scope": "carrier-note wording with transmitted parallel stated", "reason": "The layer and variant are explicit."}
+        },
+        {
+          "id": "C45-R6",
+          "source": "石氏",
+          "text": "石氏曰有赤星銳如劔抵座星天子以兵驚一曰災驚",
+          "fact": "赤星銳如劔、抵座星",
+          "omen_or_condition": "天子以兵驚; 一曰災驚",
+          "relation_terms": [],
+          "native_relation_terms": ["抵"],
+          "citation": {"status": "YES", "scope": "restored 8a complete atom", "reason": "The rule is complete in the repaired continuation."}
+        },
+        {
+          "id": "C45-R7",
+          "source": "荆州占",
+          "text": "荆州占曰黑星抵座左右旁大臣有死者",
+          "fact": "黑星抵座左右旁",
+          "omen_or_condition": "大臣有死者",
+          "relation_terms": [],
+          "native_relation_terms": ["抵"],
+          "citation": {"status": "YES", "scope": "restored 8a complete atom", "reason": "The rule is complete."}
+        },
+        {
+          "id": "C45-R8",
+          "source": "荆州占",
+          "text": "荆州占曰黃白星大如拳正圓抵座旁者臣有獻美人者",
+          "fact": "黃白星大如拳正圓、抵座旁",
+          "omen_or_condition": "臣有獻美人者",
+          "relation_terms": [],
+          "native_relation_terms": ["抵"],
+          "citation": {"status": "YES", "scope": "restored 8a complete atom", "reason": "The morphology, position, and response are intact."}
+        },
+        {
+          "id": "C45-R9",
+          "source": "郄萌",
+          "text": "郄萌曰黑星抵留座星者曰天子惡之",
+          "fact": "黑星抵留座星",
+          "omen_or_condition": "天子惡之",
+          "relation_terms": ["留"],
+          "native_relation_terms": ["抵留"],
+          "lexical_guard": "This is celestial 抵留 and must not be removed with the human-lodging false positives.",
+          "citation": {"status": "YES", "scope": "restored 8a complete atom", "reason": "The source, celestial subject, relation, and omen are explicit."}
+        }
+      ],
+      "recommendation": {
+        "scope": "original_row",
+        "citation_scalar_scope": "annotation_case; not whole-row quotation",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "citation_eligible": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES",
+        "has_citable_atoms": true,
+        "eligibility": "eligible",
+        "celestial": ["guest_star", "lunar_mansions"],
+        "relation_terms": ["入", "犯", "守", "掩"],
+        "native_relation_terms": ["至", "還", "舍", "抵"],
+        "complexity": "compound",
+        "computability": "partially_computable",
+        "risk": "high",
+        "special_tags": []
+      },
+      "unresolved": [
+        "犯、抵、掩 and 守 require an external angular/path definition; 守犯 supplies duration but not spatial threshold.",
+        "Color and shape language requires calibrated, versioned criteria.",
+        "The 幽明錄 material is fragmentary/derivative transmission and must remain a typed note."
+      ]
+    },
+    {
+      "case_id": "C47",
+      "locator": "卷89 / KR3g0018_WYG_089-18a",
+      "sources": [
+        {
+          "role": "extant_carrier_primary",
+          "name": "Kanripo KR3g0018_089",
+          "version": "commit eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_089.txt#L304-L334",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "extant_carrier_collation",
+          "name": "Wikisource 唐開元占經卷089",
+          "version": "oldid 656052",
+          "url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷089&oldid=656052",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "strong_external_rule_parallel",
+          "name": "乙巳占卷八 彗孛入列宿占",
+          "version": "Wikisource oldid 2623978",
+          "url": "https://zh.wikisource.org/w/index.php?oldid=2623978&title=乙巳占/8",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "reliable_transmitted_historical_parallel",
+          "name": "晉書卷113 苻堅載記",
+          "version": "Wikisource oldid 2135052",
+          "url": "https://zh.wikisource.org/w/index.php?title=晉書/卷113&oldid=2135052",
+          "accessed": "2026-08-01"
+        },
+        {
+          "role": "derivative_reconstruction_not_independent",
+          "name": "三十國春秋輯本 車頻秦書條",
+          "version": "entry explicitly cites 占經卷89",
+          "url": "https://zh.wikisource.org/zh-hant/三十國春秋輯本",
+          "accessed": "2026-08-01"
+        }
+      ],
+      "source_labels_as_printed": ["黃帝占", "甘氏", "車類秦書", "荆州占", "石氏", "郗萌占", "陳卓"],
+      "original_row": {
+        "scope_note": "The frozen row begins with the preceding 參 subsection's 班固天文志 note tail and ends inside the 車類秦書 note. It is therefore cross-passage and not citable whole.",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES_WITH_TEXTUAL_LIMITS",
+        "eligibility": "eligible",
+        "celestial": ["comet", "guest_star", "lunar_mansions"],
+        "relation_terms": ["犯"],
+        "normalization_note": "Carrier 干犯 is normalized to the project enum 犯; the carrier glyphs remain unchanged in quoted text.",
+        "native_relation_terms": ["干犯", "拂", "掃", "出", "在"],
+        "complexity": "cross_passage",
+        "risk": "high",
+        "computability": "partially_computable",
+        "special_tags": []
+      },
+      "repaired_section": {
+        "hierarchy": ["彗孛犯南方七宿", "東井彗孛犯東井"],
+        "left_boundary": "Exclude the preceding 班固天文志 note belonging to 參彗孛犯參.",
+        "right_boundary": "Continue through 陳卓曰彗在東井…見七十日主當之; stop before 鬼彗孛犯輿鬼.",
+        "formal_candidate": "YES",
+        "whole_section_citation": "NO",
+        "atomic_citation": "mixed-YES",
+        "eligibility": "eligible",
+        "eligibility_policy_note": "If a later terminal policy promotes external material variants to case-level conflict, revisit this value; current policy keeps the external variant in collation notes.",
+        "celestial": ["comet", "guest_star", "lunar_mansions"],
+        "relation_terms": ["犯"],
+        "native_relation_terms": ["干犯", "拂", "掃", "出", "在"],
+        "complexity": "compound",
+        "risk": "medium",
+        "computability": "partially_computable",
+        "special_tags": []
+      },
+      "entity_hierarchy": {
+        "historical_note_object": "客星〔形似彗／或名蚩尤旗〕",
+        "guard": "客星, 狀如彗, and 或名蚩尤旗 are record label, morphology, and alternative type/name—not three simultaneous objects.",
+        "source_name": {"carrier_reading": "車類秦書", "normalized_identification_candidate": "車頻《秦書》", "policy": "preserve carrier reading; no silent emendation"}
+      },
+      "atomic_rules": [
+        {
+          "id": "C47-R1",
+          "source": "黃帝占",
+          "text": "黃帝占曰彗孛干犯東井大使出野有兩軍相當不出三年",
+          "fact": "彗孛干犯東井",
+          "omen_or_condition": "大使出、野有兩軍相當; 不出三年",
+          "relation_terms": ["犯"],
+          "native_relation_terms": ["干犯"],
+          "citation": {"status": "YES", "scope": "complete main-rule atom", "reason": "Source, event, response, and horizon are intact."}
+        },
+        {
+          "id": "C47-R2",
+          "source": "甘氏",
+          "text": "甘氏曰彗星干犯東井其國兵起",
+          "fact": "彗星干犯東井",
+          "omen_or_condition": "其國兵起",
+          "relation_terms": ["犯"],
+          "native_relation_terms": ["干犯"],
+          "citation": {"status": "YES", "scope": "complete main-rule atom", "reason": "The source sentence is intact."}
+        },
+        {
+          "id": "C47-H1",
+          "source": "車類秦書 (carrier reading)",
+          "kind": "historical_note_observation",
+          "text": "苻堅九年四月有客星出尾箕長十餘丈狀如彗而末曲或名蚩尤旗拂于東井自夏及冬不滅",
+          "fact": "客星出尾箕、長十餘丈、狀如彗而末曲、或名蚩尤旗、拂于東井、自夏及冬不滅",
+          "omen_or_condition": null,
+          "relation_terms": [],
+          "native_relation_terms": ["出", "拂"],
+          "citation": {"status": "YES", "scope": "historical-note observation only", "reason": "The repaired note is citable if its nested genre and carrier source name are retained."}
+        },
+        {
+          "id": "C47-H2",
+          "source": "張益、孟光 in 車類秦書 note",
+          "kind": "historical_note_interpretation",
+          "text": "奏彗起尾箕尾箕燕分而拂東井東井秦分燕首兆亂於秦",
+          "fact": "彗起尾箕、拂東井",
+          "omen_or_condition": "燕首兆亂於秦",
+          "relation_terms": [],
+          "native_relation_terms": ["起", "拂"],
+          "citation": {"status": "YES", "scope": "court interpretation within the historical note, not neutral observation", "reason": "The memorial's evidentiary layer is explicitly typed."}
+        },
+        {
+          "id": "C47-R3",
+          "source": "荆州占",
+          "text": "荆州占曰彗星干犯東井則大臣謀其國用兵期百八十日",
+          "fact": "彗星干犯東井",
+          "omen_or_condition": "大臣謀、其國用兵; 期百八十日",
+          "relation_terms": ["犯"],
+          "native_relation_terms": ["干犯"],
+          "parallel_variant": {"witness": "乙巳占卷八 oldid 2623978", "text": "彗干犯東井則大臣誅其國用兵期百八十日", "difference": "占經 謀 / 乙巳占 誅"},
+          "citation": {"status": "YES", "scope": "carrier rule with 謀/誅 external variant disclosed", "reason": "The carrier remains citable; no silent substitution from the parallel is permitted."}
+        },
+        {
+          "id": "C47-R4",
+          "source": "石氏",
+          "text": "石氏曰彗星出東井其國兵大起車騎滿野有軍大戰將軍有死者若大臣有誅期三年中六年逺九年",
+          "fact": "彗星出東井",
+          "omen_or_condition": "兵大起、車騎滿野、大戰、將軍死或大臣誅; 三年六年九年",
+          "relation_terms": [],
+          "native_relation_terms": ["出"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The source, outcomes, and horizons are intact."}
+        },
+        {
+          "id": "C47-R5",
+          "source": "郗萌占",
+          "text": "郗萌占曰掃出東井上莖煞漸漸長上白下赤狀如矛刄此為兵灾乃太白之變",
+          "fact": "掃出東井; remainder textually uncertain",
+          "omen_or_condition": "此為兵灾乃太白之變",
+          "relation_terms": [],
+          "native_relation_terms": ["掃", "出"],
+          "textual_guard": "上莖煞漸漸長 is not translated or silently normalized; quote the original string only.",
+          "citation": {"status": "YES", "scope": "original carrier string only", "reason": "The string is quotable, but its morphology clause is not an adjudicated reading."}
+        },
+        {
+          "id": "C47-R6",
+          "source": "陳卓",
+          "text": "陳卓曰彗星出東井民人䜛言國政崩壞天下大水",
+          "fact": "彗星出東井",
+          "omen_or_condition": "民人䜛言、國政崩壞、天下大水",
+          "relation_terms": [],
+          "native_relation_terms": ["出"],
+          "citation": {"status": "YES", "scope": "complete atomic rule", "reason": "The source sentence is intact."}
+        },
+        {
+          "id": "C47-R7",
+          "source": "陳卓",
+          "text": "陳卓曰彗在東井大人死見三十日兵將當之見五十日相當之時見七十日主當之",
+          "fact": "彗在東井; 見三十日/五十日/七十日",
+          "omen_or_condition": "大人死; 兵將/相/主當之",
+          "relation_terms": [],
+          "native_relation_terms": ["在"],
+          "parallel_variant": {"witness": "乙巳占卷八 oldid 2623978", "text": "彗在井大人死見三十日兵將當之見五十日相當之見七十日主當之", "difference": "占經 時 / 乙巳占 無時; 乙巳占 also has 井 rather than 東井 in this clause"},
+          "textual_guard": "Retain the carrier 時; do not delete it from the 占經 text merely because the parallel lacks it.",
+          "citation": {"status": "YES", "scope": "carrier string with 時/無時 variant disclosed", "reason": "The rule can be cited if the textual irregularity is not concealed."}
+        }
+      ],
+      "parallel_variants": [
+        {
+          "priority": "strong_rule_parallel",
+          "witness": "乙巳占卷八 oldid 2623978",
+          "variants": ["C47-R3: 謀／誅", "C47-R7: 時／無時"],
+          "policy": "Preserve 占經 glyphs and wording; record, do not silently adopt, the external readings."
+        },
+        {
+          "priority": "historical_event_parallel",
+          "witness": "晉書卷113 oldid 2135052",
+          "text": "有彗星出於尾箕長十餘丈名蚩尤旗經太微掃東井自夏及秋冬不滅",
+          "differences": ["客星／彗星", "狀如彗而末曲或名／名", "absence/presence of 經太微", "拂／掃", "自夏及冬／自夏及秋冬", "張益孟光／張孟"]
+        }
+      ],
+      "duplicate_assessment": {
+        "status": "duplicate withdrawn provisionally",
+        "comparison_domain": "fixed Kanripo commit and recorded same-book/sample searches; external parallels are not automatically same-book duplicates",
+        "queries": ["彗星干犯東井", "彗孛干犯東井", "彗在東井大人死", "彗星出東井民人", "大使出野有兩軍相當", "車類秦書", "苻堅九年", "張益孟光", "狀如彗而末曲", "蚩尤旗拂于東井"],
+        "result": "截至记录的 fixed-commit 查询，未发现另一条同书/样本实质重复。",
+        "broad_search_note": "Broader 蚩尤旗 hits in volumes 85, 94, and 98 are type or cloud-qi discussions, not the same 苻堅—尾箕—東井 event. This is not proof that no duplicate can exist outside the recorded comparison domain."
+      },
+      "recommendation": {
+        "scope": "original_row",
+        "citation_scalar_scope": "annotation_case; not whole-row quotation",
+        "formal_candidate": "YES",
+        "annotation_citation_scalar": "YES",
+        "citation_eligible": "YES",
+        "whole_row_citation": "NO",
+        "atomic_citation": "YES_WITH_TEXTUAL_LIMITS",
+        "has_citable_atoms": true,
+        "eligibility": "eligible",
+        "celestial": ["comet", "guest_star", "lunar_mansions"],
+        "relation_terms": ["犯"],
+        "native_relation_terms": ["干犯", "拂", "掃", "出", "在"],
+        "complexity": "cross_passage",
+        "computability": "partially_computable",
+        "risk": "high",
+        "special_tags": []
+      },
+      "unresolved": [
+        "Whether project policy turns the external 謀/誅 variant into terminal conflict; this report leaves C47 eligible and special_tags empty.",
+        "The carrier reading 車類秦書 may identify 車頻《秦書》, but the original glyphs are not emended.",
+        "干犯、拂、掃 and morphology/length terms require externally versioned angular, path, unit, and missing-observation rules."
+      ]
+    }
+  ]
+}

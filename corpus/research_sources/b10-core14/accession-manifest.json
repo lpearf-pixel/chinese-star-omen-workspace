@@ -1,0 +1,119 @@
+{
+  "accession_manifest_version": "b10-core14-research-evidence/1",
+  "status": "AI_RESEARCH_PRE_REVIEW_NOT_HUMAN_APPROVAL",
+  "generated_on": "2026-08-01",
+  "workbook_lineage": {
+    "shared_content_sha256": "1424247b8ef953d794d6dae935e10e7a1f48be1d14f007ab5b5836b5ece8e50d",
+    "cases": [
+      "C02",
+      "C03",
+      "C09",
+      "C11",
+      "C13",
+      "C14",
+      "C24",
+      "C31",
+      "C33",
+      "C41",
+      "C43",
+      "C44",
+      "C45",
+      "C47"
+    ]
+  },
+  "carrier": {
+    "title": "《唐開元占經》四庫全書本",
+    "kanripo_repository": "kanripo/KR3g0018",
+    "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+    "wikisource_revision_register": "corpus/research_sources/b10-core14/wikisource-revision-register.json",
+    "independent_witness_warning": "Kanripo and Wikisource are transcription checks within the same Four Treasuries textual family, not independent witnesses solely by agreement."
+  },
+  "review_gate": {
+    "early_of_middle": "APPROVED_CRITICAL_0",
+    "middle_of_early": "APPROVED_CRITICAL_0_AFTER_CONTROLLER_POLICY",
+    "late": "APPROVED_CRITICAL_0",
+    "reviewer_a_b_modified": false
+  },
+  "boundaries": {
+    "official_kb_ingest": "NOT_RUN",
+    "qdrant_write": "NOT_RUN",
+    "local_kb_default_write": "NOT_RUN",
+    "schema_freeze": "NOT_RUN",
+    "related_books_bulk_localization": "PLANNED_NOT_RUN",
+    "runner": "NOT_RUN_ROUTINE_RESEARCH_DOCS"
+  },
+  "files": [
+    {
+      "path": "corpus/research_sources/b10-core14/README.md",
+      "sha256": "aa9f2edaea0a3063f06f9aa42e617d53985cbdc58ab3e87cd5b3d4f80f28af0e"
+    },
+    {
+      "path": "docs/research/B10_CORE14_SOURCE_AUDIT_REPORT.md",
+      "sha256": "0f08c11b70f40de1642d859200fb45925eb40b931ee25ce1ae241e1ec641744e"
+    },
+    {
+      "path": "docs/research/B10_RELATED_WIKISOURCE_LOCALIZATION_PLAN.md",
+      "sha256": "77a4520d42627f0d8b19a4cd646e11e64e408952772bed9dd769bc9059eb9433"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/wikisource-revision-register.json",
+      "sha256": "b9cb9210c11907bea190ec0626ec18a1b984dfbbec98a67e1a425800fba3e740"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/kanripo-core14-contexts.txt",
+      "sha256": "3cd34547b08cec48eb5e18629f32f20d9d7a635653b407dd27735fc2eee804db"
+    },
+    {
+      "path": "docs/research/core14-case-audits/audit-early.md",
+      "sha256": "6663730c510e40d5d989d84a920187f694569c8d11e05c96c074b9e85ceb1eea"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/audit-early.json",
+      "sha256": "28ff207c6424f7de1ed12b9422d5d489bc69aafe9d89fda4c65f50f472695cb4"
+    },
+    {
+      "path": "docs/research/core14-case-audits/audit-middle.md",
+      "sha256": "dabcb635c2d4aa4a6256e78b6b53beaead9a1208488f3eab2e6128063e340d7c"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/audit-middle.json",
+      "sha256": "30d90f31852f5010c9d39c96507a279c09f59e3cd0d51011b69359ec55810121"
+    },
+    {
+      "path": "docs/research/core14-case-audits/audit-late.md",
+      "sha256": "b89d6f29220ab1ef3e9d2960d975f3a19306858d981d53b3bea8323a2e84714d"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/audit-late.json",
+      "sha256": "54d18e61f81f8be32213320ed54781e37d6565126dac88b5cb2cc905066b8ff3"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/review-middle-of-early.md",
+      "sha256": "da07d25f9356283c40b10344e1358b4ab8c274e31397d904f214b146fda88721"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/re-review-middle-of-early.md",
+      "sha256": "8c89f0d5fd071634fd1bf5e9d173f66ace66489d3fedece3b9dd29f1e7de2617"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/review-early-of-middle.md",
+      "sha256": "ffe826df3d789c62f4f51e72681aa61d027f203be6cae57e452f0db07679d2ab"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/re-review-early-of-middle.md",
+      "sha256": "705217bdd838d99d2c693ca7eecf0c52feefb3ad6416330c6138ff75671d9cca"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/review-late.md",
+      "sha256": "b3b09ec20a8998b0ec0dbdb1bfd4c3e9707613c7b8e5e80cc133e4b8f2986feb"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/re-review-late.md",
+      "sha256": "2f6836afcbed8143d4ed43fcf68048f994c39ba588699f7888571cfa2f37b4c1"
+    },
+    {
+      "path": "docs/research/core14-case-audits/reviews/final-branch-review.md",
+      "sha256": "cbd62a0b2d94719b14b876a8e53fed8f82961467ac1decc922733ff494b52187"
+    }
+  ]
+}

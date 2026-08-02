@@ -1,0 +1,215 @@
+{
+  "report_type": "AI_PRE_REVIEW_ANCIENT_TEXT_AUDIT",
+  "reviewer_status": "not_human_reviewer_A_or_B",
+  "access_date": "2026-08-01",
+  "carrier": "唐開元占經（四庫全書文淵閣本系統）",
+  "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+  "fix_log": [
+    "round_1: citation_eligible normalized to scalar YES for all five cases; whole_passage_citation retained separately; every atom assigned citation_scope",
+    "C14 duplicate scoped only to C14-R08; case special_tags cleared; complexity=compound",
+    "C31 Taiwei targets moved to target_entity_types enclosure/asterism; eligibility=eligible; variants scoped atomically; complexity=compound",
+    "C41 carrier_text separated from Hanshu collated_reading without silently adding 入; risk=medium; target entity taxonomy corrected",
+    "C43 minimal boundary adopted; R10-R11 removed and later material marked context_only",
+    "ancient_books entries assigned scope; recommendation enums revalidated"
+  ],
+  "cases": [
+    {
+      "case_id": "C14",
+      "locator": "卷31 / KR3g0018_WYG_031-18a",
+      "sources": [
+        {"type": "wikisource_oldid", "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7031&oldid=2506688", "oldid": 2506688, "revision_timestamp": "2024-12-18T02:43:48Z", "accessed": "2026-08-01", "note": "本组中较新修订"},
+        {"type": "kanripo_fixed_commit", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_031.txt#L261-L344", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_088.txt#L29-L38", "accessed": "2026-08-01", "note": "卷88彗孛名狀占重出陳卓公式"},
+        {"type": "transmitted_history", "url": "https://zh.wikisource.org/wiki/宋書/卷24", "accessed": "2026-08-01"},
+        {"type": "transmitted_history", "url": "https://zh.wikisource.org/zh-hant/後漢紀_(四庫全書本)/卷16", "accessed": "2026-08-01"}
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "extant_carrier", "scope": "current_passage"},
+        {"name": "荆州占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "玄冥占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "宋書·天文志", "role": "historical_note_source", "scope": "current_passage"},
+        {"name": "袁宏漢紀（後漢紀）", "role": "historical_note_source", "scope": "boundary_repair"},
+        {"name": "郗萌", "role": "quoted_author", "scope": "current_passage"},
+        {"name": "陳卓", "role": "quoted_author", "scope": "current_passage"}
+      ],
+      "boundaries": {
+        "section": "熒惑犯心五",
+        "previous_context": "031-17b末郗萌曰熒",
+        "left": "恢復為郗萌曰熒惑守心有反者從太子起",
+        "right": "補至031-18b三月京都饑人相食；其後另起春秋緯説題辭",
+        "next_section": "熒惑犯尾六",
+        "whole_passage_citation": "NO"
+      },
+      "layering": {"celestial_fact": ["宋書按語熒惑守心、入羽林", "袁宏漢紀按語熒惑逆行守心"], "omens": ["反亂", "兵敗", "死亡", "女喪", "地動", "彗星出", "饑"], "historical_notes": ["趙王倫及三王起兵", "京都饑人相食"]},
+      "atomic_rules": [
+        {"id": "C14-R01", "subject": "熒惑", "object": "心", "relation": "守", "condition": null, "omen": "反者從太子起/九卿為害/大國兵起天子軍破", "source": "郗萌", "citation_scope": "expanded_context"},
+        {"id": "C14-R02", "subject": "熒惑", "object": "心", "relation": "守", "condition": "約二十日；主語省略", "omen": "相死", "source": "郗萌", "citation_scope": "expanded_context"},
+        {"id": "C14-R03", "subject": "熒惑", "object": "心", "relation": "守/留", "condition": "十日", "omen": "后死（句法待定）", "source": "郗萌", "citation_scope": "expanded_context"},
+        {"id": "C14-R04", "subject": "熒惑", "object": "心", "relation": "守", "condition": "三十日", "omen": "女䘮", "source": "郗萌", "citation_scope": "expanded_context"},
+        {"id": "C14-R05", "subject": "熒惑", "object": "心、房間", "relation": "守", "condition": "三十日", "omen": "地動", "source": "郗萌", "citation_scope": "current_passage"},
+        {"id": "C14-R06", "subject": "熒惑", "object": "心", "relation": "守", "condition": null, "omen": "反者從宗家", "source": "又占（承郗萌段）", "citation_scope": "current_passage"},
+        {"id": "C14-R07", "subject": "熒惑", "object": "心", "relation": "守", "condition": "色黒", "omen": "有兵必敗", "source": "荆州占", "citation_scope": "current_passage"},
+        {"id": "C14-R08", "subject": "熒惑", "object": "心", "relation": "守", "condition": "期三十日", "omen": "彗星出（outcome_only）", "source": "陳卓", "citation_scope": "current_passage", "duplicate_of": "唐開元占經卷88陳卓同式", "parallel_same_book": "KR3g0018_088.txt#L29-L38"},
+        {"id": "C14-R09", "subject": "熒惑", "object": "心", "relation": "守", "condition": null, "omen": "饑", "source": "玄冥占", "citation_scope": "current_passage"}
+      ],
+      "parallel_and_collation": ["卷88同式證明彗星出為占應，不是同層共時天象", "卷31王都西南指在卷88不見，保留殘疑", "元康九年月份宋書作二月，本卷按語作六月，晉書系統亦見六月"],
+      "operationality": "守/留無角距與速度閾值；色黒無色指數；10/20/30日可作時長；逆行僅按語可由視黃經速度計算。",
+      "recommendation": {"celestial": ["five_planets", "lunar_mansions", "comet"], "celestial_roles": {"comet": "outcome_only"}, "relation": ["守", "留"], "commentary_relation_only": ["入", "逆"], "complexity": "compound", "computability": "partially_computable", "risk": "medium", "special_tags": [], "formal_candidate": "YES", "citation_eligible": "YES", "whole_passage_citation": "NO", "eligibility": "eligible"},
+      "unresolved": ["王都西南指的所指", "后死句法", "宋書二月/六月異文", "守心房間切分"]
+    },
+    {
+      "case_id": "C31",
+      "locator": "卷43 / KR3g0018_WYG_043-12b",
+      "sources": [
+        {"type": "wikisource_oldid", "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7043&oldid=772363", "oldid": 772363, "revision_timestamp": "2016-10-25T18:37:22Z", "accessed": "2026-08-01"},
+        {"type": "kanripo_fixed_commit", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_043.txt#L201-L245", "accessed": "2026-08-01"},
+        {"type": "entity_definition", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_066.txt#L287-L328", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_028.txt#L242-L258", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_036.txt#L108-L135", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_058.txt#L198-L218", "accessed": "2026-08-01"}
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "extant_carrier", "scope": "current_passage"},
+        {"name": "春秋緯合誠圖", "role": "embedded_quotation; 合 is title, not relation", "scope": "current_passage"},
+        {"name": "黄帝占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "石氏", "role": "quoted_school_or_author", "scope": "boundary_repair"},
+        {"name": "郗萌", "role": "quoted_author", "scope": "current_passage"},
+        {"name": "春秋元命包", "role": "entity-definition quotation in vol.66", "scope": "wider_context"}
+      ],
+      "boundaries": {"section": "填星犯太㣲四十四", "left": "回接043-12a石氏曰填星入西門出東門", "right": "續至043-13a入西門西折出右掖門皆為大臣假主之威而不從主命", "next_section": "填星犯黄帝座四十五", "whole_passage_citation": "NO"},
+      "entity_disambiguation": ["太陰西/東門為太微蕃垣門隙，非月", "中華門、太陽門同為太微門隙", "合誠圖為書名", "天庭/太微廷為太微宮廷區域"],
+      "atomic_rules": [
+        {"id": "C31-R01", "subject": "填星", "object": "太微西門/東門", "relation": "入/出", "condition": null, "omen": "人君不安欲求賢佐", "source": "石氏", "citation_scope": "expanded_context"},
+        {"id": "C31-R02", "subject": "填星", "object": "中華西門/東門", "relation": "入/出", "condition": "carrier_text=出中華門間；東為校補候選", "omen": "臣出令", "source": "石氏", "citation_scope": "expanded_context", "textual_variant": "卷28/36/58作出中華東門"},
+        {"id": "C31-R03", "subject": "填星", "object": "太陰西門/東門", "relation": "入/出", "condition": null, "omen": "天下大亂有喪若大水", "source": "石氏", "citation_scope": "expanded_context"},
+        {"id": "C31-R04", "subject": "填星", "object": "中華闕門", "relation": "入", "condition": null, "omen": "臣弑主之候", "source": "春秋緯合誠圖", "citation_scope": "current_passage", "textual_variant": "他卷見殺/弑、中華闕門/華闕門"},
+        {"id": "C31-R05", "subject": "填星", "object": "太微廷/東門", "relation": "入/出", "condition": "東行", "omen": "天下兵急", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R06", "subject": "填星", "object": "將相、丞御史", "relation": "守", "condition": null, "omen": "大臣死", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R07", "subject": "填星", "object": "端門/廷", "relation": "入/守", "condition": null, "omen": "大禍至", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R08", "subject": "填星", "object": "南門/東門", "relation": "入/出", "condition": null, "omen": "國大旱", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R09", "subject": "填星", "object": "南門/西門", "relation": "入/出", "condition": "南行", "omen": "國大水", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R10", "subject": "填星", "object": "東門/西門", "relation": "入/出", "condition": "逆行", "omen": "大國破亡", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R11", "subject": "填星", "object": "西蕃", "relation": "入/留", "condition": "順行且留不去", "omen": "楚國凶殃", "source": "黄帝占", "citation_scope": "current_passage"},
+        {"id": "C31-R12", "subject": "填星", "object": "西門/天庭/端門", "relation": "入/犯/出", "condition": null, "omen": "大臣伐主", "source": "郗萌", "citation_scope": "current_passage"},
+        {"id": "C31-R13", "subject": "填星", "object": "西門/右掖門", "relation": "入/出", "condition": "西折", "omen": "大臣假主之威而不從主命", "source": "郗萌", "citation_scope": "expanded_context"}
+      ],
+      "parallel_and_collation": ["卷28/36/58均作出中華東門，卷43出中華門間疑脫訛", "合誠圖公式在諸卷有殺/弑、中華闕門/華闕門異文；不靜默合併"],
+      "operationality": "逆行可計算；入/出門需星表與門隙線段模型；守、犯、留無角距、速度、日數閾值。",
+      "recommendation": {"celestial": ["five_planets"], "target_entity_types": ["enclosure", "asterism"], "excluded_celestial": ["moon", "lunar_mansions"], "relation": ["入", "守", "留", "逆", "犯"], "excluded_relation": ["合"], "complexity": "compound", "computability": "partially_computable", "risk": "high", "special_tags": [], "formal_candidate": "YES", "citation_eligible": "YES", "whole_passage_citation": "NO", "eligibility": "eligible"},
+      "unresolved": ["中華門間底本影像字形", "中華闕門是否等同特定中華門隙", "丞御史切分"]
+    },
+    {
+      "case_id": "C33",
+      "locator": "卷45 / KR3g0018_WYG_045-8b",
+      "sources": [
+        {"type": "wikisource_oldid", "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7045&oldid=655964", "oldid": 655964, "revision_timestamp": "2016-10-15T10:46:13Z", "accessed": "2026-08-01"},
+        {"type": "kanripo_fixed_commit", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_045.txt#L122-L168", "accessed": "2026-08-01"},
+        {"type": "later_parallel", "url": "https://www.shidianguji.com/book/NGJ892411999009527115717/chapter/1loelzsu63ium", "accessed": "2026-08-01", "note": "乾象通鑑近似公式，不作獨立早期底本"}
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "extant_carrier", "scope": "current_passage"},
+        {"name": "荆州占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "甘氏", "role": "quoted_school_or_author", "scope": "boundary_repair"},
+        {"name": "班固天文志", "role": "embedded_quotation in following context", "scope": "wider_context"},
+        {"name": "天官書", "role": "embedded_quotation in following context", "scope": "wider_context"},
+        {"name": "乾象通鑑", "role": "later_parallel_carrier", "scope": "parallel"}
+      ],
+      "boundaries": {"previous_section": "太白王相休囚死三", "left": "回接045-8a當其囚也而有王色", "section_break_inside_passage": "太白光色芒角四", "right": "續至045-9a警邊境脩邊地，下一句甘氏曰另起", "whole_passage_citation": "NO"},
+      "atomic_rules": [
+        {"id": "C33-R01", "subject": "太白", "object": null, "relation": "狀態/顏色", "condition": "當囚而有王色", "omen": "大將反成", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R02", "subject": "太白", "object": null, "relation": "狀態/顏色", "condition": "當囚而有相色", "omen": "下犯其上", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R03", "subject": "太白", "object": null, "relation": "狀態/顏色", "condition": "當囚而有休色", "omen": "暴兵盜賊並起", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R04", "subject": "太白", "object": null, "relation": "狀態/顏色", "condition": "當囚而有死色", "omen": "妖言多不祥", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R05", "subject": "太白", "object": "所留之舍", "relation": "留", "condition": "當囚", "omen": "不可舉事用兵", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R06", "subject": "太白", "object": "舍", "relation": "進", "condition": "當囚", "omen": "歲多雹霜、萬物不成", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R07", "subject": "太白", "object": "舍", "relation": "退", "condition": "當囚", "omen": "秋冬無霜雪", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R08", "subject": "太白", "object": null, "relation": "狀態/顏色", "condition": "當死而有王/相/休/囚色", "omen": "流水/野火/金幣不行/國多虎狼", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R09", "subject": "太白", "object": null, "relation": "留守", "condition": "當死", "omen": "野獸食人", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R10", "subject": "太白", "object": "舍", "relation": "進/退", "condition": "當死", "omen": "白刃鏘鏘/兵不成行", "source": "甘氏段", "citation_scope": "expanded_context"},
+        {"id": "C33-R11", "subject": "太白", "object": null, "relation": "逆", "condition": "秋三月、出西方、色當白而不白", "omen": "金石之妖", "source": "荆州占", "citation_scope": "current_passage"},
+        {"id": "C33-R12", "subject": "太白", "object": null, "relation": "逆", "condition": "同C33-R11", "omen": "隕星墜石；落區有寇", "source": "荆州占", "citation_scope": "current_passage"},
+        {"id": "C33-R13", "subject": "太白", "object": null, "relation": "逆", "condition": "同C33-R11", "omen": "山崩地裂、出水等", "source": "荆州占", "citation_scope": "expanded_context"}
+      ],
+      "parallel_and_collation": ["乾象通鑑作不白而逆、金石之祅等近似文", "石之所下/影像檢索片段石之下待核，不改字"],
+      "operationality": "秋三月、出西方、逆行部分可計算；留守/進退缺速度與舍界；顏色、芒角無校準閾值；隕星為占應。",
+      "recommendation": {"celestial": ["five_planets", "meteor"], "celestial_roles": {"meteor": "outcome_only"}, "relation": ["守", "留", "逆"], "complexity": "cross_passage", "computability": "partially_computable", "risk": "medium", "special_tags": [], "formal_candidate": "YES", "citation_eligible": "YES", "whole_passage_citation": "NO", "eligibility": "eligible"},
+      "unresolved": ["見此二者所指", "石之所下字形", "王相休囚死季節/顏色定量模型"]
+    },
+    {
+      "case_id": "C41",
+      "locator": "卷74 / KR3g0018_WYG_074-9b",
+      "sources": [
+        {"type": "wikisource_oldid", "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7074&oldid=656022", "oldid": 656022, "revision_timestamp": "2016-10-15T10:46:23Z", "accessed": "2026-08-01"},
+        {"type": "kanripo_fixed_commit", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_074.txt#L155-L189", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_084.txt#L193-L200", "accessed": "2026-08-01", "note": "大臣犯主為占應的平行結構"},
+        {"type": "transmitted_history", "url": "https://zh.wikisource.org/wiki/漢書/卷026", "accessed": "2026-08-01"}
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "extant_carrier", "scope": "current_passage"},
+        {"name": "石氏", "role": "quoted_school_or_author", "scope": "current_passage"},
+        {"name": "班固天文志（漢書·天文志）", "role": "embedded_history_and_omen", "scope": "current_passage"},
+        {"name": "荆州占", "role": "embedded_quotation", "scope": "boundary_repair"},
+        {"name": "司馬彪天文志", "role": "preceding_historical_note", "scope": "wider_context"},
+        {"name": "宋天文志", "role": "preceding_historical_note", "scope": "wider_context"},
+        {"name": "韋昭洞紀", "role": "following_historical_note", "scope": "wider_context"}
+      ],
+      "boundaries": {"section": "流星犯紫宫十四", "left": "原首為宋天文志長按語中段；核心引用從石氏曰開始", "right": "續至074-10a水旱不調", "next_section": "流星犯北極十五", "whole_passage_citation": "NO"},
+      "atomic_rules": [
+        {"id": "C41-R01", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "主憂", "source": "石氏", "citation_scope": "current_passage"},
+        {"id": "C41-R02", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "天下多死者", "source": "石氏", "citation_scope": "current_passage"},
+        {"id": "C41-R03", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "臣犯主（人事）", "source": "石氏", "citation_scope": "current_passage"},
+        {"id": "C41-R04", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "使者憂", "source": "石氏", "citation_scope": "current_passage"},
+        {"id": "C41-R05", "subject": "流星", "object": "紫宫", "relation": "入", "condition": "使者復命語義待考", "omen": "諸侯有來使", "source": "石氏", "citation_scope": "current_passage"},
+        {"id": "C41-R06", "subject": "流星", "object": "太微/紫宫", "relation": "干；入僅見校讀", "condition": "出翼軫東北、小而後大、有光有聲", "omen": null, "source": "班固天文志；天象事實", "carrier_text": "流星出翼軫東北干太㣲紫宫始出小旦入大有光入有聲如雷", "collated_reading": "據《漢書·天文志》：流星出翼軫東北，干太微，入紫宮；始出小，且入大，有光；入有頃，聲如雷", "citation_scope": "current_passage"},
+        {"id": "C41-R07", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "天下大凶", "source": "班固天文志所載占", "citation_scope": "current_passage"},
+        {"id": "C41-R08", "subject": "流星", "object": "紫宫", "relation": "入", "condition": null, "omen": "水旱不調", "source": "荆州占", "citation_scope": "expanded_context"}
+      ],
+      "parallel_and_collation": ["卷84大臣犯主為人事占應平行", "載體作干太㣲紫宫，不含入；漢書作干太微入紫宮，僅作collated_reading", "漢書作入有頃聲如雷，本卷作入有聲如雷，待影印核對"],
+      "operationality": "入紫宫需流星軌跡與紫宫多邊形；無入界容差、亮度、時長；聲音還需觀測地點。",
+      "recommendation": {"celestial": ["meteor"], "target_entity_types": ["enclosure", "asterism"], "excluded_celestial": ["lunar_mansions"], "relation": ["入"], "excluded_relation": ["犯", "守"], "complexity": "compound", "computability": "partially_computable", "risk": "medium", "special_tags": [], "formal_candidate": "YES", "citation_eligible": "YES", "whole_passage_citation": "NO", "eligibility": "eligible"},
+      "unresolved": ["入有聲/入有頃異文", "使者復命是否隱含復入條件"]
+    },
+    {
+      "case_id": "C43",
+      "locator": "卷79 / KR3g0018_WYG_079-7b",
+      "sources": [
+        {"type": "wikisource_oldid", "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7079&oldid=656032", "oldid": 656032, "revision_timestamp": "2016-10-15T10:46:25Z", "accessed": "2026-08-01"},
+        {"type": "kanripo_fixed_commit", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_079.txt#L96-L146", "accessed": "2026-08-01"},
+        {"type": "entity_definition", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_061.txt#L120-L151", "accessed": "2026-08-01"},
+        {"type": "star_catalog_definition", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_106.txt#L36-L43", "accessed": "2026-08-01"},
+        {"type": "transmitted_history", "url": "https://zh.wikisource.org/wiki/宋書/卷23", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_032.txt#L154-L172", "accessed": "2026-08-01"},
+        {"type": "parallel_same_book", "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_095.txt#L98-L114", "accessed": "2026-08-01"}
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "extant_carrier", "scope": "current_passage"},
+        {"name": "石氏", "role": "quoted_school_or_author", "scope": "boundary_repair"},
+        {"name": "郗萌", "role": "quoted_author", "scope": "current_passage"},
+        {"name": "陳卓", "role": "quoted_author", "scope": "current_passage"},
+        {"name": "宋書·天文志", "role": "historical_note_source", "scope": "current_passage"},
+        {"name": "荆州占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "百二十占", "role": "embedded_quotation", "scope": "current_passage"},
+        {"name": "甘氏", "role": "quoted_school_or_author", "scope": "boundary_repair"},
+        {"name": "巫咸", "role": "following_quotation", "scope": "wider_context", "evidence_role": "context_only"},
+        {"name": "黄帝占", "role": "following_quotation", "scope": "wider_context", "evidence_role": "context_only"}
+      ],
+      "boundaries": {"previous_section": "客星犯虚四", "left": "回接079-7a石氏曰客星", "section_break_inside_passage": "客星犯危五", "right": "最小續至079-8a甘氏曰句期不出年完整", "context_only_after_right": "其後甘氏守危、郗萌、巫咸、黄帝占等不納入本案原子", "next_section": "客星犯營室六", "whole_passage_citation": "NO"},
+      "entity_disambiguation": ["離宫為營室附近六星星官，不是離關係", "螣蛇/騰蛇為星官字形異文"],
+      "atomic_rules": [
+        {"id": "C43-R01", "subject": "客星", "object": "虚", "relation": "犯守", "condition": "應期近一年遠二年", "omen": "哭泣之事", "source": "石氏；郗萌異說", "citation_scope": "expanded_context"},
+        {"id": "C43-R02", "subject": "客星", "object": "虚", "relation": "犯守", "condition": null, "omen": "天下有謀", "source": "陳卓", "citation_scope": "current_passage"},
+        {"id": "C43-R03", "subject": "客星", "object": "危", "relation": "犯", "condition": null, "omen": "國有哭泣", "source": "郗萌", "citation_scope": "current_passage"},
+        {"id": "C43-R04", "subject": "客星", "object": "危/離宫/螣蛇", "relation": "見/逆行/在", "condition": "離宫北螣蛇南", "omen": null, "source": "宋書按語；天象事實", "citation_scope": "current_passage"},
+        {"id": "C43-R05", "subject": "客星", "object": "危", "relation": "犯", "condition": "一曰承前", "omen": "多雨、五穀不收、人相食", "source": "郗萌段", "citation_scope": "current_passage"},
+        {"id": "C43-R06", "subject": "客星", "object": "危", "relation": "入", "condition": null, "omen": "土功、王者築宫室", "source": "荆州占", "citation_scope": "current_passage"},
+        {"id": "C43-R07", "subject": "客星", "object": "危", "relation": "入", "condition": "不出一年/三年", "omen": "大水/大饑萬人無食", "source": "荆州占", "citation_scope": "current_passage"},
+        {"id": "C43-R08", "subject": "他星", "object": "危", "relation": "入", "condition": "色赤/青，斷句待核", "omen": "盖屋/大變/憂", "source": "百二十占", "citation_scope": "current_passage"},
+        {"id": "C43-R09", "subject": "客星", "object": "危", "relation": "出", "condition": null, "omen": "大臣被刑、法官憂、水災、土功", "source": "甘氏", "citation_scope": "expanded_context"}
+      ],
+      "parallel_and_collation": ["宋書今本作騰蛇並續犯宗星、滅，本卷節引作螣蛇且省略後事", "卷32/95顯示虚危—土功蓋屋公式族，不是同條重複"],
+      "operationality": "犯/守/入無角距、邊界、持續時間；近一年遠二年是應期；客星類型不明使逆行算法不唯一；色赤青無閾值。",
+      "recommendation": {"celestial": ["guest_star", "lunar_mansions"], "relation": ["犯", "守", "入"], "commentary_relation_only": ["逆"], "excluded_relation": ["离"], "complexity": "cross_passage", "computability": "partially_computable", "risk": "medium", "special_tags": [], "formal_candidate": "YES", "citation_eligible": "YES", "whole_passage_citation": "NO", "eligibility": "eligible"},
+      "unresolved": ["百二十占色赤大變青憂標點", "犯守是複合術語或二選", "客星現代類型", "螣/騰字形"]
+    }
+  ]
+}

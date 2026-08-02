@@ -1,0 +1,69 @@
+{
+  "schema": "research-source-accession/v1",
+  "accession_id": "b10-c24-kaiyuan-vol038-2026-08-01",
+  "status": "research_only",
+  "retrieved_on": "2026-08-01",
+  "target": {
+    "case_id": "C24",
+    "locator": "卷38 / KR3g0018_WYG_038-13b",
+    "work": "唐開元占經",
+    "sections": [
+      "填星流動與列星鬭八",
+      "填星穰氣暈彗九"
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "wikisource-oldid-655950-sections-08-09",
+      "kind": "revision_bound_wikitext_excerpt",
+      "work": "唐開元占經 (四庫全書本)/卷038",
+      "revision_id": 655950,
+      "permanent_url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷038&oldid=655950",
+      "page_last_edited": "2016-10-15T10:46:00Z",
+      "file": "wikisource-oldid-655950-sections-08-09.wikitext",
+      "sha256": "225a6ab17066a62deb3b9453789f8e8a92443f2aca36526b41fbb0d0c35dfd22",
+      "license_note": "Ancient work marked public domain; Wikisource text is offered under CC BY-SA 4.0/GFDL per the page footer.",
+      "evidence_role": "comparison_transcription",
+      "citable_status": "not_promoted"
+    },
+    {
+      "source_id": "kanripo-wyg-eb17a11-vol023-030-038",
+      "kind": "commit_and_blob_bound_utf8_excerpts",
+      "repository": "kanripo/KR3g0018",
+      "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+      "source_files": [
+        {
+          "path": "KR3g0018_023.txt",
+          "blob_sha": "6aaa668ba379b1a6b1eba52f3fdedd1c7fb52b01",
+          "utf8_sha256": "e0edc9736ef6647620c5b69dabe0b136ca7df21463e919bda746776a381910a7"
+        },
+        {
+          "path": "KR3g0018_030.txt",
+          "blob_sha": "cfdba89597682040cd9f9231d8ed36f5e5e63b92",
+          "utf8_sha256": "3f3fc4b01df8ef5939501b8584ac37811416f6d13b45a319d965723b33c9ca07"
+        },
+        {
+          "path": "KR3g0018_038.txt",
+          "blob_sha": "0e632ebfa0ab9659fc9b9424063c3a08a970dbf9",
+          "utf8_sha256": "689b4e1d77f6401bd45f14579c1dccf4b15713244519faef895151219d41d02d"
+        }
+      ],
+      "file": "kanripo-parallel-passages.txt",
+      "file_sha256": "3a102da16d356e16d5216854f5df16808d0399e15e2dd94cce2e8312433719d1",
+      "excerpt_sha256": {
+        "KR3g0018_WYG_023-21a": "8db1fd8984658fa78c4f5f10685330cad4da53fe57d8c93dc93e9621943f95c4",
+        "KR3g0018_WYG_030-21b": "0b766d8bba2ac70b6df52ce97648a5fa93facbb59a400aa08f2ba4fc4692133a",
+        "KR3g0018_WYG_038-12b..14a": "e2e9ef323198060726f6f42b17122b91c50825fb68e7995bba796472f5939bbf"
+      },
+      "license_note": "Ancient source text; upstream repository has no README/license file at the pinned commit. Preserve attribution and limit this accession to research evidence pending repository-level license review.",
+      "evidence_role": "primary_locator_and_parallel_text",
+      "citable_status": "not_promoted"
+    }
+  ],
+  "invariants": [
+    "No normalization was applied to the stored excerpt strings.",
+    "Page markers, original glyphs and punctuation absence are preserved.",
+    "Editorial punctuation from CText is not treated as an independent witness.",
+    "This accession does not write or promote any official KB evidence."
+  ]
+}

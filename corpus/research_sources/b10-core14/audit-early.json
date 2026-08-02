@@ -1,0 +1,615 @@
+{
+  "report_type": "AI古籍研究预审（非Reviewer A/B）",
+  "access_date": "2026-08-01",
+  "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+  "citation_policy": {
+    "case_level": "兼容标量按pilot裁决输出：C02 YES、C03 NO、C09 YES、C11 YES、C13 YES；C03因case conflict门禁为NO，原子局部资格另存",
+    "whole_passage": "五条均NO；不得用局部YES掩盖边界问题",
+    "atomic": "每个atomic_rule显式保存citation_scope与citation_eligible；禁止blanket原子布尔值",
+    "ctext": "仅作Wikisource转录/标点检索，不作独立异本"
+  },
+  "relation_enum": ["合", "犯", "入", "守", "掩", "离", "留", "逆"],
+  "special_tag_enum": ["ambiguous", "duplicate", "conflict"],
+  "celestial_policy": "recommendation.celestial只列主体/直接天象对象；outcome/context/historical_note另存celestial_roles",
+  "complexity_rubric": {
+    "cross_passage": "frozen row跨明确小节、主题或天象主体单元",
+    "compound": "同节多来源或复合条件；仅跨页、句尾残缺不自动成为cross_passage",
+    "case_assignments": {"C02": "cross_passage", "C03": "cross_passage", "C09": "compound", "C11": "compound", "C13": "compound"}
+  },
+  "cases": [
+    {
+      "case_id": "C02",
+      "locator": "卷104 / KR3g0018_WYG_104-16a",
+      "sources": [
+        {
+          "type": "carrier_wikisource",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7104&oldid=772441",
+          "oldid": 772441,
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "carrier_kanripo",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_104.txt#L259-L290",
+          "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "modern_study",
+          "url": "https://hub.hku.hk/bitstream/10722/263195/1/FullText.pdf",
+          "note": "用于确认九執曆蝕行法的研究语境，不作古本异文",
+          "access_date": "2026-08-01"
+        }
+      ],
+      "ancient_books": [
+        {
+          "name": "唐開元占經",
+          "role": "现存载体",
+          "compiler": "瞿曇悉達"
+        },
+        {
+          "name": "九執曆",
+          "role": "本卷明示的算法来源层",
+          "author": null,
+          "note": "梵天、五通仙人为传统传承说，不作为已核实个人作者"
+        }
+      ],
+      "boundaries": {
+        "section_titles": ["筭法", "推蝕刻位", "蝕行法", "推日量法", "推日蝕法"],
+        "left": "从“若從東北隅入”起，语法完整；参数与图在上文",
+        "internal": "“推日量法”“推日蝕法”各自另起小节",
+        "right": "当前止于“謂六十乘刻内分”，须补16b“也别置之為刻分位”",
+        "whole_passage_citation": "NO",
+        "restored_subject": "月蝕、日蝕；日量；日蝕推算"
+      },
+      "punctuation": [
+        "若從東北隅入，月蝕即從東中道北行；以蝕行減方數，盡，則蝕初之分。",
+        "推日量法。術曰：置日行分，以六十乘之，以十一除之，得度；餘以六十乘之，依前除，得分。",
+        "推日蝕法……術曰：置節㫁刻位，通作分，謂六十乘刻内分也；别置之，為刻分位。"
+      ],
+      "translation": "按入食方向和图示扣减方数以求初亏位置；将日行分按60进位、以11除成度分；将节断刻位统一换成刻分位。",
+      "layers": {
+        "celestial_fact": "日月食方位及计算量",
+        "omen": null,
+        "historical_note": null
+      },
+      "atomic_rules": [
+        {
+          "id": "B10-C02-A",
+          "type": "algorithm",
+          "subject": "月蝕",
+          "object": "月面方隅",
+          "relation_native": "東北隅入；東中道北行",
+          "relation_normalized": ["入"],
+          "condition": "已有蝕行、方數和图",
+          "result": "扣尽处为蝕初之分；南入类推",
+          "source": "九執曆法经唐開元占經卷104",
+          "citation_eligible_current": "YES",
+          "citation_scope": "current_passage",
+          "citation_eligible": "YES"
+        },
+        {
+          "id": "B10-C02-B",
+          "type": "algorithm",
+          "subject": "日蝕",
+          "object": "日面方隅",
+          "relation_native": "西北隅入；西中道北行",
+          "relation_normalized": ["入"],
+          "condition": "已有蝕行、方數和图",
+          "result": "扣尽处为蝕初之分；南入类推",
+          "source": "同上",
+          "citation_eligible_current": "YES",
+          "citation_scope": "current_passage",
+          "citation_eligible": "YES"
+        },
+        {
+          "id": "B10-C02-C",
+          "type": "algorithm",
+          "subject": "日量",
+          "object": "日行分",
+          "relation_native": "乘60除11，两级取度分",
+          "relation_normalized": [],
+          "condition": "日行分来自前术五十七等数",
+          "result": "日量度、分",
+          "source": "同上",
+          "citation_eligible_current": "YES",
+          "citation_scope": "current_passage",
+          "citation_eligible": "YES"
+        },
+        {
+          "id": "B10-C02-D",
+          "type": "algorithm",
+          "subject": "日蝕推算",
+          "object": "節㫁刻位",
+          "relation_native": "通作分",
+          "relation_normalized": [],
+          "condition": "60进位",
+          "result": "刻分位",
+          "source": "同上",
+          "citation_eligible_current": "NO",
+          "citation_eligible_expanded": "YES",
+          "citation_scope": "expanded_context",
+          "citation_eligible": "YES"
+        }
+      ],
+      "parallel_and_variants": [
+        {
+          "status": "未检得独立古籍同式",
+          "note": "CText及网页均回流本卷；固定Kanripo与Wikisource属同版本系统"
+        },
+        {
+          "reading": "摽/標、㫁/斷、乘/乗",
+          "action": "保留原字形，不静默统一"
+        }
+      ],
+      "recommendation": {
+        "formal_candidate": "YES",
+        "citation_eligible": "YES",
+        "citation_eligible_whole": "NO",
+        "citation_eligible_atomic": {
+          "B10-C02-A": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C02-B": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C02-C": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C02-D": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"}
+        },
+        "eligibility": "eligible",
+        "celestial": ["sun", "moon", "eclipse"],
+        "relation": ["入"],
+        "complexity": "cross_passage",
+        "computability": "partially_computable",
+        "risk": "medium",
+        "special_tags": [],
+        "evidence_features": ["algorithmic", "boundary_fragment", "diagram_dependency", "external_parameters", "indian_astronomy"]
+      },
+      "operability": "“入”是食面方向，不是天体角距；缺图、方数和坐标约定时不可映射现代阈值。",
+      "unresolved": [
+        "蝕行法图及方数表尚未结构化",
+        "“太白從月星伐阿脩星”句读和术语义未决",
+        "A/B虽可引用，尚不能独立运行"
+      ]
+    },
+    {
+      "case_id": "C03",
+      "locator": "卷12 / KR3g0018_WYG_012-5b",
+      "sources": [
+        {
+          "type": "carrier_wikisource",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7012&oldid=655898",
+          "oldid": 655898,
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "carrier_kanripo",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_012.txt#L79-L106",
+          "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_shiji",
+          "url": "https://zh.wikisource.org/wiki/%E5%8F%B2%E8%A8%98/%E5%8D%B7027",
+          "note": "月蝕歲星，其宿地飢若亡",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_jinshu",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E6%99%89%E6%9B%B8/%E5%8D%B7012&oldid=2645984",
+          "oldid": 2645984,
+          "note": "凡月蝕五星，歲以饑；保存月奄/犯歲星史例",
+          "access_date": "2026-08-01"
+        }
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "现存载体", "compiler": "瞿曇悉達"},
+        {"name": "春秋緯元命包", "role": "书内引书"},
+        {"name": "河圖帝覽嬉", "role": "书内引书"},
+        {"name": "荆州占", "role": "书内引书"},
+        {"name": "天官書", "role": "书内引书", "author": "司馬遷"},
+        {"name": "晉書·天文志", "role": "可靠传世平行文/史例"}
+      ],
+      "boundaries": {
+        "section_title": "月與五星相犯蝕四",
+        "left": "“法令散”是“春秋緯元命包曰歲星逆犯月”的跨页句尾；当前有效边界从“河圖帝覽嬉曰月犯歲星”起",
+        "right": "止于“荆州占曰月吞歲星其國十二歲而敗”；其后“熒惑入月中”属下一主体",
+        "whole_passage_citation": "NO",
+        "restored_subject": "月与歲星"
+      },
+      "punctuation": [
+        "春秋緯元命包曰：歲星逆犯月，法令散。",
+        "河圖帝覽嬉曰：月犯歲星，其國飢；一年、二年乘之，主死。",
+        "司馬遷天官書曰：月蝕歲星，其宿地飢若亡。",
+        "荆州占曰：月吞歲星，其國十二歲而敗。"
+      ],
+      "translation": "不同占书把月与木星的逆犯、犯、乘、贯、食和吞分别连到法令散、饥荒、死亡、流民、战争和国败；这些是多来源复占，不是统一因果结论。",
+      "layers": {
+        "celestial_fact": "月与歲星的逆犯、犯、乘、貫、蝕、吞；按语有月掩歲星在參",
+        "omen": "法令散、饥、死亡、流民、国亡、大战拔邑、人相食",
+        "historical_note": "晋建兴三年月掩歲星及周撫薨、司馬勳叛、朱序助平"
+      },
+      "atomic_rules": [
+        {"id": "B10-C03-A", "subject": "歲星", "object": "月", "relation_native": "逆犯", "relation_normalized": ["逆", "犯"], "condition": null, "omen": "法令散", "source": "春秋緯元命包", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"},
+        {"id": "B10-C03-B", "subject": "月", "object": "歲星", "relation_native": "犯/乘", "relation_normalized": ["犯"], "condition": "一年二年乘之（义未定）", "omen": "国饥；主死", "source": "河圖帝覽嬉", "citation_eligible_current": "NO", "citation_scope": "current_passage", "citation_eligible": "NO", "note": "后半句句读未定"},
+        {"id": "B10-C03-C", "subject": "月", "object": "歲星", "relation_native": "乘", "relation_normalized": [], "condition": null, "omen": "相死", "source": "荆州占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C03-D", "subject": "月", "object": "歲星", "relation_native": "貫", "relation_normalized": [], "condition": "不出十二年", "omen": "流民、国饥亡", "source": "帝覽嬉", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C03-E", "subject": "月", "object": "歲星", "relation_native": "蝕", "relation_normalized": [], "condition": "以所宿地当之", "omen": "宿地饥若亡", "source": "司馬遷天官書", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C03-F", "subject": "月", "object": "歲星", "relation_native": "蝕", "relation_normalized": [], "condition": null, "omen": "其乡大战、大㧞邑", "source": "帝覽嬉", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C03-G", "subject": "月", "object": "歲星", "relation_native": "蝕", "relation_normalized": [], "condition": null, "omen": "邦主無；人人相食", "source": "荆州占", "citation_eligible_current": "NO", "citation_scope": "current_passage", "citation_eligible": "NO", "note": "“邦主無”疑脱/义未定"},
+        {"id": "B10-C03-H", "subject": "月", "object": "歲星", "relation_native": "吞", "relation_normalized": [], "condition": "十二岁内", "omen": "国败", "source": "荆州占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C03-HIST", "type": "historical_note", "subject": "月", "object": "歲星/參", "relation_native": "掩", "relation_normalized": ["掩"], "condition": "晋建兴三年正月乙卯", "omen": null, "source": "按语；晉書平行", "citation_eligible_current": "YES", "citation_scope": "historical_context", "citation_eligible": "YES"}
+      ],
+      "parallel_and_variants": [
+        {"source": "史記·天官書", "reading": "月蝕歲星，其宿地飢若亡", "relation": "直接平行"},
+        {"source": "晉書·天文志", "reading": "月奄歲星，在參", "variant": "奄/掩"},
+        {"source": "CText", "status": "非独立异本", "note": "标点不作校勘依据"}
+      ],
+      "recommendation": {
+        "formal_candidate": "YES",
+        "citation_eligible": "NO",
+        "citation_eligible_whole": "NO",
+        "citation_eligible_atomic": {
+          "B10-C03-A": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"},
+          "B10-C03-B": {"scope": "current_passage", "eligible": "NO", "reason": "句读未定"},
+          "B10-C03-C": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C03-D": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C03-E": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C03-F": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C03-G": {"scope": "current_passage", "eligible": "NO", "reason": "疑脱文"},
+          "B10-C03-H": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C03-HIST": {"scope": "historical_context", "eligible": "YES", "rule_role": "historical_note"}
+        },
+        "eligibility": "conflict",
+        "eligibility_definition": "跨来源占应分歧；不表示各占应逻辑互斥",
+        "celestial": ["moon", "five_planets", "eclipse"],
+        "celestial_roles": {"lunar_mansions": "historical_note"},
+        "relation": ["逆", "犯"],
+        "relation_roles": {"掩": "historical_note"},
+        "complexity": "cross_passage",
+        "computability": "partially_computable",
+        "risk": "high",
+        "special_tags": ["conflict"],
+        "evidence_features": ["boundary_fragment", "historical_note", "source_divergence", "uncertain_reading"]
+      },
+      "operability": "犯、乘、貫、吞、蝕、掩无统一角距或遮掩比例，必须按原词和来源分开建模。",
+      "unresolved": [
+        "“一年二年乘之”语义",
+        "“邦主無”是否脱文",
+        "跨来源占应分歧不可合成单一规则，但不等于逻辑互斥"
+      ]
+    },
+    {
+      "case_id": "C09",
+      "locator": "卷20 / KR3g0018_WYG_020-4b",
+      "sources": [
+        {
+          "type": "carrier_wikisource",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7020&oldid=655914",
+          "oldid": 655914,
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "carrier_kanripo",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_020.txt#L61-L99",
+          "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_shiji",
+          "url": "https://zh.wikisource.org/wiki/%E5%8F%B2%E8%A8%98/%E5%8D%B7027",
+          "note": "木星与土合公式；同舍为合、七寸以内定义",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_yisizhan",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E4%B9%99%E5%B7%B3%E5%8D%A0/5&oldid=854562",
+          "oldid": 854562,
+          "note": "土木合、覆军杀将/饥/战败平行",
+          "access_date": "2026-08-01"
+        }
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "现存载体", "compiler": "瞿曇悉達"},
+        {"name": "宋書·天文志", "role": "书内按语来源"},
+        {"name": "天官書", "role": "书内引书", "author": "司馬遷"},
+        {"name": "荆州占", "role": "书内引书"},
+        {"name": "乙巳占", "role": "可靠传世平行文", "author": "李淳風"},
+        {"name": "郗萌", "entity_type": "person", "role": "quoted_author"}
+      ],
+      "boundaries": {
+        "section_title": "歲星與填星相犯二",
+        "left": "“丁卯歲星犯填星……”是宋書按语尾；规则从“郗萌曰歲星與填星合於張者”起",
+        "right": "当前截在“至百”；5a续“九十二日”并继续规则",
+        "next_title": "歲星與太白相犯三（6a）",
+        "whole_passage_citation": "NO",
+        "restored_subject": "歲星与填星/土星"
+      },
+      "punctuation": [
+        "歲星與土星合，不過十日離；十日不離，天禍且降。",
+        "天官書曰：填星與木合，亂、饑生；勿用戰，必敗。",
+        "荆州占曰：歲星與填星同舎，相去三尺以内，相守二十日以上至百九十二日……"
+      ],
+      "translation": "木星与土星相合、同舍、十日内离开或不离、在三尺内守20至192日，被不同来源赋予内乱、饥荒、战败或改立君王等占应。",
+      "layers": {
+        "celestial_fact": "歲星/填星犯、合、同舍、守、离、逆；张/参宿位；平原出云",
+        "omen": "内乱、水灾、流民、盗贼、饥、战败、改立王者",
+        "historical_note": "义熙七年丁卯歲星犯填星在參及蜀地战乱"
+      },
+      "atomic_rules": [
+        {"id": "B10-C09-HIST", "type": "historical_note", "subject": "歲星", "object": "填星/參", "relation_native": "犯", "relation_normalized": ["犯"], "condition": "义熙七年丁卯", "omen": null, "source": "宋書天文志按语", "citation_eligible_current": "NO", "citation_scope": "current_fragment", "citation_eligible": "NO"},
+        {"id": "B10-C09-A", "subject": "歲星", "object": "填星/張", "relation_native": "合", "relation_normalized": ["合"], "condition": "合于张", "omen": "太陽晝、天变、害民", "source": "郗萌", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES", "celestial_outcome": "sun"},
+        {"id": "B10-C09-B", "subject": null, "object": "井泉/平原雲", "relation_native": "出雲等", "relation_normalized": [], "condition": null, "omen": "岁不和、内乱、大水", "source": "郗萌又曰", "citation_eligible_current": "NO", "citation_scope": "current_passage", "citation_eligible": "NO", "note": "文本可引；形式化主体未定；cloud_qi为context_or_outcome"},
+        {"id": "B10-C09-C", "subject": null, "object": "民/魚鱉", "relation_native": "异常", "relation_normalized": [], "condition": null, "omen": "流民、鱼鳖死陆、盗贼", "source": "郗萌又曰", "citation_eligible_current": "NO", "citation_scope": "current_passage", "citation_eligible": "NO", "note": "非独立天象规则"},
+        {"id": "B10-C09-D", "subject": "歲星", "object": "土星", "relation_native": "合后离/不离", "relation_normalized": ["合", "离"], "condition": "10日", "omen": "十日不离则天祸久", "source": "郗萌", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C09-E", "subject": "填星", "object": "木", "relation_native": "合", "relation_normalized": ["合"], "condition": null, "omen": "乱、饥；用战必败", "source": "天官書", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C09-F", "subject": "歲星", "object": "填星", "relation_native": "同舍、守", "relation_normalized": ["守"], "condition": "三尺内；20-192日", "omen": "更主立王等", "source": "荆州占", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"},
+        {"id": "B10-C09-G", "subject": "歲星/填星", "object": "所近宿位", "relation_native": "逆行后复守", "relation_normalized": ["逆", "守"], "condition": "守一年；期三年", "omen": "以宿位当国", "source": "荆州占", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"}
+      ],
+      "parallel_and_variants": [
+        {"source": "史記·天官書", "reading": "木星與土合，為內亂。飢，主勿用戰，敗", "variant": "与開元占經词序及“生”字有差"},
+        {"source": "史記·天官書", "reading": "同舍為合……七寸以内必之", "note": "不得替换荆州占三尺阈值"},
+        {"source": "乙巳占", "reading": "土與木合，為覆軍殺將……土木合，其邦饑，戰不勝，亡地", "relation": "近似公式"}
+      ],
+      "recommendation": {
+        "formal_candidate": "YES",
+        "citation_eligible": "YES",
+        "citation_eligible_whole": "NO",
+        "citation_eligible_atomic": {
+          "B10-C09-HIST": {"scope": "current_fragment", "eligible": "NO", "rule_role": "historical_note"},
+          "B10-C09-A": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C09-B": {"scope": "current_passage", "eligible": "NO", "reason": "形式化主体未定"},
+          "B10-C09-C": {"scope": "current_passage", "eligible": "NO", "reason": "非独立天象规则"},
+          "B10-C09-D": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C09-E": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C09-F": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"},
+          "B10-C09-G": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"}
+        },
+        "eligibility": "eligible",
+        "celestial": ["five_planets", "lunar_mansions"],
+        "celestial_roles": {"sun": "outcome_only", "cloud_qi": "context_or_outcome"},
+        "relation": ["合", "离", "守", "逆"],
+        "relation_roles": {"犯": "historical_note"},
+        "complexity": "compound",
+        "computability": "partially_computable",
+        "risk": "medium",
+        "special_tags": [],
+        "evidence_features": ["boundary_fragment", "historical_note", "ancient_units", "source_parallel", "cloud_omen"]
+      },
+      "operability": "守有三尺与20-192日原生阈值，但尺制和现代角度映射未定；离有10日时窗但无空间阈值；合定义不可静默借用七寸。",
+      "unresolved": [
+        "“太陽晝”术语与句读",
+        "两个“又曰”的隐含主体",
+        "三尺、七寸与现代角距的版本化映射"
+      ]
+    },
+    {
+      "case_id": "C11",
+      "locator": "卷21 / KR3g0018_WYG_021-4b",
+      "sources": [
+        {
+          "type": "carrier_wikisource",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7021&oldid=655916",
+          "oldid": 655916,
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "carrier_kanripo",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_021.txt#L61-L97",
+          "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "same_book_parallel",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7034&oldid=655942",
+          "oldid": 655942,
+          "note": "熒惑入東井太白隨之糴貴道上多死人",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_jinshu",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E6%99%89%E6%9B%B8/%E5%8D%B7012&oldid=2645984",
+          "oldid": 2645984,
+          "note": "太白奄熒惑在營室；金火合為爍為兵喪",
+          "access_date": "2026-08-01"
+        }
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "现存载体", "compiler": "瞿曇悉達"},
+        {"name": "荆州占", "role": "书内引书"},
+        {"name": "晉陽秋", "role": "书内引书/按语来源", "author": "檀道鸞"},
+        {"name": "黄帝占", "role": "书内引书"},
+        {"name": "郗萌", "entity_type": "person", "role": "quoted_author"},
+        {"name": "陳卓", "entity_type": "person", "role": "quoted_author"},
+        {"name": "韓楊", "entity_type": "authority", "role": "quoted_authority"},
+        {"name": "晉書·天文志", "role": "可靠传世史事平行"}
+      ],
+      "boundaries": {
+        "section_title": "熒惑與太白相犯二",
+        "left": "当前“白合同舍”残；须补4a“又曰熒惑與太白合”",
+        "right": "当前韩杨句截在“三十日舍”；5a续“天津闗河不渡……”",
+        "whole_passage_citation": "NO",
+        "restored_subject": "熒惑与太白"
+      },
+      "punctuation": [
+        "熒惑與太白合同舍，其分有兵戰；相離，則軍離。",
+        "熒惑入東井，太白隨之，兵喪並起。",
+        "熒惑、太白接，皆赤而芒，三十日舍天津；闗河不渡，諸侯不通，其君死之。"
+      ],
+      "translation": "火星与金星合、同舍、相离、同入斗，或火星入东井而金星随行，被不同占家联系到兵丧、死亡、粮价和洪水；韩杨另加赤芒、相接和30日停天津的复合条件。",
+      "layers": {
+        "celestial_fact": "熒惑/太白合、同舍、离、俱入斗、入东井随行、接赤芒舍天津",
+        "omen": "兵战、军离、国乱、兵丧、死亡、糴贵、百川溢",
+        "historical_note": "檀道鸞晉陽秋：太白掩熒惑在營室及同时战事"
+      },
+      "atomic_rules": [
+        {"id": "B10-C11-A", "subject": "熒惑", "object": "太白", "relation_native": "合同舍/相离", "relation_normalized": ["合", "离"], "condition": null, "omen": "其分兵战；军离", "source": "荆州占又曰", "attribution_confidence": "high_but_inherited", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"},
+        {"id": "B10-C11-HIST", "type": "historical_note", "subject": "太白", "object": "熒惑/營室", "relation_native": "掩", "relation_normalized": ["掩"], "condition": "宁康二年十一月癸酉", "omen": null, "source": "檀道鸞晉陽秋", "citation_eligible_current": "YES", "citation_scope": "historical_context", "citation_eligible": "YES"},
+        {"id": "B10-C11-B", "subject": "熒惑", "object": "太白", "relation_native": "秋合", "relation_normalized": ["合"], "condition": "秋", "omen": "不可举兵，否则受殃", "source": "荆州占又曰", "attribution_confidence": "high_but_inherited", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-C", "subject": "熒惑/太白", "object": "斗", "relation_native": "俱入", "relation_normalized": ["入"], "condition": "不出其年", "omen": "国乱有忧", "source": "黄帝占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-D", "subject": "熒惑；太白", "object": "東井", "relation_native": "入；随", "relation_normalized": ["入"], "condition": null, "omen": "兵丧并起", "source": "黄帝占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-E", "subject": "熒惑；太白", "object": "東井", "relation_native": "入；随", "relation_normalized": ["入"], "condition": null, "omen": "将/相死；一曰君死；糴贵", "source": "郗萌", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-F", "subject": "熒惑；太白", "object": "東井", "relation_native": "入；随", "relation_normalized": ["入"], "condition": null, "omen": "道上多死人", "source": "荆州占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-G", "subject": "熒惑；太白", "object": "東井", "relation_native": "入；随", "relation_normalized": ["入"], "condition": null, "omen": "百川皆溢", "source": "陳卓", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C11-H", "subject": "熒惑/太白", "object": "天津", "relation_native": "接、皆赤而芒、舍", "relation_normalized": [], "condition": "30日", "omen": "关河不渡、诸侯不通、君死", "source": "韓楊", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"}
+      ],
+      "parallel_and_variants": [
+        {"source": "唐開元占經卷34", "reading": "熒惑入東井太白隨之糴貴道上多死人", "note": "合并卷21两来源占应，不能消除来源边界"},
+        {"source": "晉書·天文志", "reading": "太白奄熒惑，在營室；金火合為爍，為兵喪", "variant": "奄/掩；晉書增加明确占辞"}
+      ],
+      "recommendation": {
+        "formal_candidate": "YES",
+        "citation_eligible": "YES",
+        "citation_eligible_whole": "NO",
+        "citation_eligible_atomic": {
+          "B10-C11-A": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"},
+          "B10-C11-HIST": {"scope": "historical_context", "eligible": "YES", "rule_role": "historical_note"},
+          "B10-C11-B": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-C": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-D": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-E": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-F": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-G": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C11-H": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"}
+        },
+        "eligibility": "eligible",
+        "celestial": ["five_planets", "lunar_mansions"],
+        "relation": ["合", "离", "入"],
+        "relation_roles": {"掩": "historical_note"},
+        "complexity": "compound",
+        "computability": "partially_computable",
+        "risk": "medium",
+        "special_tags": [],
+        "evidence_features": ["boundary_fragment", "historical_note", "same_book_parallel", "source_merge", "color_shape"]
+      },
+      "operability": "合/同舍/接/随无角距；入宿需坐标版本；赤、芒无颜色亮度阈值；30日只解决时长；掩无遮掩比例。",
+      "unresolved": [
+        "首条“又曰”的精确承接来源",
+        "韩杨“接/赤/芒”观测阈值",
+        "卷34合并句的编纂来源链"
+      ]
+    },
+    {
+      "case_id": "C13",
+      "locator": "卷31 / KR3g0018_WYG_031-8b",
+      "sources": [
+        {
+          "type": "carrier_wikisource",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E5%94%90%E9%96%8B%E5%85%83%E5%8D%A0%E7%B6%93_%28%E5%9B%9B%E5%BA%AB%E5%85%A8%E6%9B%B8%E6%9C%AC%29/%E5%8D%B7031&oldid=2506688",
+          "oldid": 2506688,
+          "note": "2024-12-18较新修订，不是2016初始导入",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "carrier_kanripo",
+          "url": "https://github.com/kanripo/KR3g0018/blob/eb17a11a6a8a40922ccff01f727e2b5df7f3e734/KR3g0018_031.txt#L133-L160",
+          "commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+          "access_date": "2026-08-01"
+        },
+        {
+          "type": "parallel_yisizhan",
+          "url": "https://zh.wikisource.org/w/index.php?title=%E4%B9%99%E5%B7%B3%E5%8D%A0/5&oldid=854562",
+          "oldid": 854562,
+          "note": "火逆行氐失地，一曰多火災",
+          "access_date": "2026-08-01"
+        }
+      ],
+      "ancient_books": [
+        {"name": "唐開元占經", "role": "现存载体", "compiler": "瞿曇悉達"},
+        {"name": "荆州占", "role": "书内引书"},
+        {"name": "巫咸", "entity_type": "authority", "role": "quoted_authority"},
+        {"name": "郗萌", "entity_type": "person", "role": "quoted_author"},
+        {"name": "乙巳占", "role": "可靠传世平行文", "author": "李淳風"}
+      ],
+      "boundaries": {
+        "section_title": "熒惑犯氐三",
+        "left": "当前“氐前進退”残；须补8a“郗萌曰熒惑入天門至”",
+        "right": "当前郗萌句截在“於”；9a续“野一曰天下有大水大兵”",
+        "whole_passage_citation": "NO",
+        "restored_subject": "熒惑及氐宿"
+      },
+      "punctuation": [
+        "熒惑入氐宿，留之二十日，大發卒戰；近期三十日，中期六十日，逺期百日。",
+        "熒惑以戊辰嵗鈎己，入氐，犯西南東北星，光合者；到己巳嵗，大將軍誅，大赦天下。",
+        "熒惑逆行氐，失火；一曰守氐，多火災。",
+        "熒惑乘氐之左星，天子自將兵於野；一曰天下有大水、大兵。"
+      ],
+      "translation": "火星进入或留守氐宿、形成钩己形、犯氐两星并光合、逆行或乘左星，被占为作战、诛将大赦、火灾、地动、天子亲征或水兵之灾。",
+      "layers": {
+        "celestial_fact": "熒惑入/留氐、鈎己、犯、光合、去复还居、逆、守、乘",
+        "omen": "伏兵、发卒战、诛将大赦、天子坐之、火灾、地动、亲征、大水大兵",
+        "historical_note": null
+      },
+      "atomic_rules": [
+        {"id": "B10-C13-A", "subject": "熒惑", "object": "天門至氐前", "relation_native": "入、進退", "relation_normalized": ["入"], "condition": null, "omen": "人主勿远出；有伏兵", "source": "郗萌", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"},
+        {"id": "B10-C13-B", "subject": "熒惑", "object": "氐宿", "relation_native": "入、留", "relation_normalized": ["入", "留"], "condition": "留20日；应期30/60/100日", "omen": "大发卒战", "source": "荆州占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C13-C", "subject": "熒惑", "object": "氐西南/东北星", "relation_native": "鈎己、入、犯、光合", "relation_normalized": ["入", "犯", "合"], "condition": "戊辰岁见，至己巳岁", "omen": "大将军诛；大赦", "source": "承前荆州占又占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES", "note": "来源承接与几何阈值待复核"},
+        {"id": "B10-C13-D", "subject": "熒惑", "object": "氐", "relation_native": "东/西出、留、去复还居", "relation_normalized": ["留"], "condition": null, "omen": "天子坐之", "source": "承前荆州占又占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C13-E1", "subject": "熒惑", "object": "氐", "relation_native": "逆行", "relation_normalized": ["逆"], "condition": null, "omen": "失火", "source": "巫咸（開元占經文）", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES", "note": "与乙巳占失地构成实质传文分歧；不影响载体句局部可引"},
+        {"id": "B10-C13-E2", "subject": "熒惑", "object": "氐", "relation_native": "守", "relation_normalized": ["守"], "condition": null, "omen": "多火灾", "source": "巫咸一曰", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES", "note": "乙巳占一曰后无守氐"},
+        {"id": "B10-C13-E-PAR", "subject": "火", "object": "氐", "relation_native": "逆行", "relation_normalized": ["逆"], "condition": null, "omen": "失地；一曰多火灾", "source": "乙巳占平行", "citation_eligible_current": "NO", "citation_eligible_parallel": "YES", "citation_scope": "parallel_only", "citation_eligible": "YES", "note": "传世平行载体，不是開元占經同版校本"},
+        {"id": "B10-C13-F", "subject": "熒惑", "object": "氐", "relation_native": "逆行", "relation_normalized": ["逆"], "condition": null, "omen": "地动", "source": "荆州占", "citation_eligible_current": "YES", "citation_scope": "current_passage", "citation_eligible": "YES"},
+        {"id": "B10-C13-G", "subject": "熒惑", "object": "氐左星", "relation_native": "乘", "relation_normalized": [], "condition": null, "omen": "天子亲征；一曰大水大兵", "source": "郗萌", "citation_eligible_current": "NO", "citation_eligible_expanded": "YES", "citation_scope": "expanded_context", "citation_eligible": "YES"}
+      ],
+      "parallel_and_variants": [
+        {
+          "source": "乙巳占卷五",
+          "kaiyuan_reading": "熒惑逆行氐失火一曰守氐多火災",
+          "parallel_reading": "火逆行氐失地一曰多火災",
+          "status": "实质异文",
+          "action": "保留两读，不静默改字"
+        },
+        {
+          "source": "CText",
+          "readings": ["在發卒戰", "巳己"],
+          "status": "非独立OCR/转录差",
+          "action": "不进入古本异文层"
+        }
+      ],
+      "recommendation": {
+        "formal_candidate": "YES",
+        "citation_eligible": "YES",
+        "citation_eligible_whole": "NO",
+        "citation_eligible_atomic": {
+          "B10-C13-A": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"},
+          "B10-C13-B": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-C": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-D": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-E1": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-E2": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-E-PAR": {"scope": "parallel_only", "eligible": "YES", "current_passage": "NO"},
+          "B10-C13-F": {"scope": "current_passage", "eligible": "YES"},
+          "B10-C13-G": {"scope": "expanded_context", "eligible": "YES", "current_passage": "NO"}
+        },
+        "eligibility": "conflict",
+        "eligibility_definition": "《開元占經》失火/守氐与《乙巳占》失地/无守氐的实质传文分歧；平行载体不是同版校本",
+        "celestial": ["five_planets", "lunar_mansions"],
+        "relation": ["入", "留", "犯", "合", "逆", "守"],
+        "complexity": "compound",
+        "computability": "partially_computable",
+        "risk": "medium",
+        "special_tags": ["conflict"],
+        "evidence_features": ["boundary_fragment", "shape_omen", "color_light", "transmitted_parallel", "uncertain_attribution"]
+      },
+      "operability": "留20日可结构化；犯/乘/光合无角距；鈎己无形态参数；守无最短时长；逆行需历算版本；失火/失地未决时不可单选。",
+      "unresolved": [
+        "失火/失地校勘",
+        "一曰后是否应有守氐",
+        "两个又占曰的精确来源归属",
+        "鈎己与光合的观测阈值"
+      ]
+    }
+  ],
+  "fix_log": [
+    {
+      "round": 1,
+      "date": "2026-08-01",
+      "review": "agent-reports/review_middle_of_early.md",
+      "changes": [
+        "recommendation.relation限制为八值枚举；原生词迁至atomic_rules.relation_native并增加relation_normalized",
+        "special_tags限制为ambiguous/duplicate/conflict或空；其他描述迁至evidence_features",
+        "增加citation_eligible_whole与逐原子citation_eligible_atomic映射，并在每个原子增加citation_scope/citation_eligible；兼容标量按C02 YES、C03 NO、C09 YES、C11 YES、C13 YES",
+        "recommendation.celestial仅保留主体；C03历史参宿与C09太阳/云气迁至celestial_roles",
+        "郗萌、陳卓、韓楊、巫咸按person/authority建模，不再虚构某某占书名",
+        "Wikisource中文URL全部percent-encode",
+        "明确Complexity rubric并将C03改为cross_passage",
+        "C03 conflict限定为跨来源占应分歧而非逻辑互斥；C13 conflict限定为两个传世载体的实质传文分歧，且不影响開元占經局部引用"
+      ]
+    }
+  ]
+}
