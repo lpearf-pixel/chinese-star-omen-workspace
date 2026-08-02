@@ -27,7 +27,7 @@ from research_sources.source_inventory import load_source_inventory
 REPO_ROOT = Path(
     os.environ.get(
         "B10_R04_REPO_ROOT",
-        Path(__file__).resolve().parents[5] / "fixture-repo",
+        Path(__file__).resolve().parents[4],
     )
 )
 PACKAGE = REPO_ROOT / "corpus/research_sources/related-wikisource"

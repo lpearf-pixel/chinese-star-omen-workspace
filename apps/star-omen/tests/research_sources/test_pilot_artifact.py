@@ -19,7 +19,7 @@ from research_sources.source_graph import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 REPO_ROOT = Path(
-    os.environ.get("B10_R04_REPO_ROOT", PROJECT_ROOT / "fixture-repo")
+    os.environ.get("B10_R04_REPO_ROOT", PROJECT_ROOT)
 )
 ARTIFACT = (
     REPO_ROOT
