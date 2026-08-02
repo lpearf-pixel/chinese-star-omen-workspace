@@ -282,7 +282,10 @@ merged and the resulting stable head is reverified.
 
 
 ### B10-R03 — Related Wikisource source localization
-- **Status:** `BACKLOG`
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `6cffa1e4adf428f068149a31e7f2572dce4a2069`.
+- **Branch:** `codex/kaiyuan-b10-related-wikisource-localization-v1`.
+- **Execution plan:** `docs/superpowers/plans/2026-08-01-b10-related-wikisource-localization.md`.
 - **Goal:** localize the related ancient works that have identifiable Wikisource
   texts with the same provenance treatment as 《唐開元占經》: permanent
   revisions, original text, volume/section locators, hashes, accession manifests,
