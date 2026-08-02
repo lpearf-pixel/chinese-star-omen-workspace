@@ -7,10 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
-Verified at: 2026-07-30
-Current feature branch: codex/kaiyuan-b10-passage-batches-v2
-Current task: B10-PR-B passage inventory, source invalidation and resumable batches
+Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
+Verified at: 2026-08-01
+Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
+Current task: B10-R03 P0 DONE on Draft PR #57; next multi-text structure discussion / whole-book expansion is pending
+Open PRs: #1, #7, #54, #57; #54 is Draft and human-review blocked; #57 is the B10-R03 Draft
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -39,7 +40,10 @@ B9 final closeout: DONE (#50)
 B9 overall: DONE
 B10-T00 program charter and threshold governance: DONE (#51)
 B10-PR-A OmenRule/v2, identity and annotation contract: DONE (#52)
-B10-PR-B passage inventory, source invalidation and resumable batches: VERIFYING
+B10-PR-B passage inventory, source invalidation and resumable batches: DONE (#53)
+B10-PR-C calibration pilot: BLOCKED on two independent human reviews (#54)
+B10-R01/R02 research source audits: DONE (#56)
+B10-R03 P0 related Wikisource localization: DONE (#57)
 B10 overall: IN_PROGRESS
 ```
 
@@ -261,6 +265,6 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-完成 B10-PR-B passage inventory、source invalidation 和 resumable batches
-→ verify and merge an independent PR targeting stable/kaiyuan-v2
+执行 B10-R03 P0 相关 Wikisource 固定版本本地化与独立审查
+→ B10-PR-C #54 继续等待两位真人独立审核，不得以 AI 研究结果替代
 ```

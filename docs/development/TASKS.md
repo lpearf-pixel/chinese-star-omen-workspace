@@ -10,9 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
-Current feature branch: codex/kaiyuan-b10-passage-batches-v2
-Current task: B10-PR-B passage inventory, source invalidation and resumable batches
+Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
+Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
+Current task: B10-R03 P0 DONE on Draft PR #57; whole-book expansion and multi-text structure discussion are not started
+Open PRs: #1, #7, #54, #57; #54 remains Draft and human-review blocked; #57 is B10-R03 Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -282,7 +283,10 @@ merged and the resulting stable head is reverified.
 
 
 ### B10-R03 — Related Wikisource source localization
-- **Status:** `BACKLOG`
+- **Status:** `DONE` (P0)
+- **Base:** `stable/kaiyuan-v2` at `6cffa1e4adf428f068149a31e7f2572dce4a2069`.
+- **Branch:** `codex/kaiyuan-b10-related-wikisource-localization-v1`.
+- **Execution plan:** `docs/superpowers/plans/2026-08-01-b10-related-wikisource-localization.md`.
 - **Goal:** localize the related ancient works that have identifiable Wikisource
   texts with the same provenance treatment as 《唐開元占經》: permanent
   revisions, original text, volume/section locators, hashes, accession manifests,
@@ -291,14 +295,17 @@ merged and the resulting stable head is reverified.
 - **Priority:** P0 starts with 《乙巳占》, 《史記·天官書》,
   《漢書·天文志》, 《宋書·天文志》, 《晉書·天文志》,
   袁宏《後漢紀》 and 《後漢書》 because they directly affect Core14
-  boundary or variant decisions.
+  boundary or variant decisions. Exact known scopes include C03, C09, C11,
+  C13, C14, C41, C43, C45 and C47; accession review may add only evidence-backed
+  scope, never inferred associations.
 - **Acceptance:** each localized object has an oldid-bound source snapshot,
   replayable URL, access date, SHA-256, version-family identity and explicit
   mapping scope; lost works or carrier-only quotations are recorded as excerpts
   and are never fabricated as complete standalone books.
-- **Boundary:** planning only in B10-R02; no bulk download, schema freeze,
-  official ingest, Qdrant or `local_kb_default` write until this separate task
-  is started and reviewed.
+- **Delivered:** 7 work families, 16 fixed-revision source objects, 645,044 raw UTF-8 bytes and 20 reversible mappings for 9 Core14 cases.
+- **Draft PR:** #57 targets only `stable/kaiyuan-v2`; remote readback passed and targeted final re-review is approved at `48d7b0f796041931f25c44c9595f25264709096d` with Critical 0 / Important 0 / Minor 0.
+- **Follow-up:** whole-book expansion and formal multi-text structure discussion remain `BACKLOG`; P0 does not claim whole-book completion.
+- **Boundary:** P0 research sources only; no production schema freeze, official ingest, Reviewer A/B change, Qdrant access or `local_kb_default` access.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`

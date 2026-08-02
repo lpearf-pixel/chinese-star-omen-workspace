@@ -1,0 +1,302 @@
+{
+  "mapping_id": "b10-r03-core14-related-wikisource-working-v1",
+  "status": "RESEARCH_MAPPING_UNFROZEN",
+  "access_date": "2026-08-01",
+  "direction": "localized_source_to_core14",
+  "relation_types": [
+    "citation_source",
+    "historical_note_parallel",
+    "material_variant",
+    "locator_support"
+  ],
+  "scope_note": "Research evidence only. Whole-row citation and atomic/source-object citation are separate; no Reviewer A/B decision or production schema is modified.",
+  "mappings": [
+    {
+      "mapping_id": "B10-R03-M01",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-yisizhan-5-r854562",
+      "target_case_id": "C09",
+      "target_atom_ids": [
+        "B10-C09-E"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷五；○填星占第三十一；raw line 23",
+      "evidence_excerpt": "土木合，其邦饑，戰不勝，亡地。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Near formula only; do not erase the 天官書 attribution or treat the page as an independent early witness."
+    },
+    {
+      "mapping_id": "B10-R03-M02",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-yisizhan-5-r854562",
+      "target_case_id": "C13",
+      "target_atom_ids": [
+        "B10-C13-E-PAR"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷五；○熒惑入列宿占第二十九；raw line 11",
+      "evidence_excerpt": "火逆行氐，失地，一曰多火災。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Preserve 失地 against carrier 失火 and keep 一曰 as an internal alternative."
+    },
+    {
+      "mapping_id": "B10-R03-M03",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-yisizhan-8-r2623978",
+      "target_case_id": "C47",
+      "target_atom_ids": [
+        "C47-R3"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷八；○彗孛入列宿占第四十八；raw line 11",
+      "evidence_excerpt": "彗幹犯東井，則大臣誅，其國用兵，期百八十日。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Preserve 誅 against carrier 謀; one Wikisource transcription family."
+    },
+    {
+      "mapping_id": "B10-R03-M04",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-yisizhan-8-r2623978",
+      "target_case_id": "C47",
+      "target_atom_ids": [
+        "C47-R7"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷八；○彗孛入列宿占第四十八；raw line 11",
+      "evidence_excerpt": "彗在井，大人死。見三十日，兵將當之。見五十日，相當之。見七十日，主當之。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Preserve 井/東井 and the absence of carrier 時 as material readings."
+    },
+    {
+      "mapping_id": "B10-R03-M05",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-shiji-027-r7904116",
+      "target_case_id": "C03",
+      "target_atom_ids": [
+        "B10-C03-E"
+      ],
+      "relation_type": "citation_source",
+      "mapping_scope": "atomic_source",
+      "evidence_locator": "卷027〈天官書第五〉月 section；raw line 170",
+      "evidence_excerpt": "月蝕歳星，其宿地，飢若亡。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Direct text for the carrier's 天官書 quotation; adjoining commentary supports lunar occultation terminology."
+    },
+    {
+      "mapping_id": "B10-R03-M06",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-hanshu-026-r1311247",
+      "target_case_id": "C41",
+      "target_atom_ids": [
+        "C41-R06",
+        "C41-R07"
+      ],
+      "relation_type": "citation_source",
+      "mapping_scope": "atomic_source",
+      "evidence_locator": "卷026；raw lines 246 and 274",
+      "evidence_excerpt": "有星孛於注、張，歷太微，干紫宮…；流星出翼、軫東北，干太微，入紫宮。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Two distinct events/wordings; do not merge 星孛 and 流星."
+    },
+    {
+      "mapping_id": "B10-R03-M07",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-songshu-23-r1748424",
+      "target_case_id": "C14",
+      "target_atom_ids": [],
+      "relation_type": "material_variant",
+      "mapping_scope": "case_historical_context",
+      "evidence_locator": "卷23；raw line 55",
+      "evidence_excerpt": "往熒惑守心…案三國史並無熒惑守心之文，宜是入太微。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Keep reported reading and explicit reservation unresolved."
+    },
+    {
+      "mapping_id": "B10-R03-M08",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-songshu-23-r1748424",
+      "target_case_id": "C43",
+      "target_atom_ids": [
+        "C43-R04"
+      ],
+      "relation_type": "citation_source",
+      "mapping_scope": "atomic_source",
+      "evidence_locator": "卷23；raw line 107",
+      "evidence_excerpt": "客星見危，逆行在離宮北，騰蛇南。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Direct historical-note locus; preserve 騰/螣 as source-specific glyph data."
+    },
+    {
+      "mapping_id": "B10-R03-M09",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-songshu-24-r1748425",
+      "target_case_id": "C14",
+      "target_atom_ids": [],
+      "relation_type": "historical_note_parallel",
+      "mapping_scope": "case_historical_context",
+      "evidence_locator": "卷24；raw lines 17, 55, 73",
+      "evidence_excerpt": "熒惑守心。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Dated Mars–Heart notices in the same Song treatise family."
+    },
+    {
+      "mapping_id": "B10-R03-M10",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-songshu-25-r1748426",
+      "target_case_id": "C09",
+      "target_atom_ids": [
+        "B10-C09-HIST"
+      ],
+      "relation_type": "citation_source",
+      "mapping_scope": "atomic_source",
+      "evidence_locator": "卷25；raw line 83",
+      "evidence_excerpt": "七月丁卯，歲星犯填星，在參。占曰：歲、填合為內亂。一曰：益州戰不勝，亡地。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Direct historical-note source; this supersedes the earlier mistaken volume-24 candidate mapping."
+    },
+    {
+      "mapping_id": "B10-R03-M11",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-songshu-25-r1748426",
+      "target_case_id": "C11",
+      "target_atom_ids": [
+        "B10-C11-HIST"
+      ],
+      "relation_type": "historical_note_parallel",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷25；raw line 17",
+      "evidence_excerpt": "太白奄熒惑，在營室。占曰：金火合為爍，此災皆為兵喪。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Same event tradition as the carrier/Jin material; not counted as independent merely because another history repeats it."
+    },
+    {
+      "mapping_id": "B10-R03-M12",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-011-r2645727",
+      "target_case_id": "C14",
+      "target_atom_ids": [],
+      "relation_type": "locator_support",
+      "mapping_scope": "case_context",
+      "evidence_locator": "卷011；raw lines 378–383",
+      "evidence_excerpt": "房、心，宋，豫州。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Geographic/star-lodge context only; not an occurrence or omen-rule substitute."
+    },
+    {
+      "mapping_id": "B10-R03-M13",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "target_case_id": "C03",
+      "target_atom_ids": [
+        "B10-C03-HIST"
+      ],
+      "relation_type": "historical_note_parallel",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷012；raw lines 367–387, including line 373",
+      "evidence_excerpt": "升平元年十一月壬午，月奄歲星，在房。占曰：人饑。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Preserve 奄/掩 and individual dates; do not collapse all notices into one event."
+    },
+    {
+      "mapping_id": "B10-R03-M14",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "target_case_id": "C11",
+      "target_atom_ids": [
+        "B10-C11-HIST"
+      ],
+      "relation_type": "historical_note_parallel",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷012；raw line 421",
+      "evidence_excerpt": "太白奄熒惑，在營室。占曰：金火合為爍，為兵喪。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Historical parallel; carrier attributes its note to 檀道鸞《晉陽秋》."
+    },
+    {
+      "mapping_id": "B10-R03-M15",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "target_case_id": "C47",
+      "target_atom_ids": [],
+      "relation_type": "locator_support",
+      "mapping_scope": "case_terminology",
+      "evidence_locator": "卷012；raw lines 64 and 66",
+      "evidence_excerpt": "彗星，所謂掃星；孛星，彗之屬也。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Terminology support only, not the East-Well omen rule."
+    },
+    {
+      "mapping_id": "B10-R03-M16",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-013-r2646586",
+      "target_case_id": "C14",
+      "target_atom_ids": [],
+      "relation_type": "material_variant",
+      "mapping_scope": "case_historical_context",
+      "evidence_locator": "卷013；raw line 12",
+      "evidence_excerpt": "案三國史並無熒惑守心之文，疑是入太微。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "疑/宜 wording remains source-specific and unresolved."
+    },
+    {
+      "mapping_id": "B10-R03-M17",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-jinshu-013-r2646586",
+      "target_case_id": "C47",
+      "target_atom_ids": [],
+      "relation_type": "locator_support",
+      "mapping_scope": "case_context",
+      "evidence_locator": "卷013；raw lines 142 and 148",
+      "evidence_excerpt": "有星孛於北河戍，經太微、三台、文昌，入北斗……掃太微；有蓬星如粉絮，東南行，歷女虛，至哭星；彗星出太微西……進掃北斗、紫微、中台。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Broader comet/path context only; no silent replacement of C47 atomic wording."
+    },
+    {
+      "mapping_id": "B10-R03-M18",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-houhanji-skqs-16-r597512",
+      "target_case_id": "C14",
+      "target_atom_ids": [],
+      "relation_type": "citation_source",
+      "mapping_scope": "case_historical_source",
+      "evidence_locator": "卷16；孝安皇帝紀第十六；永初元年五月戊寅",
+      "evidence_excerpt": "五月戊寅熒惑逆行守心本志以為後周章謀廢帝之應也",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Direct recovery of the carrier's 袁宏漢紀 historical-note continuation."
+    },
+    {
+      "mapping_id": "B10-R03-M19",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-houhanshu-83-r1458140",
+      "target_case_id": "C45",
+      "target_atom_ids": [
+        "C45-H2"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷83；逸民列傳第七十三；嚴光",
+      "evidence_excerpt": "明日，太史奏客星犯御坐甚急。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Same received-history family; preserve 御坐 and 嚴光 against carrier 天子宿/嚴遵."
+    },
+    {
+      "mapping_id": "B10-R03-M20",
+      "direction": "localized_source_to_core14",
+      "source_accession_id": "zhws-houhanshu-100-r1753568",
+      "target_case_id": "C45",
+      "target_atom_ids": [
+        "C45-H2"
+      ],
+      "relation_type": "material_variant",
+      "mapping_scope": "atomic_parallel",
+      "evidence_locator": "卷100；志第十天文上；古今注 note",
+      "evidence_excerpt": "又案嚴光傳…太史奏客星犯帝坐甚急。",
+      "target_whole_row_citation_eligible": "NO",
+      "research_note": "Cross-reference within the same received-history family, not an independent witness."
+    }
+  ]
+}

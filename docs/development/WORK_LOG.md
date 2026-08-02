@@ -2,6 +2,44 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-01 — B10-R03 P0 related Wikisource localization closeout
+
+- Initial whole-branch review at `e7be9bbf323f95a849b410d3d46218a8b809fc80`: Critical 0 / Important 2 / Minor 1. Source bytes, provenance and mappings passed; findings were limited to stale PROJECT_MEMORY, absent WORK_LOG closeout evidence and M17's summary-like excerpt.
+- Remediation head `48d7b0f796041931f25c44c9595f25264709096d` changed only the mapping excerpt, PROJECT_MEMORY, WORK_LOG and the archived initial review.
+- Targeted re-review: Critical 0 / Important 0 / Minor 0; Ready YES. M17 now quotes exact 《晉書》 raw lines 142/148; the two governance findings and Group C repository-scope concern are closed.
+- Exact remediation-head workflows: Development Governance `30738547750` success; Kaiyuan Stable Core `30738547752` success; Kaiyuan Upstream Runtime `30738547749` success.
+- P0 is DONE: 7 work families, 16 fixed-revision objects, 645,044 raw bytes, 20 reversible mappings over 9 Core14 cases. Draft PR #57 remains the review/integration surface and targets only `stable/kaiyuan-v2`.
+- Deferred: whole-book expansion beyond the captured P0 pages and the formal multi-text structure. Neither is started or frozen.
+- Runner remains `NOT RUN` under the local-first policy; no official KB, Reviewer A/B, Qdrant, `local_kb_default`, B11/B12 or `main` operation occurred.
+
+## 2026-08-01 — B10-R03 P0 related Wikisource package verifying
+
+- Draft PR #57 targets only `stable/kaiyuan-v2`; reviewed data head `e7be9bbf323f95a849b410d3d46218a8b809fc80` was ahead 47 / behind 0, open, Draft and mergeable.
+- Changed-file audit: 42 paths, limited to the related-Wikisource corpus package, research report/reviews, execution plan and development governance records. Reviewer A/B workbooks and formal KB paths are absent.
+- Delivered: 7 work families; 16 fixed-oldid source objects; 16 exact raw snapshots; 645,044 UTF-8 raw bytes; 20 reversible mappings across C03, C09, C11, C13, C14, C41, C43, C45 and C47.
+- Local package gate: `node coordination/b10-r03/validate-package.mjs` -> PASS (36 staged deliverables, 16 accessions, 20 mappings, all JSON/required fields/enums/paths/hashes/bytes/case IDs/whole-row NO).
+- GitHub readback gate: 36/36 staged deliverables matched local content exactly; 9 staged JSON files parsed. The pre-existing README and accession working contract were separately read back and parsed.
+- Independent source replay: 16/16 Wikisource `action=raw` objects matched the declared SHA-256 and byte counts; total 645,044 bytes. Revision API title and timestamp checks passed 16/16.
+- Review corrections closed: C13 moved to 《乙巳占》卷五; C47 moved to 卷八〈彗孛入列宿占第四十八〉; C09 direct 《宋書》 locus moved to 卷25; 《宋書·天文志》 boundary expanded to 卷23–26; fixed raw Song headers no longer claim to display 沈約.
+- Group review results: A Critical 0 / Important 0 / Minor 0; B 0 / 0 / 0; C 0 / 0 / 1 process-only. PR changed-file and remote-readback evidence supplies the repository-scope proof that C's temporary no-local-git environment could not supply.
+- First whole-branch review found Critical 0 and two Important governance omissions: stale/malformed PROJECT_MEMORY state and missing completion evidence in this work log. This update fixes both; task remains VERIFYING until targeted re-review and final-head gates.
+- Exact reviewed-head workflows: Development Governance `30737992881` success; Kaiyuan Stable Core `30737992876` success; Kaiyuan Upstream Runtime `30737992886` success.
+- Runner: `NOT RUN` under the local-first policy; this is a routine research/documentation PR, not the final major-version stable candidate.
+- Boundaries preserved: no production schema freeze, Reviewer A/B mutation, official KB ingest, Qdrant access, `local_kb_default` access, B11/B12 work or `main` operation.
+
+## 2026-08-01 — B10-R03 related Wikisource localization started
+
+- PR #56 was reverified at exact head `d19e074f0f9dce1a9157542c641a54c0519a23dc`: 28 expected research/governance files, 18 manifest hashes matched, 14 cases and 130 unique atomic IDs, zero reviews and zero unresolved threads.
+- PR #56 was squash merged only into `stable/kaiyuan-v2` as `6cffa1e4adf428f068149a31e7f2572dce4a2069`.
+- Live open PRs are #1, #7 and #54. PR #54 remains Draft and blocked on two independent human reviews; AI source research does not satisfy that gate.
+- B10-R03 branch `codex/kaiyuan-b10-related-wikisource-localization-v1` was created from the exact stable merge SHA.
+- Task state moved from `BACKLOG` to `IN_PROGRESS`; an execution plan, reversible raw/accession/mapping layout and unfrozen working accession contract were added.
+- P0 source research was split into three independent temporary evidence groups. They do not write the shared GitHub branch; controller integration and review remain serialized.
+- Boundaries: no production schema freeze, Reviewer A/B mutation, official KB ingest, Qdrant access, `local_kb_default` access, B11/B12 work or `main` operation.
+- Runner: `NOT RUN` for this routine research-source task.
+
+
+
 
 ## 2026-08-01 — B10-R01/R02 C24 and Core14 source audit
 
