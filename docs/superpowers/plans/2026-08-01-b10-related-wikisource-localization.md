@@ -1,7 +1,7 @@
 # B10-R03 Related Wikisource localization execution plan
 
 Date: 2026-08-01
-Status: VERIFYING
+Status: DONE
 Base: `stable/kaiyuan-v2` at `6cffa1e4adf428f068149a31e7f2572dce4a2069`
 Target branch: `codex/kaiyuan-b10-related-wikisource-localization-v1`
 
@@ -83,3 +83,7 @@ Acceptance:
 - reviews have no unresolved Critical/Important finding;
 - work log records commands/results and Runner policy;
 - Draft PR targets only `stable/kaiyuan-v2`.
+
+## Completion
+
+P0 completed on Draft PR #57: 7 work families, 16 fixed-revision source objects, 645,044 raw UTF-8 bytes, 20 reversible mappings, and approved final re-review (Critical 0 / Important 0 / Minor 0). Whole-book expansion and the formal multi-text structure remain separate follow-up work.
