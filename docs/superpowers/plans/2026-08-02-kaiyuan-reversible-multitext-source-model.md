@@ -201,6 +201,8 @@ Add negative tests using complete temporary repositories rooted at tmp/repo for:
 - a compact accession whose family_id differs from its detailed container;
 - a raw file whose actual SHA-256 or byte count differs;
 - a central family count, accession count, raw count, family count, or total byte count that does not recompute;
+- complete with failure_reason, unavailable with any raw field, partial with a half-present raw triple, and partial with a complete raw triple whose bytes/hash/count must replay;
+- wrong, duplicate, non-HTTPS, wrong-host, userinfo-bearing, or page-title-mismatched Wikisource URLs;
 - absolute, traversal, and symlink escape in metadata or raw paths;
 - malformed JSON and non-array family metadata;
 - before/after hashes proving the loader is read-only.
@@ -250,8 +252,8 @@ load_source_inventory must:
 6. Require exact equality of compact and detailed accession ID sets.
 7. Require compact/detailed equality for page_title, oldid, raw_path, raw_sha256, raw_byte_count, and capture_status.
 8. Add schema_version and family_id before ResearchAccessionV1 validation.
-9. Read every complete raw_path as bytes and recompute SHA-256 and byte count.
-10. Recompute every family accession_count plus manifest family_count, accession_count, raw_file_count, and total_raw_byte_count.
+9. For every accession with a raw identity triple, regardless of capture_status, read raw_path as bytes and recompute SHA-256 and byte count.
+10. Recompute every family accession_count plus manifest family_count and accession_count; raw_file_count counts every accession with raw_path, and total_raw_byte_count sums every accession with raw_byte_count.
 11. Return records sorted by accession_id.
 12. Never mutate or rewrite any source file.
 
@@ -282,6 +284,7 @@ git commit -m "feat(research): load immutable source inventory"
 
 **Files:**
 
+- Create: apps/star-omen/src/research_sources/core14_index.py
 - Create: apps/star-omen/src/research_sources/source_graph.py
 - Create: apps/star-omen/src/research_sources/projector.py
 - Create: apps/star-omen/tests/research_sources/test_source_graph_v0.py
@@ -295,10 +298,12 @@ Define these separate contracts:
 - AssertionStatus: observed, hypothesized, deferred. This pilot does not implement accepted or rejected research decisions.
 - SourceGraphNodeV0 for graph-local identity only.
 - SourceGraphEdgeV0 for bibliographic relations whose endpoints are both graph nodes.
-- ResearchAssertionV0 with assertion_id, subject_node_id, predicate, value, status, supporting_accession_ids, contradicting_accession_ids, rationale, and verification_method.
-- ResearchEvidenceLinkV0 with mapping_id, source_object_id, target_case_id, target_atom_ids, relation_type, mapping_scope, evidence_locator, evidence_excerpt, research_note, status, supporting_accession_ids, and contradicting_accession_ids.
+- ResearchAssertionV0 with assertion_id, subject_node_id, predicate, value, status, confidence_level (unknown, low, medium, high), confidence_note, supporting_accession_ids, contradicting_accession_ids, rationale, and verification_method.
+- ResearchEvidenceLinkV0 with every per-mapping key: mapping_id, direction, source_accession_id, source_object_id, target_case_id, target_atom_ids, relation_type, mapping_scope, evidence_locator, evidence_excerpt, target_whole_row_citation_eligible, research_note, status, confidence_level, confidence_note, supporting_accession_ids, and contradicting_accession_ids. The legacy target_whole_row_citation_eligible value is compatibility-preserved research data, not formal approval.
 - SourceObjectRefV0 with the compact manifest accession fields needed for reverse projection.
-- SourcePackageMetadataV0 with all non-accession central-manifest fields and family descriptors needed for reverse projection.
+- SourcePackageMetadataV0 with every non-accession central-manifest field and family descriptor needed for reverse projection.
+- MappingPackageMetadataV0 with every top-level mapping field other than mappings, including mapping_id, status, access_date, direction, relation_types, and scope_note.
+- Core14TargetIndexV0 with unique case IDs, unique atom IDs, three audit file SHA-256 values, and the b10-core14 accession-manifest SHA-256.
 - SourceProjectionBundleV0 containing the bibliographic graph, assertions, source objects, package metadata, evidence links, source document hashes, pilot case IDs, and forbidden side effects.
 
 Tests must prove:
@@ -308,6 +313,7 @@ Tests must prove:
 - every bibliographic edge endpoint exists;
 - every assertion subject exists;
 - every evidence link points to a source_object and a known generated accession;
+- every input mapping object and reverse-projected mapping object have identical key sets, including direction and target_whole_row_citation_eligible;
 - stable canonical JSON is independent of input ordering;
 - unknown edition, genealogy, and independent-witness state are explicit deferred assertions;
 - printed labels are observations while normalized candidates remain hypothesized or deferred;
@@ -315,7 +321,7 @@ Tests must prove:
 
 - [ ] Step 2: Write failing projector and reverse-projector tests
 
-Project the real Layer-A inventory plus core14-mapping.json and assert:
+Load Core14TargetIndexV0 from the repository and project the real Layer-A inventory plus core14-mapping.json and assert:
 
 ~~~python
 assert bundle.source_object_count == 16
@@ -350,19 +356,21 @@ Also assert:
 - Deleting generated bytes and rebuilding produces byte-identical canonical bytes.
 - Hashes of every Layer-A JSON/raw file remain unchanged.
 - Hashes of current RuleCandidate/OmenRule fixtures remain unchanged.
-- Case and atom closure loads exactly corpus/research_sources/b10-core14/audit-early.json, audit-middle.json, and audit-late.json, verifies them through b10-core14/accession-manifest.json, and rejects duplicate case or atom IDs.
+- load_core14_target_index(repo_root) loads exactly corpus/research_sources/b10-core14/audit-early.json, audit-middle.json, and audit-late.json, recomputes the SHA-256 values declared by b10-core14/accession-manifest.json, binds the accession-manifest SHA itself, and rejects duplicate case or atom IDs.
 
 - [ ] Step 3: Implement strict bibliography and evidence contracts
 
 Use frozen Pydantic models with extra="forbid". Bibliographic node and edge IDs must be deterministic ASCII slugs. Carrier IDs derive from provider plus page_title/floating identity and exclude oldid. SourceObject IDs derive from accession IDs. Work and TextVersion candidates use graph-local IDs and never merge on normalized-title equality.
 
-ResearchAssertionV0 preserves supporting and contradicting evidence separately. Existing legacy work_normalized_candidate, version_family, independent_witness_note, and uncertain author_or_compiler strings enter assertions only as hypothesized or deferred compatibility evidence; their mere presence never creates an observed fact.
+ResearchAssertionV0 preserves supporting and contradicting evidence separately and requires a non-empty confidence_note; confidence_level is descriptive research metadata and never a promotion threshold. Existing legacy work_normalized_candidate, version_family, independent_witness_note, and uncertain author_or_compiler strings enter assertions only as hypothesized or deferred compatibility evidence; their mere presence never creates an observed fact.
 
-ResearchEvidenceLinkV0 is not a bibliographic edge. It preserves every original mapping field required for exact reverse projection. No accepted/rejected decision record exists in pilot-v0.
+ResearchEvidenceLinkV0 is not a bibliographic edge. It preserves every original mapping key required for exact reverse projection, including direction and target_whole_row_citation_eligible, while keeping formal approval semantics forbidden. No accepted/rejected decision record exists in pilot-v0.
+
+load_core14_target_index(repo_root) is the only path-aware Core14 loader. project_source_bundle receives the resulting immutable Core14TargetIndexV0 explicitly and never infers paths from CWD.
 
 - [ ] Step 4: Implement both directions
 
-project_source_bundle(inventory, manifest_document, mapping_document, source_manifest_sha, source_mapping_sha) must:
+project_source_bundle(inventory, manifest_document, mapping_document, source_manifest_sha, source_mapping_sha, core14_index) must:
 
 1. Create one SourceObjectRefV0 and one source_object node per accession.
 2. Create/reuse carrier nodes by provider plus page identity, excluding oldid.
@@ -370,11 +378,12 @@ project_source_bundle(inventory, manifest_document, mapping_document, source_man
 4. Create bibliographic edges only among four-layer nodes.
 5. Preserve each Core14 mapping as a distinct ResearchEvidenceLinkV0 with every source field needed for exact reconstruction.
 6. Emit deferred assertions for edition identity, genealogy, and independent-witness state.
-7. Preserve central manifest header, family descriptors, forbidden side effects, relation_types, mapping scope note, mapping direction, and access dates in typed compatibility metadata.
+7. Preserve every central manifest header/family field in SourcePackageMetadataV0 and every mapping header field in MappingPackageMetadataV0, including mapping_id and status.
 8. Sort every collection deterministically.
-9. Raise SourceProjectionError on orphans, duplicates, missing targets, title-based merging, or production/human-review fields.
+9. Verify every evidence-link case and atom through the explicit Core14TargetIndexV0 and bind the index input hashes into the bundle.
+10. Raise SourceProjectionError on orphans, duplicates, missing targets, title-based merging, key-set loss, or production/human-review fields.
 
-project_compatibility(bundle) must reconstruct accession-manifest.json and core14-mapping.json as in-memory JSON objects from the bundle alone. It must not read files. Canonical JSON equality with the original objects is the round-trip gate.
+project_compatibility(bundle) must reconstruct accession-manifest.json and core14-mapping.json as in-memory JSON objects from the bundle alone. It must not read files. Canonical JSON equality and identical recursive object-key sets with the original objects are the round-trip gates.
 
 - [ ] Step 5: Run focused tests
 
@@ -398,7 +407,6 @@ git commit -m "feat(research): project reversible source bundle"
 
 - Create: scripts/build_b10_r04_source_projection.py
 - Create: corpus/research_sources/related-wikisource/source-projection-pilot-v0.json
-- Create: corpus/research_sources/related-wikisource/source-projection-pilot-report.json
 - Create: docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md
 - Create: apps/star-omen/tests/research_sources/test_pilot_artifact.py
 
@@ -417,6 +425,7 @@ The test must read the committed bundle and report and assert:
 - zero orphan graph nodes, graph edges, assertions, or evidence links;
 - zero accepted independent-witness assertions and a positive deferred count;
 - forbidden side effects all equal NOT_RUN;
+- the embedded validation_report contains the replay, reverse-projection, pilot-case, deferred, hash, and forbidden-side-effect evidence;
 - project_compatibility(bundle) reconstructs both original JSON documents without file reads;
 - rebuilding produces byte-identical canonical bytes.
 
@@ -441,11 +450,13 @@ python scripts/build_b10_r04_source_projection.py --repo-root . --write-new
 Behavior:
 
 - --check builds in memory and fails if committed artifact bytes differ.
-- --write-new creates only source-projection-pilot-v0.json and source-projection-pilot-report.json and fails if either already exists.
-- Publication uses temporary sibling files, flush, fsync, and exclusive rename; any partial failure removes only the temporary files.
+- --write-new creates only source-projection-pilot-v0.json and fails if it already exists.
+- The bundle contains an embedded validation_report; no sibling JSON report is published.
+- Publication writes and fsyncs a temporary sibling, then uses an exclusive same-filesystem hard link to create the final path without overwrite and unlinks the temporary name. On any failure, remove only the temporary path; never remove or replace a pre-existing final artifact.
 - Unknown CLI flags fail.
 - canonical_hash_bytes uses compact sorted JSON; artifact_file_bytes uses sorted keys, two-space indentation, UTF-8, and one terminal newline.
-- The report records 16/16 replay, 20/20 reverse projection, C14/C45/C47 checks, zero title merges, zero accepted independent-witness assertions, positive deferred count, Layer-A before/after hashes, and RuleCandidate/OmenRule fixture before/after hashes.
+- The embedded validation_report records 16/16 replay, 20/20 reverse projection, C14/C45/C47 checks, zero title merges, zero accepted independent-witness assertions, positive deferred count, Core14 index hashes, Layer-A before/after hashes, and RuleCandidate/OmenRule fixture before/after hashes.
+- Tests cover an existing final target and a concurrent final-path placeholder and prove no partial final artifact is left or overwritten.
 - No network access is allowed.
 
 - [ ] Step 4: Generate artifacts and write the research report
@@ -484,7 +495,7 @@ Expected result: PASS and no file changes after --check.
 - [ ] Step 6: Commit
 
 ~~~bash
-git add scripts/build_b10_r04_source_projection.py corpus/research_sources/related-wikisource/source-projection-pilot-v0.json corpus/research_sources/related-wikisource/source-projection-pilot-report.json docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md apps/star-omen/tests/research_sources/test_pilot_artifact.py
+git add scripts/build_b10_r04_source_projection.py corpus/research_sources/related-wikisource/source-projection-pilot-v0.json docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md apps/star-omen/tests/research_sources/test_pilot_artifact.py
 git commit -m "feat(research): add B10 R04 source projection pilot"
 ~~~
 
@@ -569,6 +580,7 @@ Confirm:
 - all required GitHub Actions pass for the exact final head;
 - review threads and formal reviews are zero or resolved;
 - remote file contents and artifact hashes match;
-- compare the final docs-only commit to the reviewed implementation SHA and verify it changes only the five review/governance paths.
+- compare the final docs-only commit to the reviewed implementation SHA and verify it changes only the five review/governance paths;
+- independently confirm those five files do not alter scope, the reviewed implementation SHA, NOT_RUN boundaries, recorded commands, test counts, or review conclusion.
 
 Add a top-level PR comment recording the exact final head SHA, workflow run IDs, targeted docs-only re-review result, and Ready-for-user-review status. Do not mutate the branch after that comment. Keep B10-R04 at VERIFYING until the user authorizes merge or project workflow explicitly permits the recommended merge step.
