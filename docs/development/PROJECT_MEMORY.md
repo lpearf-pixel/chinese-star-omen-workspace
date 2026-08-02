@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
 Verified at: 2026-08-01
 Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
-Current task: B10-R03 related Wikisource source localization — VERIFYING
+Current task: B10-R03 P0 DONE on Draft PR #57; next multi-text structure discussion / whole-book expansion is pending
 Open PRs: #1, #7, #54, #57; #54 is Draft and human-review blocked; #57 is the B10-R03 Draft
 Forbidden target: main
 Protected collection: local_kb_default
@@ -43,7 +43,7 @@ B10-PR-A OmenRule/v2, identity and annotation contract: DONE (#52)
 B10-PR-B passage inventory, source invalidation and resumable batches: DONE (#53)
 B10-PR-C calibration pilot: BLOCKED on two independent human reviews (#54)
 B10-R01/R02 research source audits: DONE (#56)
-B10-R03 related Wikisource localization: VERIFYING (#57)
+B10-R03 P0 related Wikisource localization: DONE (#57)
 B10 overall: IN_PROGRESS
 ```
 
