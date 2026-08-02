@@ -1,0 +1,20 @@
+{
+  "register_version": "b10-core14-wikisource-revisions/1",
+  "accessed_on": "2026-08-01",
+  "source_family": "《唐開元占經》四庫全書本",
+  "volumes": [
+    {"volume":"008","revision_id":655890,"cases":["C44"],"title":"唐開元占經_(四庫全書本)/卷008","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷008&oldid=655890"},
+    {"volume":"012","revision_id":655898,"cases":["C03"],"title":"唐開元占經_(四庫全書本)/卷012","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷012&oldid=655898"},
+    {"volume":"020","revision_id":655914,"cases":["C09"],"title":"唐開元占經_(四庫全書本)/卷020","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷020&oldid=655914"},
+    {"volume":"021","revision_id":655916,"cases":["C11"],"title":"唐開元占經_(四庫全書本)/卷021","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷021&oldid=655916"},
+    {"volume":"031","revision_id":2506688,"cases":["C13","C14"],"title":"唐開元占經_(四庫全書本)/卷031","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷031&oldid=2506688"},
+    {"volume":"038","revision_id":655950,"cases":["C24"],"title":"唐開元占經_(四庫全書本)/卷038","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷038&oldid=655950"},
+    {"volume":"043","revision_id":772363,"cases":["C31"],"title":"唐開元占經_(四庫全書本)/卷043","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷043&oldid=772363"},
+    {"volume":"045","revision_id":655964,"cases":["C33"],"title":"唐開元占經_(四庫全書本)/卷045","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷045&oldid=655964"},
+    {"volume":"074","revision_id":656022,"cases":["C41"],"title":"唐開元占經_(四庫全書本)/卷074","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷074&oldid=656022"},
+    {"volume":"079","revision_id":656032,"cases":["C43"],"title":"唐開元占經_(四庫全書本)/卷079","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷079&oldid=656032"},
+    {"volume":"083","revision_id":656040,"cases":["C45"],"title":"唐開元占經_(四庫全書本)/卷083","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷083&oldid=656040"},
+    {"volume":"089","revision_id":656052,"cases":["C47"],"title":"唐開元占經_(四庫全書本)/卷089","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷089&oldid=656052"},
+    {"volume":"104","revision_id":772441,"cases":["C02"],"title":"唐開元占經_(四庫全書本)/卷104","permanent_url":"https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷104&oldid=772441"}
+  ]
+}
