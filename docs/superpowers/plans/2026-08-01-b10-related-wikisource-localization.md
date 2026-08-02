@@ -36,11 +36,11 @@ Acceptance:
 ## Task 2 — P0 astronomy works
 
 Localize the directly relevant Wikisource source objects for:
-- 《乙巳占》 — C13, C47;
+- 《乙巳占》 — C09, C13, C47;
 - 《史記·天官書》 — C03;
 - 《漢書·天文志》 — C41;
-- 《宋書·天文志》 — C09, C14;
-- 《晉書·天文志》 — C03, C14, C47.
+- 《宋書·天文志》 — C09, C14, C43;
+- 《晉書·天文志》 — C03, C11, C14, C47.
 
 For each object, capture the relevant volume/section pages first, then expand all pages that belong to the named astronomy chapter when Wikisource exposes stable separable pages.
 
