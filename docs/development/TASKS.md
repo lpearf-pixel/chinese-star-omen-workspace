@@ -10,9 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 108e0d5fe42403e66b2f2c2a6e0c24585df955b8
-Current feature branch: codex/kaiyuan-b10-passage-batches-v2
-Current task: B10-PR-B passage inventory, source invalidation and resumable batches
+Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
+Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
+Current task: B10-R03 related Wikisource source localization
+Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
