@@ -263,7 +263,7 @@ merged and the resulting stable head is reverified.
   `local_kb_default` mutation, source-text normalization, B11/B12, or `main`.
 
 ### B10-R02 — Core14 source audit and mapping preparation
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Cases:** `C02`, `C03`, `C09`, `C11`, `C13`, `C14`, `C24`,
   `C31`, `C33`, `C41`, `C43`, `C44`, `C45`, `C47`.
 - **Goal:** extend each frozen passage to source-section boundaries, preserve
@@ -279,6 +279,26 @@ merged and the resulting stable head is reverified.
   no threshold freeze, no official ingest or evidence promotion, no Qdrant or
   `local_kb_default` mutation, no silent source normalization, no B11/B12 and
   no `main`.
+
+
+### B10-R03 — Related Wikisource source localization
+- **Status:** `BACKLOG`
+- **Goal:** localize the related ancient works that have identifiable Wikisource
+  texts with the same provenance treatment as 《唐開元占經》: permanent
+  revisions, original text, volume/section locators, hashes, accession manifests,
+  collation notes and GitHub auditability.
+- **Plan:** `docs/research/B10_RELATED_WIKISOURCE_LOCALIZATION_PLAN.md`.
+- **Priority:** P0 starts with 《乙巳占》, 《史記·天官書》,
+  《漢書·天文志》, 《宋書·天文志》, 《晉書·天文志》,
+  袁宏《後漢紀》 and 《後漢書》 because they directly affect Core14
+  boundary or variant decisions.
+- **Acceptance:** each localized object has an oldid-bound source snapshot,
+  replayable URL, access date, SHA-256, version-family identity and explicit
+  mapping scope; lost works or carrier-only quotations are recorded as excerpts
+  and are never fabricated as complete standalone books.
+- **Boundary:** planning only in B10-R02; no bulk download, schema freeze,
+  official ingest, Qdrant or `local_kb_default` write until this separate task
+  is started and reviewed.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
