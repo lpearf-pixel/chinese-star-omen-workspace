@@ -248,6 +248,20 @@ merged and the resulting stable head is reverified.
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
 - **Status:** `BACKLOG`
 
+### B10-R01 — C24 source accession and parallel-text pilot
+- **Status:** `IN_PROGRESS`
+- **Locator:** `卷38 / KR3g0018_WYG_038-13b`.
+- **Goal:** preserve a revision-bound public source snapshot, record every cited
+  ancient source, separate observation from emendation hypotheses, and compare
+  the repeated Jupiter/Mars/Saturn formula before any C24 citation decision.
+- **Acceptance:** source bytes and hashes are recorded; Wikisource revision and
+  Kanripo commit/blob identities are pinned; sections eight and nine are split;
+  `客環守` alternatives remain explicit; a staged multi-text mapping plan has
+  entry/exit gates and does not pre-empt the later schema decision.
+- **Boundary:** research support only; no human-review substitution, threshold
+  freeze, full-book extraction, model approval, official ingest, Qdrant access,
+  `local_kb_default` mutation, source-text normalization, B11/B12, or `main`.
+
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
 
