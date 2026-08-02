@@ -1,0 +1,28 @@
+[
+  {
+    "accession_id": "zhws-hanshu-026-r1311247",
+    "work_printed": "《漢書》卷二十六〈天文志第六〉",
+    "work_normalized_candidate": "漢書·天文志",
+    "page_title": "漢書/卷026",
+    "oldid": 1311247,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?oldid=1311247&title=%E6%BC%A2%E6%9B%B8%2F%E5%8D%B7026",
+    "floating_url": "https://zh.wikisource.org/zh-hant/%E6%BC%A2%E6%9B%B8/%E5%8D%B7026",
+    "revision_timestamp": "2017-09-28T03:20:54Z",
+    "accessed_on": "2026-08-01",
+    "locator": "卷二十六，天文志第六；raw lines 246 and 274",
+    "version_family": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+    "author_or_compiler": "班固（Wikisource volume header）",
+    "license_note": "Wikisource fixed-page footer: site text offered under CC BY-SA 4.0 (additional terms may apply); attribute page title, permanent URL/revision ID, and Wikisource.",
+    "independent_witness_note": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+    "core14_cases": [
+      "C41"
+    ],
+    "relevant_excerpt": "孝武建元三年三月，有星孛於注、張，歷太微，干紫宮，至於天漢。另有：三月丙戌，流星出翼、軫東北，干太微，入紫宮。",
+    "excerpt_locator": "raw lines 246, 274",
+    "raw_sha256": "f394d0404aacc69fd653586ab75495084e3af25a4112afbac7cbe2ec93d8cf70",
+    "raw_byte_count": 45491,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/raw/han-shu-juan-026-oldid-1311247.wikitext",
+    "capture_note": "complete fixed-revision raw page captured"
+  }
+]
