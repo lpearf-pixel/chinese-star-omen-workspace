@@ -1,0 +1,49 @@
+{
+  "contract_id": "related-wikisource-accession-working-v0",
+  "status": "RESEARCH_WORKING_CONTRACT_UNFROZEN",
+  "description": "Machine-checkable field requirements for B10-R03 revision-bound research snapshots; not a production multi-text schema.",
+  "required_accession_fields": [
+    "accession_id",
+    "work_printed",
+    "work_normalized_candidate",
+    "page_title",
+    "oldid",
+    "permanent_url",
+    "floating_url",
+    "revision_timestamp",
+    "accessed_on",
+    "locator",
+    "version_family",
+    "author_or_compiler",
+    "license_note",
+    "independent_witness_note",
+    "core14_cases",
+    "relevant_excerpt",
+    "excerpt_locator",
+    "raw_path",
+    "raw_sha256",
+    "raw_byte_count",
+    "capture_status"
+  ],
+  "field_rules": {
+    "accession_id": "unique non-empty ASCII identifier stable for the fixed title and oldid",
+    "oldid": "positive integer as string or number; null only when capture_status is unavailable",
+    "permanent_url": "HTTPS replay URL containing the fixed oldid when capture_status is complete",
+    "accessed_on": "YYYY-MM-DD",
+    "core14_cases": "sorted unique case IDs",
+    "raw_path": "repository-relative path under corpus/research_sources/related-wikisource; null only when no source object was captured",
+    "raw_sha256": "lowercase 64-hex digest of exact raw UTF-8 bytes",
+    "raw_byte_count": "non-negative integer for exact raw UTF-8 bytes",
+    "capture_status": "complete | unavailable | partial_with_reason"
+  },
+  "forbidden_interpretations": [
+    "capture_status complete does not assert the ancient work is complete",
+    "same-family mirrors do not count as independent witnesses by agreement alone",
+    "research mapping does not approve a rule or human review decision",
+    "raw snapshot must not be replaced by normalized punctuation or translation"
+  ],
+  "production_schema_freeze": "NOT_RUN",
+  "official_kb_ingest": "NOT_RUN",
+  "qdrant_access": "NOT_RUN",
+  "local_kb_default_access": "NOT_RUN"
+}
