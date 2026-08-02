@@ -1,0 +1,52 @@
+[
+  {
+    "accession_id": "zhws-shiji-root-r7823731",
+    "work_printed": "史記",
+    "work_normalized_candidate": "史記",
+    "page_title": "史記",
+    "oldid": 7823731,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?title=%E5%8F%B2%E8%A8%98&oldid=7823731",
+    "floating_url": "https://zh.wikisource.org/wiki/%E5%8F%B2%E8%A8%98",
+    "revision_timestamp": "2026-06-14T15:57:04Z",
+    "accessed_on": "2026-08-01",
+    "locator": "Root work object; header notes and table of contents, including 卷二十七 天官書第五.",
+    "version_family": "Fixed Wikisource root metadata identifies 《史記》 as 一百三十卷、內府刊本 and describes the recorded text as a combined presentation of the surviving commentaries of 裴駰、司馬貞、張守節, while separately listing the three commentaries.",
+    "author_or_compiler": "司馬遷撰；褚少孫補（as stated in the fixed root object's header notes）",
+    "license_note": "Wikisource site metadata: Creative Commons Attribution-Share Alike 4.0, https://creativecommons.org/licenses/by-sa/4.0/deed.zh. Underlying historical text is separately ancient/public-domain in origin.",
+    "independent_witness_note": "This is a fixed root metadata object for replayable version-family attribution, not an independent textual witness and not a second witness to the 卷027 wording.",
+    "core14_cases": [],
+    "relevant_excerpt": "",
+    "excerpt_locator": "No Core14 excerpt; captured to make the version-family and attribution metadata replayable.",
+    "raw_sha256": "5952550773e4fee59cad263271feba9eb93d24ead950936c1237a9f8ac888b95",
+    "raw_byte_count": 13308,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/raw/shiji-root-oldid-7823731.wikitext",
+    "capture_note": "complete_root_metadata_page_wikitext"
+  },
+  {
+    "accession_id": "zhws-shiji-027-r7904116",
+    "work_printed": "史記",
+    "work_normalized_candidate": "史記·天官書",
+    "page_title": "史記/卷027",
+    "oldid": 7904116,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?title=%E5%8F%B2%E8%A8%98/%E5%8D%B7027&oldid=7904116",
+    "floating_url": "https://zh.wikisource.org/wiki/%E5%8F%B2%E8%A8%98/%E5%8D%B7027",
+    "revision_timestamp": "2026-06-27T02:42:14Z",
+    "accessed_on": "2026-08-01",
+    "locator": "卷二十七，天官書第五；月 section",
+    "version_family": "The separately captured fixed Wikisource root object GA-SJ-ROOT-7823731 identifies the text as 內府刊本 and records an integrated three-commentary presentation (裴駰《集解》、司馬貞《索隱》、張守節《正義》); this page includes those annotations.",
+    "author_or_compiler": "司馬遷撰；fixed root accession GA-SJ-ROOT-7823731 also records 褚少孫補 and the three commentators named in version_family.",
+    "license_note": "Wikisource site metadata: Creative Commons Attribution-Share Alike 4.0, https://creativecommons.org/licenses/by-sa/4.0/deed.zh. Underlying historical text is separately ancient/public-domain in origin.",
+    "independent_witness_note": "No other mirror was treated as an independent witness. This accession is the fixed Wikisource transcription of its stated version family, not a separately collated physical witness.",
+    "core14_cases": [
+      "C03"
+    ],
+    "relevant_excerpt": "月蝕歳星，其宿地，飢若亡。",
+    "excerpt_locator": "卷二十七〈天官書第五〉，==月== section (raw snapshot line 170); adjoining 【正義】 defines 月蝕星 as the moon covering a star.",
+    "raw_sha256": "97c9840084005b7a0cb9e29e82be5a333f226a574d5980b5a3914e5f8720e7d1",
+    "raw_byte_count": 112574,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/raw/shiji-027-oldid-7904116.wikitext",
+    "capture_note": "complete_separable_page_wikitext"
+  }
+]
