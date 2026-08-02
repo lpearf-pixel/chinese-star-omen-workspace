@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 6cffa1e4adf428f068149a31e7f2572dce4a2069
 Current feature branch: codex/kaiyuan-b10-related-wikisource-localization-v1
-Current task: B10-R03 related Wikisource source localization — VERIFYING
+Current task: B10-R03 P0 DONE on Draft PR #57; whole-book expansion and multi-text structure discussion are not started
 Open PRs: #1, #7, #54, #57; #54 remains Draft and human-review blocked; #57 is B10-R03 Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -283,7 +283,7 @@ merged and the resulting stable head is reverified.
 
 
 ### B10-R03 — Related Wikisource source localization
-- **Status:** `VERIFYING`
+- **Status:** `DONE` (P0)
 - **Base:** `stable/kaiyuan-v2` at `6cffa1e4adf428f068149a31e7f2572dce4a2069`.
 - **Branch:** `codex/kaiyuan-b10-related-wikisource-localization-v1`.
 - **Execution plan:** `docs/superpowers/plans/2026-08-01-b10-related-wikisource-localization.md`.
@@ -303,7 +303,8 @@ merged and the resulting stable head is reverified.
   mapping scope; lost works or carrier-only quotations are recorded as excerpts
   and are never fabricated as complete standalone books.
 - **Delivered:** 7 work families, 16 fixed-revision source objects, 645,044 raw UTF-8 bytes and 20 reversible mappings for 9 Core14 cases.
-- **Draft PR:** #57 targets only `stable/kaiyuan-v2`; remote readback and final branch review are the remaining completion gates.
+- **Draft PR:** #57 targets only `stable/kaiyuan-v2`; remote readback passed and targeted final re-review is approved at `48d7b0f796041931f25c44c9595f25264709096d` with Critical 0 / Important 0 / Minor 0.
+- **Follow-up:** whole-book expansion and formal multi-text structure discussion remain `BACKLOG`; P0 does not claim whole-book completion.
 - **Boundary:** P0 research sources only; no production schema freeze, official ingest, Reviewer A/B change, Qdrant access or `local_kb_default` access.
 
 ### B10-PR-D — Full-book deterministic extraction
