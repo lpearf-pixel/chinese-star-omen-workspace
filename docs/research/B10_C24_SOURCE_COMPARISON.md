@@ -3,7 +3,7 @@
 ## Scope and current disposition
 
 Case `C24` is anchored at `卷38 / KR3g0018_WYG_038-13b`. It remains a
-research candidate with `ambiguous`, `not_computable` and high evidence risk.
+research candidate with `ambiguous`, `partially_computable` and high evidence risk. Only retrograde motion and explicit duration/length fields are potentially reconstructable after versioned coordinate, unit and tolerance policies; qualitative cloud/qi morphology and omen outcomes remain non-computable.
 This note does not replace either human reviewer and does not approve a citable
 rule.
 
