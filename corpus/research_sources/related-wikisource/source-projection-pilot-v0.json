@@ -1,0 +1,3317 @@
+{
+  "assertions": [
+    {
+      "assertion_id": "assertion:zhws-hanshu-026-r1311247:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:hanshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "value": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-hanshu-026-r1311247:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:hanshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "value": "班固（Wikisource volume header）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-hanshu-026-r1311247:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-hanshu-026-r1311247",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "value": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-hanshu-026-r1311247:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:hanshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "value": "漢書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-hanshu-026-r1311247:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:hanshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "value": "《漢書》卷二十六〈天文志第六〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanji-skqs-16-r597512:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanji:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "value": "欽定四庫全書本；Wikisource page header identifies the 四庫全書 transcription and the body prints 「晉 袁宏 撰」. The page is one continuous transcription rather than a transclusion with separately labelled image-page boundaries.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanji-skqs-16-r597512:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanji:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "value": "晉 袁宏（page text: 「晉 袁宏 撰」）；編年體皇帝紀，不是范曄《後漢書》的傳或志。",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanji-skqs-16-r597512:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-houhanji-skqs-16-r597512",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "value": "No separate witness was captured or collated. This accession is one fixed Wikisource transcription of the 四庫本; a mirror reproducing the same 四庫 text would not be an independent witness.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanji-skqs-16-r597512:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:houhanji",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "value": "袁宏《後漢紀》（四庫全書本）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanji-skqs-16-r597512:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:houhanji",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "value": "後漢紀",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-100-r1753568:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "value": "Wikisource transcription of the received 《後漢書》 continuative treatise sequence. It is the astronomy-treatise chapter (志), conventionally associated with 司馬彪's 《續漢書》 material, not 范曄's 嚴光 biography; this page does not itself name a print edition.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-100-r1753568:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "value": "《後漢書》受傳本的天文志系統；page body labels 「《志》第十 天文上」. The header has no single author field; do not collapse it into 袁宏《後漢紀》 or into the volume-83 biography.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-100-r1753568:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-houhanshu-100-r1753568",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "value": "No independent witness was captured. This page quotes/cross-refers to 嚴光傳 inside an annotation; it is corroborating context within the same received 《後漢書》 family, not a separate witness to the exact narrative.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-100-r1753568:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:houhanshu",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "value": "《後漢書》志第十・天文上",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-100-r1753568:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:houhanshu",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "value": "後漢書",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-83-r1458140:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "value": "Wikisource transcription of the received 《後漢書》 chapter; the page header credits 「范曄、司馬彪等」 and includes embedded annotations/citations, but does not identify a specific print edition. This is a biography chapter, not an annal or the astronomy treatise.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-83-r1458140:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:houhanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "value": "范曄為本卷逸民列傳所屬史家；Wikisource header gives 「范曄、司馬彪等」. The relevant unit is 嚴光傳, a biography.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-83-r1458140:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-houhanshu-83-r1458140",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "value": "No independent manuscript, print, or separately edited witness was captured. GC-03 is another chapter in the same received-history/Wikisource family, not an independent witness to this biography wording.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-83-r1458140:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:houhanshu",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "value": "范曄《後漢書》／卷八十三・逸民列傳第七十三",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-houhanshu-83-r1458140:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:houhanshu",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "value": "後漢書",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-011-r2645727:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "value": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-011-r2645727:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "value": "房玄齡（Wikisource volume header）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-011-r2645727:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-jinshu-011-r2645727",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "value": "One Wikisource transcription witness; do not count the sequential volumes or a same-family mirror as independent witnesses.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-011-r2645727:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "value": "晉書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-011-r2645727:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "value": "《晉書》卷十一〈志第一·天文上〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-012-r2645984:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "value": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-012-r2645984:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "value": "房玄齡（Wikisource volume header）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-012-r2645984:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-jinshu-012-r2645984",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "value": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-012-r2645984:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "value": "晉書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-012-r2645984:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "value": "《晉書》卷十二〈志第二·天文中〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-013-r2646586:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "value": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-013-r2646586:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "value": "房玄齡（Wikisource volume header）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-013-r2646586:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-jinshu-013-r2646586",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "value": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-013-r2646586:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "value": "晉書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-jinshu-013-r2646586:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "value": "《晉書》卷十三〈志第三·天文下〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-027-r7904116:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "value": "The separately captured fixed Wikisource root object GA-SJ-ROOT-7823731 identifies the text as 內府刊本 and records an integrated three-commentary presentation (裴駰《集解》、司馬貞《索隱》、張守節《正義》); this page includes those annotations.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-027-r7904116:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "value": "司馬遷撰；fixed root accession GA-SJ-ROOT-7823731 also records 褚少孫補 and the three commentators named in version_family.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-027-r7904116:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-shiji-027-r7904116",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "value": "No other mirror was treated as an independent witness. This accession is the fixed Wikisource transcription of its stated version family, not a separately collated physical witness.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-027-r7904116:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:shiji-tianguanshu",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "value": "史記·天官書",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-027-r7904116:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:shiji-tianguanshu",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "value": "史記",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-root-r7823731:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "value": "Fixed Wikisource root metadata identifies 《史記》 as 一百三十卷、內府刊本 and describes the recorded text as a combined presentation of the surviving commentaries of 裴駰、司馬貞、張守節, while separately listing the three commentaries.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-root-r7823731:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "value": "司馬遷撰；褚少孫補（as stated in the fixed root object's header notes）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-root-r7823731:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-shiji-root-r7823731",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "value": "This is a fixed root metadata object for replayable version-family attribution, not an independent textual witness and not a second witness to the 卷027 wording.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-root-r7823731:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:shiji-tianguanshu",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "value": "史記",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-shiji-root-r7823731:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:shiji-tianguanshu",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "value": "史記",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-23-r1748424:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "value": "Wikisource transcription with apparatus; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-23-r1748424:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "value": "沈約（historical compiler; not displayed in this fixed raw header, whose author field is blank）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-23-r1748424:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-songshu-23-r1748424",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "value": "Same Wikisource transcription family as volumes 24–26; the sequential pages and any same-family mirror are not independent witnesses.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-23-r1748424:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "value": "宋書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-23-r1748424:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "value": "《宋書》志第十三〈天文一〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-24-r1748425:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "value": "Wikisource transcription with apparatus; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-24-r1748425:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "value": "沈約（historical compiler; not displayed in this fixed raw header, whose author field is blank）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-24-r1748425:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-songshu-24-r1748425",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "value": "Same Wikisource transcription family as volumes 23 and 25–26; the sequential pages and any same-family mirror are not independent witnesses.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-24-r1748425:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "value": "宋書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-24-r1748425:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "value": "《宋書》志第十四〈天文二〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-25-r1748426:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "value": "Wikisource transcription with apparatus; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-25-r1748426:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "value": "沈約（historical compiler; not displayed in this fixed raw header, whose author field is blank）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-25-r1748426:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-songshu-25-r1748426",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "value": "Same Wikisource transcription family as volumes 23–24 and 26; the sequential pages and any same-family mirror are not independent witnesses.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-25-r1748426:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "value": "宋書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-25-r1748426:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "value": "《宋書》志第十五〈天文三〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-26-r1748427:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "value": "Wikisource transcription with apparatus; no printed-edition siglum stated in the raw page header",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-26-r1748427:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "value": "沈約（historical compiler; not displayed in this fixed raw header, whose author field is blank）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-26-r1748427:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-songshu-26-r1748427",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "value": "Same Wikisource transcription family as volumes 23–25; the sequential pages and any same-family mirror are not independent witnesses.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-26-r1748427:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "value": "宋書·天文志",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-songshu-26-r1748427:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "value": "《宋書》志第十六〈天文四〉",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-2-r854559:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "value": "Wikisource transcription of 《乙巳占》; root object credits 李淳風 and 唐, but names no print edition or editorial apparatus.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-2-r854559:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "value": "李淳風（Wikisource root header; 唐）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-2-r854559:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-yisizhan-2-r854559",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "value": "No other mirror was treated as an independent witness. This accession is only the fixed Wikisource transcription; no edition-provenanced parallel witness was established in this capture.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-2-r854559:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-2-r854559:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-5-r854562:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "value": "Wikisource transcription of 《乙巳占》; root object credits 李淳風 and 唐, but names no print edition or editorial apparatus.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-5-r854562:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "value": "李淳風（Wikisource root header; 唐）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-5-r854562:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-yisizhan-5-r854562",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "value": "No other mirror was treated as an independent witness. The 一曰 clause is an internal alternative statement in this same Wikisource source object, not an independent witness or document family.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-5-r854562:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-5-r854562:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-8-r2623978:edition_identity",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "edition_identity",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "value": "Wikisource transcription of 《乙巳占》; root object credits 李淳風 and 唐, but names no print edition or editorial apparatus.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-8-r2623978:genealogy",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "genealogy",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "text-version-candidate:family:yisizhan:v0",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "value": "李淳風（Wikisource root header; 唐）",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-8-r2623978:independent_witness",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "independent_witness",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "deferred",
+      "subject_node_id": "source-object:zhws-yisizhan-8-r2623978",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "value": "No other mirror was treated as an independent witness. Differences within this same page are internal wording, not an independent document family or separately provenanced witness.",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-8-r2623978:normalized_label_candidate",
+      "confidence_level": "unknown",
+      "confidence_note": "Legacy research wording preserved verbatim without human adjudication.",
+      "contradicting_accession_ids": [],
+      "predicate": "normalized_label_candidate",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "hypothesized",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    },
+    {
+      "assertion_id": "assertion:zhws-yisizhan-8-r2623978:printed_label",
+      "confidence_level": "high",
+      "confidence_note": "Verbatim Layer-A field; observation is limited to the preserved record.",
+      "contradicting_accession_ids": [],
+      "predicate": "printed_label",
+      "rationale": "Preserve source metadata while separating observation, hypothesis, and deferral.",
+      "status": "observed",
+      "subject_node_id": "work-candidate:family:yisizhan",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "value": "乙巳占",
+      "verification_method": "Exact field projection from the validated immutable accession."
+    }
+  ],
+  "bibliographic_edges": [
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:00473ab8198f082da3e94e2aa9eb17244cb3c50a9edc3d1208af9a91278d4f5a",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:258ff9551844067c1285d2a2edc3b9bed55c48a674f634e2dc7ff759b70579c9",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "target_node_id": "source-object:zhws-songshu-23-r1748424"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:0115ee6ca0d40f9c46e51caae462bef8713ff92c78a4db9f7ef40753b951661e",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:5508af157563610d55d74d05e39e263f8846c055adb14b0a3bd4c749c9c47e2a",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "target_node_id": "source-object:zhws-shiji-root-r7823731"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:04e6e6d785cf143272271fd436b8af3617b094ef6ee8400448925162e22b078f",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "target_node_id": "carrier:zhws:sha256:cad4320921313d43f6de86e35ad36dd2b620422d9e858c209a8891b518b317e8"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:12c7d4e1901b27a74a7842f9ee56453e9abfaf469e66ee26c19cfa264222e946",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "target_node_id": "carrier:zhws:sha256:14927685f713d1e13e8de5de61dc1401a539fa7af51d11f8a595efcccc90533a"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:1c11e45110be21f6bedbd2b79fa6584811aa779c8acfa8173442604cd8bebb35",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:950bca6715eda5cd1cda43e9c1abdeef163d72e6246cbadf2f69fe94fa13e2cb",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "target_node_id": "source-object:zhws-shiji-027-r7904116"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:23b603a1338e1ac584964d24bd3ad75ec4ea84b0d96a72c53a7a7476c62298f4",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:36c5b516387241fa3a82e63285a960e3c6337799f3d2e3d13e736ffb634179c6",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "target_node_id": "source-object:zhws-jinshu-011-r2645727"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:23f0f46936fa6a21b28c05e1f3139b63fd8979e0fee682da6f76b78a1b54e702",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:798dc32a61b762282d2cfadbd05e7d5435c631eecf426d2bab141d80fe4a787c",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "target_node_id": "source-object:zhws-yisizhan-2-r854559"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:2831f0cfbd043435c4779f69fb7a66877861fc4c28f6d3569f1f90fe4e4cb9d6",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "target_node_id": "carrier:zhws:sha256:0dec1daeca3a8c211e46537ec2a3aed0963665630ad69922550e78efced0bb82"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:2d58782ac4b90e8fff9f678bdc625cfe2b4e832a65d83985365397d4e9f5d6c6",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:cd4c2b9fd54b33f7ea0f0bc761fd35519a3b502ff7579994863a03aa7809dece",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "target_node_id": "source-object:zhws-houhanji-skqs-16-r597512"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:33f02c2afd8ebf59dabc9e3b9398ac075ff3dc50fb53967fcbb0886cbb0d3008",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:bd37b00f375bfdcbcdd9bba8774b4ef8ebdd89ec14c299239833a9b0758d0704",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "target_node_id": "source-object:zhws-houhanshu-83-r1458140"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:369ed7777851c77b01d22c24d4dd8a3eb452a0b3b003df14bdd30cfd07de6b56",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-shiji-root-r7823731"
+      ],
+      "target_node_id": "carrier:zhws:sha256:5508af157563610d55d74d05e39e263f8846c055adb14b0a3bd4c749c9c47e2a"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:40361075d3b07a581abee56a5f577478482edd1679eb44994ecf94e7b2dcc5e7",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:houhanshu:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "target_node_id": "carrier:zhws:sha256:bd37b00f375bfdcbcdd9bba8774b4ef8ebdd89ec14c299239833a9b0758d0704"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:40ecf24a2870cd23797b8e434dc2ca5d356bf7b731e8c4ce9fe652e862c26ea8",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:songshu-tianwenzhi",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424",
+        "zhws-songshu-24-r1748425",
+        "zhws-songshu-25-r1748426",
+        "zhws-songshu-26-r1748427"
+      ],
+      "target_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:49fe0d94e55f4fb3acef4a283a8a644b858d5cb9bb94f8c0a071cd529cac43bd",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:473bbe7e0f83233c01e97f7221d7cb5b23c3d5b8121952cbb44e2b0a946ae9d7",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "target_node_id": "source-object:zhws-hanshu-026-r1311247"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:4d4e814f66cd464975e9a4ab579c222d8aa34a00c6d629abff855a3b0a548c8d",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "target_node_id": "carrier:zhws:sha256:82d316d1a929c180399c2edaf8a082a2ff40d429506790b216f759bcc82bde6c"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:5070929b928b7db90c29e00f1ee1e82ba0e5383d543492c40d6bc0ea60f323af",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:yisizhan:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "target_node_id": "carrier:zhws:sha256:75d68e242880923151d9a9826f9fb95c1121da6fc511f3b786940bcc020edd77"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:61f1ac9f8f618b8bcdf1bdf8f796c3e7666da62577abbaa48bb867505677ffe7",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:82d316d1a929c180399c2edaf8a082a2ff40d429506790b216f759bcc82bde6c",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "target_node_id": "source-object:zhws-jinshu-012-r2645984"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:6a569e27d6ad045e3964c898dec3a494bc3260f1d2c4c118d2a85f08ff5adbb5",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:51da7a32733d34c39bfdfcbedb139a65beb26517ee5e081b1efb151c30a69422",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "target_node_id": "source-object:zhws-songshu-25-r1748426"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:703477f9467fcec8c360a644b3e20f21fc36928ff65b9701e79c0eff3c295987",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:houhanji",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "target_node_id": "text-version-candidate:family:houhanji:v0"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:75ed3bd3beeb2d4dea01ddd0fda7e0f4b8e096a1a3d24f99d652993bcfb1904e",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:64f3afeb320c738ce0b89071b5cdd330b2772325b9a76fd7b862eb774bd840b8",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "target_node_id": "source-object:zhws-yisizhan-5-r854562"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:770534209e74fd5c63b7d02fcb037f2d9de9fb8d0bc7cf677890274de88af015",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:hanshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "target_node_id": "carrier:zhws:sha256:473bbe7e0f83233c01e97f7221d7cb5b23c3d5b8121952cbb44e2b0a946ae9d7"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:926baa2a11408da9741cdc789ac225ce1e21670d4e1256c0fce5aad09d1b8429",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:a3a68258cf179b37df0a5da2b4dca6777d94d6e19818122831341d07dec4380b",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "target_node_id": "source-object:zhws-houhanshu-100-r1753568"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:93caaf478bea9beb13c1e500c7ce4815282827aa9a8cfbb529a2b8b94f64e6f5",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "target_node_id": "carrier:zhws:sha256:51da7a32733d34c39bfdfcbedb139a65beb26517ee5e081b1efb151c30a69422"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:9651f1749fac5ef962539dec31f41f989be2710e9a8cc7c68f6a0bf2cc63d2d3",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:yisizhan",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559",
+        "zhws-yisizhan-5-r854562",
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "target_node_id": "text-version-candidate:family:yisizhan:v0"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:9787d5bc1f74f59ac3c68c3a13615f36422e8b4a06c4dcc46561ada716aac443",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:75d68e242880923151d9a9826f9fb95c1121da6fc511f3b786940bcc020edd77",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "target_node_id": "source-object:zhws-yisizhan-8-r2623978"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:99595e43d4585ec46a1f76398df06b504042b5ebc18f874630fa8837d7de6d81",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "target_node_id": "carrier:zhws:sha256:258ff9551844067c1285d2a2edc3b9bed55c48a674f634e2dc7ff759b70579c9"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:a911848c81fb7f672f036695d0b62a942657653e92e32d15bbae0fb53971ffce",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:0dec1daeca3a8c211e46537ec2a3aed0963665630ad69922550e78efced0bb82",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "target_node_id": "source-object:zhws-jinshu-013-r2646586"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:aa421d99867747eedd4002663886c99012bee91bf326b912f4ecc182195b420c",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:cad4320921313d43f6de86e35ad36dd2b620422d9e858c209a8891b518b317e8",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "target_node_id": "source-object:zhws-songshu-24-r1748425"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:aed1f92a4bbf9d6af59b48c88f7bb6c03885ef38c28750a6448dee8f727e7df8",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:yisizhan:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "target_node_id": "carrier:zhws:sha256:64f3afeb320c738ce0b89071b5cdd330b2772325b9a76fd7b862eb774bd840b8"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:b407dc3b98882c6506a687116f752aa03cdc910739ea3ac17a353bc8c98520c8",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:houhanshu",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568",
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "target_node_id": "text-version-candidate:family:houhanshu:v0"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:b7db4b2f55e4dab5c3736293cd677a10c4f7d7dc79882099a208f097057fe98f",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "target_node_id": "carrier:zhws:sha256:36c5b516387241fa3a82e63285a960e3c6337799f3d2e3d13e736ffb634179c6"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:c4abe5814ad56b380ec94cb96228662593bc9a9557b5dd5c53ef38becec1247a",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:shiji-tianguanshu",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116",
+        "zhws-shiji-root-r7823731"
+      ],
+      "target_node_id": "text-version-candidate:family:shiji-tianguanshu:v0"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:d0c4210086a949f9fac633651a58c09f5fa1a28e01e700c45668590e6057cce4",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:hanshu-tianwenzhi",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "target_node_id": "text-version-candidate:family:hanshu-tianwenzhi:v0"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:d8eb4cc107385da5d0f28bae30d81e870a880049286d621ed1cf1a74ea45a244",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:houhanshu:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "target_node_id": "carrier:zhws:sha256:a3a68258cf179b37df0a5da2b4dca6777d94d6e19818122831341d07dec4380b"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:e1015c09d0b7c852040de75b11b98451f0a58dbd6c6a5f0dbaa18401641cdf33",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "target_node_id": "carrier:zhws:sha256:950bca6715eda5cd1cda43e9c1abdeef163d72e6246cbadf2f69fe94fa13e2cb"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Imported family grouping is a research hypothesis, not an accepted genealogy.",
+      "edge_id": "edge:sha256:eb174e0cc840158020209ee1b0944f90271f5c2ff4361e87f11af487c3841c49",
+      "relation_type": "work_has_text_version_candidate",
+      "source_node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727",
+        "zhws-jinshu-012-r2645984",
+        "zhws-jinshu-013-r2646586"
+      ],
+      "target_node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0"
+    },
+    {
+      "confidence_level": "high",
+      "confidence_note": "The fixed oldid source object was captured from this exact Wikisource page title.",
+      "edge_id": "edge:sha256:f0fcc402839d1c2d4f28aeae32dcbf5a63870313f877925a81127c98e84244d0",
+      "relation_type": "carrier_has_source_object",
+      "source_node_id": "carrier:zhws:sha256:14927685f713d1e13e8de5de61dc1401a539fa7af51d11f8a595efcccc90533a",
+      "status": "observed",
+      "supporting_accession_ids": [
+        "zhws-songshu-26-r1748427"
+      ],
+      "target_node_id": "source-object:zhws-songshu-26-r1748427"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:f77d9d0c383c626784cf7b0b4f620cdc0e0b2f2e10bb4509d14bb1806994d83c",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:yisizhan:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-2-r854559"
+      ],
+      "target_node_id": "carrier:zhws:sha256:798dc32a61b762282d2cfadbd05e7d5435c631eecf426d2bab141d80fe4a787c"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Carrier-to-version placement is retained as a deferred research assertion.",
+      "edge_id": "edge:sha256:fce1e8aba69ccf2cf2810ffbb056dcdceda092bc8776a9c76e66e18b7415ce19",
+      "relation_type": "version_has_carrier",
+      "source_node_id": "text-version-candidate:family:houhanji:v0",
+      "status": "deferred",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "target_node_id": "carrier:zhws:sha256:cd4c2b9fd54b33f7ea0f0bc761fd35519a3b502ff7579994863a03aa7809dece"
+    }
+  ],
+  "core14_index": {
+    "audits": [
+      {
+        "atom_ids": [
+          "B10-C02-A",
+          "B10-C02-B",
+          "B10-C02-C",
+          "B10-C02-D",
+          "B10-C03-A",
+          "B10-C03-B",
+          "B10-C03-C",
+          "B10-C03-D",
+          "B10-C03-E",
+          "B10-C03-F",
+          "B10-C03-G",
+          "B10-C03-H",
+          "B10-C03-HIST",
+          "B10-C09-A",
+          "B10-C09-B",
+          "B10-C09-C",
+          "B10-C09-D",
+          "B10-C09-E",
+          "B10-C09-F",
+          "B10-C09-G",
+          "B10-C09-HIST",
+          "B10-C11-A",
+          "B10-C11-B",
+          "B10-C11-C",
+          "B10-C11-D",
+          "B10-C11-E",
+          "B10-C11-F",
+          "B10-C11-G",
+          "B10-C11-H",
+          "B10-C11-HIST",
+          "B10-C13-A",
+          "B10-C13-B",
+          "B10-C13-C",
+          "B10-C13-D",
+          "B10-C13-E-PAR",
+          "B10-C13-E1",
+          "B10-C13-E2",
+          "B10-C13-F",
+          "B10-C13-G"
+        ],
+        "case_ids": [
+          "C02",
+          "C03",
+          "C09",
+          "C11",
+          "C13"
+        ],
+        "name": "early",
+        "path": "corpus/research_sources/b10-core14/audit-early.json",
+        "sha256": "28ff207c6424f7de1ed12b9422d5d489bc69aafe9d89fda4c65f50f472695cb4"
+      },
+      {
+        "atom_ids": [
+          "C14-R01",
+          "C14-R02",
+          "C14-R03",
+          "C14-R04",
+          "C14-R05",
+          "C14-R06",
+          "C14-R07",
+          "C14-R08",
+          "C14-R09",
+          "C31-R01",
+          "C31-R02",
+          "C31-R03",
+          "C31-R04",
+          "C31-R05",
+          "C31-R06",
+          "C31-R07",
+          "C31-R08",
+          "C31-R09",
+          "C31-R10",
+          "C31-R11",
+          "C31-R12",
+          "C31-R13",
+          "C33-R01",
+          "C33-R02",
+          "C33-R03",
+          "C33-R04",
+          "C33-R05",
+          "C33-R06",
+          "C33-R07",
+          "C33-R08",
+          "C33-R09",
+          "C33-R10",
+          "C33-R11",
+          "C33-R12",
+          "C33-R13",
+          "C41-R01",
+          "C41-R02",
+          "C41-R03",
+          "C41-R04",
+          "C41-R05",
+          "C41-R06",
+          "C41-R07",
+          "C41-R08",
+          "C43-R01",
+          "C43-R02",
+          "C43-R03",
+          "C43-R04",
+          "C43-R05",
+          "C43-R06",
+          "C43-R07",
+          "C43-R08",
+          "C43-R09"
+        ],
+        "case_ids": [
+          "C14",
+          "C31",
+          "C33",
+          "C41",
+          "C43"
+        ],
+        "name": "middle",
+        "path": "corpus/research_sources/b10-core14/audit-middle.json",
+        "sha256": "30d90f31852f5010c9d39c96507a279c09f59e3cd0d51011b69359ec55810121"
+      },
+      {
+        "atom_ids": [
+          "C24-S8-R1",
+          "C24-S8-R2",
+          "C24-S8-R3",
+          "C24-S8-R4",
+          "C24-S8-R5",
+          "C24-S9-R1",
+          "C24-S9-R2",
+          "C24-S9-R3",
+          "C24-S9-R4",
+          "C24-S9-R5",
+          "C24-S9-R6",
+          "C44-R1",
+          "C44-R2",
+          "C44-R3",
+          "C44-R4",
+          "C44-R5",
+          "C44-R6",
+          "C44-R7",
+          "C44-R8",
+          "C45-H1",
+          "C45-H2",
+          "C45-R1",
+          "C45-R2",
+          "C45-R3",
+          "C45-R4",
+          "C45-R5",
+          "C45-R6",
+          "C45-R7",
+          "C45-R8",
+          "C45-R9",
+          "C47-H1",
+          "C47-H2",
+          "C47-R1",
+          "C47-R2",
+          "C47-R3",
+          "C47-R4",
+          "C47-R5",
+          "C47-R6",
+          "C47-R7"
+        ],
+        "case_ids": [
+          "C24",
+          "C44",
+          "C45",
+          "C47"
+        ],
+        "name": "late",
+        "path": "corpus/research_sources/b10-core14/audit-late.json",
+        "sha256": "54d18e61f81f8be32213320ed54781e37d6565126dac88b5cb2cc905066b8ff3"
+      }
+    ],
+    "cases": [
+      {
+        "atom_ids": [
+          "B10-C02-A",
+          "B10-C02-B",
+          "B10-C02-C",
+          "B10-C02-D"
+        ],
+        "case_id": "C02"
+      },
+      {
+        "atom_ids": [
+          "B10-C03-A",
+          "B10-C03-B",
+          "B10-C03-C",
+          "B10-C03-D",
+          "B10-C03-E",
+          "B10-C03-F",
+          "B10-C03-G",
+          "B10-C03-H",
+          "B10-C03-HIST"
+        ],
+        "case_id": "C03"
+      },
+      {
+        "atom_ids": [
+          "B10-C09-A",
+          "B10-C09-B",
+          "B10-C09-C",
+          "B10-C09-D",
+          "B10-C09-E",
+          "B10-C09-F",
+          "B10-C09-G",
+          "B10-C09-HIST"
+        ],
+        "case_id": "C09"
+      },
+      {
+        "atom_ids": [
+          "B10-C11-A",
+          "B10-C11-B",
+          "B10-C11-C",
+          "B10-C11-D",
+          "B10-C11-E",
+          "B10-C11-F",
+          "B10-C11-G",
+          "B10-C11-H",
+          "B10-C11-HIST"
+        ],
+        "case_id": "C11"
+      },
+      {
+        "atom_ids": [
+          "B10-C13-A",
+          "B10-C13-B",
+          "B10-C13-C",
+          "B10-C13-D",
+          "B10-C13-E-PAR",
+          "B10-C13-E1",
+          "B10-C13-E2",
+          "B10-C13-F",
+          "B10-C13-G"
+        ],
+        "case_id": "C13"
+      },
+      {
+        "atom_ids": [
+          "C14-R01",
+          "C14-R02",
+          "C14-R03",
+          "C14-R04",
+          "C14-R05",
+          "C14-R06",
+          "C14-R07",
+          "C14-R08",
+          "C14-R09"
+        ],
+        "case_id": "C14"
+      },
+      {
+        "atom_ids": [
+          "C24-S8-R1",
+          "C24-S8-R2",
+          "C24-S8-R3",
+          "C24-S8-R4",
+          "C24-S8-R5",
+          "C24-S9-R1",
+          "C24-S9-R2",
+          "C24-S9-R3",
+          "C24-S9-R4",
+          "C24-S9-R5",
+          "C24-S9-R6"
+        ],
+        "case_id": "C24"
+      },
+      {
+        "atom_ids": [
+          "C31-R01",
+          "C31-R02",
+          "C31-R03",
+          "C31-R04",
+          "C31-R05",
+          "C31-R06",
+          "C31-R07",
+          "C31-R08",
+          "C31-R09",
+          "C31-R10",
+          "C31-R11",
+          "C31-R12",
+          "C31-R13"
+        ],
+        "case_id": "C31"
+      },
+      {
+        "atom_ids": [
+          "C33-R01",
+          "C33-R02",
+          "C33-R03",
+          "C33-R04",
+          "C33-R05",
+          "C33-R06",
+          "C33-R07",
+          "C33-R08",
+          "C33-R09",
+          "C33-R10",
+          "C33-R11",
+          "C33-R12",
+          "C33-R13"
+        ],
+        "case_id": "C33"
+      },
+      {
+        "atom_ids": [
+          "C41-R01",
+          "C41-R02",
+          "C41-R03",
+          "C41-R04",
+          "C41-R05",
+          "C41-R06",
+          "C41-R07",
+          "C41-R08"
+        ],
+        "case_id": "C41"
+      },
+      {
+        "atom_ids": [
+          "C43-R01",
+          "C43-R02",
+          "C43-R03",
+          "C43-R04",
+          "C43-R05",
+          "C43-R06",
+          "C43-R07",
+          "C43-R08",
+          "C43-R09"
+        ],
+        "case_id": "C43"
+      },
+      {
+        "atom_ids": [
+          "C44-R1",
+          "C44-R2",
+          "C44-R3",
+          "C44-R4",
+          "C44-R5",
+          "C44-R6",
+          "C44-R7",
+          "C44-R8"
+        ],
+        "case_id": "C44"
+      },
+      {
+        "atom_ids": [
+          "C45-H1",
+          "C45-H2",
+          "C45-R1",
+          "C45-R2",
+          "C45-R3",
+          "C45-R4",
+          "C45-R5",
+          "C45-R6",
+          "C45-R7",
+          "C45-R8",
+          "C45-R9"
+        ],
+        "case_id": "C45"
+      },
+      {
+        "atom_ids": [
+          "C47-H1",
+          "C47-H2",
+          "C47-R1",
+          "C47-R2",
+          "C47-R3",
+          "C47-R4",
+          "C47-R5",
+          "C47-R6",
+          "C47-R7"
+        ],
+        "case_id": "C47"
+      }
+    ],
+    "manifest_path": "corpus/research_sources/b10-core14/accession-manifest.json",
+    "manifest_sha256": "a038dcd684990810f89cd9b84f9e30ad7464505ce6bef81ad02da5e00785f968",
+    "schema_version": "core14-target-index/pilot-v0"
+  },
+  "evidence_links": [
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "土木合，其邦饑，戰不勝，亡地。",
+      "evidence_locator": "卷五；○填星占第三十一；raw line 23",
+      "mapping_id": "B10-R03-M01",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 0,
+      "relation_type": "material_variant",
+      "research_note": "Near formula only; do not erase the 天官書 attribution or treat the page as an independent early witness.",
+      "source_accession_id": "zhws-yisizhan-5-r854562",
+      "source_object_id": "source-object:zhws-yisizhan-5-r854562",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "target_atom_ids": [
+        "B10-C09-E"
+      ],
+      "target_case_id": "C09",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "火逆行氐，失地，一曰多火災。",
+      "evidence_locator": "卷五；○熒惑入列宿占第二十九；raw line 11",
+      "mapping_id": "B10-R03-M02",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 1,
+      "relation_type": "material_variant",
+      "research_note": "Preserve 失地 against carrier 失火 and keep 一曰 as an internal alternative.",
+      "source_accession_id": "zhws-yisizhan-5-r854562",
+      "source_object_id": "source-object:zhws-yisizhan-5-r854562",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-5-r854562"
+      ],
+      "target_atom_ids": [
+        "B10-C13-E-PAR"
+      ],
+      "target_case_id": "C13",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "彗幹犯東井，則大臣誅，其國用兵，期百八十日。",
+      "evidence_locator": "卷八；○彗孛入列宿占第四十八；raw line 11",
+      "mapping_id": "B10-R03-M03",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 2,
+      "relation_type": "material_variant",
+      "research_note": "Preserve 誅 against carrier 謀; one Wikisource transcription family.",
+      "source_accession_id": "zhws-yisizhan-8-r2623978",
+      "source_object_id": "source-object:zhws-yisizhan-8-r2623978",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "target_atom_ids": [
+        "C47-R3"
+      ],
+      "target_case_id": "C47",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "彗在井，大人死。見三十日，兵將當之。見五十日，相當之。見七十日，主當之。",
+      "evidence_locator": "卷八；○彗孛入列宿占第四十八；raw line 11",
+      "mapping_id": "B10-R03-M04",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 3,
+      "relation_type": "material_variant",
+      "research_note": "Preserve 井/東井 and the absence of carrier 時 as material readings.",
+      "source_accession_id": "zhws-yisizhan-8-r2623978",
+      "source_object_id": "source-object:zhws-yisizhan-8-r2623978",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-yisizhan-8-r2623978"
+      ],
+      "target_atom_ids": [
+        "C47-R7"
+      ],
+      "target_case_id": "C47",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "月蝕歳星，其宿地，飢若亡。",
+      "evidence_locator": "卷027〈天官書第五〉月 section；raw line 170",
+      "mapping_id": "B10-R03-M05",
+      "mapping_scope": "atomic_source",
+      "ordinal": 4,
+      "relation_type": "citation_source",
+      "research_note": "Direct text for the carrier's 天官書 quotation; adjoining commentary supports lunar occultation terminology.",
+      "source_accession_id": "zhws-shiji-027-r7904116",
+      "source_object_id": "source-object:zhws-shiji-027-r7904116",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-shiji-027-r7904116"
+      ],
+      "target_atom_ids": [
+        "B10-C03-E"
+      ],
+      "target_case_id": "C03",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "有星孛於注、張，歷太微，干紫宮…；流星出翼、軫東北，干太微，入紫宮。",
+      "evidence_locator": "卷026；raw lines 246 and 274",
+      "mapping_id": "B10-R03-M06",
+      "mapping_scope": "atomic_source",
+      "ordinal": 5,
+      "relation_type": "citation_source",
+      "research_note": "Two distinct events/wordings; do not merge 星孛 and 流星.",
+      "source_accession_id": "zhws-hanshu-026-r1311247",
+      "source_object_id": "source-object:zhws-hanshu-026-r1311247",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-hanshu-026-r1311247"
+      ],
+      "target_atom_ids": [
+        "C41-R06",
+        "C41-R07"
+      ],
+      "target_case_id": "C41",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "往熒惑守心…案三國史並無熒惑守心之文，宜是入太微。",
+      "evidence_locator": "卷23；raw line 55",
+      "mapping_id": "B10-R03-M07",
+      "mapping_scope": "case_historical_context",
+      "ordinal": 6,
+      "relation_type": "material_variant",
+      "research_note": "Keep reported reading and explicit reservation unresolved.",
+      "source_accession_id": "zhws-songshu-23-r1748424",
+      "source_object_id": "source-object:zhws-songshu-23-r1748424",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C14",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "客星見危，逆行在離宮北，騰蛇南。",
+      "evidence_locator": "卷23；raw line 107",
+      "mapping_id": "B10-R03-M08",
+      "mapping_scope": "atomic_source",
+      "ordinal": 7,
+      "relation_type": "citation_source",
+      "research_note": "Direct historical-note locus; preserve 騰/螣 as source-specific glyph data.",
+      "source_accession_id": "zhws-songshu-23-r1748424",
+      "source_object_id": "source-object:zhws-songshu-23-r1748424",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-23-r1748424"
+      ],
+      "target_atom_ids": [
+        "C43-R04"
+      ],
+      "target_case_id": "C43",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "熒惑守心。",
+      "evidence_locator": "卷24；raw lines 17, 55, 73",
+      "mapping_id": "B10-R03-M09",
+      "mapping_scope": "case_historical_context",
+      "ordinal": 8,
+      "relation_type": "historical_note_parallel",
+      "research_note": "Dated Mars–Heart notices in the same Song treatise family.",
+      "source_accession_id": "zhws-songshu-24-r1748425",
+      "source_object_id": "source-object:zhws-songshu-24-r1748425",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-24-r1748425"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C14",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "七月丁卯，歲星犯填星，在參。占曰：歲、填合為內亂。一曰：益州戰不勝，亡地。",
+      "evidence_locator": "卷25；raw line 83",
+      "mapping_id": "B10-R03-M10",
+      "mapping_scope": "atomic_source",
+      "ordinal": 9,
+      "relation_type": "citation_source",
+      "research_note": "Direct historical-note source; this supersedes the earlier mistaken volume-24 candidate mapping.",
+      "source_accession_id": "zhws-songshu-25-r1748426",
+      "source_object_id": "source-object:zhws-songshu-25-r1748426",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "target_atom_ids": [
+        "B10-C09-HIST"
+      ],
+      "target_case_id": "C09",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "太白奄熒惑，在營室。占曰：金火合為爍，此災皆為兵喪。",
+      "evidence_locator": "卷25；raw line 17",
+      "mapping_id": "B10-R03-M11",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 10,
+      "relation_type": "historical_note_parallel",
+      "research_note": "Same event tradition as the carrier/Jin material; not counted as independent merely because another history repeats it.",
+      "source_accession_id": "zhws-songshu-25-r1748426",
+      "source_object_id": "source-object:zhws-songshu-25-r1748426",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-songshu-25-r1748426"
+      ],
+      "target_atom_ids": [
+        "B10-C11-HIST"
+      ],
+      "target_case_id": "C11",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "房、心，宋，豫州。",
+      "evidence_locator": "卷011；raw lines 378–383",
+      "mapping_id": "B10-R03-M12",
+      "mapping_scope": "case_context",
+      "ordinal": 11,
+      "relation_type": "locator_support",
+      "research_note": "Geographic/star-lodge context only; not an occurrence or omen-rule substitute.",
+      "source_accession_id": "zhws-jinshu-011-r2645727",
+      "source_object_id": "source-object:zhws-jinshu-011-r2645727",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-011-r2645727"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C14",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "升平元年十一月壬午，月奄歲星，在房。占曰：人饑。",
+      "evidence_locator": "卷012；raw lines 367–387, including line 373",
+      "mapping_id": "B10-R03-M13",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 12,
+      "relation_type": "historical_note_parallel",
+      "research_note": "Preserve 奄/掩 and individual dates; do not collapse all notices into one event.",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "source_object_id": "source-object:zhws-jinshu-012-r2645984",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "target_atom_ids": [
+        "B10-C03-HIST"
+      ],
+      "target_case_id": "C03",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "太白奄熒惑，在營室。占曰：金火合為爍，為兵喪。",
+      "evidence_locator": "卷012；raw line 421",
+      "mapping_id": "B10-R03-M14",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 13,
+      "relation_type": "historical_note_parallel",
+      "research_note": "Historical parallel; carrier attributes its note to 檀道鸞《晉陽秋》.",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "source_object_id": "source-object:zhws-jinshu-012-r2645984",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "target_atom_ids": [
+        "B10-C11-HIST"
+      ],
+      "target_case_id": "C11",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "彗星，所謂掃星；孛星，彗之屬也。",
+      "evidence_locator": "卷012；raw lines 64 and 66",
+      "mapping_id": "B10-R03-M15",
+      "mapping_scope": "case_terminology",
+      "ordinal": 14,
+      "relation_type": "locator_support",
+      "research_note": "Terminology support only, not the East-Well omen rule.",
+      "source_accession_id": "zhws-jinshu-012-r2645984",
+      "source_object_id": "source-object:zhws-jinshu-012-r2645984",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-012-r2645984"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C47",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "案三國史並無熒惑守心之文，疑是入太微。",
+      "evidence_locator": "卷013；raw line 12",
+      "mapping_id": "B10-R03-M16",
+      "mapping_scope": "case_historical_context",
+      "ordinal": 15,
+      "relation_type": "material_variant",
+      "research_note": "疑/宜 wording remains source-specific and unresolved.",
+      "source_accession_id": "zhws-jinshu-013-r2646586",
+      "source_object_id": "source-object:zhws-jinshu-013-r2646586",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C14",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "有星孛於北河戍，經太微、三台、文昌，入北斗……掃太微；有蓬星如粉絮，東南行，歷女虛，至哭星；彗星出太微西……進掃北斗、紫微、中台。",
+      "evidence_locator": "卷013；raw lines 142 and 148",
+      "mapping_id": "B10-R03-M17",
+      "mapping_scope": "case_context",
+      "ordinal": 16,
+      "relation_type": "locator_support",
+      "research_note": "Broader comet/path context only; no silent replacement of C47 atomic wording.",
+      "source_accession_id": "zhws-jinshu-013-r2646586",
+      "source_object_id": "source-object:zhws-jinshu-013-r2646586",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-jinshu-013-r2646586"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C47",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "五月戊寅熒惑逆行守心本志以為後周章謀廢帝之應也",
+      "evidence_locator": "卷16；孝安皇帝紀第十六；永初元年五月戊寅",
+      "mapping_id": "B10-R03-M18",
+      "mapping_scope": "case_historical_source",
+      "ordinal": 17,
+      "relation_type": "citation_source",
+      "research_note": "Direct recovery of the carrier's 袁宏漢紀 historical-note continuation.",
+      "source_accession_id": "zhws-houhanji-skqs-16-r597512",
+      "source_object_id": "source-object:zhws-houhanji-skqs-16-r597512",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-houhanji-skqs-16-r597512"
+      ],
+      "target_atom_ids": [],
+      "target_case_id": "C14",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "明日，太史奏客星犯御坐甚急。",
+      "evidence_locator": "卷83；逸民列傳第七十三；嚴光",
+      "mapping_id": "B10-R03-M19",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 18,
+      "relation_type": "material_variant",
+      "research_note": "Same received-history family; preserve 御坐 and 嚴光 against carrier 天子宿/嚴遵.",
+      "source_accession_id": "zhws-houhanshu-83-r1458140",
+      "source_object_id": "source-object:zhws-houhanshu-83-r1458140",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-83-r1458140"
+      ],
+      "target_atom_ids": [
+        "C45-H2"
+      ],
+      "target_case_id": "C45",
+      "target_whole_row_citation_eligible": "NO"
+    },
+    {
+      "confidence_level": "unknown",
+      "confidence_note": "Compatibility import from an unfrozen research mapping; no new adjudication performed.",
+      "contradicting_accession_ids": [],
+      "direction": "localized_source_to_core14",
+      "evidence_excerpt": "又案嚴光傳…太史奏客星犯帝坐甚急。",
+      "evidence_locator": "卷100；志第十天文上；古今注 note",
+      "mapping_id": "B10-R03-M20",
+      "mapping_scope": "atomic_parallel",
+      "ordinal": 19,
+      "relation_type": "material_variant",
+      "research_note": "Cross-reference within the same received-history family, not an independent witness.",
+      "source_accession_id": "zhws-houhanshu-100-r1753568",
+      "source_object_id": "source-object:zhws-houhanshu-100-r1753568",
+      "status": "hypothesized",
+      "supporting_accession_ids": [
+        "zhws-houhanshu-100-r1753568"
+      ],
+      "target_atom_ids": [
+        "C45-H2"
+      ],
+      "target_case_id": "C45",
+      "target_whole_row_citation_eligible": "NO"
+    }
+  ],
+  "generated_from_accession_ids": [
+    "zhws-hanshu-026-r1311247",
+    "zhws-houhanji-skqs-16-r597512",
+    "zhws-houhanshu-100-r1753568",
+    "zhws-houhanshu-83-r1458140",
+    "zhws-jinshu-011-r2645727",
+    "zhws-jinshu-012-r2645984",
+    "zhws-jinshu-013-r2646586",
+    "zhws-shiji-027-r7904116",
+    "zhws-shiji-root-r7823731",
+    "zhws-songshu-23-r1748424",
+    "zhws-songshu-24-r1748425",
+    "zhws-songshu-25-r1748426",
+    "zhws-songshu-26-r1748427",
+    "zhws-yisizhan-2-r854559",
+    "zhws-yisizhan-5-r854562",
+    "zhws-yisizhan-8-r2623978"
+  ],
+  "generated_from_mapping_ids": [
+    "B10-R03-M01",
+    "B10-R03-M02",
+    "B10-R03-M03",
+    "B10-R03-M04",
+    "B10-R03-M05",
+    "B10-R03-M06",
+    "B10-R03-M07",
+    "B10-R03-M08",
+    "B10-R03-M09",
+    "B10-R03-M10",
+    "B10-R03-M11",
+    "B10-R03-M12",
+    "B10-R03-M13",
+    "B10-R03-M14",
+    "B10-R03-M15",
+    "B10-R03-M16",
+    "B10-R03-M17",
+    "B10-R03-M18",
+    "B10-R03-M19",
+    "B10-R03-M20"
+  ],
+  "mapping_package_metadata": {
+    "access_date": "2026-08-01",
+    "direction": "localized_source_to_core14",
+    "mapping_id": "b10-r03-core14-related-wikisource-working-v1",
+    "relation_types": [
+      "citation_source",
+      "historical_note_parallel",
+      "material_variant",
+      "locator_support"
+    ],
+    "scope_note": "Research evidence only. Whole-row citation and atomic/source-object citation are separate; no Reviewer A/B decision or production schema is modified.",
+    "status": "RESEARCH_MAPPING_UNFROZEN"
+  },
+  "nodes": [
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:0dec1daeca3a8c211e46537ec2a3aed0963665630ad69922550e78efced0bb82",
+      "page_title": "晉書/卷013",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:14927685f713d1e13e8de5de61dc1401a539fa7af51d11f8a595efcccc90533a",
+      "page_title": "宋書/卷26",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:258ff9551844067c1285d2a2edc3b9bed55c48a674f634e2dc7ff759b70579c9",
+      "page_title": "宋書/卷23",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:36c5b516387241fa3a82e63285a960e3c6337799f3d2e3d13e736ffb634179c6",
+      "page_title": "晉書/卷011",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:473bbe7e0f83233c01e97f7221d7cb5b23c3d5b8121952cbb44e2b0a946ae9d7",
+      "page_title": "漢書/卷026",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:51da7a32733d34c39bfdfcbedb139a65beb26517ee5e081b1efb151c30a69422",
+      "page_title": "宋書/卷25",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:5508af157563610d55d74d05e39e263f8846c055adb14b0a3bd4c749c9c47e2a",
+      "page_title": "史記",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:64f3afeb320c738ce0b89071b5cdd330b2772325b9a76fd7b862eb774bd840b8",
+      "page_title": "乙巳占/5",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:75d68e242880923151d9a9826f9fb95c1121da6fc511f3b786940bcc020edd77",
+      "page_title": "乙巳占/8",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:798dc32a61b762282d2cfadbd05e7d5435c631eecf426d2bab141d80fe4a787c",
+      "page_title": "乙巳占/2",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:82d316d1a929c180399c2edaf8a082a2ff40d429506790b216f759bcc82bde6c",
+      "page_title": "晉書/卷012",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:950bca6715eda5cd1cda43e9c1abdeef163d72e6246cbadf2f69fe94fa13e2cb",
+      "page_title": "史記/卷027",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:a3a68258cf179b37df0a5da2b4dca6777d94d6e19818122831341d07dec4380b",
+      "page_title": "後漢書/卷100",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:bd37b00f375bfdcbcdd9bba8774b4ef8ebdd89ec14c299239833a9b0758d0704",
+      "page_title": "後漢書/卷83",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:cad4320921313d43f6de86e35ad36dd2b620422d9e858c209a8891b518b317e8",
+      "page_title": "宋書/卷24",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": null,
+      "family_id": null,
+      "kind": "carrier",
+      "node_id": "carrier:zhws:sha256:cd4c2b9fd54b33f7ea0f0bc761fd35519a3b502ff7579994863a03aa7809dece",
+      "page_title": "後漢紀 (四庫全書本)/卷16",
+      "provider": "zh.wikisource.org"
+    },
+    {
+      "accession_id": "zhws-hanshu-026-r1311247",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-hanshu-026-r1311247",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-houhanji-skqs-16-r597512",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-houhanji-skqs-16-r597512",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-houhanshu-100-r1753568",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-houhanshu-100-r1753568",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-houhanshu-83-r1458140",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-houhanshu-83-r1458140",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-jinshu-011-r2645727",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-jinshu-011-r2645727",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-jinshu-012-r2645984",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-jinshu-012-r2645984",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-jinshu-013-r2646586",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-jinshu-013-r2646586",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-shiji-027-r7904116",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-shiji-027-r7904116",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-shiji-root-r7823731",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-shiji-root-r7823731",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-songshu-23-r1748424",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-songshu-23-r1748424",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-songshu-24-r1748425",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-songshu-24-r1748425",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-songshu-25-r1748426",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-songshu-25-r1748426",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-songshu-26-r1748427",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-songshu-26-r1748427",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-yisizhan-2-r854559",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-yisizhan-2-r854559",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-yisizhan-5-r854562",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-yisizhan-5-r854562",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": "zhws-yisizhan-8-r2623978",
+      "family_id": null,
+      "kind": "source_object",
+      "node_id": "source-object:zhws-yisizhan-8-r2623978",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "hanshu-tianwenzhi",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:hanshu-tianwenzhi:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "houhanji",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:houhanji:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "houhanshu",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:houhanshu:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "jinshu-tianwenzhi",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:jinshu-tianwenzhi:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "shiji-tianguanshu",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:shiji-tianguanshu:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "songshu-tianwenzhi",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:songshu-tianwenzhi:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "yisizhan",
+      "kind": "text_version_candidate",
+      "node_id": "text-version-candidate:family:yisizhan:v0",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "hanshu-tianwenzhi",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:hanshu-tianwenzhi",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "houhanji",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:houhanji",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "houhanshu",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:houhanshu",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "jinshu-tianwenzhi",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:jinshu-tianwenzhi",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "shiji-tianguanshu",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:shiji-tianguanshu",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "songshu-tianwenzhi",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:songshu-tianwenzhi",
+      "page_title": null,
+      "provider": null
+    },
+    {
+      "accession_id": null,
+      "family_id": "yisizhan",
+      "kind": "work_candidate",
+      "node_id": "work-candidate:family:yisizhan",
+      "page_title": null,
+      "provider": null
+    }
+  ],
+  "pilot_case_ids": [
+    "C14",
+    "C45",
+    "C47"
+  ],
+  "research_only": true,
+  "schema_version": "source-projection-bundle/pilot-v0",
+  "source_manifest_sha": "49dac42d29d8c560e15bf16dc98880b29f5f8287fd16e806d542587533b82c4f",
+  "source_mapping_sha": "3a79afb3cd4559236eb9869dc3b0080d6d92ebb3984b6b0c46e9a33edb056250",
+  "source_objects": [
+    {
+      "accession_id": "zhws-hanshu-026-r1311247",
+      "capture_status": "complete",
+      "family_id": "hanshu-tianwenzhi",
+      "oldid": 1311247,
+      "ordinal": 5,
+      "page_title": "漢書/卷026",
+      "raw_byte_count": 45491,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/raw/han-shu-juan-026-oldid-1311247.wikitext",
+      "raw_sha256": "f394d0404aacc69fd653586ab75495084e3af25a4112afbac7cbe2ec93d8cf70"
+    },
+    {
+      "accession_id": "zhws-houhanji-skqs-16-r597512",
+      "capture_status": "complete",
+      "family_id": "houhanji",
+      "oldid": 597512,
+      "ordinal": 13,
+      "page_title": "後漢紀 (四庫全書本)/卷16",
+      "raw_byte_count": 16006,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanji/raw/houhanji_skqs_vol16_oldid597512.wikitext",
+      "raw_sha256": "91a228d8d7d0a6889d03844dd4ec6a3719b68632b1487f4dfe62355bf8955612"
+    },
+    {
+      "accession_id": "zhws-houhanshu-100-r1753568",
+      "capture_status": "complete",
+      "family_id": "houhanshu",
+      "oldid": 1753568,
+      "ordinal": 15,
+      "page_title": "後漢書/卷100",
+      "raw_byte_count": 28124,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu_vol100_oldid1753568.wikitext",
+      "raw_sha256": "115fadb6aa7d09f1413bbc90cee0968abee6b21238dd9c365065b2e178945e41"
+    },
+    {
+      "accession_id": "zhws-houhanshu-83-r1458140",
+      "capture_status": "complete",
+      "family_id": "houhanshu",
+      "oldid": 1458140,
+      "ordinal": 14,
+      "page_title": "後漢書/卷83",
+      "raw_byte_count": 30373,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu_vol83_oldid1458140.wikitext",
+      "raw_sha256": "fd064cf6b7cd2fa55b3e0aeff9c16b952805a65f611788d475218b607076b32a"
+    },
+    {
+      "accession_id": "zhws-jinshu-011-r2645727",
+      "capture_status": "complete",
+      "family_id": "jinshu-tianwenzhi",
+      "oldid": 2645727,
+      "ordinal": 10,
+      "page_title": "晉書/卷011",
+      "raw_byte_count": 54029,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-011-oldid-2645727.wikitext",
+      "raw_sha256": "9b9cfe4fae50eb49c0038b16b5189b2d424a2d68ec894064577b66a5f1624e81"
+    },
+    {
+      "accession_id": "zhws-jinshu-012-r2645984",
+      "capture_status": "complete",
+      "family_id": "jinshu-tianwenzhi",
+      "oldid": 2645984,
+      "ordinal": 11,
+      "page_title": "晉書/卷012",
+      "raw_byte_count": 55662,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-012-oldid-2645984.wikitext",
+      "raw_sha256": "839272ea53adfbfcde4629f2ebd8b86c62d16b1c561d96b0df12ba64dafb15ca"
+    },
+    {
+      "accession_id": "zhws-jinshu-013-r2646586",
+      "capture_status": "complete",
+      "family_id": "jinshu-tianwenzhi",
+      "oldid": 2646586,
+      "ordinal": 12,
+      "page_title": "晉書/卷013",
+      "raw_byte_count": 65539,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-013-oldid-2646586.wikitext",
+      "raw_sha256": "c3f57767151c161d4586a70e0c8c9961597fce369d7b7559ac37e44abd334235"
+    },
+    {
+      "accession_id": "zhws-shiji-027-r7904116",
+      "capture_status": "complete",
+      "family_id": "shiji-tianguanshu",
+      "oldid": 7904116,
+      "ordinal": 4,
+      "page_title": "史記/卷027",
+      "raw_byte_count": 112574,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/raw/shiji-027-oldid-7904116.wikitext",
+      "raw_sha256": "97c9840084005b7a0cb9e29e82be5a333f226a574d5980b5a3914e5f8720e7d1"
+    },
+    {
+      "accession_id": "zhws-shiji-root-r7823731",
+      "capture_status": "complete",
+      "family_id": "shiji-tianguanshu",
+      "oldid": 7823731,
+      "ordinal": 3,
+      "page_title": "史記",
+      "raw_byte_count": 13308,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/raw/shiji-root-oldid-7823731.wikitext",
+      "raw_sha256": "5952550773e4fee59cad263271feba9eb93d24ead950936c1237a9f8ac888b95"
+    },
+    {
+      "accession_id": "zhws-songshu-23-r1748424",
+      "capture_status": "complete",
+      "family_id": "songshu-tianwenzhi",
+      "oldid": 1748424,
+      "ordinal": 6,
+      "page_title": "宋書/卷23",
+      "raw_byte_count": 37089,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/raw/song-shu-juan-23-oldid-1748424.wikitext",
+      "raw_sha256": "429bc177554471278a7fe033bdc539ecc6faa90ee01a21cb961eab77fc058dd1"
+    },
+    {
+      "accession_id": "zhws-songshu-24-r1748425",
+      "capture_status": "complete",
+      "family_id": "songshu-tianwenzhi",
+      "oldid": 1748425,
+      "ordinal": 7,
+      "page_title": "宋書/卷24",
+      "raw_byte_count": 33728,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/raw/song-shu-juan-24-oldid-1748425.wikitext",
+      "raw_sha256": "dc3b9d4991032a2e05976cfec2809c563123b38fdc1405996920660134bbb589"
+    },
+    {
+      "accession_id": "zhws-songshu-25-r1748426",
+      "capture_status": "complete",
+      "family_id": "songshu-tianwenzhi",
+      "oldid": 1748426,
+      "ordinal": 8,
+      "page_title": "宋書/卷25",
+      "raw_byte_count": 34637,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/raw/song-shu-juan-25-oldid-1748426.wikitext",
+      "raw_sha256": "202eafcef6899ac828289a79b5b9201ca4f44b185b5ae3dcf3133a29eced6783"
+    },
+    {
+      "accession_id": "zhws-songshu-26-r1748427",
+      "capture_status": "complete",
+      "family_id": "songshu-tianwenzhi",
+      "oldid": 1748427,
+      "ordinal": 9,
+      "page_title": "宋書/卷26",
+      "raw_byte_count": 23789,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/raw/song-shu-juan-26-oldid-1748427.wikitext",
+      "raw_sha256": "dd90595f2e9fbbaf025737a9f916b01ccbf97fccd4dd244690e2387611e6c131"
+    },
+    {
+      "accession_id": "zhws-yisizhan-2-r854559",
+      "capture_status": "complete",
+      "family_id": "yisizhan",
+      "oldid": 854559,
+      "ordinal": 0,
+      "page_title": "乙巳占/2",
+      "raw_byte_count": 37209,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-2-oldid-854559.wikitext",
+      "raw_sha256": "2681f158284b4767ab76a21003e001d7479d0a439065e05890e463ead317bcea"
+    },
+    {
+      "accession_id": "zhws-yisizhan-5-r854562",
+      "capture_status": "complete",
+      "family_id": "yisizhan",
+      "oldid": 854562,
+      "ordinal": 1,
+      "page_title": "乙巳占/5",
+      "raw_byte_count": 31158,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-5-oldid-854562.wikitext",
+      "raw_sha256": "15d1774880be1178b7d61bdbcca45bedd9611fd60925e3e9b35c909cae435078"
+    },
+    {
+      "accession_id": "zhws-yisizhan-8-r2623978",
+      "capture_status": "complete",
+      "family_id": "yisizhan",
+      "oldid": 2623978,
+      "ordinal": 2,
+      "page_title": "乙巳占/8",
+      "raw_byte_count": 26328,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-8-oldid-2623978.wikitext",
+      "raw_sha256": "5f482d92f856eef52452b2b10dd84b4ece887df5bc18bd11fe7d344fcd55acee"
+    }
+  ],
+  "source_package_metadata": {
+    "access_date": "2026-08-01",
+    "accession_count": 16,
+    "core14_cases": [
+      "C03",
+      "C09",
+      "C11",
+      "C13",
+      "C14",
+      "C41",
+      "C43",
+      "C45",
+      "C47"
+    ],
+    "families": [
+      {
+        "accession_count": 1,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/accessions.json",
+        "family_id": "hanshu-tianwenzhi",
+        "label": "《漢書·天文志》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/notes.md",
+        "ordinal": 2
+      },
+      {
+        "accession_count": 1,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/houhanji/accessions.json",
+        "family_id": "houhanji",
+        "label": "袁宏《後漢紀》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/houhanji/notes.md",
+        "ordinal": 5
+      },
+      {
+        "accession_count": 2,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/houhanshu/accessions.json",
+        "family_id": "houhanshu",
+        "label": "《後漢書》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/houhanshu/notes.md",
+        "ordinal": 6
+      },
+      {
+        "accession_count": 3,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/accessions.json",
+        "family_id": "jinshu-tianwenzhi",
+        "label": "《晉書·天文志》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/notes.md",
+        "ordinal": 4
+      },
+      {
+        "accession_count": 2,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/accessions.json",
+        "family_id": "shiji-tianguanshu",
+        "label": "《史記·天官書》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/shiji-tianguanshu/notes.md",
+        "ordinal": 1
+      },
+      {
+        "accession_count": 4,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/accessions.json",
+        "family_id": "songshu-tianwenzhi",
+        "label": "《宋書·天文志》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/notes.md",
+        "ordinal": 3
+      },
+      {
+        "accession_count": 3,
+        "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/yisizhan/accessions.json",
+        "family_id": "yisizhan",
+        "label": "《乙巳占》",
+        "notes_path": "corpus/research_sources/related-wikisource/p0/yisizhan/notes.md",
+        "ordinal": 0
+      }
+    ],
+    "family_count": 7,
+    "forbidden_side_effects": {
+      "local_kb_default_access": "NOT_RUN",
+      "official_kb_ingest": "NOT_RUN",
+      "production_schema_freeze": "NOT_RUN",
+      "qdrant_access": "NOT_RUN",
+      "reviewer_a_b_modification": "NOT_RUN"
+    },
+    "manifest_id": "b10-r03-related-wikisource-p0-v1",
+    "mapping_path": "corpus/research_sources/related-wikisource/core14-mapping.json",
+    "raw_file_count": 16,
+    "source_capture": "exact UTF-8 MediaWiki action=raw response for each fixed oldid",
+    "status": "RESEARCH_SOURCE_PACKAGE",
+    "total_raw_byte_count": 645044,
+    "working_contract_path": "corpus/research_sources/related-wikisource/accession-working-contract.json"
+  },
+  "title_based_merges": [],
+  "validation_report": {
+    "accepted_independent_witness_count": 0,
+    "bibliographic_edge_count": 39,
+    "core14_audit_digests": [
+      {
+        "path": "corpus/research_sources/b10-core14/audit-early.json",
+        "sha256": "28ff207c6424f7de1ed12b9422d5d489bc69aafe9d89fda4c65f50f472695cb4"
+      },
+      {
+        "path": "corpus/research_sources/b10-core14/audit-middle.json",
+        "sha256": "30d90f31852f5010c9d39c96507a279c09f59e3cd0d51011b69359ec55810121"
+      },
+      {
+        "path": "corpus/research_sources/b10-core14/audit-late.json",
+        "sha256": "54d18e61f81f8be32213320ed54781e37d6565126dac88b5cb2cc905066b8ff3"
+      }
+    ],
+    "core14_manifest_sha256": "a038dcd684990810f89cd9b84f9e30ad7464505ce6bef81ad02da5e00785f968",
+    "deferred_independent_witness_count": 16,
+    "evidence_link_count": 20,
+    "forbidden_side_effects": {
+      "local_kb_default_access": "NOT_RUN",
+      "official_kb_ingest": "NOT_RUN",
+      "production_schema_freeze": "NOT_RUN",
+      "qdrant_access": "NOT_RUN",
+      "reviewer_a_b_modification": "NOT_RUN"
+    },
+    "graph_node_count": 46,
+    "layer_a_after": {
+      "file_count": 32,
+      "sha256": "bb609e4604684778920769fb9aa5bd4fa0193984a16a540753ebcf86574958d4",
+      "total_byte_count": 703933
+    },
+    "layer_a_before": {
+      "file_count": 32,
+      "sha256": "bb609e4604684778920769fb9aa5bd4fa0193984a16a540753ebcf86574958d4",
+      "total_byte_count": 703933
+    },
+    "orphan_assertion_count": 0,
+    "orphan_evidence_link_count": 0,
+    "orphan_graph_edge_count": 0,
+    "orphan_graph_node_count": 0,
+    "pilot_cases": [
+      {
+        "case_id": "C14",
+        "checks": [
+          "five_distinct_case_level_links",
+          "four_relation_types_preserved",
+          "no_atom_scope_inflation"
+        ],
+        "status": "PASS"
+      },
+      {
+        "case_id": "C45",
+        "checks": [
+          "di_zuo_and_yu_zuo_preserved",
+          "same_received_history_family_not_independent",
+          "two_source_objects_preserved"
+        ],
+        "status": "PASS"
+      },
+      {
+        "case_id": "C47",
+        "checks": [
+          "case_level_locators_preserved",
+          "mou_and_zhu_preserved",
+          "shi_and_absence_preserved"
+        ],
+        "status": "PASS"
+      }
+    ],
+    "reverse_accession_actual": 16,
+    "reverse_accession_expected": 16,
+    "reverse_mapping_actual": 20,
+    "reverse_mapping_expected": 20,
+    "rule_identity_fixture_after": [],
+    "rule_identity_fixture_before": [],
+    "rule_identity_fixture_status": "NO_VERSIONED_RULE_FIXTURE_IN_STABLE_BASELINE",
+    "schema_version": "projection-validation-report/pilot-v0",
+    "source_manifest_sha256": "49dac42d29d8c560e15bf16dc98880b29f5f8287fd16e806d542587533b82c4f",
+    "source_mapping_sha256": "3a79afb3cd4559236eb9869dc3b0080d6d92ebb3984b6b0c46e9a33edb056250",
+    "source_replay_actual": 16,
+    "source_replay_expected": 16,
+    "status": "PASS",
+    "title_based_merge_count": 0
+  }
+}

@@ -291,6 +291,211 @@ class CompatibilityProjectionV0(StrictResearchModel):
         return json.loads(self.mapping_json_bytes)
 
 
+class FileDigestV0(StrictResearchModel):
+    path: str = Field(strict=True, min_length=1)
+    sha256: str = Field(strict=True, pattern=r"^[0-9a-f]{64}$")
+
+
+class SnapshotDigestV0(StrictResearchModel):
+    file_count: int = Field(strict=True, ge=0)
+    total_byte_count: int = Field(strict=True, ge=0)
+    sha256: str = Field(strict=True, pattern=r"^[0-9a-f]{64}$")
+
+
+class PilotCaseCheckV0(StrictResearchModel):
+    case_id: Literal["C14", "C45", "C47"]
+    status: Literal["PASS"]
+    checks: tuple[str, ...]
+
+    @field_validator("checks")
+    @classmethod
+    def validate_checks(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        if not value or value != tuple(sorted(set(value))):
+            raise ValueError("pilot checks must be non-empty, sorted, and unique")
+        return value
+
+
+def build_pilot_case_checks(
+    evidence_links: tuple[ResearchEvidenceLinkV0, ...],
+    source_objects: tuple[SourceObjectRefV0, ...],
+    assertions: tuple[ResearchAssertionV0, ...],
+) -> tuple[PilotCaseCheckV0, ...]:
+    """Validate the exact C14/C45/C47 stress denominators and label only facts checked."""
+
+    by_id = {link.mapping_id: link for link in evidence_links}
+    c14_expected = {
+        "B10-R03-M07": ("material_variant", "case_historical_context"),
+        "B10-R03-M09": ("historical_note_parallel", "case_historical_context"),
+        "B10-R03-M12": ("locator_support", "case_context"),
+        "B10-R03-M16": ("material_variant", "case_historical_context"),
+        "B10-R03-M18": ("citation_source", "case_historical_source"),
+    }
+    c14_ids = {link.mapping_id for link in evidence_links if link.target_case_id == "C14"}
+    if c14_ids != set(c14_expected):
+        raise ValueError("C14 must contain exactly mappings M07/M09/M12/M16/M18")
+    for mapping_id, (relation, scope) in c14_expected.items():
+        link = by_id[mapping_id]
+        if (
+            link.relation_type != relation
+            or link.mapping_scope != scope
+            or link.target_atom_ids != ()
+        ):
+            raise ValueError("C14 relation, scope, or case-level boundary is invalid")
+
+    c45_ids = {link.mapping_id for link in evidence_links if link.target_case_id == "C45"}
+    if c45_ids != {"B10-R03-M19", "B10-R03-M20"}:
+        raise ValueError("C45 must contain exactly mappings M19/M20")
+    c45 = (by_id["B10-R03-M19"], by_id["B10-R03-M20"])
+    if any(
+        link.relation_type != "material_variant"
+        or link.mapping_scope != "atomic_parallel"
+        or link.target_atom_ids != ("C45-H2",)
+        for link in c45
+    ):
+        raise ValueError("C45 relation, scope, or atom target is invalid")
+    c45_source_ids = {link.source_accession_id for link in c45}
+    if c45_source_ids != {
+        "zhws-houhanshu-83-r1458140",
+        "zhws-houhanshu-100-r1753568",
+    }:
+        raise ValueError("C45 source denominator is invalid")
+    source_family = {item.accession_id: item.family_id for item in source_objects}
+    if {source_family.get(source_id) for source_id in c45_source_ids} != {"houhanshu"}:
+        raise ValueError("C45 sources must remain in one houhanshu family")
+    c45_text = "\n".join(link.evidence_excerpt for link in c45)
+    if "御坐" not in c45_text or "帝坐" not in c45_text:
+        raise ValueError("C45 material readings are incomplete")
+    deferred_witness_sources = {
+        assertion.supporting_accession_ids[0]
+        for assertion in assertions
+        if assertion.predicate == "independent_witness"
+        and assertion.status is AssertionStatus.DEFERRED
+        and len(assertion.supporting_accession_ids) == 1
+    }
+    if not c45_source_ids <= deferred_witness_sources:
+        raise ValueError("C45 independent-witness state must remain deferred")
+
+    c47_expected = {
+        "B10-R03-M03": (("C47-R3",), "material_variant", "atomic_parallel"),
+        "B10-R03-M04": (("C47-R7",), "material_variant", "atomic_parallel"),
+        "B10-R03-M15": ((), "locator_support", "case_terminology"),
+        "B10-R03-M17": ((), "locator_support", "case_context"),
+    }
+    c47_ids = {link.mapping_id for link in evidence_links if link.target_case_id == "C47"}
+    if c47_ids != set(c47_expected):
+        raise ValueError("C47 must contain exactly mappings M03/M04/M15/M17")
+    for mapping_id, (atom_ids, relation, scope) in c47_expected.items():
+        link = by_id[mapping_id]
+        if (
+            link.target_atom_ids != atom_ids
+            or link.relation_type != relation
+            or link.mapping_scope != scope
+        ):
+            raise ValueError("C47 relation, scope, or atom boundary is invalid")
+    c47_text = "\n".join(
+        link.evidence_excerpt + "\n" + link.research_note
+        for link in (by_id[mapping_id] for mapping_id in sorted(c47_expected))
+    )
+    if not all(token in c47_text for token in ("誅", "謀", "時", "absence")):
+        raise ValueError("C47 material readings are incomplete")
+
+    return (
+        PilotCaseCheckV0(
+            case_id="C14",
+            status="PASS",
+            checks=(
+                "five_distinct_case_level_links",
+                "four_relation_types_preserved",
+                "no_atom_scope_inflation",
+            ),
+        ),
+        PilotCaseCheckV0(
+            case_id="C45",
+            status="PASS",
+            checks=(
+                "di_zuo_and_yu_zuo_preserved",
+                "same_received_history_family_not_independent",
+                "two_source_objects_preserved",
+            ),
+        ),
+        PilotCaseCheckV0(
+            case_id="C47",
+            status="PASS",
+            checks=(
+                "case_level_locators_preserved",
+                "mou_and_zhu_preserved",
+                "shi_and_absence_preserved",
+            ),
+        ),
+    )
+
+
+class ProjectionValidationReportV0(StrictResearchModel):
+    schema_version: Literal["projection-validation-report/pilot-v0"]
+    status: Literal["PASS"]
+    source_manifest_sha256: str = Field(strict=True, pattern=r"^[0-9a-f]{64}$")
+    source_mapping_sha256: str = Field(strict=True, pattern=r"^[0-9a-f]{64}$")
+    source_replay_expected: int = Field(strict=True, ge=0)
+    source_replay_actual: int = Field(strict=True, ge=0)
+    reverse_accession_expected: int = Field(strict=True, ge=0)
+    reverse_accession_actual: int = Field(strict=True, ge=0)
+    reverse_mapping_expected: int = Field(strict=True, ge=0)
+    reverse_mapping_actual: int = Field(strict=True, ge=0)
+    graph_node_count: int = Field(strict=True, ge=0)
+    bibliographic_edge_count: int = Field(strict=True, ge=0)
+    evidence_link_count: int = Field(strict=True, ge=0)
+    orphan_graph_node_count: int = Field(strict=True, ge=0)
+    orphan_graph_edge_count: int = Field(strict=True, ge=0)
+    orphan_assertion_count: int = Field(strict=True, ge=0)
+    orphan_evidence_link_count: int = Field(strict=True, ge=0)
+    title_based_merge_count: int = Field(strict=True, ge=0)
+    accepted_independent_witness_count: int = Field(strict=True, ge=0)
+    deferred_independent_witness_count: int = Field(strict=True, ge=0)
+    pilot_cases: tuple[PilotCaseCheckV0, ...]
+    core14_manifest_sha256: str = Field(strict=True, pattern=r"^[0-9a-f]{64}$")
+    core14_audit_digests: tuple[FileDigestV0, ...]
+    layer_a_before: SnapshotDigestV0
+    layer_a_after: SnapshotDigestV0
+    rule_identity_fixture_status: Literal[
+        "NO_VERSIONED_RULE_FIXTURE_IN_STABLE_BASELINE"
+    ]
+    rule_identity_fixture_before: tuple[FileDigestV0, ...]
+    rule_identity_fixture_after: tuple[FileDigestV0, ...]
+    forbidden_side_effects: ForbiddenSideEffectsV0
+
+    @model_validator(mode="after")
+    def validate_pass_evidence(self) -> "ProjectionValidationReportV0":
+        if self.source_replay_expected != self.source_replay_actual:
+            raise ValueError("source replay denominator does not close")
+        if self.reverse_accession_expected != self.reverse_accession_actual:
+            raise ValueError("reverse accession denominator does not close")
+        if self.reverse_mapping_expected != self.reverse_mapping_actual:
+            raise ValueError("reverse mapping denominator does not close")
+        if any(
+            value != 0
+            for value in (
+                self.orphan_graph_node_count,
+                self.orphan_graph_edge_count,
+                self.orphan_assertion_count,
+                self.orphan_evidence_link_count,
+                self.title_based_merge_count,
+                self.accepted_independent_witness_count,
+            )
+        ):
+            raise ValueError("PASS report cannot contain orphan, merge, or accepted counts")
+        if self.deferred_independent_witness_count <= 0:
+            raise ValueError("PASS report must retain deferred independent-witness state")
+        if tuple(item.case_id for item in self.pilot_cases) != ("C14", "C45", "C47"):
+            raise ValueError("pilot cases must be C14, C45, and C47 in order")
+        if self.layer_a_before != self.layer_a_after:
+            raise ValueError("Layer-A snapshot changed during build")
+        if self.rule_identity_fixture_before != self.rule_identity_fixture_after:
+            raise ValueError("rule identity fixture snapshot changed during build")
+        if self.rule_identity_fixture_before or self.rule_identity_fixture_after:
+            raise ValueError("no-fixture status requires empty fixture hash denominators")
+        return self
+
+
 class SourceProjectionBundleV0(StrictResearchModel):
     schema_version: Literal["source-projection-bundle/pilot-v0"]
     research_only: Literal[True]
@@ -308,7 +513,7 @@ class SourceProjectionBundleV0(StrictResearchModel):
     generated_from_mapping_ids: tuple[str, ...]
     pilot_case_ids: tuple[Literal["C14", "C45", "C47"], ...]
     title_based_merges: tuple[str, ...] = ()
-    validation_report: dict[str, Any] | None = None
+    validation_report: ProjectionValidationReportV0 | None = None
 
     @model_validator(mode="after")
     def validate_closed_research_graph(self) -> "SourceProjectionBundleV0":
@@ -471,6 +676,51 @@ class SourceProjectionBundleV0(StrictResearchModel):
                 raise ValueError("evidence-link relation is not declared")
             if link.source_accession_id not in link.supporting_accession_ids:
                 raise ValueError("evidence-link support must contain its source accession")
+        if self.validation_report is not None:
+            report = self.validation_report
+            if report.source_manifest_sha256 != self.source_manifest_sha:
+                raise ValueError("validation report source manifest hash is inconsistent")
+            if report.source_mapping_sha256 != self.source_mapping_sha:
+                raise ValueError("validation report source mapping hash is inconsistent")
+            if report.source_replay_actual != len(self.source_objects):
+                raise ValueError("validation report source replay count is inconsistent")
+            if report.reverse_accession_actual != len(self.source_objects):
+                raise ValueError("validation report reverse accession count is inconsistent")
+            if report.reverse_mapping_actual != len(self.evidence_links):
+                raise ValueError("validation report reverse mapping count is inconsistent")
+            if report.graph_node_count != len(self.nodes):
+                raise ValueError("validation report graph node count is inconsistent")
+            if report.bibliographic_edge_count != len(self.bibliographic_edges):
+                raise ValueError("validation report edge count is inconsistent")
+            if report.evidence_link_count != len(self.evidence_links):
+                raise ValueError("validation report evidence-link count is inconsistent")
+            if report.core14_manifest_sha256 != self.core14_index.manifest_sha256:
+                raise ValueError("validation report Core14 manifest hash is inconsistent")
+            expected_audits = tuple(
+                FileDigestV0(path=item.path, sha256=item.sha256)
+                for item in self.core14_index.audits
+            )
+            if report.core14_audit_digests != expected_audits:
+                raise ValueError("validation report Core14 audit hashes are inconsistent")
+            if tuple(item.case_id for item in report.pilot_cases) != self.pilot_case_ids:
+                raise ValueError("validation report pilot cases are inconsistent")
+            if report.forbidden_side_effects != self.source_package_metadata.forbidden_side_effects:
+                raise ValueError("validation report forbidden side effects are inconsistent")
+            if report.accepted_independent_witness_count != len(
+                self.accepted_independent_witness_assertions
+            ):
+                raise ValueError("validation report accepted-witness count is inconsistent")
+            if report.deferred_independent_witness_count != (
+                self.deferred_independent_witness_assertion_count
+            ):
+                raise ValueError("validation report deferred-witness count is inconsistent")
+            expected_pilot_checks = build_pilot_case_checks(
+                self.evidence_links,
+                self.source_objects,
+                self.assertions,
+            )
+            if report.pilot_cases != expected_pilot_checks:
+                raise ValueError("validation report pilot checks are inconsistent")
         return self
 
     @property
@@ -522,6 +772,7 @@ class SourceProjectionBundleV0(StrictResearchModel):
 __all__ = [
     "AssertionStatus",
     "CompatibilityProjectionV0",
+    "FileDigestV0",
     "ConfidenceLevel",
     "FamilyDescriptorV0",
     "ForbiddenSideEffectsV0",
@@ -535,4 +786,8 @@ __all__ = [
     "SourceObjectRefV0",
     "SourcePackageMetadataV0",
     "SourceProjectionBundleV0",
+    "SnapshotDigestV0",
+    "PilotCaseCheckV0",
+    "ProjectionValidationReportV0",
+    "build_pilot_case_checks",
 ]
