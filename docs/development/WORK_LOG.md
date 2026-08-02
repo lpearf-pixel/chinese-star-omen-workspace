@@ -2,6 +2,19 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-01 — B10-R03 related Wikisource localization started
+
+- PR #56 was reverified at exact head `d19e074f0f9dce1a9157542c641a54c0519a23dc`: 28 expected research/governance files, 18 manifest hashes matched, 14 cases and 130 unique atomic IDs, zero reviews and zero unresolved threads.
+- PR #56 was squash merged only into `stable/kaiyuan-v2` as `6cffa1e4adf428f068149a31e7f2572dce4a2069`.
+- Live open PRs are #1, #7 and #54. PR #54 remains Draft and blocked on two independent human reviews; AI source research does not satisfy that gate.
+- B10-R03 branch `codex/kaiyuan-b10-related-wikisource-localization-v1` was created from the exact stable merge SHA.
+- Task state moved from `BACKLOG` to `IN_PROGRESS`; an execution plan, reversible raw/accession/mapping layout and unfrozen working accession contract were added.
+- P0 source research was split into three independent temporary evidence groups. They do not write the shared GitHub branch; controller integration and review remain serialized.
+- Boundaries: no production schema freeze, Reviewer A/B mutation, official KB ingest, Qdrant access, `local_kb_default` access, B11/B12 work or `main` operation.
+- Runner: `NOT RUN` for this routine research-source task.
+
+
+
 
 ## 2026-08-01 — B10-R01/R02 C24 and Core14 source audit
 
