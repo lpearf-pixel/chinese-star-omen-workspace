@@ -112,7 +112,7 @@ C24 必须保留三种作用域，不能用修复后的一个小节反写覆盖�
 | 13 卷 Wikisource oldid 与 Kanripo 固定提交取证 | 完成 |
 | 三组并行初审 | 完成 |
 | 交叉复核与修复 | 完成；三组最终 Critical=0 |
-| GitHub 证据包、总报告、manifest | VERIFYING |
+| GitHub 证据包、总报告、manifest | 完成；Draft PR #56 |
 | 相关引书 Wikisource 本地化 | PLANNED；另见 `B10_RELATED_WIKISOURCE_LOCALIZATION_PLAN.md`，本轮不下载 |
 | 正式 schema / KB ingest | NOT RUN（明确不在本轮范围） |
 | Reviewer A/B 人工裁决 | NOT RUN（本报告不能替代） |
