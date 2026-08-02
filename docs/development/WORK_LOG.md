@@ -1702,3 +1702,28 @@ TDD GREEN and regression evidence: the minimum hermetic phase builder composed a
 Independent review of `087d500` found no Critical or Important issues and two Minor issues. The aggregate protected-inspection count could not prove one inspection per phase; a new test first failed with `ValueError: not enough values to unpack`, then the audit records gained `phase_name` and now assert the exact ordered three-phase protected inspections. The work log's transient dependency path was replaced by the portable isolated-target setup description. Post-review focused result: `3 passed`; combined release regressions: `139 passed in 4.56s`. Full gates on the resulting workspace: contracts `6 passed`; text-core `22 passed`; downstream `220 passed`; upstream `188 passed, 3 skipped` (the established environment-only Qdrant integrations); release drill passed all 13 checks. Remaining: commit this review fix, run exact-head governance/diff scans, publish the new remote head, and require its PR workflows before ready/merge.
 
 PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactly seven B8-T02 workflow/test/governance files. Remote implementation head `c9dcb7f5ef970ed16c8d51c10cc0a71c81816e18` passed Development Governance run `29674290728`, Kaiyuan Stable Core run `29674290738`, and Kaiyuan Upstream Runtime run `29674290722`. This evidence is intentionally recorded in a docs-only follow-up commit, so those runs become historical rather than final-head merge evidence. Next exact action: publish this work-log commit, require all workflows on the resulting actual remote head, recheck reviews/threads/diff, then ready and squash merge only to `stable/kaiyuan-v2`.
+
+## 2026-08-02 — B10-R03 merged; B10-R04 source-model design started
+
+### B10-R03 merge evidence
+
+- PR #57 final head: `fed1913512fbea19a804c2bf6565b0193f1cd1ac`.
+- Exact-head workflows: Development Governance `30738747034`, Kaiyuan Stable Core `30738747042`, Kaiyuan Upstream Runtime `30738747018`; all `success`.
+- Changed-file audit: 44 expected research-source, review, plan and governance paths; review submissions, review threads and PR comments were all zero.
+- PR #57 was marked ready and squash merged with expected-head protection.
+- Stable merge commit: `090f1b95d1c0b798077162408cea3d3bedd975a5`.
+- `main`, Reviewer A/B, official KB, Qdrant and `local_kb_default` were not modified.
+
+### B10-R04 start and research findings
+
+- Branch: `codex/kaiyuan-b10-multitext-source-model-v1` from exact stable commit `090f1b95d1c0b798077162408cea3d3bedd975a5`.
+- Three independent read-only investigations covered P0 work boundaries, P1/P2 bibliography and multi-text architecture.
+- Existing P0 integrity replay: 16/16 fixed revisions exist, 16/16 raw responses replay, and byte counts match the merged manifest.
+- Natural completed boundaries: 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13.
+- Recommended next localization denominator: 15 new accession objects — seven missing 《乙巳占》 volumes plus its root page, 《後漢書·天文志》 volumes 101–102 plus its root page, and root metadata pages for 《漢書》《宋書》《晉書》 and 袁宏《後漢紀》.
+- A seven-family full-history mirror would add roughly 631 accessions and is rejected as outside the natural research boundary.
+- `幽明錄` oldid `7904673` is a six-volume page with unknown base identity while the ancient thirty-volume work is lost; it remains a P2 carrier excerpt, not a complete or independent witness.
+- `玉函山房叢書` oldid `2370320` is a catalog; relevant latitude-text entries are red links. It is bibliographic evidence only, not a text witness.
+- Recommended architecture: immutable accession preservation (A), a rebuildable Work–TextVersion–Carrier–SourceObject shadow graph (B), and a delayed rule adapter (C) only after B10-PR-F and human approval.
+- PR #54 remains Draft and human-review blocked. B10-PR-D remains forbidden until the two independent human worksheets and threshold freeze pass.
+- This start changes governance documentation only. No source download, production schema freeze, model call, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main` operation was run.
