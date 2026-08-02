@@ -250,8 +250,8 @@
       "target_atom_ids": [],
       "relation_type": "locator_support",
       "mapping_scope": "case_context",
-      "evidence_locator": "卷013；raw lines 90–150",
-      "evidence_excerpt": "星孛、彗星、掃、蓬星 historical sequences.",
+      "evidence_locator": "卷013；raw lines 142 and 148",
+      "evidence_excerpt": "有星孛於北河戍，經太微、三台、文昌，入北斗……掃太微；有蓬星如粉絮，東南行，歷女虛，至哭星；彗星出太微西……進掃北斗、紫微、中台。",
       "target_whole_row_citation_eligible": "NO",
       "research_note": "Broader comet/path context only; no silent replacement of C47 atomic wording."
     },
