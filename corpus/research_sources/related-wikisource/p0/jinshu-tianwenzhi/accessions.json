@@ -1,0 +1,83 @@
+[
+  {
+    "accession_id": "zhws-jinshu-011-r2645727",
+    "work_printed": "《晉書》卷十一〈志第一·天文上〉",
+    "work_normalized_candidate": "晉書·天文志",
+    "page_title": "晉書/卷011",
+    "oldid": 2645727,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?oldid=2645727&title=%E6%99%89%E6%9B%B8%2F%E5%8D%B7011",
+    "floating_url": "https://zh.wikisource.org/zh-hant/%E6%99%89%E6%9B%B8/%E5%8D%B7011",
+    "revision_timestamp": "2026-01-30T18:11:45Z",
+    "accessed_on": "2026-08-01",
+    "locator": "卷十一 志第一 天文上；raw lines 378–383",
+    "version_family": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+    "author_or_compiler": "房玄齡（Wikisource volume header）",
+    "license_note": "The fixed page labels the Tang work public domain; its Wikisource footer separately offers site text under CC BY-SA 4.0 (additional terms may apply).",
+    "independent_witness_note": "One Wikisource transcription witness; do not count the sequential volumes or a same-family mirror as independent witnesses.",
+    "core14_cases": [
+      "C14"
+    ],
+    "relevant_excerpt": "房、心，宋，豫州：潁川，入房一度；汝南，入房二度；……淮陽，入心一度。",
+    "excerpt_locator": "raw lines 378–383",
+    "raw_sha256": "9b9cfe4fae50eb49c0038b16b5189b2d424a2d68ec894064577b66a5f1624e81",
+    "raw_byte_count": 54029,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-011-oldid-2645727.wikitext",
+    "capture_note": "complete fixed-revision raw page captured; no discrete C03 occurrence identified"
+  },
+  {
+    "accession_id": "zhws-jinshu-012-r2645984",
+    "work_printed": "《晉書》卷十二〈志第二·天文中〉",
+    "work_normalized_candidate": "晉書·天文志",
+    "page_title": "晉書/卷012",
+    "oldid": 2645984,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?oldid=2645984&title=%E6%99%89%E6%9B%B8%2F%E5%8D%B7012",
+    "floating_url": "https://zh.wikisource.org/zh-hant/%E6%99%89%E6%9B%B8/%E5%8D%B7012",
+    "revision_timestamp": "2026-02-01T08:27:44Z",
+    "accessed_on": "2026-08-01",
+    "locator": "卷十二 志第二 天文中；raw lines 64, 66, 367, 369, 373, 375, 379, 381, 383, 385, 387",
+    "version_family": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+    "author_or_compiler": "房玄齡（Wikisource volume header）",
+    "license_note": "The fixed page labels the Tang work public domain; its Wikisource footer separately offers site text under CC BY-SA 4.0 (additional terms may apply).",
+    "independent_witness_note": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+    "core14_cases": [
+      "C03",
+      "C11",
+      "C47"
+    ],
+    "relevant_excerpt": "升平元年十一月壬午，月奄歲星，在房。占曰：人饑。……孝武甯康二年十一月癸酉，太白奄熒惑，在營室。占曰：金火合為爍，為兵喪。……一曰彗星，所謂掃星。",
+    "excerpt_locator": "raw line 373 (dated C03 occurrence); line 421 (C11); lines 367, 369, 375, 379, 381, 383, 385, 387 (other direct lunar–Jupiter candidates); lines 64, 66 (C47 terminology)",
+    "raw_sha256": "839272ea53adfbfcde4629f2ebd8b86c62d16b1c561d96b0df12ba64dafb15ca",
+    "raw_byte_count": 55662,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-012-oldid-2645984.wikitext",
+    "capture_note": "complete fixed-revision raw page captured"
+  },
+  {
+    "accession_id": "zhws-jinshu-013-r2646586",
+    "work_printed": "《晉書》卷十三〈志第三·天文下〉",
+    "work_normalized_candidate": "晉書·天文志",
+    "page_title": "晉書/卷013",
+    "oldid": 2646586,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?oldid=2646586&title=%E6%99%89%E6%9B%B8%2F%E5%8D%B7013",
+    "floating_url": "https://zh.wikisource.org/zh-hant/%E6%99%89%E6%9B%B8/%E5%8D%B7013",
+    "revision_timestamp": "2026-02-03T15:47:31Z",
+    "accessed_on": "2026-08-01",
+    "locator": "卷十三 志第三 天文下；raw lines 12, 38, 40, 50, 52, 90–150",
+    "version_family": "Wikisource transcription; no printed-edition siglum stated in the raw page header",
+    "author_or_compiler": "房玄齡（Wikisource volume header）",
+    "license_note": "The fixed page labels the Tang work public domain; its Wikisource footer separately offers site text under CC BY-SA 4.0 (additional terms may apply).",
+    "independent_witness_note": "One Wikisource transcription witness; do not count a same-family mirror as independent.",
+    "core14_cases": [
+      "C14",
+      "C47"
+    ],
+    "relevant_excerpt": "往者熒惑守心而文帝崩，吳、蜀無事，此其徵也。案三國史並無熒惑守心之文，疑是入太微。……十五年七月壬申，有星孛於北河戍，經太微、三台、文昌，入北斗……八月戊戌，入紫宮乃減。",
+    "excerpt_locator": "raw line 12 (C14 reserved reading); lines 38, 40, 50, 52 (other Mars–Heart); lines 90–150, especially 142 and 148 (C47); line 83 contains additional moon/star material but no exclusive C03 identification",
+    "raw_sha256": "c3f57767151c161d4586a70e0c8c9961597fce369d7b7559ac37e44abd334235",
+    "raw_byte_count": 65539,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-013-oldid-2646586.wikitext",
+    "capture_note": "complete fixed-revision raw page captured; C03 is represented by volume 12's direct lunar–Jupiter notices"
+  }
+]
