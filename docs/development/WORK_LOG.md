@@ -2,6 +2,83 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+
+## 2026-08-01 — B10-R01/R02 C24 and Core14 source audit
+
+The user requested a persistent multi-task source audit for all fourteen frozen
+B10 pilot passages, following the C02/C03/C24 review standard: restore source
+context, compare parallel texts, record quoted ancient works, propose atomic
+splits, preserve unresolved readings and publish a final report to GitHub.
+
+The audit covered C02, C03, C09, C11, C13, C14, C24, C31, C33, C41, C43,
+C44, C45 and C47. Public carrier evidence is pinned to thirteen permanent
+Wikisource revisions and Kanripo commit
+`eb17a11a6a8a40922ccff01f727e2b5df7f3e734`. The evidence package contains
+page windows, revision register, three structured audits, initial cross-reviews,
+corrected re-reviews, a final branch review and a SHA-256 accession manifest.
+
+Research decisions:
+
+```text
+Formal candidate: 14 YES
+Annotation Citation eligible: 12 YES; C03/C24 NO
+Whole frozen-row citation: 14 NO
+Eligibility: 11 eligible; C03/C13 conflict under the pilot divergence policy; C24 ambiguous
+Complexity: 6 cross_passage; 8 compound
+Atomic proposals: 130 unique research records, not production rules
+Computability: 14 partially_computable; omen outcomes are never astronomical formulas
+```
+
+C24 now retains three distinct scopes: the frozen row, repaired section eight
+and repaired section nine. The original row preserves `cloud_qi`; the
+`㑹客環守` string remains unresolved and is not silently emended. The older
+C24 comparison document was reconciled from `not_computable` to
+`partially_computable`: only retrograde motion and explicit duration/length
+fields may be reconstructed after versioned coordinate, unit and tolerance
+policies; qualitative cloud/qi morphology and omen outcomes remain
+non-computable.
+
+The user also required related Wikisource books to receive the same localization
+treatment as 《唐開元占經》 in a later task. B10-R03 records that backlog and
+prioritizes 《乙巳占》, 《史記·天官書》, 《漢書·天文志》,
+《宋書·天文志》, 《晉書·天文志》, 袁宏《後漢紀》 and
+《後漢書》. Lost works and carrier-only quotations are never fabricated as
+complete standalone books. No related-book bulk download occurred in this task.
+
+Fresh local verification:
+
+```text
+JSON parse: PASS
+exact Core14 IDs: PASS (14/14)
+unique atomic IDs: PASS (130/130)
+recursive Formal/Eligibility/Risk/Computability enums: PASS
+relation and special-tag enums: PASS
+Citation scalar matrix: PASS (12 YES, 2 NO)
+whole-row citation matrix: PASS (14 NO)
+Wikisource revision register: PASS (13 volumes, exact oldids)
+Kanripo context blocks: PASS (14, exact pinned commit)
+accession-manifest SHA-256 recheck: PASS
+machine absolute path / provenance / KB boundary guards: PASS
+repaired AI workbook SHA-256: cc4a4cba204ff21b5653abf9a6a6ee2f58ff7be478ca411037867c7c98f6fef2 (unchanged)
+GitHub uploaded-file readback: PASS (exact content)
+```
+
+Three group cross-reviews reached Critical 0. The final whole-branch review
+initially found one Important C24 computability mismatch and one Minor stale plan
+status; both were corrected. Scoped re-review is APPROVED with Critical 0,
+Important 0 and Minor 0.
+
+Draft PR #56 targets only `stable/kaiyuan-v2`. The final evidence/review head
+before governance closeout is
+`51e7fc588b6c2714a4970c0d8f388fd9a0c8cae4`; the branch was ahead of stable
+and not behind, and PR #56 was open, Draft and mergeable. This task did not
+populate Reviewer A/B, freeze a production schema or threshold, ingest the
+official KB, access/write Qdrant, mutate `local_kb_default`, modify `main`,
+or perform B11/B12 work.
+
+Runner: `NOT RUN` under the local-first policy because this is a routine
+research/documentation PR, not the exact major-version stable merge candidate.
+
 ## 2026-07-30 — GOV-T03 local-first verification policy
 
 The user approved a repository-wide delivery rule: routine work uses focused
