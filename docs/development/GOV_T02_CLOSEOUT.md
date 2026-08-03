@@ -9,7 +9,7 @@ Stable integration: `08fb71ab1db7de509154214cca44693a5de4859c`
 GOV-T02 proved that legacy PR #1 and #7 are fully superseded on the stable v2
 line. The audit was merged before either legacy PR was changed. Both PRs then
 received a hash-bound explanation and were closed without merge or branch
-deletion. A live query now returns only human-blocked Draft PR #54.
+deletion. The query immediately after closure returned only human-blocked Draft PR #54; opening this closeout added PR #62. The current open set is #54/#62, and #54 is the only non-closeout PR.
 
 ## Audit evidence
 
