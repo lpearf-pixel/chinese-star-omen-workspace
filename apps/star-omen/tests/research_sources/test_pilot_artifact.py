@@ -68,10 +68,10 @@ def test_committed_artifact_is_closed_typed_and_rebuildable() -> None:
     assert bundle.validation_report.orphan_assertion_count == 0
     assert bundle.validation_report.orphan_evidence_link_count == 0
     assert bundle.validation_report.layer_a_before.file_count == 50
-    assert bundle.validation_report.layer_a_before.total_byte_count == 1_168_547
+    assert bundle.validation_report.layer_a_before.total_byte_count == 1_168_896
     assert (
         bundle.validation_report.layer_a_before.sha256
-        == "7126f5f18c027b94ecb1a0a173b14b642e4d14e075a524203e28a1c6b40dd3fa"
+        == "6ddb813960b5e1144022b5931cfe307b4cf725097fe439b9b960ee180beda615"
     )
     assert bundle.validation_report.layer_a_before == bundle.validation_report.layer_a_after
     assert bundle.validation_report.rule_identity_fixture_before == ()
