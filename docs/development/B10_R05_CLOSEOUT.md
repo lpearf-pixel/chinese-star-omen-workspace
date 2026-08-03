@@ -46,6 +46,7 @@ complete Reviewer A and Reviewer B worksheets and the frozen approval gates must
 produce a canonical `threshold-freeze.json` before B10-PR-D may start. This
 closeout does not substitute AI work for either reviewer.
 
-No production multi-text schema, official ingest, Qdrant,
+No B10-PR-D/E/F start, production multi-text schema, official ingest, Qdrant,
 `local_kb_default`, B11/B12, automatic publishing or `main` operation is
-authorized by this closeout.
+authorized by this closeout. Even after the human and frozen gates pass, each
+downstream task must be separately recorded `IN_PROGRESS` before work begins.
