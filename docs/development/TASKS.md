@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 1a30070d3517d07097fbffe3a8ed43a9a0144c5f
-Current feature branch: codex/kaiyuan-b10-r05-bounded-source-expansion-v1
-Current task: B10-R05 VERIFYING; bounded 15-accession source expansion
+Last verified stable HEAD: bcb72c9c922a8d87319cc88aec7a772016a1cf27
+Current feature branch: docs/kaiyuan-b10-r05-closeout-v1
+Current task: B10-R05 DONE; B10-PR-C BLOCKED on two independent human reviews
 Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -39,7 +39,7 @@ B9 planning: DONE
 
 ## B9
 
-- **Overall status:** `VERIFYING`
+- **Overall status:** `DONE`
 - **Public contracts:** `AstronomyEvent/v1`、`RuleAssessment/v1`、`VideoPackage/v1`
 - **Design:** `docs/superpowers/specs/2026-07-20-kaiyuan-evidence-video-pipeline-design.md`
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
@@ -247,7 +247,9 @@ merged and the resulting stable head is reverified.
 - **Final head and merge:** final head `3059748`; Development Governance `30601310046`, Kaiyuan Stable Core `30601310041` and Kaiyuan Upstream Runtime `30601310051` succeeded under the pre-GOV-T03 policy; PR #53 squash merged as `7ed60487a9a77e93578f14e27e35dc7612dcc054`.
 
 ### B10-PR-C — Golden sets, calibration pilot and threshold freeze
-- **Status:** `BACKLOG`
+- **Status:** `BLOCKED`
+- **Blocking evidence:** Draft PR #54 requires two different people to independently complete Reviewer A and Reviewer B worksheets. AI, blank worksheets and anonymous slot creation do not satisfy this gate.
+- **Exit gate:** reviewed pilot fixtures and an approved canonical `threshold-freeze.json`; only then may B10-PR-D start.
 
 ### B10-R01 — C24 source accession and parallel-text pilot
 - **Status:** `DONE`
@@ -317,7 +319,7 @@ merged and the resulting stable head is reverified.
 - **Boundary:** no production multi-text schema, rule/candidate identity change, independent-witness promotion, Reviewer A/B substitution, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
 
 ### B10-R05 — Bounded 15-accession source expansion
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `1a30070d3517d07097fbffe3a8ed43a9a0144c5f`.
 - **Branch:** `codex/kaiyuan-b10-r05-bounded-source-expansion-v1`.
 - **Goal:** add exactly 15 fixed-revision Wikisource accession/raw objects to the existing seven-family research package, rebuild the reversible projection against 31 source objects, and prove that all 20 Core14 mappings and the original 16 objects remain unchanged.
@@ -325,6 +327,9 @@ merged and the resulting stable head is reverified.
 - **Acceptance:** exact ID/title/oldid register; 31 compact/detailed joins; 31 raw SHA-256 and byte counts; family counts 11/2/2/5/4/2/5; existing 16 metadata/raw identities unchanged; mapping document still exactly 20; zero new Core14 case claims; deterministic projection/check; no title merge, orphan or accepted independent-witness claim.
 - **Plan:** `docs/superpowers/plans/2026-08-02-kaiyuan-b10-r05-bounded-source-expansion.md`.
 - **Reviewed implementation head:** `46a360e96980b2d48fb2faba6b1876a93a93e27c`.
+- **Final PR head:** `b084b10216f2be8ea2854768528e209d4c069c77`.
+- **Merged:** PR #59 squash merged as `bcb72c9c922a8d87319cc88aec7a772016a1cf27`.
+- **Exact-head workflows:** Development Governance `30784883162`, Kaiyuan Stable Core `30784883137`, Kaiyuan Upstream Runtime `30784883149`; all succeeded.
 - **Delivered:** 15 new fixed revisions; 31 accessions/raw objects; 1,050,322 raw bytes; 76 graph nodes, 69 edges, 155 research assertions and the unchanged 20 evidence links; current artifact 233,498 bytes, SHA-256 `583b00a9d160d7374453ef4ec552acc05fa8faf9841a87978a0183d1bc595468`.
 - **Verification checkpoint:** 31/31 network raw replay; 15/15 target title/oldid/timestamp; inventory `62 passed`; combined focused suite `98 passed`; builder `--check`, compileall and remote artifact readback passed; branch review Critical 0 / Important 0 / Minor 0. Exact-head hosted Actions remain pending.
 - **Boundary:** no 631-object provider-history mirror, no inferred mapping, no Reviewer A/B change, no B10-PR-D/E/F start, no production schema freeze, official ingest, Qdrant or `local_kb_default` access.
@@ -355,21 +360,22 @@ merged and the resulting stable head is reverified.
 ## Current sequence
 
 ```text
-implement and merge B9-G6-E2 scientific hard gate
-→ regenerate source-backed macOS G6 evidence
-→ add B9-G6-E3 hash-bound AI visual report
-→ add B9-G6-E4 lightweight human confirmation
-→ harden FFmpeg runtime preflight and regenerate the preview
-→ independently verify the resulting evidence archive
-→ correct handoff version provenance and archive privacy/minimality
-→ merge final B9 closeout
-→ only then B10
+B10-R05 merged and recorded DONE
+→ B10-PR-C remains BLOCKED on two independent human reviews
+→ validate the completed A/B worksheets and approval record
+→ publish canonical threshold-freeze.json
+→ only then start B10-PR-D full-book deterministic extraction
+→ B10-PR-E optional model adapter
+→ B10-PR-F review queue/conflicts
+→ B10-PR-G review waves/coverage
+→ B10-PR-H release and B11 gap report
 ```
 
 Current prohibitions:
 
 - no direct stable writes;
-- no B10–B12 implementation;
+- no B10-PR-D/E/F start before PR #54 satisfies the human-review and threshold-freeze gates;
+- no AI substitution for Reviewer A/B;
 - no official Qdrant or `local_kb_default` mutation;
 - no automatic publishing or `final.mp4`;
-- no claim that hosted CI is real Stellarium/FFmpeg evidence.
+- no claim that hosted CI replaces human, corpus, scientific or real-device evidence.
