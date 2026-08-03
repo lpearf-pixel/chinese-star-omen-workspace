@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
+Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
 Verified at: 2026-08-02
-Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
-Current task: GOV-T02 DONE candidate (effective when PR #62 merges); B10-PR-C human-review BLOCKED
-Open PRs: #54 and closeout #62; #54 is the only non-closeout PR and is Draft/human-review blocked
+Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
+Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C human-review BLOCKED
+Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -161,7 +161,12 @@ docs/development/B9_VERTICAL_SLICE_RUNBOOK.md
 GOV-T02 的 70 行逐路径审计已由 PR #61 合并为
 `08fb71ab1db7de509154214cca44693a5de4859c`。旧路线 PR #1 与 #7
 均已收到哈希绑定的取代说明，并分别以 `closed / merged=false`
-关闭；分支和历史保留。两者不得重新合并或 cherry-pick。当前开放 PR 为受两名不同真人 Reviewer A/B 门禁阻塞的 #54 与本次 closeout #62；#62 合并后预计仅剩 #54。
+关闭；分支和历史保留。PR #62 final head
+`82b464049f1ca39557696016dddab3cdcfc2762c` 通过三项 Actions 和终审，
+随后 squash 合并为 `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`。
+GOV-T02 已在 stable 生效为 `DONE`；PR #62 合并后的即时开放集仅有受两名
+不同真人 Reviewer A/B 门禁阻塞的 #54。此后出现的治理 PR 不改变该历史
+事实。两条旧分支不得重新合并或 cherry-pick。
 
 ## 5. 冻结公共契约
 
@@ -270,14 +275,15 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-GOV-T02 audit is merged at stable 08fb71ab1db7de509154214cca44693a5de4859c; #1/#7 are closed without merge
+GOV-T02 is DONE at stable 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962; #1/#7 are closed without merge
 → B10-R05 remains integrated and DONE
+→ GOV-T04 pilot run 30800888691 passed on ca7f0569 and its artifact hash was independently checked; finalize review fixes on one new exact head
+→ run one new lightweight `kaiyuan-runner/v2/<exact-sha>` tag for that immutable closeout head, require live stable to equal artifact base, then merge PR #63 only to stable
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-→ GOV-T02 closeout #62 is Ready after corrected-head Actions/review; final status-only head must rerun gates, and merge establishes DONE; #1/#7 remain closed without merge and PR #54 remains untouched
-→ GOV-T04 remains BACKLOG
+→ GOV-T04 does not replace nightly, real-device, corpus, scientific, security, migration or human evidence
 ```
 
 The R05 merge does not authorize a production multi-text schema, new Core14

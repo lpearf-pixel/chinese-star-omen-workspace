@@ -1,16 +1,12 @@
 name: B9 RuleAssessment Lineage
 
 on:
-  pull_request:
-    branches:
-      - stable/kaiyuan-v2
-    paths:
-      - "apps/star-omen/src/video_pipeline/rule_assessment*.py"
-      - "apps/star-omen/src/video_pipeline/evidence_bundle.py"
-      - "apps/star-omen/tests/video_pipeline/rule_assessment/**"
-      - "tests/fixtures/evidence/v1/**"
-      - "tests/fixtures/video-package/v1/evidence-rich-regression/**"
-      - ".github/workflows/b9-rule-assessment.yml"
+  workflow_call:
+    inputs:
+      candidate_sha:
+        description: Exact major-version candidate commit SHA
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -21,6 +17,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

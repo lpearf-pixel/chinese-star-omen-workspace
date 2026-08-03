@@ -1,9 +1,16 @@
 name: Development Governance
 
 on:
-  pull_request:
-    branches:
-      - "stable/kaiyuan-v2"
+  workflow_call:
+    inputs:
+      candidate_sha:
+        description: Exact major-version candidate commit SHA
+        required: true
+        type: string
+      base_sha:
+        description: Verified current stable/kaiyuan-v2 commit SHA
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -15,6 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.candidate_sha }}
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
@@ -27,5 +35,5 @@ jobs:
       - name: Require task or work-log update for code changes
         run: |
           python scripts/check_development_governance.py \
-            --base "${{ github.event.pull_request.base.sha }}" \
-            --head "${{ github.event.pull_request.head.sha }}"
+            --base "${{ inputs.base_sha }}" \
+            --head "${{ inputs.candidate_sha }}"
