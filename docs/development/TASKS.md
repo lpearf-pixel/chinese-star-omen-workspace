@@ -331,7 +331,7 @@ merged and the resulting stable head is reverified.
 - **Merged:** PR #59 squash merged as `bcb72c9c922a8d87319cc88aec7a772016a1cf27`.
 - **Exact-head workflows:** Development Governance `30784883162`, Kaiyuan Stable Core `30784883137`, Kaiyuan Upstream Runtime `30784883149`; all succeeded.
 - **Delivered:** 15 new fixed revisions; 31 accessions/raw objects; 1,050,322 raw bytes; 76 graph nodes, 69 edges, 155 research assertions and the unchanged 20 evidence links; current artifact 233,498 bytes, SHA-256 `583b00a9d160d7374453ef4ec552acc05fa8faf9841a87978a0183d1bc595468`.
-- **Verification checkpoint:** 31/31 network raw replay; 15/15 target title/oldid/timestamp; inventory `62 passed`; combined focused suite `98 passed`; builder `--check`, compileall and remote artifact readback passed; branch review Critical 0 / Important 0 / Minor 0. Exact-head hosted Actions remain pending.
+- **Verification:** 31/31 network raw replay; 15/15 target title/oldid/timestamp; inventory `62 passed`; combined focused suite `98 passed`; builder `--check`, compileall and remote artifact readback passed; branch review Critical 0 / Important 0 / Minor 0; all three final exact-head hosted Actions succeeded as recorded above.
 - **Boundary:** no 631-object provider-history mirror, no inferred mapping, no Reviewer A/B change, no B10-PR-D/E/F start, no production schema freeze, official ingest, Qdrant or `local_kb_default` access.
 
 ### B10-PR-D — Full-book deterministic extraction
@@ -361,14 +361,11 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
-→ B10-PR-C remains BLOCKED on two independent human reviews
-→ validate the completed A/B worksheets and approval record
-→ publish canonical threshold-freeze.json
-→ only then start B10-PR-D full-book deterministic extraction
-→ B10-PR-E optional model adapter
-→ B10-PR-F review queue/conflicts
-→ B10-PR-G review waves/coverage
-→ B10-PR-H release and B11 gap report
+→ wait for two different humans to independently complete Reviewer A/B
+→ validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
+→ PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
+→ B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
+→ B10-PR-G/H and B11 remain BACKLOG behind the accepted B10 sequence
 ```
 
 Current prohibitions:
