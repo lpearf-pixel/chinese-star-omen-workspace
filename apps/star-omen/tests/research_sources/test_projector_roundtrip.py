@@ -93,7 +93,7 @@ def test_projection_records_exact_inputs_and_source_order() -> None:
     )
     assert bundle.pilot_case_ids == ("C14", "C45", "C47")
     assert bundle.source_package_metadata.source_capture == manifest["source_capture"]
-    assert {item.ordinal for item in bundle.source_objects} == set(range(16))
+    assert {item.ordinal for item in bundle.source_objects} == set(range(31))
     assert {item.ordinal for item in bundle.evidence_links} == set(range(20))
     assert bundle.source_object_count == 31
     assert bundle.evidence_link_count == 20
