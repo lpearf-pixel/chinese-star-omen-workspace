@@ -1,0 +1,1174 @@
+{
+  "schema_version": "gov-legacy-pr-disposition-matrix/v1",
+  "generated_for_stable_sha": "5571ddb34311f1601c8e084efa133be99655cd5a",
+  "classification_definitions": {
+    "exact": "legacy and stable Git blob SHA are identical",
+    "evolved_superset": "stable retains the same canonical path and responsibility with later reviewed changes; concrete stable implementation/test evidence is listed",
+    "retired_non_behavioral": "obsolete task or planning scaffold with no runtime, test, schema, corpus or fixture responsibility",
+    "unresolved": "replacement evidence is insufficient; any row blocks closure"
+  },
+  "summaries": {
+    "1": {
+      "changed_path_count": 58,
+      "classification_counts": {
+        "exact": 27,
+        "evolved_superset": 24,
+        "retired_non_behavioral": 7,
+        "unresolved": 0
+      },
+      "unresolved_count": 0
+    },
+    "7": {
+      "changed_path_count": 12,
+      "classification_counts": {
+        "exact": 7,
+        "evolved_superset": 5,
+        "retired_non_behavioral": 0,
+        "unresolved": 0
+      },
+      "unresolved_count": 0
+    }
+  },
+  "semantic_checks": {
+    "1": [
+      {
+        "requirement": "shared candidate contracts and schemas",
+        "stable_evidence": [
+          "packages/kb-contracts/python/kb_contracts",
+          "packages/kb-contracts/schemas",
+          "packages/kb-contracts/tests/test_contracts.py"
+        ]
+      },
+      {
+        "requirement": "candidate generation and deterministic identity",
+        "stable_evidence": [
+          "apps/star-omen/src/candidate_cards.py",
+          "packages/kb-contracts/python/kb_contracts/hashes.py",
+          "apps/star-omen/tests/test_candidate_sync_v1.py"
+        ]
+      },
+      {
+        "requirement": "transactional upstream status sync and four business states",
+        "stable_evidence": [
+          "apps/star-omen/src/candidate_sync.py",
+          "apps/star-omen/tests/test_candidate_sync_v1.py"
+        ]
+      },
+      {
+        "requirement": "candidate-only overlay",
+        "stable_evidence": [
+          "apps/star-omen/src/connectors/candidate_overlay.py",
+          "apps/star-omen/tests/test_retriever.py"
+        ]
+      },
+      {
+        "requirement": "approval-only upstream import and official namespace",
+        "stable_evidence": [
+          "apps/local-kb-unified/scripts/import_candidate_cards.py",
+          "apps/local-kb-unified/tests/test_candidate_import_v1.py"
+        ]
+      },
+      {
+        "requirement": "contract/downstream/upstream gates",
+        "stable_evidence": [
+          "Makefile",
+          "packages/kb-contracts/tests/test_contracts.py",
+          "apps/star-omen/tests/test_candidate_sync_v1.py",
+          "apps/local-kb-unified/tests/test_candidate_import_v1.py"
+        ]
+      }
+    ],
+    "7": [
+      {
+        "requirement": "heading_only separated from exact evidence and ordered loose_window",
+        "stable_evidence": [
+          "packages/kb-text-core/python/kb_text_core/matching.py",
+          "packages/kb-text-core/tests/test_text_core.py"
+        ]
+      },
+      {
+        "requirement": "duplicate provenance with fenjuan priority",
+        "stable_evidence": [
+          "packages/kb-text-core/python/kb_text_core/ranking.py",
+          "packages/kb-text-core/tests/test_text_core.py"
+        ]
+      },
+      {
+        "requirement": "raw-preserving parser and anchor identity",
+        "stable_evidence": [
+          "packages/kb-text-core/python/kb_text_core/parser.py",
+          "packages/kb-text-core/python/kb_text_core/anchors.py",
+          "packages/kb-text-core/tests/test_text_core.py"
+        ]
+      },
+      {
+        "requirement": "corpus audit v2",
+        "stable_evidence": [
+          "scripts/audit_kaiyuan_corpus.py"
+        ]
+      },
+      {
+        "requirement": "dry-run split with explicit write/force and volume comparison",
+        "stable_evidence": [
+          "scripts/split_kaiyuan_fulltext.py",
+          "scripts/compare_kaiyuan_volumes.py"
+        ]
+      },
+      {
+        "requirement": "installable text-core package",
+        "stable_evidence": [
+          "packages/kb-text-core/pyproject.toml"
+        ]
+      }
+    ]
+  },
+  "rows": [
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "CODEX_TASK.md",
+      "legacy_blob_sha": "7d78ae9976b9d5b676888f2140b314bcf6e69f25",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "Makefile",
+      "legacy_blob_sha": "6c257386108b7c38bf410b2b950ee5fc2d06bf7a",
+      "classification": "evolved_superset",
+      "stable_path": "Makefile",
+      "stable_blob_sha": "ea797cfac9ba79f3a8710d0568ac15d80e63691f",
+      "responsibility": "workspace verification entrypoints",
+      "stable_evidence_paths": [
+        "Makefile",
+        "packages/kb-contracts/tests/test_contracts.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "README.md",
+      "legacy_blob_sha": "f2bbe18a9c3e8ff67fcb3425f21f551de1433465",
+      "classification": "evolved_superset",
+      "stable_path": "README.md",
+      "stable_blob_sha": "70eb869e2e5a3eb86f58d3086e26f7d5ab1d7da0",
+      "responsibility": "workspace architecture and candidate workflow documentation",
+      "stable_evidence_paths": [
+        "README.md",
+        "apps/local-kb-unified/docs/downstream-candidate-sync-v1.md"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/Makefile",
+      "legacy_blob_sha": "44d86884939e481822afe43d5e6d2f8bbc139d51",
+      "classification": "evolved_superset",
+      "stable_path": "apps/local-kb-unified/Makefile",
+      "stable_blob_sha": "214ddbec6a691761c89f831d33e18396a30535e1",
+      "responsibility": "upstream validation, promotion and test entrypoints",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/Makefile",
+        "apps/local-kb-unified/tests/test_candidate_import_v1.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/data/corpus_manifest.json",
+      "legacy_blob_sha": "dac98b0df948c816d43818dfebf268c6b8970e25",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/data/corpus_manifest.json",
+      "stable_blob_sha": "dac98b0df948c816d43818dfebf268c6b8970e25",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/data/corpus_manifest.json"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/data/generated/extract_cards/.gitkeep",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/data/generated/extract_cards/.gitkeep",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/data/generated/extract_cards/.gitkeep"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/docs/downstream-candidate-sync-v1.md",
+      "legacy_blob_sha": "ca1e9dfd5970e34ae0f94f57ab302c0a087696b2",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/docs/downstream-candidate-sync-v1.md",
+      "stable_blob_sha": "ca1e9dfd5970e34ae0f94f57ab302c0a087696b2",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/docs/downstream-candidate-sync-v1.md"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/incoming/downstream_candidates/.gitkeep",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/incoming/downstream_candidates/.gitkeep",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/incoming/downstream_candidates/.gitkeep"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/kb_search/app.py",
+      "legacy_blob_sha": "3f66e14ef832bd4cacb2c24f2c5a666c422d59c6",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/kb_search/app.py",
+      "stable_blob_sha": "3f66e14ef832bd4cacb2c24f2c5a666c422d59c6",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/kb_search/app.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/scripts/__init__.py",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/scripts/__init__.py",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/scripts/__init__.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/scripts/corpus_manifest.py",
+      "legacy_blob_sha": "5629d8bb59d0238f74c626865f647db50a871356",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/scripts/corpus_manifest.py",
+      "stable_blob_sha": "5629d8bb59d0238f74c626865f647db50a871356",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/scripts/corpus_manifest.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/scripts/healthcheck.sh",
+      "legacy_blob_sha": "da0a81838f36aebd93eb361aab17c0492837ae67",
+      "classification": "evolved_superset",
+      "stable_path": "apps/local-kb-unified/scripts/healthcheck.sh",
+      "stable_blob_sha": "916d742263adc6c32ee42375fb5b102b1f499a10",
+      "responsibility": "upstream health validation",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/scripts/healthcheck.sh",
+        "apps/local-kb-unified/kb_search/app.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/scripts/import_candidate_cards.py",
+      "legacy_blob_sha": "db52d891cfba5c6bb1780e2f15be6c82c61c4c5a",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/scripts/import_candidate_cards.py",
+      "stable_blob_sha": "db52d891cfba5c6bb1780e2f15be6c82c61c4c5a",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/scripts/import_candidate_cards.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/local-kb-unified/tests/test_candidate_import_v1.py",
+      "legacy_blob_sha": "ae055afb0fffaea364a1de990a32a4800baf10b2",
+      "classification": "exact",
+      "stable_path": "apps/local-kb-unified/tests/test_candidate_import_v1.py",
+      "stable_blob_sha": "ae055afb0fffaea364a1de990a32a4800baf10b2",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/local-kb-unified/tests/test_candidate_import_v1.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/README.md",
+      "legacy_blob_sha": "9b6a4eff4a51518567e77680e61b3834feb97926",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/README.md",
+      "stable_blob_sha": "1db43ee7ac52979f258fbd105599e1d5dddb3ff3",
+      "responsibility": "downstream candidate and retrieval operator documentation",
+      "stable_evidence_paths": [
+        "apps/star-omen/README.md",
+        "apps/star-omen/tests/test_candidate_sync_v1.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/config/config.yaml",
+      "legacy_blob_sha": "cfbd7d109fe2e675f313dab31a7dcbf04387eb4f",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/config/config.yaml",
+      "stable_blob_sha": "cfbd7d109fe2e675f313dab31a7dcbf04387eb4f",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/config/config.yaml"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/generated_candidates/.gitkeep",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/data/generated_candidates/.gitkeep",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/generated_candidates/.gitkeep"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/case_reports/.gitkeep",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/data/research/case_reports/.gitkeep",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/case_reports/.gitkeep"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.md",
+      "legacy_blob_sha": "0cd32a324286bc211dba75d1ba4107ea22fa843a",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.md",
+      "stable_blob_sha": "dff27694e0d052c91385f241d8008c67b08a97a9",
+      "responsibility": "canonical sample case report",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.md",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.report.json",
+      "legacy_blob_sha": "dc06ac5c6d4e70e652e28204ae40608b9754bdcc",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.report.json",
+      "stable_blob_sha": "4cae4ac8210eb8a708cbb88c710fb56c920aa7bd",
+      "responsibility": "canonical structured sample report",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/case_reports/corr_mars_xin_leadership_change_001.report.json",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/celestial_events/mars_guarding_xin_001.json",
+      "legacy_blob_sha": "4a975bbb34e3b275f53a8bf3ea55a6dce3f7e07e",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/celestial_events/mars_guarding_xin_001.json",
+      "stable_blob_sha": "97b558a387fb3db27a2d2a79f83541abe75058cc",
+      "responsibility": "canonical celestial-event fixture",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/celestial_events/mars_guarding_xin_001.json",
+        "apps/star-omen/tests/test_rule_matcher.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/correlations/corr_mars_xin_leadership_change_001.json",
+      "legacy_blob_sha": "103f591e0e02e514ecb25701d0d27aafe28cc821",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/correlations/corr_mars_xin_leadership_change_001.json",
+      "stable_blob_sha": "9a645069e2d259323323f106ffbe3c46b9964c34",
+      "responsibility": "canonical correlation fixture",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/correlations/corr_mars_xin_leadership_change_001.json",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/historical_events/hist_sample_leadership_change_001.json",
+      "legacy_blob_sha": "3a8afc1cbdd8c71b41ffc7001609c4fea2204e8b",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/historical_events/hist_sample_leadership_change_001.json",
+      "stable_blob_sha": "f21a748d096a8e0210c21efc5551f5dbb2c01f9a",
+      "responsibility": "canonical historical-event fixture",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/historical_events/hist_sample_leadership_change_001.json",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/indexes/.gitkeep",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/data/research/indexes/.gitkeep",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/indexes/.gitkeep"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/data/research/indexes/case_index.json",
+      "legacy_blob_sha": "fdcd89f0d7050d9dfdb269cc5f1ba3956505837b",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/data/research/indexes/case_index.json",
+      "stable_blob_sha": "ec1a3931353e2d937a5585b8a8d89b181191df12",
+      "responsibility": "canonical research case index",
+      "stable_evidence_paths": [
+        "apps/star-omen/data/research/indexes/case_index.json",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_L1.md",
+      "legacy_blob_sha": "27574bfb0ae7500f45b55a277639241d4b8f0a66",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_L2.md",
+      "legacy_blob_sha": "4fd8e409d78586a4f5fb5502c2e9db5d261d8b58",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_L3.md",
+      "legacy_blob_sha": "f32f24445ad436b4c54cc666256ba7180e5a559f",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_L4.md",
+      "legacy_blob_sha": "be3fae7f34c09eca98e393d9df172295f8498f32",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_L5.md",
+      "legacy_blob_sha": "77d51989948ef947e089e5f34a2c277f42395449",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/docs/codex_plan_index.md",
+      "legacy_blob_sha": "f230a0c735dc7a5d40d64d7b5b914e99d07fb3f7",
+      "classification": "retired_non_behavioral",
+      "stable_path": null,
+      "stable_blob_sha": null,
+      "responsibility": "obsolete task-session or L1-L5 planning scaffold",
+      "stable_evidence_paths": [
+        "AGENTS.md",
+        "docs/development/TASKS.md",
+        "docs/development/PROJECT_MEMORY.md",
+        "docs/development/WORK_LOG.md",
+        "docs/superpowers/specs",
+        "docs/superpowers/plans"
+      ],
+      "verification_note": "No runtime, test, schema, corpus or fixture responsibility; replaced by the current file-governed development system."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/candidate_cards.py",
+      "legacy_blob_sha": "a50e3391f5ca88578a8896aaa213671900a8817e",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/candidate_cards.py",
+      "stable_blob_sha": "30b5f0da26ec22e1bd5fbd0b397a162b5a5cd379",
+      "responsibility": "candidate generation and upstream sync command compatibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/candidate_cards.py",
+        "apps/star-omen/src/candidate_sync.py",
+        "apps/star-omen/tests/test_candidate_sync_v1.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/cli.py",
+      "legacy_blob_sha": "09e82abca4b5c4dbb011300c87780a6e2cbb2d1b",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/cli.py",
+      "stable_blob_sha": "597dac0267c10e3c3039c544df42abdd00908c56",
+      "responsibility": "candidate, sync, audit and retrieval CLI bindings",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/cli.py",
+        "apps/star-omen/tests/test_candidate_sync_v1.py",
+        "apps/star-omen/tests/test_retriever.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/config/settings.py",
+      "legacy_blob_sha": "5f7ab5703ae30b57c721e1f4ed9c1bd13488727e",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/src/config/settings.py",
+      "stable_blob_sha": "5f7ab5703ae30b57c721e1f4ed9c1bd13488727e",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/config/settings.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/connectors/candidate_overlay.py",
+      "legacy_blob_sha": "e3cc1413e07572339d6e24269534bc71ce3e470f",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/connectors/candidate_overlay.py",
+      "stable_blob_sha": "f62c8ef269fe7092b169560a3ca3bf9194000b82",
+      "responsibility": "candidate-only overlay without official promotion",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/connectors/candidate_overlay.py",
+        "apps/star-omen/tests/test_retriever.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/connectors/kb_contract.py",
+      "legacy_blob_sha": "a89dbd8fa1c102d4cb36f0df5c2ff8cd3465e6d6",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/connectors/kb_contract.py",
+      "stable_blob_sha": "98fc41a3f00bfe3d3dd8e62fd9e57e085640acf8",
+      "responsibility": "structured KB wire contract and error taxonomy",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/connectors/kb_contract.py",
+        "apps/star-omen/tests/test_kb_contract.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/connectors/kb_search_retriever.py",
+      "legacy_blob_sha": "102ec60e88a67c886c3236f982b2769b37a841b7",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/connectors/kb_search_retriever.py",
+      "stable_blob_sha": "3939718b3601d6f17547a5f083e255ac18b69b72",
+      "responsibility": "official retrieval plus bounded candidate overlay",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/connectors/kb_search_retriever.py",
+        "apps/star-omen/tests/test_retriever.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/models.py",
+      "legacy_blob_sha": "362e188edf1e2e19a4ad98349aaf96c8c80577ec",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/src/models.py",
+      "stable_blob_sha": "362e188edf1e2e19a4ad98349aaf96c8c80577ec",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/models.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/research.py",
+      "legacy_blob_sha": "12ecb51cc525c34f7e0f54996d92e04b9882bbb2",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/research.py",
+      "stable_blob_sha": "6b048e5d14728b4fb5a8147bf55aae4c6dc3a818",
+      "responsibility": "deterministic research report generation",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/research.py",
+        "apps/star-omen/tests/test_research_reports.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/src/rule_engine/minimal_matcher.py",
+      "legacy_blob_sha": "3b92810320c0c09826b39fe4545e352a07ee0acd",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/src/rule_engine/minimal_matcher.py",
+      "stable_blob_sha": "047a0dd9d378aca0bda46631baa993699ebe3f5d",
+      "responsibility": "rule matching consumes citable evidence and retains candidate boundaries",
+      "stable_evidence_paths": [
+        "apps/star-omen/src/rule_engine/minimal_matcher.py",
+        "apps/star-omen/tests/test_rule_matcher.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/tests/test_candidate_sync_v1.py",
+      "legacy_blob_sha": "5d0fd32d5193bfe463cd027ff18ffb844ad608a5",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/tests/test_candidate_sync_v1.py",
+      "stable_blob_sha": "95374d46645ee19d52851f4e337301ff212a3ff0",
+      "responsibility": "candidate sync regression coverage",
+      "stable_evidence_paths": [
+        "apps/star-omen/tests/test_candidate_sync_v1.py",
+        "apps/star-omen/src/candidate_sync.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/tests/test_kb_contract.py",
+      "legacy_blob_sha": "d19d412b8cb399074df4004c5a5dda909cdd0a03",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/tests/test_kb_contract.py",
+      "stable_blob_sha": "d19d412b8cb399074df4004c5a5dda909cdd0a03",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/tests/test_kb_contract.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/tests/test_research_reports.py",
+      "legacy_blob_sha": "4d8df7b45f0757fd6ba36b416950ae43c855779e",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/tests/test_research_reports.py",
+      "stable_blob_sha": "50fbad324d95fc030536b8f18b71f8d7726dc5fe",
+      "responsibility": "research report regression coverage",
+      "stable_evidence_paths": [
+        "apps/star-omen/tests/test_research_reports.py",
+        "apps/star-omen/src/research.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/tests/test_retriever.py",
+      "legacy_blob_sha": "fa33dc04c896803ecc642c4eda5bc8d82d5199e4",
+      "classification": "exact",
+      "stable_path": "apps/star-omen/tests/test_retriever.py",
+      "stable_blob_sha": "fa33dc04c896803ecc642c4eda5bc8d82d5199e4",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "apps/star-omen/tests/test_retriever.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "apps/star-omen/tests/test_rule_matcher.py",
+      "legacy_blob_sha": "a72221efc8412e84e1f70cce63d54e9786c829c0",
+      "classification": "evolved_superset",
+      "stable_path": "apps/star-omen/tests/test_rule_matcher.py",
+      "stable_blob_sha": "077fb97f0187bf866e090b980c9a48a3d0542da0",
+      "responsibility": "rule-matcher regression coverage",
+      "stable_evidence_paths": [
+        "apps/star-omen/tests/test_rule_matcher.py",
+        "apps/star-omen/src/rule_engine/minimal_matcher.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/README.md",
+      "legacy_blob_sha": "729c25562bb8f3aba2fbe8bb7c334bbd23cb631e",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-contracts/README.md",
+      "stable_blob_sha": "845e59badefe880833e3607671c086448442b553",
+      "responsibility": "shared contract operator documentation",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/README.md",
+        "packages/kb-contracts/tests/test_contracts.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/python/kb_contracts/__init__.py",
+      "legacy_blob_sha": "05baaf9c9f2b947da6caf990e6cafa0133005e81",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-contracts/python/kb_contracts/__init__.py",
+      "stable_blob_sha": "24d6dbd19ad8a30ce176eb3570a15670c6ec2f06",
+      "responsibility": "shared contract public exports",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/python/kb_contracts/__init__.py",
+        "packages/kb-contracts/tests/test_contracts.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/python/kb_contracts/hashes.py",
+      "legacy_blob_sha": "f46beb8bb5664459e98c5f36420b2ef6ade6b342",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/python/kb_contracts/hashes.py",
+      "stable_blob_sha": "f46beb8bb5664459e98c5f36420b2ef6ade6b342",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/python/kb_contracts/hashes.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/python/kb_contracts/manifest.py",
+      "legacy_blob_sha": "14a858fa03878dbb012c559c066a925de30dfb78",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/python/kb_contracts/manifest.py",
+      "stable_blob_sha": "14a858fa03878dbb012c559c066a925de30dfb78",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/python/kb_contracts/manifest.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/python/kb_contracts/models.py",
+      "legacy_blob_sha": "fb9e5550cd47755126eb2a44e509d69b02bb70c5",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-contracts/python/kb_contracts/models.py",
+      "stable_blob_sha": "5feeea5be06897325f5df05540e414ebc4838638",
+      "responsibility": "candidate and corpus contract models",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/python/kb_contracts/models.py",
+        "packages/kb-contracts/tests/test_contracts.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/python/kb_contracts/normalize.py",
+      "legacy_blob_sha": "e855fd76ffe4cd12a0d40e5bd0aa2a2c4dddc560",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/python/kb_contracts/normalize.py",
+      "stable_blob_sha": "e855fd76ffe4cd12a0d40e5bd0aa2a2c4dddc560",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/python/kb_contracts/normalize.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/schemas/candidate_card.schema.json",
+      "legacy_blob_sha": "1b0daa483708efe7a3aec75b946f9030022c6180",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/schemas/candidate_card.schema.json",
+      "stable_blob_sha": "1b0daa483708efe7a3aec75b946f9030022c6180",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/schemas/candidate_card.schema.json"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/schemas/candidate_manifest.schema.json",
+      "legacy_blob_sha": "8d483c094bb58398cbd586fa5e65bceb11ea05dd",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/schemas/candidate_manifest.schema.json",
+      "stable_blob_sha": "8d483c094bb58398cbd586fa5e65bceb11ea05dd",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/schemas/candidate_manifest.schema.json"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/schemas/corpus_manifest.schema.json",
+      "legacy_blob_sha": "1b49a34be642f45fafba5bfb8a67da8485279048",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/schemas/corpus_manifest.schema.json",
+      "stable_blob_sha": "1b49a34be642f45fafba5bfb8a67da8485279048",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/schemas/corpus_manifest.schema.json"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "packages/kb-contracts/tests/test_contracts.py",
+      "legacy_blob_sha": "ee7fd53fd8bf6dbb2e1dd7dfd8606445b40c8390",
+      "classification": "exact",
+      "stable_path": "packages/kb-contracts/tests/test_contracts.py",
+      "stable_blob_sha": "ee7fd53fd8bf6dbb2e1dd7dfd8606445b40c8390",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-contracts/tests/test_contracts.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "scripts/__init__.py",
+      "legacy_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "classification": "exact",
+      "stable_path": "scripts/__init__.py",
+      "stable_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "scripts/__init__.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "scripts/sync_kaiyuan_source.py",
+      "legacy_blob_sha": "a2d9e2230fe1ae39d57f48bd2c9dbbaab6181bc9",
+      "classification": "exact",
+      "stable_path": "scripts/sync_kaiyuan_source.py",
+      "stable_blob_sha": "a2d9e2230fe1ae39d57f48bd2c9dbbaab6181bc9",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "scripts/sync_kaiyuan_source.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 1,
+      "legacy_head": "0eaeffac6d875ce6834e2a5632708ba8933bf812",
+      "legacy_path": "tests/test_sync_kaiyuan_source.py",
+      "legacy_blob_sha": "9a03d7726d0179645e995b29c5b38ddc5e92e161",
+      "classification": "exact",
+      "stable_path": "tests/test_sync_kaiyuan_source.py",
+      "stable_blob_sha": "9a03d7726d0179645e995b29c5b38ddc5e92e161",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "tests/test_sync_kaiyuan_source.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "Makefile",
+      "legacy_blob_sha": "b9b25c9524cfdefdbcd8a6305ee0962af6414996",
+      "classification": "evolved_superset",
+      "stable_path": "Makefile",
+      "stable_blob_sha": "ea797cfac9ba79f3a8710d0568ac15d80e63691f",
+      "responsibility": "text-core audit, comparison and split entrypoints",
+      "stable_evidence_paths": [
+        "Makefile",
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "docs/kaiyuan-corpus-retrieval-v2.md",
+      "legacy_blob_sha": "de54000a89a6646156875f7c1ee26556507711b5",
+      "classification": "evolved_superset",
+      "stable_path": "docs/kaiyuan-corpus-retrieval-v2.md",
+      "stable_blob_sha": "6dbaca9c23e77ed12f5b5bfb4b22cf9eaebc15e3",
+      "responsibility": "corpus retrieval and evidence-matching documentation",
+      "stable_evidence_paths": [
+        "docs/kaiyuan-corpus-retrieval-v2.md",
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/pyproject.toml",
+      "legacy_blob_sha": "eb3eb4e6e055b6241c084059f65d71baf84f3651",
+      "classification": "exact",
+      "stable_path": "packages/kb-text-core/pyproject.toml",
+      "stable_blob_sha": "eb3eb4e6e055b6241c084059f65d71baf84f3651",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/pyproject.toml"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/python/kb_text_core/__init__.py",
+      "legacy_blob_sha": "7c17e20de8b06d25205b9426fbfd1a9cc0a2b82b",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-text-core/python/kb_text_core/__init__.py",
+      "stable_blob_sha": "c8e969f645ca335a8010a862e0735d88e472699d",
+      "responsibility": "text-core public parser/matching/ranking exports",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/python/kb_text_core/__init__.py",
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/python/kb_text_core/anchors.py",
+      "legacy_blob_sha": "4776b4a6925ea2c6c0b602598c968e4a5f386f0e",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-text-core/python/kb_text_core/anchors.py",
+      "stable_blob_sha": "a27ffb03d5164f95331436c1a37f921f1c72d39b",
+      "responsibility": "stable source locator, offset and anchor construction",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/python/kb_text_core/anchors.py",
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/python/kb_text_core/matching.py",
+      "legacy_blob_sha": "55333c429f023544f8bcd0b9e5f6c04809ee5d13",
+      "classification": "exact",
+      "stable_path": "packages/kb-text-core/python/kb_text_core/matching.py",
+      "stable_blob_sha": "55333c429f023544f8bcd0b9e5f6c04809ee5d13",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/python/kb_text_core/matching.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/python/kb_text_core/parser.py",
+      "legacy_blob_sha": "6a6c6b84c94d993fd5aea98bf10489ba695e6ba5",
+      "classification": "evolved_superset",
+      "stable_path": "packages/kb-text-core/python/kb_text_core/parser.py",
+      "stable_blob_sha": "0999728fbd71818573974f7b6a5ab25f9063115c",
+      "responsibility": "raw-preserving volume/page/heading passage parsing",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/python/kb_text_core/parser.py",
+        "packages/kb-text-core/python/kb_text_core/anchors.py",
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Stable keeps the canonical path and responsibility with later reviewed changes; listed implementation/test paths are present on the exact stable baseline."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/python/kb_text_core/ranking.py",
+      "legacy_blob_sha": "1ba5692bea6e13baac63ff56b94817ae2bbb6ff9",
+      "classification": "exact",
+      "stable_path": "packages/kb-text-core/python/kb_text_core/ranking.py",
+      "stable_blob_sha": "1ba5692bea6e13baac63ff56b94817ae2bbb6ff9",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/python/kb_text_core/ranking.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "packages/kb-text-core/tests/test_text_core.py",
+      "legacy_blob_sha": "f749afe1ec6c9e2d20e30576c4c878f4701c82bc",
+      "classification": "exact",
+      "stable_path": "packages/kb-text-core/tests/test_text_core.py",
+      "stable_blob_sha": "f749afe1ec6c9e2d20e30576c4c878f4701c82bc",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "packages/kb-text-core/tests/test_text_core.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "scripts/audit_kaiyuan_corpus.py",
+      "legacy_blob_sha": "6cf7746d9f5a644428e8d5f196dd2a12f93e2f3c",
+      "classification": "exact",
+      "stable_path": "scripts/audit_kaiyuan_corpus.py",
+      "stable_blob_sha": "6cf7746d9f5a644428e8d5f196dd2a12f93e2f3c",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "scripts/audit_kaiyuan_corpus.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "scripts/compare_kaiyuan_volumes.py",
+      "legacy_blob_sha": "ae40c24f7a7e7f83d1f9e3a892ebde176b4b2ef1",
+      "classification": "exact",
+      "stable_path": "scripts/compare_kaiyuan_volumes.py",
+      "stable_blob_sha": "ae40c24f7a7e7f83d1f9e3a892ebde176b4b2ef1",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "scripts/compare_kaiyuan_volumes.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    },
+    {
+      "legacy_pr": 7,
+      "legacy_head": "3cc654b92514223d069b56162c874b5a1a65e060",
+      "legacy_path": "scripts/split_kaiyuan_fulltext.py",
+      "legacy_blob_sha": "5d6624ebd3f76a085e197b904a8eda515827c231",
+      "classification": "exact",
+      "stable_path": "scripts/split_kaiyuan_fulltext.py",
+      "stable_blob_sha": "5d6624ebd3f76a085e197b904a8eda515827c231",
+      "responsibility": "unchanged legacy responsibility",
+      "stable_evidence_paths": [
+        "scripts/split_kaiyuan_fulltext.py"
+      ],
+      "verification_note": "Git blob identity is exact."
+    }
+  ]
+}
