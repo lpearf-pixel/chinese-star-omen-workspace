@@ -4,6 +4,21 @@ Date: 2026-08-02
 Stable baseline: `5571ddb34311f1601c8e084efa133be99655cd5a`  
 Disposition: PR #1 and PR #7 are superseded; close only after this audit merges
 
+## Row-level evidence
+
+The authoritative machine-readable matrix is
+`docs/development/gov-t02-legacy-pr-matrix.json` at Git blob
+`9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`. It contains exactly 70 rows. Every row records the legacy
+PR/head/path/blob, stable path/blob, one of the four frozen classifications,
+the preserved responsibility, concrete stable implementation/test evidence and
+a verification note. Counts are recomputed from those rows:
+
+- PR #1: exact 27, evolved_superset 24, retired_non_behavioral 7, unresolved 0;
+- PR #7: exact 7, evolved_superset 5, retired_non_behavioral 0, unresolved 0.
+
+Any future matrix row classified `unresolved` invalidates this disposition and
+must block closure.
+
 ## PR #1 — candidate sync foundation
 
 | Field | Value |
