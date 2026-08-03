@@ -1,18 +1,12 @@
 name: B9 Scientific Provider
 
 on:
-  pull_request:
-    branches:
-      - stable/kaiyuan-v2
-    paths:
-      - "apps/star-omen/src/video_pipeline/astronomy/**"
-      - "apps/star-omen/src/video_pipeline/asterisms/**"
-      - "apps/star-omen/data/video_pipeline/scientific_conventions_v1.yaml"
-      - "apps/star-omen/data/video_pipeline/asterism_catalog_v1.yaml"
-      - "apps/star-omen/tests/video_pipeline/astronomy/**"
-      - "apps/star-omen/tests/video_pipeline/asterisms/**"
-      - "apps/star-omen/pyproject.toml"
-      - ".github/workflows/b9-scientific-provider.yml"
+  workflow_call:
+    inputs:
+      candidate_sha:
+        description: Exact major-version candidate commit SHA
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -23,6 +17,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

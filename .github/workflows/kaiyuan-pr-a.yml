@@ -1,30 +1,12 @@
 name: Kaiyuan Stable Core
 
 on:
-  pull_request:
-    branches:
-      - "dev-test"
-      - "stable/kaiyuan-v2"
-    paths:
-      - "apps/star-omen/**"
-      - "packages/kb-contracts/**"
-      - "packages/kb-text-core/**"
-      - "corpus/kaiyuan_zhanjing/**"
-      - "scripts/audit_kaiyuan_baseline.py"
-      - "scripts/audit_kaiyuan_corpus.py"
-      - "scripts/audit_kaiyuan_spot_checks.py"
-      - "scripts/compare_kaiyuan_volumes.py"
-      - "scripts/split_kaiyuan_fulltext.py"
-      - "docs/development/**"
-      - "AGENTS.md"
-      - "Makefile"
-      - ".github/workflows/kaiyuan-pr-a.yml"
-  push:
-    branches:
-      - "stable/kaiyuan-v2"
-      - "codex/kaiyuan-corpus-retrieval-v2"
-      - "codex/kaiyuan-corpus-hardening-v2"
-      - "codex/kaiyuan-citable-sync-v2"
+  workflow_call:
+    inputs:
+      candidate_sha:
+        description: Exact major-version candidate commit SHA
+        required: true
+        type: string
 
 jobs:
   text-core-compat:
@@ -35,6 +17,8 @@ jobs:
         python-version: ["3.9", "3.12"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
 
       - uses: actions/setup-python@v5
         with:
@@ -55,6 +39,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
 
       - uses: actions/setup-python@v5
         with:

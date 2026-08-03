@@ -3,6 +3,25 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-02 — GOV-T04 implementation entered VERIFYING
+
+- All eight transitional workflow bodies now expose only required `workflow_call` inputs and checkout the verified candidate SHA. No migrated workflow responds to ordinary pull requests or branch pushes.
+- The new unified entrypoint responds only to a lightweight `kaiyuan-runner/v2/<40-hex-sha>` tag. Preflight proves tag/event/object/checkout identity, fetches current `stable/kaiyuan-v2`, requires it to be the exact merge base and rejects a candidate equal to stable.
+- The always-running finalizer consumes preflight plus all eight reusable conclusions. The tested standard-library builder validates candidate/base/ref/workflow/run identity and the exact nine-job denominator, refuses overwrite, publishes `major-version-runner-result/v1` plus a SHA-256 sidecar and fails unless every required conclusion is `success`.
+- Pre-governance implementation head: `4c671d516e91844ef20b37d3ddab8d3a1df12498`. Local verification on the complete 22-path change set: workflow/governance unit discovery `15 passed`; topology CLI `PASS (8 reusable + 1 unified)`; YAML parse `9/9`; development governance `changed_files=22 code_files=4`; `git diff --check` passed.
+- GOV-T04 is `VERIFYING`, not `DONE`. Remaining proof is a clean final candidate commit, Draft PR path/review audit, one exact-SHA lightweight tag run, all nine required conclusions, downloaded artifact/sidecar verification and merge only to `stable/kaiyuan-v2`.
+- PR #54, product behavior, corpus, schema, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12, publishing and `main` remain untouched. Nightly and real-device/scientific/corpus/human/migration/security evidence remain independent.
+
+
+## 2026-08-02 — GOV-T02 effective closeout and GOV-T04 design start
+
+- PR #62 final head `82b464049f1ca39557696016dddab3cdcfc2762c` passed Development Governance `30789542306`, Kaiyuan Stable Core `30789542258` and Kaiyuan Upstream Runtime `30789542404`; independent final review reported Critical 0 / Important 0 / Minor 0 / Ready YES.
+- PR #62 squash merged only to `stable/kaiyuan-v2` as `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; live comparison returned identical. GOV-T02 is now effective `DONE` and the only open PR is human-blocked Draft #54.
+- GOV-T04 starts from that exact stable commit on `codex/kaiyuan-gov-t04-unified-runner-v1`. The audited baseline contains eight workflow files and every one has an automatic `pull_request` or `push` trigger; no scheduled nightly workflow exists.
+- Initial `workflow_dispatch` design was rejected before closeout: GitHub requires that event's workflow file to exist on the repository default branch, while this repository's default historical `main` is forbidden for v2 changes. The replacement uses a lightweight `kaiyuan-runner/v2/<exact-sha>` tag, eight reusable `workflow_call` gates, exact tag/event/object/checkout identity, current stable ancestry, complete result fan-in and SHA-bound evidence. Ordinary PR/branch push, nightly and task-specific real-environment evidence remain separate.
+- Baseline governance unit tests: `5 passed`. No workflow file has changed in this design checkpoint. PR #54, product code, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12, publishing and `main` remain untouched.
+
+
 ## 2026-08-02 — GOV-T02 legacy PR closure complete; closeout verifying
 
 - Evidence PR #61 final head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa` passed Development Governance `30788598906`, Kaiyuan Stable Core `30788598913` and Kaiyuan Upstream Runtime `30788598905`.

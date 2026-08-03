@@ -1,16 +1,12 @@
 name: B9 Editorial Stellarium
 
 on:
-  pull_request:
-    branches:
-      - stable/kaiyuan-v2
-    paths:
-      - "apps/star-omen/src/video_pipeline/editorial*.py"
-      - "apps/star-omen/src/video_pipeline/stellarium.py"
-      - "apps/star-omen/data/examples/video/**"
-      - "apps/star-omen/data/video_pipeline/templates/**"
-      - "apps/star-omen/tests/video_pipeline/editorial/**"
-      - ".github/workflows/b9-editorial-stellarium.yml"
+  workflow_call:
+    inputs:
+      candidate_sha:
+        description: Exact major-version candidate commit SHA
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -21,6 +17,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

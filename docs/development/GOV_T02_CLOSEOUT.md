@@ -1,15 +1,17 @@
 # GOV-T02 Legacy PR Disposition Closeout
 
 Date: 2026-08-02  
-Status: `DONE` candidate — effective on stable only when final closeout PR #62 merges  
-Stable integration: `08fb71ab1db7de509154214cca44693a5de4859c`
+Status: `DONE`
+Stable integration: `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`
 
 ## Result
 
 GOV-T02 proved that legacy PR #1 and #7 are fully superseded on the stable v2
 line. The audit was merged before either legacy PR was changed. Both PRs then
 received a hash-bound explanation and were closed without merge or branch
-deletion. The query immediately after closure returned only human-blocked Draft PR #54; opening this closeout added PR #62. The current open set is #54/#62, and #54 is the only non-closeout PR.
+deletion. PR #62 then passed its final exact-head gates and merged only to
+`stable/kaiyuan-v2`. The current open set contains only human-blocked Draft PR
+#54.
 
 ## Audit evidence
 
@@ -48,9 +50,12 @@ passed Development Governance `30789415141`, Kaiyuan Stable Core
 `30789415089` and Kaiyuan Upstream Runtime `30789415112`; re-review reported
 Critical 0 / Important 0 / Minor 0 / Ready YES.
 
-This final status-only head must rerun the same three exact-head Actions and
-pass final review. The branch-side `DONE` is effective on
-`stable/kaiyuan-v2` only when PR #62 merges.
+Final head `82b464049f1ca39557696016dddab3cdcfc2762c` passed Development
+Governance `30789542306`, Kaiyuan Stable Core `30789542258`, Kaiyuan Upstream
+Runtime `30789542404` and independent final review Critical 0 / Important 0 /
+Minor 0 / Ready YES. PR #62 squash merged as
+`96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; the post-merge stable identity
+check was exact. GOV-T02 is therefore `DONE` on stable.
 
 ## Unchanged boundaries
 

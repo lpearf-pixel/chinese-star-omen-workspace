@@ -78,4 +78,4 @@
 - [x] Record audit PR and merge SHA plus both legacy closure comments/states.
 - [x] Mark GOV-T02 `DONE` on the final status-only closeout head, effective only when PR #62 merges.
 - [x] Verify open PRs contain #54 but not #1/#7.
-- [ ] Run exact-head docs/governance gates and merge the final closeout PR.
+- [x] Run final exact-head Actions and review, then squash merge PR #62 as `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`.

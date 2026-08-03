@@ -1,0 +1,161 @@
+name: Kaiyuan Major-Version Unified Gate
+run-name: Major-version gate ${{ github.sha }}
+
+on:
+  push:
+    tags:
+      - "kaiyuan-runner/v2/*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kaiyuan-major-version-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      candidate_sha: ${{ steps.verify.outputs.candidate_sha }}
+      base_sha: ${{ steps.verify.outputs.base_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact candidate and current stable ancestry
+        id: verify
+        shell: bash
+        env:
+          candidate_sha: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$candidate_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "candidate_sha must be a full lowercase 40-hex commit SHA" >&2
+            exit 1
+          fi
+          test "$candidate_sha" = "$GITHUB_SHA"
+          test "$GITHUB_REF_TYPE" = "tag"
+          expected_ref="kaiyuan-runner/v2/$candidate_sha"
+          test "$GITHUB_REF_NAME" = "$expected_ref"
+          test "$(git cat-file -t "$candidate_sha")" = "commit"
+          test "$(git rev-parse HEAD)" = "$candidate_sha"
+
+          git fetch --no-tags origin \
+            +refs/heads/stable/kaiyuan-v2:refs/remotes/origin/stable/kaiyuan-v2
+          base_sha=$(git rev-parse refs/remotes/origin/stable/kaiyuan-v2)
+          test "$candidate_sha" != "$base_sha"
+          git merge-base --is-ancestor "$base_sha" "$candidate_sha"
+          test "$(git merge-base "$base_sha" "$candidate_sha")" = "$base_sha"
+
+          printf 'candidate_sha=%s\n' "$candidate_sha" >> "$GITHUB_OUTPUT"
+          printf 'base_sha=%s\n' "$base_sha" >> "$GITHUB_OUTPUT"
+
+  governance:
+    needs: preflight
+    uses: ./.github/workflows/development-governance.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+      base_sha: ${{ needs.preflight.outputs.base_sha }}
+
+  b9-assisted-renderer-review:
+    needs: preflight
+    uses: ./.github/workflows/b9-assisted-renderer-review.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  b9-editorial-stellarium:
+    needs: preflight
+    uses: ./.github/workflows/b9-editorial-stellarium.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  b9-package-review-preview:
+    needs: preflight
+    uses: ./.github/workflows/b9-package-review-preview.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  b9-rule-assessment:
+    needs: preflight
+    uses: ./.github/workflows/b9-rule-assessment.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  b9-scientific-provider:
+    needs: preflight
+    uses: ./.github/workflows/b9-scientific-provider.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  stable-core:
+    needs: preflight
+    uses: ./.github/workflows/kaiyuan-pr-a.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  upstream-runtime:
+    needs: preflight
+    uses: ./.github/workflows/kaiyuan-upstream-runtime.yml
+    with:
+      candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}
+
+  finalize:
+    if: ${{ always() }}
+    needs:
+      - preflight
+      - governance
+      - b9-assisted-renderer-review
+      - b9-editorial-stellarium
+      - b9-package-review-preview
+      - b9-rule-assessment
+      - b9-scientific-provider
+      - stable-core
+      - upstream-runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CANDIDATE_SHA: ${{ github.sha }}
+      VERIFIED_CANDIDATE_SHA: ${{ needs.preflight.outputs.candidate_sha }}
+      BASE_SHA: ${{ needs.preflight.outputs.base_sha }}
+      PREFLIGHT_RESULT: ${{ needs.preflight.result }}
+      GOVERNANCE_RESULT: ${{ needs.governance.result }}
+      B9_ASSISTED_RESULT: ${{ needs.b9-assisted-renderer-review.result }}
+      B9_EDITORIAL_RESULT: ${{ needs.b9-editorial-stellarium.result }}
+      B9_PACKAGE_RESULT: ${{ needs.b9-package-review-preview.result }}
+      B9_RULE_RESULT: ${{ needs.b9-rule-assessment.result }}
+      B9_SCIENTIFIC_RESULT: ${{ needs.b9-scientific-provider.result }}
+      STABLE_CORE_RESULT: ${{ needs.stable-core.result }}
+      UPSTREAM_RUNTIME_RESULT: ${{ needs.upstream-runtime.result }}
+      WORKFLOW_SHA: ${{ github.workflow_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Build SHA-bound unified result
+        id: result
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/build_runner_result.py --output-root .
+
+      - name: Upload unified result
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: major-version-runner-result-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            major-version-runner-result.json
+            major-version-runner-result.json.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Fail closed unless every required job passed
+        if: ${{ steps.result.outputs.all_required_succeeded != 'true' }}
+        run: exit 1
