@@ -3,6 +3,17 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-02 — GOV-T02 legacy PR closure complete; closeout verifying
+
+- Evidence PR #61 final head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa` passed Development Governance `30788598906`, Kaiyuan Stable Core `30788598913` and Kaiyuan Upstream Runtime `30788598905`.
+- Independent final review reported Critical 0 / Important 0 / Minor 0 / Ready YES. The 70 unique rows matched all 58 PR #1 and 12 PR #7 changed paths; 133 legacy/stable blob bindings had no mismatch.
+- PR #61 squash merged only to `stable/kaiyuan-v2` as `08fb71ab1db7de509154214cca44693a5de4859c`; post-merge compare was identical and the matrix retained blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`.
+- PR #1 received supersession comment `5162877413` at 2026-08-03T06:05:13Z and closed at 2026-08-03T06:05:15Z with `merged=false`; audited head remained `0eaeffac6d875ce6834e2a5632708ba8933bf812`.
+- PR #7 received supersession comment `5162877570` at 2026-08-03T06:05:14Z and closed at 2026-08-03T06:05:16Z with `merged=false`; audited head remained `3cc654b92514223d069b56162c874b5a1a65e060`.
+- Both legacy branches and histories remain preserved. A live open-PR query returned only Draft PR #54; its two-human Reviewer A/B gate was not changed.
+- GOV-T02 remains `VERIFYING` only until this final docs-only closeout passes exact-head gates and independent review. No behavior, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12 or `main` operation occurred.
+
+
 ## 2026-08-02 — GOV-T02 legacy PR supersession audit
 
 - Stable was reverified at `5571ddb34311f1601c8e084efa133be99655cd5a`; the only open PRs were #1, #7 and human-blocked #54.
