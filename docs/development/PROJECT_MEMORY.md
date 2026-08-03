@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
 Verified at: 2026-08-02
 Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
-Current task: GOV-T02 VERIFYING final closeout; B10-PR-C human-review BLOCKED
+Current task: GOV-T02 DONE candidate (effective when PR #62 merges); B10-PR-C human-review BLOCKED
 Open PRs: #54 and closeout #62; #54 is the only non-closeout PR and is Draft/human-review blocked
 Forbidden target: main
 Protected collection: local_kb_default
@@ -276,7 +276,7 @@ GOV-T02 audit is merged at stable 08fb71ab1db7de509154214cca44693a5de4859c; #1/#
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-→ GOV-T02 closure is complete and final docs-only closeout is VERIFYING; #1/#7 are closed without merge and PR #54 remains untouched
+→ GOV-T02 closeout #62 is Ready after corrected-head Actions/review; final status-only head must rerun gates, and merge establishes DONE; #1/#7 remain closed without merge and PR #54 remains untouched
 → GOV-T04 remains BACKLOG
 ```
 
