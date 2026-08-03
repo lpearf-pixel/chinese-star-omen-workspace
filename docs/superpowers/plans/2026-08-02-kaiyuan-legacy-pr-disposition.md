@@ -22,6 +22,7 @@
 
 **Files:**
 - Create: `docs/development/GOV_T02_LEGACY_PR_DISPOSITION.md`
+- Create: `docs/development/gov-t02-legacy-pr-matrix.json`
 - Modify: `docs/development/TASKS.md`
 - Modify: `docs/development/PROJECT_MEMORY.md`
 
@@ -29,6 +30,8 @@
 - [x] Record PR #1 base/head, 58 changed paths and diverged ancestry.
 - [x] Record PR #7 base/head, 12 changed paths and diverged ancestry.
 - [x] Compare every legacy path to stable by existence and blob SHA.
+- [x] Persist all 70 rows with legacy/stable blobs, classification, responsibility and concrete stable implementation/test evidence.
+- [x] Recompute exact/evolved/retired/unresolved counts from the persisted rows and require unresolved 0/70.
 - [x] Require every missing path to be non-behavioral obsolete planning material.
 
 ### Task 2: Prove semantic supersession
