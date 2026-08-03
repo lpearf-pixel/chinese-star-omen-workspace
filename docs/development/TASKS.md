@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 090f1b95d1c0b798077162408cea3d3bedd975a5
-Current feature branch: codex/kaiyuan-b10-multitext-source-model-v1
-Current task: B10-R04 VERIFYING; reversible source-model pilot and natural-boundary expansion policy
-Open PRs: #1, #7, #54, #58; #54 remains Draft and human-review blocked; #58 is the B10-R04 verifying Draft
+Last verified stable HEAD: 1a30070d3517d07097fbffe3a8ed43a9a0144c5f
+Current feature branch: codex/kaiyuan-b10-r05-bounded-source-expansion-v1
+Current task: B10-R05 IN_PROGRESS; bounded 15-accession source expansion
+Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -308,22 +308,23 @@ merged and the resulting stable head is reverified.
 - **Boundary:** P0 research sources only; no production schema freeze, official ingest, Reviewer A/B change, Qdrant access or `local_kb_default` access.
 
 ### B10-R04 — Reversible multi-text source model and natural-boundary expansion policy
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Base:** `stable/kaiyuan-v2` at `090f1b95d1c0b798077162408cea3d3bedd975a5`.
 - **Branch:** `codex/kaiyuan-b10-multitext-source-model-v1`.
-- **Entry gate:** satisfied by merged B10-R03 P0 PR #57 and live replay of its 16 fixed source objects.
-- **Goal:** preserve the accession package as the immutable source layer, design a reversible Work–TextVersion–Carrier–SourceObject shadow graph, define natural scholarly localization boundaries, and prepare a lossless pilot before any broader source expansion.
-- **Recommended architecture:** immutable accession bytes remain authoritative; the bibliographic graph is a rebuildable sidecar; research mappings and alignment hypotheses remain separate from `OmenRule/v2` and `RuleCandidate/v2`; formal projection is deferred until B10-PR-F and human approval.
-- **Natural-boundary policy:** provenance rigor equal to 《唐開元占經》 does not require mirroring an entire container history. Standalone omen works may be localized as whole works; large histories stop at the complete relevant treatise or directly evidenced chapter unless a later task establishes a broader research denominator.
-- **Pilot denominator:** all 7 P0 families, 16 source objects and 20 mappings, with C45/C47/C14 as relation stress cases.
-- **Acceptance:** three architecture options and a system blueprint are recorded; research-accession invariants and deferred authority fields are explicit; 16/16 source objects and 20/20 mappings can round-trip through the shadow model without information loss; no title-based silent merge, no unreviewed independent-witness claim, and no rule/candidate identity change.
-- **Source-scope findings:** 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13 already meet their natural treatise boundaries. 《乙巳占》 has 3/10 volumes captured; 《後漢書·天文志》 needs volumes 101–102 after the model pilot. The whole 30-volume 《後漢紀》 and full standard histories are not automatic expansion targets.
-- **P1/P2 finding:** no new high-confidence P1 source object was found. The six-volume Wikisource `幽明錄` page has unknown base identity while the ancient thirty-volume work is lost; the `玉函山房叢書` page is a catalog whose relevant latitude-text entries are red links. They remain P2 carrier excerpts or bibliographic clues.
-- **Reviewed implementation head:** `df424128a5cbd530daa5dd23f7232f2da23c92f4`; strict accession contract, immutable 16-object inventory, 46-node/39-edge/80-assertion shadow graph, true 20/20 reverse projection and the 141,956-byte pilot artifact `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`, bound to the complete 34-file Layer A package snapshot.
-- **Verification:** local Task 1–4 suite `166 passed`; builder `--check` and `compileall` passed. Exact-head Actions: Development Governance `30749422233`, Kaiyuan Stable Core `30749422195` and Kaiyuan Upstream Runtime `30749422194`, all success; hosted counts include contracts 93, text-core 26 on Python 3.9/3.12, downstream 591 and upstream 188 passed / 3 skipped.
-- **Independent review:** Critical 0 / Important 0 / Minor 1, Ready YES. The sole Minor is stale PR-description metadata and is handled after the docs-only final head; it does not authorize merge. Draft PR #58 remains `VERIFYING`.
-- **Pending:** production multi-text schema and the bounded 15-accession expansion are not implemented or approved; B10-R04 remains `VERIFYING` until exact-head gates, final independent review and Draft PR verification complete.
-- **Boundary:** design and research-source tooling only; no PR #54 completion claim, threshold freeze, B10-PR-D start, Reviewer A/B substitution, production schema freeze, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
+- **Merged:** PR #58 squash merged as `1a30070d3517d07097fbffe3a8ed43a9a0144c5f` after the exact reviewed head passed all three required Actions.
+- **Delivered:** immutable 16-object Layer A, rebuildable Work–TextVersion–Carrier–SourceObject Layer B, 20/20 reversible Core14 evidence links, 46 nodes, 39 bibliographic edges, 80 research assertions and an audit-bound pilot artifact.
+- **Verification:** Task 1–4 local suite `166 passed`; exact-head Development Governance, Kaiyuan Stable Core and Kaiyuan Upstream Runtime all succeeded; final independent review Critical 0 / Important 0 / Minor 0 / Ready YES.
+- **Boundary:** no production multi-text schema, rule/candidate identity change, independent-witness promotion, Reviewer A/B substitution, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
+
+### B10-R05 — Bounded 15-accession source expansion
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at `1a30070d3517d07097fbffe3a8ed43a9a0144c5f`.
+- **Branch:** `codex/kaiyuan-b10-r05-bounded-source-expansion-v1`.
+- **Goal:** add exactly 15 fixed-revision Wikisource accession/raw objects to the existing seven-family research package, rebuild the reversible projection against 31 source objects, and prove that all 20 Core14 mappings and the original 16 objects remain unchanged.
+- **Fixed denominator:** 《乙巳占》 root plus volumes 1, 3, 4, 6, 7, 9 and 10 (8); 《漢書》 root (1); 《宋書》 root (1); 《晉書》 root (1); 袁宏《後漢紀》（四庫全書本） root (1); 《後漢書》 root plus volumes 101 and 102 (3). Total 15.
+- **Acceptance:** exact ID/title/oldid register; 31 compact/detailed joins; 31 raw SHA-256 and byte counts; family counts 11/2/2/5/4/2/5; existing 16 metadata/raw identities unchanged; mapping document still exactly 20; zero new Core14 case claims; deterministic projection/check; no title merge, orphan or accepted independent-witness claim.
+- **Plan:** `docs/superpowers/plans/2026-08-02-kaiyuan-b10-r05-bounded-source-expansion.md`.
+- **Boundary:** no 631-object provider-history mirror, no inferred mapping, no Reviewer A/B change, no B10-PR-D/E/F start, no production schema freeze, official ingest, Qdrant or `local_kb_default` access.
 
 ### B10-PR-D — Full-book deterministic extraction
 - **Status:** `BACKLOG`
