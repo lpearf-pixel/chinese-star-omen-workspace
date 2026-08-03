@@ -6,6 +6,7 @@
 ## 2026-08-02 — GOV-T02 legacy PR supersession audit
 
 - Stable was reverified at `5571ddb34311f1601c8e084efa133be99655cd5a`; the only open PRs were #1, #7 and human-blocked #54.
+- The authoritative matrix `docs/development/gov-t02-legacy-pr-matrix.json` contains 70 rows at Git blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`; each row binds legacy/stable blob, classification, responsibility and stable implementation/test evidence. Recomputed unresolved count is 0/70.
 - PR #1: base `codex/sync-contract-v1@98e0bb7…`, head `0eaeffac…`, 58 paths, diverged from stable. Stable preserves all 51 behavior/data paths: 27 exact blobs and 24 evolved implementations. The seven retired paths are only `CODEX_TASK.md` and the obsolete L1–L5/index planning documents.
 - PR #1 semantic replacement checks passed for shared candidate contracts/schemas, deterministic IDs and hashes, candidate generation, transactional sync, `pending|merged|needs_review|stale`, overlay, approval-only upstream import and contract/downstream/upstream test targets.
 - PR #7: base `dev-test@b42e2c6…`, head `3cc654b…`, 12 paths, diverged from stable. All 12 paths remain on stable; seven core blobs are exact and five are evolved.
