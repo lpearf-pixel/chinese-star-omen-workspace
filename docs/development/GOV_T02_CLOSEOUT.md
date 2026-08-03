@@ -1,7 +1,7 @@
 # GOV-T02 Legacy PR Disposition Closeout
 
 Date: 2026-08-02  
-Status: `VERIFYING` — legacy disposition complete; final closeout PR pending  
+Status: `DONE` candidate — effective on stable only when final closeout PR #62 merges  
 Stable integration: `08fb71ab1db7de509154214cca44693a5de4859c`
 
 ## Result
@@ -39,10 +39,18 @@ reopened for merge or cherry-picked into stable.
 
 ## Final closeout gate
 
-This closeout is documentation-only. GOV-T02 becomes `DONE` only when its
-exact final head passes Development Governance, Kaiyuan Stable Core, Kaiyuan
-Upstream Runtime and independent review, and the closeout PR is merged into
-`stable/kaiyuan-v2`.
+Closeout PR #62 initial head `3d04102f8e54d7b491f7716f90d5df6f67585fa6`
+passed all three Actions. Independent review found one Important wording issue:
+after #62 was opened, the current open set was #54/#62 rather than #54 alone.
+
+Corrected head `cf209033e948afdca0375ae6df76a447ffd2f359`
+passed Development Governance `30789415141`, Kaiyuan Stable Core
+`30789415089` and Kaiyuan Upstream Runtime `30789415112`; re-review reported
+Critical 0 / Important 0 / Minor 0 / Ready YES.
+
+This final status-only head must rerun the same three exact-head Actions and
+pass final review. The branch-side `DONE` is effective on
+`stable/kaiyuan-v2` only when PR #62 merges.
 
 ## Unchanged boundaries
 
