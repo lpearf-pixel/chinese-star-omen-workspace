@@ -3,6 +3,18 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-02 — GOV-T02 legacy PR closure complete; closeout verifying
+
+- Evidence PR #61 final head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa` passed Development Governance `30788598906`, Kaiyuan Stable Core `30788598913` and Kaiyuan Upstream Runtime `30788598905`.
+- Independent final review reported Critical 0 / Important 0 / Minor 0 / Ready YES. The 70 unique rows matched all 58 PR #1 and 12 PR #7 changed paths; 133 legacy/stable blob bindings had no mismatch.
+- PR #61 squash merged only to `stable/kaiyuan-v2` as `08fb71ab1db7de509154214cca44693a5de4859c`; post-merge compare was identical and the matrix retained blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`.
+- PR #1 received supersession comment `5162877413` at 2026-08-03T06:05:13Z and closed at 2026-08-03T06:05:15Z with `merged=false`; audited head remained `0eaeffac6d875ce6834e2a5632708ba8933bf812`.
+- PR #7 received supersession comment `5162877570` at 2026-08-03T06:05:14Z and closed at 2026-08-03T06:05:16Z with `merged=false`; audited head remained `3cc654b92514223d069b56162c874b5a1a65e060`.
+- Both legacy branches and histories remain preserved. A live query immediately after their closure returned only Draft PR #54; opening the final closeout added #62, so the current open set is #54/#62 and #54 remains the only non-closeout PR. Its two-human Reviewer A/B gate was not changed.
+- PR #62 initial head `3d04102f8e54d7b491f7716f90d5df6f67585fa6` passed all three Actions but review found one Important current-open-set wording issue. Corrected head `cf209033e948afdca0375ae6df76a447ffd2f359` passed Development Governance `30789415141`, Kaiyuan Stable Core `30789415089`, Kaiyuan Upstream Runtime `30789415112`; re-review reported Critical 0 / Important 0 / Minor 0 / Ready YES.
+- GOV-T02 is a `DONE` candidate: the final status-only head must rerun all three exact-head Actions and final review, and the status becomes effective on stable only when PR #62 merges. No behavior, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12 or `main` operation occurred.
+
+
 ## 2026-08-02 — GOV-T02 legacy PR supersession audit
 
 - Stable was reverified at `5571ddb34311f1601c8e084efa133be99655cd5a`; the only open PRs were #1, #7 and human-blocked #54.

@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 5571ddb34311f1601c8e084efa133be99655cd5a
-Current feature branch: docs/kaiyuan-gov-t02-legacy-pr-disposition-v1
-Current task: GOV-T02 VERIFYING; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
+Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
+Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
+Current task: GOV-T02 DONE candidate (effective when PR #62 merges); B10-PR-C remains BLOCKED on two independent human reviews
+Open PRs: #54 and closeout #62; #54 remains the only non-closeout PR and is Draft/human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -22,7 +22,7 @@ Forbidden target: main
 Protected collection: local_kb_default
 ```
 
-实时恢复时必须重新核验以上事实。旧路线 PR #1、#7 仍开放，不得无证据关闭。
+实时恢复时必须重新核验以上事实。旧路线 PR #1、#7 已在合并证据审计后以 `closed / merged=false` 处置；分支与历史保留，禁止重新合并或 cherry-pick。
 
 ## 已完成稳定阶段
 
@@ -184,18 +184,19 @@ merged and the resulting stable head is reverified.
 ## Governance
 
 ### GOV-T02 — Legacy PR #1/#7 disposition
-- **Status:** `VERIFYING`
-- **Branch:** `docs/kaiyuan-gov-t02-legacy-pr-disposition-v1`
+- **Status:** `DONE` candidate (effective on `stable/kaiyuan-v2` only when final closeout PR #62 merges)
+- **Audit branch:** `docs/kaiyuan-gov-t02-legacy-pr-disposition-v1`
+- **Closeout branch:** `docs/kaiyuan-gov-t02-closeout-v1`
 - **Design:** `docs/superpowers/specs/2026-08-02-kaiyuan-legacy-pr-disposition-design.md`
 - **Plan:** `docs/superpowers/plans/2026-08-02-kaiyuan-legacy-pr-disposition.md`
 - **Audit:** `docs/development/GOV_T02_LEGACY_PR_DISPOSITION.md`
 - **Row matrix:** `docs/development/gov-t02-legacy-pr-matrix.json` (70 rows; Git blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`)
-- **Goal:** prove whether every behavior-bearing PR #1/#7 deliverable is present or safely superseded on current stable v2, record the path/semantic matrix, and close the legacy PRs only after the evidence PR merges.
-- **Acceptance:** exact live PR/base/head identities; all changed paths classified as exact, evolved-superset, intentionally retired non-behavioral artifact or unresolved; no unresolved review/comment obligation; stable replacements and gates cited; closure comments link the merged audit; final closeout records actual closed state.
-- **Evidence checkpoint:** the 70-row matrix records every legacy/stable blob, classification, responsibility and concrete stable implementation/test evidence. PR #7 has 12/12 paths preserved (7 exact, 5 evolved); PR #1 has all 51 behavior/data paths preserved (27 exact, 24 evolved), while only seven obsolete task/plan documents are intentionally retired. Both PRs have zero comments, reviews and unresolved threads; matrix unresolved count is 0/70.
-- **Disposition:** both legacy branches are superseded and must not be merged or cherry-picked. Close only after this audit PR merges; then record the actual closed state in a final docs-only closeout.
-- **Boundary:** no merge or cherry-pick from either legacy branch; no behavior, corpus, candidate, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change.
-
+- **Audit merge:** PR #61, reviewed head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa`, squash `08fb71ab1db7de509154214cca44693a5de4859c`.
+- **Closure evidence:** PR #1 head `0eaeffac6d875ce6834e2a5632708ba8933bf812` closed without merge at 2026-08-03T06:05:15Z after comment `5162877413`; PR #7 head `3cc654b92514223d069b56162c874b5a1a65e060` closed without merge at 2026-08-03T06:05:16Z after comment `5162877570`.
+- **Result:** all 70 legacy paths classified, unresolved count 0; #1/#7 are absent from the open PR set. Current open PRs are human-blocked #54 and this closeout #62; after #62 merges, #54 is expected to remain alone.
+- **Closeout verification:** corrected evidence head `cf209033e948afdca0375ae6df76a447ffd2f359` passed Development Governance `30789415141`, Kaiyuan Stable Core `30789415089`, Kaiyuan Upstream Runtime `30789415112` and independent review Critical 0 / Important 0 / Minor 0 / Ready YES.
+- **Exit gate:** the final status-only head must rerun all three exact-head Actions and pass final review; this branch-side `DONE` becomes effective on stable only when PR #62 merges.
+- **Boundary:** do not reopen, merge or cherry-pick either legacy branch; no behavior, corpus, candidate, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change.
 ### GOV-T03 — Local-first verification and major-version Runner gate
 - **Status:** `DONE`
 - **Goal:** make local verification the default for routine work and reserve one final unified Runner validation for the exact major-version candidate immediately before merging into `stable/kaiyuan-v2`.

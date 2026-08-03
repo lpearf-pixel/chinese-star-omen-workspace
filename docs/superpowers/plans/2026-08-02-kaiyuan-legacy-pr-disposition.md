@@ -53,19 +53,19 @@
 - Modify: `docs/development/PROJECT_MEMORY.md`
 - Modify: `docs/development/WORK_LOG.md`
 
-- [ ] Open a Draft PR from the audit branch to `stable/kaiyuan-v2`.
-- [ ] Verify exact-head changed paths, governance/stable/upstream Actions and independent review.
-- [ ] Squash merge the audit PR only after Critical 0 / Important 0 and all exact-head gates succeed.
+- [x] Open a Draft PR from the audit branch to `stable/kaiyuan-v2` (PR #61).
+- [x] Verify exact-head changed paths, governance/stable/upstream Actions and independent review.
+- [x] Squash merge the audit PR only after Critical 0 / Important 0 and all exact-head gates succeed (`08fb71ab1db7de509154214cca44693a5de4859c`).
 
 ### Task 4: Close the superseded legacy PRs
 
 **Files:** none; GitHub PR metadata/comments only.
 
-- [ ] Add a hash-bound supersession comment to PR #1.
-- [ ] Close PR #1 without merging or deleting its branch.
-- [ ] Add a hash-bound supersession comment to PR #7.
-- [ ] Close PR #7 without merging or deleting its branch.
-- [ ] Re-read both PRs and require `state=closed`, `merged=false`.
+- [x] Add a hash-bound supersession comment to PR #1 (`5162877413`).
+- [x] Close PR #1 without merging or deleting its branch.
+- [x] Add a hash-bound supersession comment to PR #7 (`5162877570`).
+- [x] Close PR #7 without merging or deleting its branch.
+- [x] Re-read both PRs and require `state=closed`, `merged=false`.
 
 ### Task 5: Publish final closeout
 
@@ -75,7 +75,7 @@
 - Modify: `docs/development/PROJECT_MEMORY.md`
 - Modify: `docs/development/WORK_LOG.md`
 
-- [ ] Record audit PR and merge SHA plus both legacy closure comments/states.
-- [ ] Mark GOV-T02 `DONE`.
-- [ ] Verify open PRs contain #54 but not #1/#7.
+- [x] Record audit PR and merge SHA plus both legacy closure comments/states.
+- [x] Mark GOV-T02 `DONE` on the final status-only closeout head, effective only when PR #62 merges.
+- [x] Verify open PRs contain #54 but not #1/#7.
 - [ ] Run exact-head docs/governance gates and merge the final closeout PR.
