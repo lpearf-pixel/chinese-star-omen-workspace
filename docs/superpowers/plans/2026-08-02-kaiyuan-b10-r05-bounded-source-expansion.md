@@ -49,10 +49,10 @@
 - Modify: `apps/star-omen/tests/research_sources/test_projector_roundtrip.py`
 - Modify: `apps/star-omen/tests/research_sources/test_pilot_artifact.py`
 
-- [ ] Create a machine-readable register containing the base stable SHA, baseline manifest SHA-256, the exact 15 IDs/title/oldid/timestamp/family/raw-path tuples and the invariant expected counts.
-- [ ] Add tests requiring 31 accessions/raw files, seven families, exact family counts `11/2/2/5/4/2/5`, the exact 15 new IDs, empty Core14 scope for every new object and exactly 20 unchanged mapping IDs.
-- [ ] Snapshot the original 16 accession metadata identities and raw SHA-256/byte-count triples in the test/register so a later mutation fails closed.
-- [ ] Run the focused tests before data changes and record the expected failure at 16 rather than 31.
+- [x] Create a machine-readable register containing the base stable SHA, baseline manifest SHA-256, the exact 15 IDs/title/oldid/timestamp/family/raw-path tuples and the invariant expected counts.
+- [x] Add tests requiring 31 accessions/raw files, seven families, exact family counts `11/2/2/5/4/2/5`, the exact 15 new IDs, empty Core14 scope for every new object and exactly 20 unchanged mapping IDs.
+- [x] Snapshot the original 16 accession metadata identities and raw SHA-256/byte-count triples in the test/register so a later mutation fails closed.
+- [x] Run the focused tests before data changes and record the expected failure at 16 rather than 31.
 
 ```bash
 cd apps/star-omen
@@ -69,12 +69,12 @@ Expected: FAIL only on the new 31-object/15-ID requirements.
 - Modify: six existing `p0/*/accessions.json` files and their collation notes when the denominator changes.
 - Modify: `corpus/research_sources/related-wikisource/accession-manifest.json`.
 
-- [ ] Fetch each registered object from `https://zh.wikisource.org/w/index.php?title=<title>&oldid=<oldid>&action=raw` without normalization or silent fallback.
-- [ ] Verify the MediaWiki API reports the exact registered title, oldid and timestamp before accepting bytes.
-- [ ] Compute raw UTF-8 byte count and SHA-256; create one compact and one detailed record with matching shared fields.
-- [ ] Use `capture_status: complete`, `core14_cases: []`, an empty `relevant_excerpt`, and an explicit boundary-only locator/note. Do not claim whole-book evidence beyond the captured object.
-- [ ] Update family counts to yisizhan 11, shiji 2, hanshu 2, songshu 5, jinshu 4, houhanji 2 and houhanshu 5; update global totals from the actual bytes.
-- [ ] Re-run inventory tests and require all compact/detailed joins, raw file-set, SHA and byte-count gates to pass.
+- [x] Fetch each registered object from `https://zh.wikisource.org/w/index.php?title=<title>&oldid=<oldid>&action=raw` without normalization or silent fallback.
+- [x] Verify the MediaWiki API reports the exact registered title, oldid and timestamp before accepting bytes.
+- [x] Compute raw UTF-8 byte count and SHA-256; create one compact and one detailed record with matching shared fields.
+- [x] Use `capture_status: complete`, `core14_cases: []`, an empty `relevant_excerpt`, and an explicit boundary-only locator/note. Do not claim whole-book evidence beyond the captured object.
+- [x] Update family counts to yisizhan 11, shiji 2, hanshu 2, songshu 5, jinshu 4, houhanji 2 and houhanshu 5; update global totals from the actual bytes.
+- [x] Re-run inventory tests and require all compact/detailed joins, raw file-set, SHA and byte-count gates to pass.
 
 ## Task 3: Rebuild and validate the reversible Layer-B projection
 
@@ -87,11 +87,11 @@ Expected: FAIL only on the new 31-object/15-ID requirements.
 - Modify: `docs/research/B10_R04_SOURCE_GRAPH_PILOT_REPORT.md`
 - Create: `docs/research/B10_R05_BOUNDED_SOURCE_EXPANSION_REPORT.md`
 
-- [ ] Change only denominator expectations needed for 31 source objects; retain schema, node kinds, identity rules, evidence-link semantics and reverse-projector behavior.
-- [ ] Regenerate the deterministic artifact through `scripts/build_b10_r04_source_projection.py`; Git history and the R05 report preserve the R04 pilot hash and 16-object provenance.
-- [ ] Require 31 generated accession IDs, exactly 20 original mapping IDs, exact reverse projection, zero title-based merges, zero orphans, zero accepted independent-witness assertions and positive deferred assertions.
-- [ ] Prove the original 16 records/raw identities and the complete mapping document remain unchanged from the registered stable baseline.
-- [ ] Record old/new manifest and artifact SHA-256 values, counts and explicit NOT_RUN safety fields in the R05 report.
+- [x] Change only denominator expectations needed for 31 source objects; retain schema, node kinds, identity rules, evidence-link semantics and reverse-projector behavior.
+- [x] Regenerate the deterministic artifact through `scripts/build_b10_r04_source_projection.py`; Git history and the R05 report preserve the R04 pilot hash and 16-object provenance.
+- [x] Require 31 generated accession IDs, exactly 20 original mapping IDs, exact reverse projection, zero title-based merges, zero orphans, zero accepted independent-witness assertions and positive deferred assertions.
+- [x] Prove the original 16 records/raw identities and the complete mapping document remain unchanged from the registered stable baseline.
+- [x] Record old/new manifest and artifact SHA-256 values, counts and explicit NOT_RUN safety fields in the R05 report.
 
 ## Task 4: Replay all sources and complete local verification
 
@@ -102,7 +102,7 @@ Expected: FAIL only on the new 31-object/15-ID requirements.
 - Modify: `docs/development/PROJECT_MEMORY.md`
 - Modify: this plan.
 
-- [ ] Replay all 31 fixed-revision raw URLs and require exact SHA-256/byte counts; separately require the exact 15 registered revision timestamps.
+- [x] Replay all 31 fixed-revision raw URLs and require exact SHA-256/byte counts; separately require the exact 15 registered revision timestamps.
 - [ ] Run the deterministic builder check, focused research tests, contract/downstream gates, compile checks, governance checker and diff hygiene.
 
 ```bash
@@ -117,7 +117,7 @@ python -m compileall -q apps/star-omen/src/research_sources scripts/build_b10_r0
 git diff --check
 ```
 
-- [ ] Mark B10-R05 `VERIFYING`, record exact commands/counts/hashes and commit the intended implementation head.
+- [x] Mark B10-R05 `VERIFYING`, record exact commands/counts/hashes and commit the intended implementation head.
 
 ## Task 5: Independent review and Draft PR
 
@@ -126,8 +126,8 @@ git diff --check
 - Create: `docs/research/b10-r05-reviews/final-branch-review.md`
 - Modify: `docs/development/WORK_LOG.md`, `TASKS.md`, `PROJECT_MEMORY.md` and this plan.
 
-- [ ] Independently recompute 31/31 raw identities, 31/31 compact-to-detailed joins, exact 15 target identity/timestamps, unchanged original 16 and unchanged 20 mappings.
-- [ ] Review graph closure, reverse projection, title-merge prevention, deferred authority, forbidden side effects and branch scope. Fix and repeat until Critical 0 / Important 0.
+- [x] Independently recompute 31/31 raw identities, 31/31 compact-to-detailed joins, exact 15 target identity/timestamps, unchanged original 16 and unchanged 20 mappings.
+- [x] Review graph closure, reverse projection, title-merge prevention, deferred authority, forbidden side effects and branch scope. Fix and repeat until Critical 0 / Important 0.
 - [ ] Commit the immutable review record and governance-only closeout, then open a Draft PR targeting only `stable/kaiyuan-v2`.
 - [ ] Verify the exact final PR head, changed paths, hosted required Actions and review threads. Add a hash-bound top-level review comment without another branch mutation.
 - [ ] Keep the PR Draft and B10-R05 `VERIFYING` until the user authorizes integration.
