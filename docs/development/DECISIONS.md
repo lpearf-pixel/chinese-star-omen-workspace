@@ -232,3 +232,16 @@
 - **Consequence:** B10-PR-A 至 PR-H 分阶段独立 review/merge/closeout。
   覆盖率报告必须公开分母，sealed holdout 不参与日常调参，所有历史
   review、release 和 checkpoint 保持可追溯。
+
+## D-026 — 相关古书采用不可变 accession、可重建影子图和自然研究边界
+
+- **Status:** Accepted for B10 research pilot; production multi-text schema remains unfrozen.
+- **Decision:** preserve PR #57 accession/raw/hash records as the authoritative immutable layer; build a deletable and reproducible Work–TextVersion–Carrier–SourceObject shadow graph; keep research evidence links and alignment hypotheses outside `OmenRule/v2` and `RuleCandidate/v2`. A rule adapter may be designed only after B10-PR-F exists and formal human approval is available.
+- **Fact ownership:** Source Preservation owns fixed revision, raw bytes, hash, byte count and capture state. The shadow graph owns bibliographic identity hypotheses. Evidence Alignment owns case/atom research links. Reviewer A/B and the B10 rule pipeline alone own formal labels and approval.
+- **Natural boundary:** equal provenance treatment does not imply mirroring an entire container history. Standalone omen works may use a whole-work denominator; large histories stop at the complete relevant treatise or directly evidenced chapter unless a later reviewed task establishes a broader denominator.
+- **Pilot:** round-trip the existing seven families, sixteen source objects and twenty mappings through the shadow graph, using C45, C47 and C14 as relation stress cases. Any information loss, title-based merge, unreviewed independent-witness claim or candidate/rule identity change fails the pilot.
+- **Expansion denominator:** after the pilot, add fifteen fixed source objects: seven missing 《乙巳占》 volumes plus its root, 《後漢書·天文志》 volumes 101–102 plus its root, and root metadata pages for 《漢書》《宋書》《晉書》 and 袁宏《後漢紀》. Do not expand the four standard histories or all thirty 《後漢紀》 volumes in this task.
+- **Lost/compiled works:** the six-volume Wikisource 《幽明錄》 page remains P2 because its base is unknown and the ancient thirty-volume work is lost. The 《玉函山房叢書》 page is a catalog whose relevant latitude-text entries are red links; it is bibliographic evidence, not a text witness.
+- **Reversibility:** a graph failure disables or deletes the graph without changing accession bytes. New floating-page content creates a new fixed-revision object. Unknown identity stays unknown; disagreements are append-only and deferred.
+- **Boundary:** no PR #54 completion claim, threshold freeze, B10-PR-D start, Reviewer A/B substitution, production schema freeze, official ingest, Qdrant or `local_kb_default` access, B11/B12, automatic publication or `main` operation.
+- **Reason:** file-only preservation is safe but accumulates repeated free-text identity claims; direct rule integration would make research-source changes disturb candidate identity, golden sets and formal evidence gates. A rebuildable sidecar keeps the raw foundation reversible while enabling version and alignment research.

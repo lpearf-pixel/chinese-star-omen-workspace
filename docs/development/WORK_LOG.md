@@ -1702,3 +1702,77 @@ TDD GREEN and regression evidence: the minimum hermetic phase builder composed a
 Independent review of `087d500` found no Critical or Important issues and two Minor issues. The aggregate protected-inspection count could not prove one inspection per phase; a new test first failed with `ValueError: not enough values to unpack`, then the audit records gained `phase_name` and now assert the exact ordered three-phase protected inspections. The work log's transient dependency path was replaced by the portable isolated-target setup description. Post-review focused result: `3 passed`; combined release regressions: `139 passed in 4.56s`. Full gates on the resulting workspace: contracts `6 passed`; text-core `22 passed`; downstream `220 passed`; upstream `188 passed, 3 skipped` (the established environment-only Qdrant integrations); release drill passed all 13 checks. Remaining: commit this review fix, run exact-head governance/diff scans, publish the new remote head, and require its PR workflows before ready/merge.
 
 PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactly seven B8-T02 workflow/test/governance files. Remote implementation head `c9dcb7f5ef970ed16c8d51c10cc0a71c81816e18` passed Development Governance run `29674290728`, Kaiyuan Stable Core run `29674290738`, and Kaiyuan Upstream Runtime run `29674290722`. This evidence is intentionally recorded in a docs-only follow-up commit, so those runs become historical rather than final-head merge evidence. Next exact action: publish this work-log commit, require all workflows on the resulting actual remote head, recheck reviews/threads/diff, then ready and squash merge only to `stable/kaiyuan-v2`.
+
+## 2026-08-02 — B10-R03 merged; B10-R04 source-model design started
+
+### B10-R03 merge evidence
+
+- PR #57 final head: `fed1913512fbea19a804c2bf6565b0193f1cd1ac`.
+- Exact-head workflows: Development Governance `30738747034`, Kaiyuan Stable Core `30738747042`, Kaiyuan Upstream Runtime `30738747018`; all `success`.
+- Changed-file audit: 44 expected research-source, review, plan and governance paths; review submissions, review threads and PR comments were all zero.
+- PR #57 was marked ready and squash merged with expected-head protection.
+- Stable merge commit: `090f1b95d1c0b798077162408cea3d3bedd975a5`.
+- `main`, Reviewer A/B, official KB, Qdrant and `local_kb_default` were not modified.
+
+### B10-R04 start and research findings
+
+- Branch: `codex/kaiyuan-b10-multitext-source-model-v1` from exact stable commit `090f1b95d1c0b798077162408cea3d3bedd975a5`.
+- Three independent read-only investigations covered P0 work boundaries, P1/P2 bibliography and multi-text architecture.
+- Existing P0 integrity replay: 16/16 fixed revisions exist, 16/16 raw responses replay, and byte counts match the merged manifest.
+- Natural completed boundaries: 《史記·天官書》卷27, 《漢書·天文志》卷26, 《宋書·天文志》卷23–26 and 《晉書·天文志》卷11–13.
+- Recommended next localization denominator: 15 new accession objects — seven missing 《乙巳占》 volumes plus its root page, 《後漢書·天文志》 volumes 101–102 plus its root page, and root metadata pages for 《漢書》《宋書》《晉書》 and 袁宏《後漢紀》.
+- A seven-family full-history mirror would add roughly 631 accessions and is rejected as outside the natural research boundary.
+- `幽明錄` oldid `7904673` is a six-volume page with unknown base identity while the ancient thirty-volume work is lost; it remains a P2 carrier excerpt, not a complete or independent witness.
+- `玉函山房叢書` oldid `2370320` is a catalog; relevant latitude-text entries are red links. It is bibliographic evidence only, not a text witness.
+- Recommended architecture: immutable accession preservation (A), a rebuildable Work–TextVersion–Carrier–SourceObject shadow graph (B), and a delayed rule adapter (C) only after B10-PR-F and human approval.
+- PR #54 remains Draft and human-review blocked. B10-PR-D remains forbidden until the two independent human worksheets and threshold freeze pass.
+- This start changes governance documentation only. No source download, production schema freeze, model call, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main` operation was run.
+
+## 2026-08-02 — B10-R04 implementation entered VERIFYING
+
+### Implemented scope
+
+- Strict frozen `ResearchAccession/v1` contract and immutable B10-R03 accession loader.
+- Rebuildable research-only WorkCandidate–TextVersionCandidate–Carrier–SourceObject graph with 46 nodes, 39 bibliographic edges, 80 assertions and 20 evidence links.
+- True in-memory B→A reverse projection for all 16 accession records and 20 Core14 mappings; C14, C45 and C47 retain exact relation, source and atom/case boundaries.
+- Deterministic no-overwrite builder and regenerated `source-projection-bundle/pilot-v0` artifact: 141,956 bytes, SHA-256 `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`.
+- Complete immutable Layer A package denominator: 34 files, 708,406 bytes, aggregate SHA-256 `b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74`; this includes the package README and accession working contract as well as all manifest, mapping, metadata, notes and raw files.
+- Task 4 implementation commit: `b61ffc5fef283fe3427e1972a6e4d80930d8a240`; six implementation/artifact/report files were fetched from that exact commit and matched local bytes and Git blob SHAs.
+
+### Verification checkpoint before final exact-head gates
+
+- Combined Task 1–4 suite: `166 passed in 5.37s`.
+- Hermetic builder `--check`: exit 0; committed artifact rebuilt byte-identically.
+- `compileall` for research-source modules and builder: exit 0.
+- Targeted specification re-review: Critical 0 / Important 0 / Minor 0, Ready YES.
+- Targeted publication/security re-review: Critical 0 / Important 0 / Minor 0, Ready YES; symlink-chain, link failure, post-link cleanup and post-link directory-fsync fault probes all fail closed with path-safe status.
+- Remaining before the immutable final review record: full repository contract/downstream/governance gates on the exact pre-review head and independent branch-wide verification.
+
+### Safety and deferred work
+
+- Production schema freeze: `NOT_RUN`.
+- Official KB ingest: `NOT_RUN`.
+- Qdrant access: `NOT_RUN`.
+- `local_kb_default` access: `NOT_RUN`.
+- Reviewer A/B modification: `NOT_RUN`.
+- PR #54 completion claim and threshold freeze: `NOT_RUN`; the PR remains human-review blocked.
+- B10-PR-D, B10-PR-E and B10-PR-F start: `NOT_RUN`.
+- The bounded 15-accession expansion and any production multi-text model remain pending; this checkpoint is research-layer verification only.
+
+### Exact-head CI diagnosis before final review
+
+- Pre-review head `83adfe9dcb493d76ba889e8505fdfee6bedfd6b6` passed Development Governance run `30749086591` but failed Stable Core `30749086623` and Upstream Runtime `30749086574`: three research tests defaulted to a coordination-only `fixture-repo` path. The failure was reproducible as 30 missing-path tests; the other 561 downstream tests and all text-core, Qdrant, candidate-roundtrip and upstream jobs passed.
+- Test-root fix head `ae760553fa42503c03decefcd0abf1fc0d5cad1d` passed Development Governance run `30749209292` and reduced the repository regression to two byte-rebuild failures. Stable Core `30749209294` and Upstream Runtime `30749209293` proved the committed artifact had been generated from an incomplete 32-file local fixture while the merged Layer A package contains 34 files.
+- Root cause: the coordination fixture omitted the already-merged `README.md` and `accession-working-contract.json`. They are not raw accessions but are part of the immutable source-package denominator and therefore must participate in Layer A snapshot evidence.
+- Corrective scope: load those exact stable bytes into the test fixture, regenerate only the research pilot artifact and report, bind the exact 34-file snapshot in tests, and rerun all three workflows on the next exact head. No Layer A repository file is modified.
+
+### Reviewed implementation head and independent branch review
+
+- Reviewed implementation head: `df424128a5cbd530daa5dd23f7232f2da23c92f4`, base `stable/kaiyuan-v2` at `090f1b95d1c0b798077162408cea3d3bedd975a5`, Draft PR #58.
+- Exact-head workflows all succeeded: Development Governance `30749422233`, Kaiyuan Stable Core `30749422195`, Kaiyuan Upstream Runtime `30749422194`.
+- Hosted counts: shared contracts `93 passed`; text-core `26 passed` on both Python 3.9 and 3.12; downstream `591 passed`; upstream unit `188 passed, 3 skipped`; release contract subsets `20`, `37`, `21`, `32` and `3` passed. Qdrant incremental, retrieval contract and candidate roundtrip jobs succeeded.
+- Independent replay: 16/16 raw identities and compact/detailed joins; 20/20 true B→A projection; 14 Core14 cases and 130 atoms; 46 nodes, 39 edges, 80 assertions and 20 evidence links with zero orphans.
+- Layer A: 34 files, 708,406 bytes, aggregate `b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74`; all 34 authoritative package files are unchanged relative to stable. Artifact: 141,956 bytes, SHA-256 `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`.
+- C14, C45 and C47 exact mapping/source/atom boundaries passed; title merge is 0; accepted independent witness is 0 and deferred is 16; carrier IDs contain no oldid.
+- Changed-path audit: 21 paths before this immutable review record, all within contracts, research source code/tests, the derived artifact/report, design/plan and governance. No RuleCandidate/OmenRule fixture, Layer A input, Qdrant, `local_kb_default`, Reviewer A/B or B10-PR-D/E/F path changed.
+- Independent verdict: Critical 0 / Important 0 / Minor 1, Ready YES for docs-only closeout. The Minor is that PR #58 description still cites the superseded `83adfe9d…` head and `abec414a…` artifact; update PR metadata after the final docs-only head, rerun all three Actions, then add the immutable PR comment. Merge remains unauthorized.

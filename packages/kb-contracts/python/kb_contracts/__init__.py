@@ -7,6 +7,7 @@ from .manifest import (
 )
 from .models import REVIEW_STATUSES, SYNC_STATUSES, ReviewStatus, SyncStatus
 from .normalize import normalize_term
+from .research_accession_v1 import CaptureStatus, ResearchAccessionV1
 from .sync import (
     RETRYABLE_SYNC_ERRORS,
     SYNC_ERROR_CODES,
@@ -16,8 +17,10 @@ from .sync import (
 )
 
 __all__ = [
+    "CaptureStatus",
     "RETRYABLE_SYNC_ERRORS",
     "REVIEW_STATUSES",
+    "ResearchAccessionV1",
     "SYNC_ERROR_CODES",
     "SYNC_STATUSES",
     "ReviewStatus",
