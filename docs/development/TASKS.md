@@ -10,9 +10,9 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: bcb72c9c922a8d87319cc88aec7a772016a1cf27
-Current feature branch: docs/kaiyuan-b10-r05-closeout-v1
-Current task: B10-R05 DONE; B10-PR-C BLOCKED on two independent human reviews
+Last verified stable HEAD: 5571ddb34311f1601c8e084efa133be99655cd5a
+Current feature branch: docs/kaiyuan-gov-t02-legacy-pr-disposition-v1
+Current task: GOV-T02 VERIFYING; B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -184,8 +184,17 @@ merged and the resulting stable head is reverified.
 ## Governance
 
 ### GOV-T02 — Legacy PR #1/#7 disposition
-- **Status:** `BACKLOG`
-- **Boundary:** compare against stable v2 before closure; does not block G6
+- **Status:** `VERIFYING`
+- **Branch:** `docs/kaiyuan-gov-t02-legacy-pr-disposition-v1`
+- **Design:** `docs/superpowers/specs/2026-08-02-kaiyuan-legacy-pr-disposition-design.md`
+- **Plan:** `docs/superpowers/plans/2026-08-02-kaiyuan-legacy-pr-disposition.md`
+- **Audit:** `docs/development/GOV_T02_LEGACY_PR_DISPOSITION.md`
+- **Row matrix:** `docs/development/gov-t02-legacy-pr-matrix.json` (70 rows; Git blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`)
+- **Goal:** prove whether every behavior-bearing PR #1/#7 deliverable is present or safely superseded on current stable v2, record the path/semantic matrix, and close the legacy PRs only after the evidence PR merges.
+- **Acceptance:** exact live PR/base/head identities; all changed paths classified as exact, evolved-superset, intentionally retired non-behavioral artifact or unresolved; no unresolved review/comment obligation; stable replacements and gates cited; closure comments link the merged audit; final closeout records actual closed state.
+- **Evidence checkpoint:** the 70-row matrix records every legacy/stable blob, classification, responsibility and concrete stable implementation/test evidence. PR #7 has 12/12 paths preserved (7 exact, 5 evolved); PR #1 has all 51 behavior/data paths preserved (27 exact, 24 evolved), while only seven obsolete task/plan documents are intentionally retired. Both PRs have zero comments, reviews and unresolved threads; matrix unresolved count is 0/70.
+- **Disposition:** both legacy branches are superseded and must not be merged or cherry-picked. Close only after this audit PR merges; then record the actual closed state in a final docs-only closeout.
+- **Boundary:** no merge or cherry-pick from either legacy branch; no behavior, corpus, candidate, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change.
 
 ### GOV-T03 — Local-first verification and major-version Runner gate
 - **Status:** `DONE`

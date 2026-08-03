@@ -7,10 +7,10 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: bcb72c9c922a8d87319cc88aec7a772016a1cf27
+Last verified stable HEAD: 5571ddb34311f1601c8e084efa133be99655cd5a
 Verified at: 2026-08-02
-Current feature branch: docs/kaiyuan-b10-r05-closeout-v1
-Current task: B10-R05 DONE; B10-PR-C human-review BLOCKED
+Current feature branch: docs/kaiyuan-gov-t02-legacy-pr-disposition-v1
+Current task: GOV-T02 VERIFYING; B10-PR-C human-review BLOCKED
 Open PRs: #1, #7, #54; #54 is Draft and human-review blocked
 Forbidden target: main
 Protected collection: local_kb_default
@@ -272,7 +272,8 @@ B10-R05 is integrated and DONE at stable bcb72c9c922a8d87319cc88aec7a772016a1cf2
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-→ GOV-T02/GOV-T04 may proceed only as separately registered governance tasks and must not weaken PR #54
+→ GOV-T02 supersession audit is VERIFYING: merge the evidence PR first, then close #1/#7 with hash-bound comments, then record the actual closed state; PR #54 remains untouched
+→ GOV-T04 remains BACKLOG
 ```
 
 The R05 merge does not authorize a production multi-text schema, new Core14

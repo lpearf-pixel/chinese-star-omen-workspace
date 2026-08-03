@@ -3,6 +3,19 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-02 — GOV-T02 legacy PR supersession audit
+
+- Stable was reverified at `5571ddb34311f1601c8e084efa133be99655cd5a`; the only open PRs were #1, #7 and human-blocked #54.
+- The authoritative matrix `docs/development/gov-t02-legacy-pr-matrix.json` contains 70 rows at Git blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`; each row binds legacy/stable blob, classification, responsibility and stable implementation/test evidence. Recomputed unresolved count is 0/70.
+- PR #1: base `codex/sync-contract-v1@98e0bb7…`, head `0eaeffac…`, 58 paths, diverged from stable. Stable preserves all 51 behavior/data paths: 27 exact blobs and 24 evolved implementations. The seven retired paths are only `CODEX_TASK.md` and the obsolete L1–L5/index planning documents.
+- PR #1 semantic replacement checks passed for shared candidate contracts/schemas, deterministic IDs and hashes, candidate generation, transactional sync, `pending|merged|needs_review|stale`, overlay, approval-only upstream import and contract/downstream/upstream test targets.
+- PR #7: base `dev-test@b42e2c6…`, head `3cc654b…`, 12 paths, diverged from stable. All 12 paths remain on stable; seven core blobs are exact and five are evolved.
+- PR #7 semantic replacement checks passed for `heading_only`, ordered `loose_window`, duplicate provenance, corpus audit v2 checks, dry-run/`--write`/`--force` split policy, volume comparison CLI, installable `kb-text-core` and regression tests.
+- Both legacy PRs have zero conversation comments, submitted reviews and unresolved review threads. PR #7's historical `Kaiyuan PR A` run `29387666965` succeeded; PR #1 has no current workflow evidence, which is not used as proof of stable replacement.
+- Disposition: superseded. Do not merge or cherry-pick either legacy branch. GOV-T02 remains `VERIFYING`: first merge the audit PR, then post hash-bound supersession comments and close #1/#7, then create a final docs-only closeout.
+- No product behavior, corpus, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change occurred.
+
+
 ## 2026-08-02 — B10-R05 merged and closed
 
 - PR #59 final head: `b084b10216f2be8ea2854768528e209d4c069c77`; base: `stable/kaiyuan-v2`.
