@@ -79,5 +79,29 @@
     "capture_status": "complete",
     "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-juan-013-oldid-2646586.wikitext",
     "capture_note": "complete fixed-revision raw page captured; C03 is represented by volume 12's direct lunar–Jupiter notices"
+  },
+  {
+    "accession_id": "zhws-jinshu-root-r2644704",
+    "work_printed": "晉書",
+    "work_normalized_candidate": "晉書",
+    "page_title": "晉書",
+    "oldid": 2644704,
+    "permanent_url": "https://zh.wikisource.org/w/index.php?title=%E6%99%89%E6%9B%B8&oldid=2644704",
+    "floating_url": "https://zh.wikisource.org/wiki/%E6%99%89%E6%9B%B8",
+    "revision_timestamp": "2026-01-27T03:11:20Z",
+    "accessed_on": "2026-08-02",
+    "locator": "Root work object; fixed table of contents and version-family boundary.",
+    "version_family": "Fixed Wikisource root object for 《晉書》; captured only as replayable work boundary and table-of-contents metadata, not as a new textual witness to volumes 11–13.",
+    "author_or_compiler": "房玄齡等（historical compilers; this fixed root object is boundary metadata）",
+    "license_note": "Wikisource site text is offered under CC BY-SA 4.0 with possible additional terms; the underlying historical text is separately ancient/public-domain in origin. Attribute the fixed page title, revision and Chinese Wikisource.",
+    "independent_witness_note": "This accession is one fixed Wikisource source object. It is not promoted to an independent witness and no same-family page or mirror is counted as independent.",
+    "core14_cases": [],
+    "relevant_excerpt": "",
+    "excerpt_locator": "No Core14 case assigned in B10-R05; retained only for the fixed natural-boundary denominator.",
+    "raw_sha256": "78dd6e9865064c47b3f457c5fba4c92e7ec88b851ae1cbd49dd519bd75304ec0",
+    "raw_byte_count": 14847,
+    "capture_status": "complete",
+    "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-root-oldid-2644704.wikitext",
+    "capture_note": "complete_fixed_revision_boundary_object_no_core14_mapping"
   }
 ]

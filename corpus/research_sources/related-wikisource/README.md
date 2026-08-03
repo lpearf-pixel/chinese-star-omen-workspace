@@ -4,13 +4,17 @@ Status: B10 research support; not an official KB corpus and not a frozen multi-t
 
 ## Purpose
 
-This package preserves revision-bound Wikisource source objects used to audit Core14 passages. It gives related works the same minimum provenance treatment as 《唐開元占經》 while keeping raw source, catalog metadata, case mapping and collation notes separate.
+This package preserves revision-bound Wikisource source objects used to audit Core14 passages and natural scholarly boundaries. It gives related works the same minimum provenance treatment as 《唐開元占經》 while keeping raw source, catalog metadata, case mapping and collation notes separate.
+
+The B10-R05 bounded denominator is 7 work families, 31 fixed-revision source objects and 1,050,322 raw UTF-8 bytes. The original 20 Core14 research mappings remain unchanged; the 15 boundary-expansion objects carry no inferred Core14 case.
 
 ## Reversible layout
 
     corpus/research_sources/related-wikisource/
       README.md
       accession-working-contract.json
+      b10-r05-bounded-expansion.json
+      source-projection-pilot-v0.json
       p0/
         <work-family>/
           accessions.json

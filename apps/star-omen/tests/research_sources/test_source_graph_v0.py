@@ -152,14 +152,15 @@ def test_graph_has_expected_layer_counts_and_valid_references() -> None:
     bundle = _bundle()
     counts = Counter(node.kind for node in bundle.nodes)
 
-    assert len(bundle.nodes) == 46
+    assert len(bundle.nodes) == 76
     assert counts == {
         NodeKind.WORK_CANDIDATE: 7,
         NodeKind.TEXT_VERSION_CANDIDATE: 7,
-        NodeKind.CARRIER: 16,
-        NodeKind.SOURCE_OBJECT: 16,
+        NodeKind.CARRIER: 31,
+        NodeKind.SOURCE_OBJECT: 31,
     }
-    assert len(bundle.bibliographic_edges) == 39
+    assert len(bundle.bibliographic_edges) == 69
+    assert len(bundle.assertions) == 155
     assert len(bundle.evidence_links) == 20
 
     node_ids = {node.node_id for node in bundle.nodes}

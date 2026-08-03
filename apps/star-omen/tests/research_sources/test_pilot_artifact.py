@@ -50,27 +50,28 @@ def test_committed_artifact_is_closed_typed_and_rebuildable() -> None:
 
     assert bundle.schema_version == "source-projection-bundle/pilot-v0"
     assert bundle.research_only is True
-    assert bundle.source_object_count == 16
+    assert bundle.source_object_count == 31
     assert bundle.evidence_link_count == 20
-    assert len(bundle.nodes) == 46
-    assert len(bundle.bibliographic_edges) == 39
+    assert len(bundle.nodes) == 76
+    assert len(bundle.bibliographic_edges) == 69
     assert bundle.pilot_case_ids == ("C14", "C45", "C47")
     assert bundle.title_based_merges == ()
     assert bundle.accepted_independent_witness_assertions == ()
     assert bundle.deferred_independent_witness_assertion_count > 0
     assert bundle.validation_report is not None
     assert bundle.validation_report.status == "PASS"
-    assert bundle.validation_report.source_replay_actual == 16
+    assert len(bundle.assertions) == 155
+    assert bundle.validation_report.source_replay_actual == 31
     assert bundle.validation_report.reverse_mapping_actual == 20
     assert bundle.validation_report.orphan_graph_node_count == 0
     assert bundle.validation_report.orphan_graph_edge_count == 0
     assert bundle.validation_report.orphan_assertion_count == 0
     assert bundle.validation_report.orphan_evidence_link_count == 0
-    assert bundle.validation_report.layer_a_before.file_count == 34
-    assert bundle.validation_report.layer_a_before.total_byte_count == 708_406
+    assert bundle.validation_report.layer_a_before.file_count == 50
+    assert bundle.validation_report.layer_a_before.total_byte_count == 1_168_896
     assert (
         bundle.validation_report.layer_a_before.sha256
-        == "b8322d8a7a631b925ed6dde0afc01e03fb4d81882f4897c92c8efd96a7f24b74"
+        == "6ddb813960b5e1144022b5931cfe307b4cf725097fe439b9b960ee180beda615"
     )
     assert bundle.validation_report.layer_a_before == bundle.validation_report.layer_a_after
     assert bundle.validation_report.rule_identity_fixture_before == ()
