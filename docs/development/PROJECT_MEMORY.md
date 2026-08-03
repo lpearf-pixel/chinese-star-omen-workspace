@@ -11,7 +11,7 @@ Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
 Verified at: 2026-08-02
 Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
 Current task: GOV-T02 VERIFYING final closeout; B10-PR-C human-review BLOCKED
-Open PRs: #54 only; #54 is Draft and human-review blocked
+Open PRs: #54 and closeout #62; #54 is the only non-closeout PR and is Draft/human-review blocked
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -161,8 +161,7 @@ docs/development/B9_VERTICAL_SLICE_RUNBOOK.md
 GOV-T02 的 70 行逐路径审计已由 PR #61 合并为
 `08fb71ab1db7de509154214cca44693a5de4859c`。旧路线 PR #1 与 #7
 均已收到哈希绑定的取代说明，并分别以 `closed / merged=false`
-关闭；分支和历史保留。两者不得重新合并或 cherry-pick。当前开放 PR
-仅 #54，且仍受两名不同真人独立 Reviewer A/B 门禁阻塞。
+关闭；分支和历史保留。两者不得重新合并或 cherry-pick。当前开放 PR 为受两名不同真人 Reviewer A/B 门禁阻塞的 #54 与本次 closeout #62；#62 合并后预计仅剩 #54。
 
 ## 5. 冻结公共契约
 
