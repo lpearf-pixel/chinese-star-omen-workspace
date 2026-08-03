@@ -13,7 +13,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
 Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
 Current task: GOV-T02 VERIFYING final closeout; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs: #54 only; #54 remains Draft and human-review blocked
+Open PRs: #54 and closeout #62; #54 remains the only non-closeout PR and is Draft/human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -193,7 +193,7 @@ merged and the resulting stable head is reverified.
 - **Row matrix:** `docs/development/gov-t02-legacy-pr-matrix.json` (70 rows; Git blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`)
 - **Audit merge:** PR #61, reviewed head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa`, squash `08fb71ab1db7de509154214cca44693a5de4859c`.
 - **Closure evidence:** PR #1 head `0eaeffac6d875ce6834e2a5632708ba8933bf812` closed without merge at 2026-08-03T06:05:15Z after comment `5162877413`; PR #7 head `3cc654b92514223d069b56162c874b5a1a65e060` closed without merge at 2026-08-03T06:05:16Z after comment `5162877570`.
-- **Result:** all 70 legacy paths classified, unresolved count 0; #1/#7 are absent from the open PR set and #54 is the only open PR.
+- **Result:** all 70 legacy paths classified, unresolved count 0; #1/#7 are absent from the open PR set. Current open PRs are human-blocked #54 and this closeout #62; after #62 merges, #54 is expected to remain alone.
 - **Exit gate:** merge the final docs-only closeout after exact-head Actions and independent review; then GOV-T02 becomes `DONE`.
 - **Boundary:** do not reopen, merge or cherry-pick either legacy branch; no behavior, corpus, candidate, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change.
 ### GOV-T03 — Local-first verification and major-version Runner gate
