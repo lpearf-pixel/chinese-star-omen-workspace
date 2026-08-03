@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 1a30070d3517d07097fbffe3a8ed43a9a0144c5f
 Current feature branch: codex/kaiyuan-b10-r05-bounded-source-expansion-v1
-Current task: B10-R05 IN_PROGRESS; bounded 15-accession source expansion
+Current task: B10-R05 VERIFYING; bounded 15-accession source expansion
 Open PRs: #1, #7, #54; #54 remains Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -317,13 +317,16 @@ merged and the resulting stable head is reverified.
 - **Boundary:** no production multi-text schema, rule/candidate identity change, independent-witness promotion, Reviewer A/B substitution, official ingest, Qdrant access, `local_kb_default` access, B11/B12 or `main`.
 
 ### B10-R05 — Bounded 15-accession source expansion
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING`
 - **Base:** `stable/kaiyuan-v2` at `1a30070d3517d07097fbffe3a8ed43a9a0144c5f`.
 - **Branch:** `codex/kaiyuan-b10-r05-bounded-source-expansion-v1`.
 - **Goal:** add exactly 15 fixed-revision Wikisource accession/raw objects to the existing seven-family research package, rebuild the reversible projection against 31 source objects, and prove that all 20 Core14 mappings and the original 16 objects remain unchanged.
 - **Fixed denominator:** 《乙巳占》 root plus volumes 1, 3, 4, 6, 7, 9 and 10 (8); 《漢書》 root (1); 《宋書》 root (1); 《晉書》 root (1); 袁宏《後漢紀》（四庫全書本） root (1); 《後漢書》 root plus volumes 101 and 102 (3). Total 15.
 - **Acceptance:** exact ID/title/oldid register; 31 compact/detailed joins; 31 raw SHA-256 and byte counts; family counts 11/2/2/5/4/2/5; existing 16 metadata/raw identities unchanged; mapping document still exactly 20; zero new Core14 case claims; deterministic projection/check; no title merge, orphan or accepted independent-witness claim.
 - **Plan:** `docs/superpowers/plans/2026-08-02-kaiyuan-b10-r05-bounded-source-expansion.md`.
+- **Reviewed implementation head:** `46a360e96980b2d48fb2faba6b1876a93a93e27c`.
+- **Delivered:** 15 new fixed revisions; 31 accessions/raw objects; 1,050,322 raw bytes; 76 graph nodes, 69 edges, 155 research assertions and the unchanged 20 evidence links; current artifact 233,498 bytes, SHA-256 `583b00a9d160d7374453ef4ec552acc05fa8faf9841a87978a0183d1bc595468`.
+- **Verification checkpoint:** 31/31 network raw replay; 15/15 target title/oldid/timestamp; inventory `62 passed`; combined focused suite `98 passed`; builder `--check`, compileall and remote artifact readback passed; branch review Critical 0 / Important 0 / Minor 0. Exact-head hosted Actions remain pending.
 - **Boundary:** no 631-object provider-history mirror, no inferred mapping, no Reviewer A/B change, no B10-PR-D/E/F start, no production schema freeze, official ingest, Qdrant or `local_kb_default` access.
 
 ### B10-PR-D — Full-book deterministic extraction
