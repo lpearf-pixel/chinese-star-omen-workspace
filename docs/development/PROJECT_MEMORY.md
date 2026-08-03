@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 5571ddb34311f1601c8e084efa133be99655cd5a
+Last verified stable HEAD: 08fb71ab1db7de509154214cca44693a5de4859c
 Verified at: 2026-08-02
-Current feature branch: docs/kaiyuan-gov-t02-legacy-pr-disposition-v1
-Current task: GOV-T02 VERIFYING; B10-PR-C human-review BLOCKED
-Open PRs: #1, #7, #54; #54 is Draft and human-review blocked
+Current feature branch: docs/kaiyuan-gov-t02-closeout-v1
+Current task: GOV-T02 VERIFYING final closeout; B10-PR-C human-review BLOCKED
+Open PRs: #54 only; #54 is Draft and human-review blocked
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -156,9 +156,13 @@ docs/development/B9_G6_E1_CLOSEOUT.md
 docs/development/B9_VERTICAL_SLICE_RUNBOOK.md
 ```
 
-## 4. Open legacy PRs
+## 4. Legacy PR disposition
 
-最后核验时旧路线 PR #1、#7 仍开放，均不以 `stable/kaiyuan-v2` 为目标。关闭前必须逐项证明已被 stable v2 完全取代。
+GOV-T02 的 70 行逐路径审计已由 PR #61 合并为
+`08fb71ab1db7de509154214cca44693a5de4859c`。旧路线 PR #1 与 #7
+均已收到哈希绑定的取代说明，并分别以 `closed / merged=false`
+关闭；分支和历史保留。两者不得重新合并或 cherry-pick。当前开放 PR
+仅 #54，且仍受两名不同真人独立 Reviewer A/B 门禁阻塞。
 
 ## 5. 冻结公共契约
 
@@ -267,12 +271,13 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-B10-R05 is integrated and DONE at stable bcb72c9c922a8d87319cc88aec7a772016a1cf27
+GOV-T02 audit is merged at stable 08fb71ab1db7de509154214cca44693a5de4859c; #1/#7 are closed without merge
+→ B10-R05 remains integrated and DONE
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-→ GOV-T02 supersession audit is VERIFYING: merge the evidence PR first, then close #1/#7 with hash-bound comments, then record the actual closed state; PR #54 remains untouched
+→ GOV-T02 closure is complete and final docs-only closeout is VERIFYING; #1/#7 are closed without merge and PR #54 remains untouched
 → GOV-T04 remains BACKLOG
 ```
 
