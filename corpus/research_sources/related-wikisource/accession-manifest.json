@@ -6,9 +6,9 @@
   "mapping_path": "corpus/research_sources/related-wikisource/core14-mapping.json",
   "source_capture": "exact UTF-8 MediaWiki action=raw response for each fixed oldid",
   "family_count": 7,
-  "accession_count": 16,
-  "raw_file_count": 16,
-  "total_raw_byte_count": 645044,
+  "accession_count": 31,
+  "raw_file_count": 31,
+  "total_raw_byte_count": 1050322,
   "core14_cases": [
     "C03",
     "C09",
@@ -24,7 +24,7 @@
     {
       "family_id": "yisizhan",
       "label": "《乙巳占》",
-      "accession_count": 3,
+      "accession_count": 11,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/yisizhan/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/yisizhan/notes.md"
     },
@@ -38,35 +38,35 @@
     {
       "family_id": "hanshu-tianwenzhi",
       "label": "《漢書·天文志》",
-      "accession_count": 1,
+      "accession_count": 2,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/notes.md"
     },
     {
       "family_id": "songshu-tianwenzhi",
       "label": "《宋書·天文志》",
-      "accession_count": 4,
+      "accession_count": 5,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/notes.md"
     },
     {
       "family_id": "jinshu-tianwenzhi",
       "label": "《晉書·天文志》",
-      "accession_count": 3,
+      "accession_count": 4,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/notes.md"
     },
     {
       "family_id": "houhanji",
       "label": "袁宏《後漢紀》",
-      "accession_count": 1,
+      "accession_count": 2,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/houhanji/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/houhanji/notes.md"
     },
     {
       "family_id": "houhanshu",
       "label": "《後漢書》",
-      "accession_count": 2,
+      "accession_count": 5,
       "accession_metadata_path": "corpus/research_sources/related-wikisource/p0/houhanshu/accessions.json",
       "notes_path": "corpus/research_sources/related-wikisource/p0/houhanshu/notes.md"
     }
@@ -230,6 +230,156 @@
       "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu_vol100_oldid1753568.wikitext",
       "raw_sha256": "115fadb6aa7d09f1413bbc90cee0968abee6b21238dd9c365065b2e178945e41",
       "raw_byte_count": 28124,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-root-r1965836",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占",
+      "oldid": 1965836,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-root-oldid-1965836.wikitext",
+      "raw_sha256": "7ad74fa13598838ff83bbda5386f75c63fa8c32d345c8ebe5800382576dbf7e7",
+      "raw_byte_count": 3513,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-1-r1377475",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/1",
+      "oldid": 1377475,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-1-oldid-1377475.wikitext",
+      "raw_sha256": "8f6e4ffbea6114917342f7bfc21a66225bda10b97edb9568b9e9cabe382c7aa4",
+      "raw_byte_count": 42047,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-3-r7904696",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/3",
+      "oldid": 7904696,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-3-oldid-7904696.wikitext",
+      "raw_sha256": "da13147aeb41fa7594495b4e4df3c06f9100bbf9ba9324293a3d646eab44168b",
+      "raw_byte_count": 52279,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-4-r1538289",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/4",
+      "oldid": 1538289,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-4-oldid-1538289.wikitext",
+      "raw_sha256": "dfb1592b1c080816106ddc7786e8a0f72818ecff448a6335092c37347cc00f92",
+      "raw_byte_count": 23889,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-6-r1715347",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/6",
+      "oldid": 1715347,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-6-oldid-1715347.wikitext",
+      "raw_sha256": "7c25da459854130e509b5bae656d82015a6a148ce69e5a7850aaf2dd55f63ff3",
+      "raw_byte_count": 28100,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-7-r1538297",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/7",
+      "oldid": 1538297,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-7-oldid-1538297.wikitext",
+      "raw_sha256": "6e975981380a6720141ef6c7e7386d664a3ebe79774282a04c281f2d0068497a",
+      "raw_byte_count": 30070,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-9-r854566",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/9",
+      "oldid": 854566,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-9-oldid-854566.wikitext",
+      "raw_sha256": "b76c41f45753878888259e0c3969ceb6a095a272debfc2ea5b5df73bdb917079",
+      "raw_byte_count": 36277,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-yisizhan-10-r1538300",
+      "family_id": "yisizhan",
+      "page_title": "乙巳占/10",
+      "oldid": 1538300,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/yisizhan/raw/yisizhan-10-oldid-1538300.wikitext",
+      "raw_sha256": "f372877e3ba791167d7fc9c97b91c23f9717384bec35583095e526ad46cb6231",
+      "raw_byte_count": 82857,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-hanshu-root-r7906813",
+      "family_id": "hanshu-tianwenzhi",
+      "page_title": "漢書",
+      "oldid": 7906813,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/hanshu-tianwenzhi/raw/han-shu-root-oldid-7906813.wikitext",
+      "raw_sha256": "41b11d9a2bbdbe4d6fb14a98ac9316fb6777338ceb635194a4be97e5a326524c",
+      "raw_byte_count": 13541,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-songshu-root-r2390963",
+      "family_id": "songshu-tianwenzhi",
+      "page_title": "宋書",
+      "oldid": 2390963,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/songshu-tianwenzhi/raw/song-shu-root-oldid-2390963.wikitext",
+      "raw_sha256": "a4c8cb6ceca0256cbc72f93a668675244e1af22272549c55e7c411044dcc129e",
+      "raw_byte_count": 9652,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-jinshu-root-r2644704",
+      "family_id": "jinshu-tianwenzhi",
+      "page_title": "晉書",
+      "oldid": 2644704,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/jinshu-tianwenzhi/raw/jin-shu-root-oldid-2644704.wikitext",
+      "raw_sha256": "78dd6e9865064c47b3f457c5fba4c92e7ec88b851ae1cbd49dd519bd75304ec0",
+      "raw_byte_count": 14847,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-houhanji-skqs-root-r597585",
+      "family_id": "houhanji",
+      "page_title": "後漢紀 (四庫全書本)",
+      "oldid": 597585,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanji/raw/houhanji-skqs-root-oldid-597585.wikitext",
+      "raw_sha256": "968d9f472b04eb66385ae70f00b7a9abc7faddd15cd2f8bc1f7b9a826d1924d3",
+      "raw_byte_count": 5128,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-houhanshu-root-r7902792",
+      "family_id": "houhanshu",
+      "page_title": "後漢書",
+      "oldid": 7902792,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu-root-oldid-7902792.wikitext",
+      "raw_sha256": "1e042858da1ba5dc484b5f3e9364236087ae43cabd79ccf952ac63ac7e971057",
+      "raw_byte_count": 11729,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-houhanshu-101-r2043770",
+      "family_id": "houhanshu",
+      "page_title": "後漢書/卷101",
+      "oldid": 2043770,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu-vol101-oldid-2043770.wikitext",
+      "raw_sha256": "a31e189409b4a621ddd6369cbdba94756022b6533c11b140d01f914327db7598",
+      "raw_byte_count": 40269,
+      "capture_status": "complete"
+    },
+    {
+      "accession_id": "zhws-houhanshu-102-r1484970",
+      "family_id": "houhanshu",
+      "page_title": "後漢書/卷102",
+      "oldid": 1484970,
+      "raw_path": "corpus/research_sources/related-wikisource/p0/houhanshu/raw/houhanshu-vol102-oldid-1484970.wikitext",
+      "raw_sha256": "84d44eb88d4b551c8e2ed4228fdfad3aa2ff4db81a3007718fd7c3e696c50fb2",
+      "raw_byte_count": 11080,
       "capture_status": "complete"
     }
   ],
