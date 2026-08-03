@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 1a30070d3517d07097fbffe3a8ed43a9a0144c5f
 Verified at: 2026-08-02
 Current feature branch: codex/kaiyuan-b10-r05-bounded-source-expansion-v1
-Current task: B10-R05 bounded 15-accession source expansion IN_PROGRESS
+Current task: B10-R05 bounded 15-accession source expansion VERIFYING
 Open PRs: #1, #7, #54; #54 is Draft and human-review blocked
 Forbidden target: main
 Protected collection: local_kb_default
@@ -45,7 +45,7 @@ B10-PR-C calibration pilot: BLOCKED on two independent human reviews (#54)
 B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
-B10-R05 bounded 15-accession source expansion: IN_PROGRESS
+B10-R05 bounded 15-accession source expansion: VERIFYING (implementation `46a360e96980b2d48fb2faba6b1876a93a93e27c`)
 B10 overall: IN_PROGRESS
 ```
 
@@ -267,10 +267,9 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-在 B10-R05 固定 15 个 accession 的 title/oldid/timestamp/路径登记表
-→ 先写失败测试，把分母从 16 固定为 31，同时保持 Core14 mapping 为 20
-→ 抓取并哈希 15 个 action=raw 固定版本，更新六个家族和中央 manifest
-→ 重建可逆投影并证明原 16 对象、20 条映射和规则身份完全不变
-→ 完成 31/31 联网回放、独立复核和 Draft PR；不启动 B10-PR-D/E/F
+为 reviewed implementation head 46a360e96980b2d48fb2faba6b1876a93a93e27c 创建 Draft PR
+→ 核验 exact final head 的 Development Governance、Kaiyuan Stable Core、Kaiyuan Upstream Runtime
+→ 记录 31/31 replay、15/15 revision identity、20 mapping unchanged 和 branch review 结果
+→ 保持 Draft，等待用户审阅/授权；不启动 B10-PR-D/E/F
 → B10-PR-C #54 继续等待两位真人独立审核；AI 不得替代 Reviewer A/B
 ```
