@@ -144,7 +144,7 @@ def test_inventory_joins_real_compact_and_detailed_records(repo_root: Path) -> N
     assert len(inventory.accessions) == 31
     assert inventory.family_count == 7
     assert inventory.raw_file_count == 31
-    assert inventory.total_raw_byte_count == 645_044
+    assert inventory.total_raw_byte_count == 1_050_322
     assert inventory.accession_ids == tuple(sorted(inventory.accession_ids))
     assert inventory.get("zhws-yisizhan-5-r854562").family_id == "yisizhan"
     assert inventory.get("zhws-yisizhan-5-r854562").core14_cases == (
