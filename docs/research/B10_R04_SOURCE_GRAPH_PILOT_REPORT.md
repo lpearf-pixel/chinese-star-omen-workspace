@@ -3,6 +3,8 @@
 日期：2026-08-02  
 状态：研究层 pilot 已生成并验证；生产多文本 schema 未冻结
 
+> 历史快照说明：本报告中的 16 对象、34 文件和 artifact 哈希固定于 PR #58 / stable `1a30070d3517d07097fbffe3a8ed43a9a0144c5f`。B10-R05 后续扩展没有改写这项历史结论；当前 31 对象状态见 `B10_R05_BOUNDED_SOURCE_EXPANSION_REPORT.md`。
+
 ## 1. 范围与非目标
 
 本轮只把 B10-R03 已固定的 7 个文献族、16 个 Wikisource revision 和 20 条 Core14 研究映射投影为可删除、可重建的研究影子图。它不选择正误异文，不声明独立见证，不改变 Reviewer A/B 结论，不建立正式引用资格，也不进入 OmenRule、RuleCandidate、正式 KB、Qdrant 或 `local_kb_default`。
