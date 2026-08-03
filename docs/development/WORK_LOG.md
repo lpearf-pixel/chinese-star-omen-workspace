@@ -1776,3 +1776,42 @@ PR #28 remained draft, base `stable/kaiyuan-v2`, mergeable, and scoped to exactl
 - C14, C45 and C47 exact mapping/source/atom boundaries passed; title merge is 0; accepted independent witness is 0 and deferred is 16; carrier IDs contain no oldid.
 - Changed-path audit: 21 paths before this immutable review record, all within contracts, research source code/tests, the derived artifact/report, design/plan and governance. No RuleCandidate/OmenRule fixture, Layer A input, Qdrant, `local_kb_default`, Reviewer A/B or B10-PR-D/E/F path changed.
 - Independent verdict: Critical 0 / Important 0 / Minor 1, Ready YES for docs-only closeout. The Minor is that PR #58 description still cites the superseded `83adfe9d…` head and `abec414a…` artifact; update PR metadata after the final docs-only head, rerun all three Actions, then add the immutable PR comment. Merge remains unauthorized.
+
+## 2026-08-02 — B10-R04 merged and B10-R05 entered VERIFYING
+
+### B10-R04 integration
+
+- PR #58 was marked ready and squash merged to `stable/kaiyuan-v2` as `1a30070d3517d07097fbffe3a8ed43a9a0144c5f` with expected-head protection.
+- The reviewed exact head had passed Development Governance, Kaiyuan Stable Core and Kaiyuan Upstream Runtime; final review was Critical 0 / Important 0 / Minor 0 / Ready YES.
+- The R04 16-object artifact remains pinned by Git history: 141,956 bytes, SHA-256 `4ca4bdc211889b07cedf6fe28443944f132e8d9aa3122f46eeff47d527010f8b`.
+
+### B10-R05 implementation
+
+- Branch: `codex/kaiyuan-b10-r05-bounded-source-expansion-v1` from exact stable `1a30070d3517d07097fbffe3a8ed43a9a0144c5f`.
+- Reviewed implementation head: `46a360e96980b2d48fb2faba6b1876a93a93e27c`.
+- Fixed batch: exactly 15 source objects — 8 《乙巳占》 boundaries, 4 history/work roots and 3 《後漢書》 boundaries; no provider-history mirror.
+- Layer A: 7 families, 31 accessions/raw files, 1,050,322 raw UTF-8 bytes; family counts 11/2/2/5/4/2/5.
+- Current manifest SHA-256: `c5ab46da6bc1ba5126758f1fce10804801572e1509bc364aaba636e4cbf676c5`; baseline manifest SHA-256 remains registered as `49dac42d29d8c560e15bf16dc98880b29f5f8287fd16e806d542587533b82c4f`.
+- Mapping document remains byte-identical at SHA-256 `3a79afb3cd4559236eb9869dc3b0080d6d92ebb3984b6b0c46e9a33edb056250` with exactly 20 entries.
+- Layer B: 76 nodes, 69 bibliographic edges, 155 research assertions, 20 evidence links, 31 deferred independent-witness assertions, zero title merges and zero orphans.
+- Artifact: 233,498 bytes, SHA-256 `583b00a9d160d7374453ef4ec552acc05fa8faf9841a87978a0183d1bc595468`.
+- Layer A snapshot: 50 files, 1,168,896 bytes, aggregate `6ddb813960b5e1144022b5931cfe307b4cf725097fe439b9b960ee180beda615`.
+
+### Verification checkpoint
+
+- TDD RED: the frozen 15-ID test failed on the unchanged 16-object manifest before capture.
+- MediaWiki revision identity: 15/15 exact title, oldid and timestamp.
+- Independent network raw replay: 31/31 SHA-256 and byte counts, total 1,050,322 bytes.
+- Inventory suite: `62 passed in 2.48s`.
+- Inventory/graph/projector/artifact suite: `98 passed in 6.38s`.
+- Deterministic builder `--check`: exit 0.
+- Research-source/contracts/builder `compileall`: exit 0.
+- Remote artifact readback: exact match to the local 229,976-character / 233,498-byte build.
+- Stable compare: ahead only, behind 0; implementation scope contains 40 expected test, research-source, artifact, plan/report and governance paths.
+- Full repository contract/downstream/governance evidence will be supplied by exact-head hosted Actions after the Draft PR opens.
+
+### Safety
+
+- New Core14 mappings: 0; every new object has `core14_cases: []` and empty `relevant_excerpt`.
+- Production schema freeze, official KB ingest, Qdrant, `local_kb_default`, Reviewer A/B modification and B10-PR-D/E/F start: `NOT_RUN`.
+- PR #54 remains Draft and human-review blocked.
