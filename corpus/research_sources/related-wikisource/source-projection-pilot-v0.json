@@ -5178,13 +5178,13 @@
     "graph_node_count": 76,
     "layer_a_after": {
       "file_count": 50,
-      "sha256": "7126f5f18c027b94ecb1a0a173b14b642e4d14e075a524203e28a1c6b40dd3fa",
-      "total_byte_count": 1168547
+      "sha256": "6ddb813960b5e1144022b5931cfe307b4cf725097fe439b9b960ee180beda615",
+      "total_byte_count": 1168896
     },
     "layer_a_before": {
       "file_count": 50,
-      "sha256": "7126f5f18c027b94ecb1a0a173b14b642e4d14e075a524203e28a1c6b40dd3fa",
-      "total_byte_count": 1168547
+      "sha256": "6ddb813960b5e1144022b5931cfe307b4cf725097fe439b9b960ee180beda615",
+      "total_byte_count": 1168896
     },
     "orphan_assertion_count": 0,
     "orphan_evidence_link_count": 0,
