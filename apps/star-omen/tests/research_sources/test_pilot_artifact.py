@@ -50,7 +50,7 @@ def test_committed_artifact_is_closed_typed_and_rebuildable() -> None:
 
     assert bundle.schema_version == "source-projection-bundle/pilot-v0"
     assert bundle.research_only is True
-    assert bundle.source_object_count == 16
+    assert bundle.source_object_count == 31
     assert bundle.evidence_link_count == 20
     assert len(bundle.nodes) == 46
     assert len(bundle.bibliographic_edges) == 39
