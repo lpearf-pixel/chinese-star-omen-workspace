@@ -2,6 +2,19 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+
+## 2026-08-02 — B10-R05 merged and closed
+
+- PR #59 final head: `b084b10216f2be8ea2854768528e209d4c069c77`; base: `stable/kaiyuan-v2`.
+- Exact-head workflows all succeeded: Development Governance `30784883162`, Kaiyuan Stable Core `30784883137`, Kaiyuan Upstream Runtime `30784883149`.
+- Hosted evidence: contracts `93 passed`; text-core `26 passed` on Python 3.9 and 3.12; downstream `593 passed`; upstream `188 passed, 3 skipped`; release subsets `20`, `37`, `21`, `32` and `3` passed.
+- Review state before merge: Critical 0 / Important 0 / Minor 0; submitted reviews 0; unresolved review threads 0; GitHub reported mergeable.
+- User authorized integration. PR #59 was marked ready and squash merged only to `stable/kaiyuan-v2` as `bcb72c9c922a8d87319cc88aec7a772016a1cf27`.
+- Post-merge comparison: `stable/kaiyuan-v2` and the squash commit are identical (ahead 0, behind 0).
+- Delivered denominator remains exact: 7 families, 31 source objects, 1,050,322 raw bytes, 76 nodes, 69 edges, 155 research assertions and 20 unchanged evidence links; 31/31 network replay and 15/15 revision identity passed.
+- B10-R05 is `DONE`. PR #54 remains `BLOCKED` on two independent human reviews; B10-PR-D/E/F did not start.
+- No production schema freeze, official ingest, Qdrant, `local_kb_default`, Reviewer A/B, B11/B12, automatic publishing or `main` operation occurred.
+
 ## 2026-08-01 — B10-R03 P0 related Wikisource localization closeout
 
 - Initial whole-branch review at `e7be9bbf323f95a849b410d3d46218a8b809fc80`: Critical 0 / Important 2 / Minor 1. Source bytes, provenance and mappings passed; findings were limited to stale PROJECT_MEMORY, absent WORK_LOG closeout evidence and M17's summary-like excerpt.
