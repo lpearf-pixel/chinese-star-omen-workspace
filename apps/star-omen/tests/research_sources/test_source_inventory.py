@@ -13,6 +13,7 @@ from research_sources import SourceInventoryError, load_source_inventory
 
 
 PACKAGE_RELATIVE = Path("corpus/research_sources/related-wikisource")
+EXPANSION_REGISTER_RELATIVE = PACKAGE_RELATIVE / "b10-r05-bounded-expansion.json"
 
 
 @pytest.fixture(scope="session")
@@ -98,12 +99,51 @@ def _assert_error(
     return caught.value
 
 
+def test_b10_r05_denominator_is_exact_and_mapping_scope_is_unchanged(
+    repo_root: Path,
+) -> None:
+    register = _load_json(repo_root / EXPANSION_REGISTER_RELATIVE)
+    manifest = _manifest(repo_root)
+    target_ids = {item["accession_id"] for item in register["targets"]}
+    accessions = {item["accession_id"]: item for item in manifest["accessions"]}
+
+    assert len(register["targets"]) == 15
+    assert register["target_accession_count"] == 31
+    assert set(accessions) >= target_ids
+    assert {
+        family["family_id"]: family["accession_count"]
+        for family in manifest["families"]
+    } == register["expected_family_counts"]
+
+    for accession_id in target_ids:
+        family, _, _, detail = _detail_for(repo_root, manifest, accession_id)
+        assert family["family_id"] == accessions[accession_id]["family_id"]
+        assert detail["core14_cases"] == []
+        assert detail["relevant_excerpt"] == ""
+
+    mapping = _load_json(repo_root / PACKAGE_RELATIVE / "core14-mapping.json")
+    assert [item["mapping_id"] for item in mapping["mappings"]] == register[
+        "baseline_mapping_ids"
+    ]
+
+
+def test_b10_r05_preserves_baseline_compact_accession_identities(
+    repo_root: Path,
+) -> None:
+    register = _load_json(repo_root / EXPANSION_REGISTER_RELATIVE)
+    manifest = _manifest(repo_root)
+    by_id = {item["accession_id"]: item for item in manifest["accessions"]}
+
+    for expected in register["baseline_accessions"]:
+        assert by_id[expected["accession_id"]] == expected
+
+
 def test_inventory_joins_real_compact_and_detailed_records(repo_root: Path) -> None:
     inventory = load_source_inventory(repo_root)
 
-    assert len(inventory.accessions) == 16
+    assert len(inventory.accessions) == 31
     assert inventory.family_count == 7
-    assert inventory.raw_file_count == 16
+    assert inventory.raw_file_count == 31
     assert inventory.total_raw_byte_count == 645_044
     assert inventory.accession_ids == tuple(sorted(inventory.accession_ids))
     assert inventory.get("zhws-yisizhan-5-r854562").family_id == "yisizhan"
