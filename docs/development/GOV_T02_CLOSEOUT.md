@@ -10,8 +10,9 @@ GOV-T02 proved that legacy PR #1 and #7 are fully superseded on the stable v2
 line. The audit was merged before either legacy PR was changed. Both PRs then
 received a hash-bound explanation and were closed without merge or branch
 deletion. PR #62 then passed its final exact-head gates and merged only to
-`stable/kaiyuan-v2`. The current open set contains only human-blocked Draft PR
-#54.
+`stable/kaiyuan-v2`. Immediately after that merge, the open set contained only
+human-blocked Draft PR #54. Later governance PRs do not alter this historical
+GOV-T02 closeout fact.
 
 ## Audit evidence
 

@@ -19,8 +19,6 @@ REUSABLE_WORKFLOWS = (
 UNIFIED_WORKFLOW = "kaiyuan-major-version-gate.yml"
 ORDINARY_EVENTS = {"pull_request", "pull_request_target", "push"}
 PR_EVENTS = {"pull_request", "pull_request_target"}
-RUNNER_TAG_FILTER = '      - "kaiyuan-runner/v2/*"'
-
 CALL_JOBS = {
     "b9-assisted-renderer-review.yml": "b9-assisted-renderer-review",
     "b9-editorial-stellarium.yml": "b9-editorial-stellarium",
@@ -58,6 +56,51 @@ def _event_keys(text: str) -> set[str]:
         match.group(1)
         for match in re.finditer(r"(?m)^  ([A-Za-z_][A-Za-z0-9_-]*):", block)
     }
+
+
+def _nested_block(text: str, key: str, indent: int) -> str | None:
+    lines = text.splitlines(keepends=True)
+    marker = f"{' ' * indent}{key}:"
+    start = next(
+        (index for index, line in enumerate(lines) if line.rstrip() == marker),
+        None,
+    )
+    if start is None:
+        return None
+    end = len(lines)
+    for index in range(start + 1, len(lines)):
+        line = lines[index]
+        current_indent = len(line) - len(line.lstrip(" "))
+        if line.strip() and current_indent <= indent:
+            end = index
+            break
+    return "".join(lines[start:end])
+
+
+def _mapping_keys(text: str, indent: int) -> list[str]:
+    indentation = re.escape(" " * indent)
+    return [
+        match.group(1)
+        for match in re.finditer(
+            rf"(?m)^{indentation}([A-Za-z_][A-Za-z0-9_-]*):", text
+        )
+    ]
+
+
+def _sequence_values(text: str, key: str, indent: int) -> list[str]:
+    block = _nested_block(text, key, indent)
+    if block is None:
+        return []
+    values: list[str] = []
+    item_indent = " " * (indent + 2)
+    for line in block.splitlines()[1:]:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if not line.startswith(item_indent + "- "):
+            return []
+        values.append(stripped[2:].strip().strip('"').strip("'"))
+    return values
 
 
 def _input_block(on_block: str, name: str) -> str | None:
@@ -109,6 +152,24 @@ def _checkout_blocks(text: str) -> list[str]:
     return blocks
 
 
+def _checkout_ref_errors(text: str, expected_ref: str, name: str) -> list[str]:
+    errors: list[str] = []
+    blocks = _checkout_blocks(text)
+    if not blocks:
+        return [f"{name}: at least one checkout is required"]
+    for index, block in enumerate(blocks, start=1):
+        refs = [
+            match.group(1).strip()
+            for match in re.finditer(r"(?m)^\s+ref:\s*(.+?)\s*$", block)
+        ]
+        if refs != [expected_ref]:
+            errors.append(
+                f"{name}: checkout {index} must have exactly one checkout ref "
+                f"bound to {expected_ref}"
+            )
+    return errors
+
+
 def _job_blocks(text: str) -> dict[str, str]:
     jobs = _top_level_block(text, "jobs")
     if jobs is None:
@@ -146,12 +207,12 @@ def _validate_reusable(path: Path) -> list[str]:
     ):
         errors.append(f"{name}: base_sha must be a required string input")
 
-    checkout_blocks = _checkout_blocks(text)
-    if not checkout_blocks:
-        errors.append(f"{name}: at least one checkout is required")
-    for block in checkout_blocks:
-        if "ref: ${{ inputs.candidate_sha }}" not in block:
-            errors.append(f"{name}: every checkout needs candidate_sha checkout binding")
+    checkout_errors = _checkout_ref_errors(
+        text, "${{ inputs.candidate_sha }}", name
+    )
+    errors.extend(checkout_errors)
+    if checkout_errors:
+        errors.append(f"{name}: every checkout needs candidate_sha checkout binding")
     if name == "development-governance.yml":
         if '--base "${{ inputs.base_sha }}"' not in text:
             errors.append(f"{name}: governance base is not input-bound")
@@ -178,10 +239,27 @@ def _validate_unified(path: Path) -> list[str]:
             f"{path.name}: expected only exact candidate tag push, found {sorted(events)}"
         )
     on_block = _top_level_block(text, "on") or ""
-    if RUNNER_TAG_FILTER not in on_block:
-        errors.append(f"{path.name}: exact candidate tag filter is required")
+    push_block = _nested_block(on_block, "push", 2) or ""
+    push_keys = _mapping_keys(push_block, 4)
+    branch_keys = {"branches", "branches-ignore"} & set(push_keys)
+    if branch_keys:
+        errors.append(
+            f"{path.name}: branch push filter forbidden: {sorted(branch_keys)}"
+        )
+    if push_keys != ["tags"]:
+        errors.append(
+            f"{path.name}: push must contain only one tags filter"
+        )
+    tag_filters = _sequence_values(push_block, "tags", 4)
+    if tag_filters != ["kaiyuan-runner/v2/*"]:
+        errors.append(
+            f"{path.name}: exactly one tag filter kaiyuan-runner/v2/* is required"
+        )
     if "permissions:\n  contents: read" not in text:
         errors.append(f"{path.name}: contents permission must be read-only")
+    errors.extend(
+        _checkout_ref_errors(text, "${{ github.sha }}", path.name)
+    )
 
     jobs = _job_blocks(text)
     preflight = jobs.get("preflight", "")
@@ -191,20 +269,15 @@ def _validate_unified(path: Path) -> list[str]:
         markers = (
             "ref: ${{ github.sha }}",
             "candidate_sha: ${{ github.sha }}",
-            'test "$GITHUB_REF_TYPE" = "tag"',
-            'expected_ref="kaiyuan-runner/v2/$candidate_sha"',
-            'test "$GITHUB_REF_NAME" = "$expected_ref"',
-            'test "$(git cat-file -t "$candidate_sha")" = "commit"',
-            'test "$(git rev-parse HEAD)" = "$candidate_sha"',
-            "refs/heads/stable/kaiyuan-v2",
-            'test "$candidate_sha" != "$base_sha"',
-            'git merge-base --is-ancestor "$base_sha" "$candidate_sha"',
-            'test "$(git merge-base "$base_sha" "$candidate_sha")" = "$base_sha"',
+            "python3 scripts/verify_runner_candidate.py",
+            '--candidate-sha "$candidate_sha"',
+            '--ref-type "$GITHUB_REF_TYPE"',
+            '--ref-name "$GITHUB_REF_NAME"',
+            "--stable-ref refs/heads/stable/kaiyuan-v2",
+            '--github-output "$GITHUB_OUTPUT"',
             "candidate_sha: ${{ steps.verify.outputs.candidate_sha }}",
             "base_sha: ${{ steps.verify.outputs.base_sha }}",
         )
-        if "^[0-9a-f]{40}$" not in preflight:
-            errors.append(f"{path.name}: preflight lacks lowercase 40-hex check")
         for marker in markers:
             if marker not in preflight:
                 errors.append(f"{path.name}: preflight missing marker: {marker}")
@@ -219,6 +292,8 @@ def _validate_unified(path: Path) -> list[str]:
             errors.append(f"{path.name}: {job_name} must need preflight")
         if "candidate_sha: ${{ needs.preflight.outputs.candidate_sha }}" not in call:
             errors.append(f"{path.name}: {job_name} candidate input is not verified")
+        if re.search(r"(?m)^    secrets:\s*inherit\s*$", call):
+            errors.append(f"{path.name}: {job_name} must not inherit secrets")
         if reusable == "development-governance.yml" and (
             "base_sha: ${{ needs.preflight.outputs.base_sha }}" not in call
         ):

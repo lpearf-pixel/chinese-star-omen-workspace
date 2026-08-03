@@ -3,6 +3,19 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-03 — GOV-T04 pilot verified; final review fixes prepared
+
+- Draft PR #63 targets only `stable/kaiyuan-v2`. Pilot head `ca7f05691fbb2a5ee9c1232950f8ad914f4b107f` was strictly based on stable `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; lightweight tag `kaiyuan-runner/v2/ca7f05691fbb2a5ee9c1232950f8ad914f4b107f` directly identified that commit.
+- Unified run `30800888691` attempt 1 completed `success`: preflight, Development Governance, the five B9 groups, Kaiyuan Stable Core, Kaiyuan Upstream Runtime and finalize all succeeded. The only skipped steps were failure-only sentinels in otherwise successful jobs.
+- Artifact `major-version-runner-result-30800888691-1` ID `8850776737` contained exactly the result JSON and sidecar. GitHub ZIP digest and independently recomputed ZIP SHA-256 were both `43ef662ce403904019d0c428b634e7aca82d178a84ac02db81f701c436069812`; `sha256sum -c` passed and result JSON SHA-256 was `f706719312d22a400a94e15375b493286ae74143d9abefa2198295dceef811fd`. Schema, repository, workflow, run/attempt, candidate/event/verified/workflow SHA, base, tag ref/type and all nine job results matched exactly.
+- Fresh local replay on the identical Git tree `46b3e4399cc109b6476993b94fbb09e1556692d5`: `15 passed`; topology `PASS (8 reusable + 1 unified)`; YAML `9/9`; development governance `changed_files=22 code_files=4`; diff and ancestry checks passed.
+- Independent final review of that pilot head: Critical 0 / Important 4 / Minor 2 / Ready with fixes. The Important findings were real: annotated tags were not rejected at the raw ref, unified push filters were not structurally exclusive, stable movement after the run was not documented as invalidating evidence, and current PR/pilot governance facts were stale.
+- TDD remediation observed RED for the missing raw-tag verifier and for branch filters, extra tag namespaces, inherited secrets and duplicate checkout refs. The closeout candidate now verifies the raw remote tag ref directly equals the candidate commit using a shell-free standard-library Git adapter, rejects annotated tags against a real temporary remote, restricts the unified trigger to exactly one tag namespace, rejects checkout ref overrides and `secrets: inherit`, and invalidates evidence when live stable differs from artifact `base_sha`.
+- Minor full-SHA pinning of marketplace actions and pair-atomic artifact publication remain non-blocking hardening candidates. Current action permissions are read-only and a partial result publication fails the job closed; neither Minor is represented as completed.
+- GOV-T04 is a `DONE` candidate only. It becomes effective after the resulting immutable closeout head receives one successful unified tag run, zero Critical/Important final review, live stable equals artifact base immediately before merge, and PR #63 squash merges with expected-head protection. Final run/review/merge evidence is recorded in PR metadata to avoid changing the verified head.
+- PR #54 remains Draft and blocked on two independent human Reviewer A/B worksheets. No product, corpus, schema, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12, publishing or `main` operation occurred.
+
+
 ## 2026-08-02 — GOV-T04 implementation entered VERIFYING
 
 - All eight transitional workflow bodies now expose only required `workflow_call` inputs and checkout the verified candidate SHA. No migrated workflow responds to ordinary pull requests or branch pushes.

@@ -34,26 +34,14 @@ jobs:
           candidate_sha: ${{ github.sha }}
         run: |
           set -euo pipefail
-          if [[ ! "$candidate_sha" =~ ^[0-9a-f]{40}$ ]]; then
-            echo "candidate_sha must be a full lowercase 40-hex commit SHA" >&2
-            exit 1
-          fi
           test "$candidate_sha" = "$GITHUB_SHA"
-          test "$GITHUB_REF_TYPE" = "tag"
-          expected_ref="kaiyuan-runner/v2/$candidate_sha"
-          test "$GITHUB_REF_NAME" = "$expected_ref"
-          test "$(git cat-file -t "$candidate_sha")" = "commit"
-          test "$(git rev-parse HEAD)" = "$candidate_sha"
-
-          git fetch --no-tags origin \
-            +refs/heads/stable/kaiyuan-v2:refs/remotes/origin/stable/kaiyuan-v2
-          base_sha=$(git rev-parse refs/remotes/origin/stable/kaiyuan-v2)
-          test "$candidate_sha" != "$base_sha"
-          git merge-base --is-ancestor "$base_sha" "$candidate_sha"
-          test "$(git merge-base "$base_sha" "$candidate_sha")" = "$base_sha"
-
-          printf 'candidate_sha=%s\n' "$candidate_sha" >> "$GITHUB_OUTPUT"
-          printf 'base_sha=%s\n' "$base_sha" >> "$GITHUB_OUTPUT"
+          python3 scripts/verify_runner_candidate.py \
+            --candidate-sha "$candidate_sha" \
+            --ref-type "$GITHUB_REF_TYPE" \
+            --ref-name "$GITHUB_REF_NAME" \
+            --remote origin \
+            --stable-ref refs/heads/stable/kaiyuan-v2 \
+            --github-output "$GITHUB_OUTPUT"
 
   governance:
     needs: preflight

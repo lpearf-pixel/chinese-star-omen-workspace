@@ -85,6 +85,59 @@ class RunnerWorkflowValidationTests(unittest.TestCase):
             any("default-branch-only workflow_dispatch" in error for error in errors)
         )
 
+    def test_unified_branch_push_filter_is_rejected(self) -> None:
+        path = self.root / ".github/workflows/kaiyuan-major-version-gate.yml"
+        text = path.read_text(encoding="utf-8").replace(
+            "  push:\n    tags:\n",
+            '  push:\n    branches:\n      - "**"\n    tags:\n',
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
+
+        errors = validate_repository(self.root)
+
+        self.assertTrue(any("branch push filter" in error for error in errors))
+
+    def test_unified_extra_tag_filter_is_rejected(self) -> None:
+        path = self.root / ".github/workflows/kaiyuan-major-version-gate.yml"
+        text = path.read_text(encoding="utf-8").replace(
+            '      - "kaiyuan-runner/v2/*"\n',
+            '      - "kaiyuan-runner/v2/*"\n      - "release/*"\n',
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
+
+        errors = validate_repository(self.root)
+
+        self.assertTrue(any("exactly one tag filter" in error for error in errors))
+
+    def test_reusable_call_cannot_inherit_secrets(self) -> None:
+        path = self.root / ".github/workflows/kaiyuan-major-version-gate.yml"
+        text = path.read_text(encoding="utf-8").replace(
+            "    uses: ./.github/workflows/b9-scientific-provider.yml\n",
+            "    uses: ./.github/workflows/b9-scientific-provider.yml\n"
+            "    secrets: inherit\n",
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
+
+        errors = validate_repository(self.root)
+
+        self.assertTrue(any("must not inherit secrets" in error for error in errors))
+
+    def test_duplicate_checkout_ref_cannot_override_candidate(self) -> None:
+        path = self.root / ".github/workflows/kaiyuan-major-version-gate.yml"
+        text = path.read_text(encoding="utf-8").replace(
+            "          ref: ${{ github.sha }}\n",
+            "          ref: ${{ github.sha }}\n          ref: main\n",
+            1,
+        )
+        path.write_text(text, encoding="utf-8")
+
+        errors = validate_repository(self.root)
+
+        self.assertTrue(any("exactly one checkout ref" in error for error in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

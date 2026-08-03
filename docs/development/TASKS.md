@@ -12,8 +12,8 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
 Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 VERIFYING; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs: #54 only; it is Draft/human-review blocked
+Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C remains BLOCKED on two independent human reviews
+Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -194,7 +194,7 @@ merged and the resulting stable head is reverified.
 - **Audit merge:** PR #61, reviewed head `cd99ed2a1a94e0b698530bf63e2d4269ba23acfa`, squash `08fb71ab1db7de509154214cca44693a5de4859c`.
 - **Closure evidence:** PR #1 head `0eaeffac6d875ce6834e2a5632708ba8933bf812` closed without merge at 2026-08-03T06:05:15Z after comment `5162877413`; PR #7 head `3cc654b92514223d069b56162c874b5a1a65e060` closed without merge at 2026-08-03T06:05:16Z after comment `5162877570`.
 - **Result:** all 70 legacy paths classified, unresolved count 0; #1/#7 are absent from the open PR set. PR #62 final head `82b464049f1ca39557696016dddab3cdcfc2762c` passed Development Governance `30789542306`, Kaiyuan Stable Core `30789542258`, Kaiyuan Upstream Runtime `30789542404` and independent review Critical 0 / Important 0 / Minor 0 / Ready YES.
-- **Closeout merge:** PR #62 squash merged only to `stable/kaiyuan-v2` as `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; the current open PR set contains only human-blocked #54.
+- **Closeout merge:** PR #62 squash merged only to `stable/kaiyuan-v2` as `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; immediately after that merge the open PR set contained only human-blocked #54. Later governance PRs do not change this historical result.
 - **Boundary:** do not reopen, merge or cherry-pick either legacy branch; no behavior, corpus, candidate, Qdrant, `local_kb_default`, PR #54, B10-PR-D/E/F, B11/B12 or `main` change.
 ### GOV-T03 — Local-first verification and major-version Runner gate
 - **Status:** `DONE`
@@ -204,12 +204,12 @@ merged and the resulting stable head is reverified.
 - **PR and review:** PR #55; independent review found zero Critical, Important or Minor findings after the B9–B10 strategy reconciliation.
 
 ### GOV-T04 — Major-version unified Runner workflow migration
-- **Status:** `VERIFYING`
+- **Status:** `DONE` candidate; effective on stable only after the immutable closeout head passes the unified gate and PR #63 merges
 - **Branch:** `codex/kaiyuan-gov-t04-unified-runner-v1`
 - **Design:** `docs/superpowers/specs/2026-08-02-kaiyuan-major-version-runner-workflow-design.md`
 - **Goal:** replace transitional per-PR automatic Runner triggers with one explicit exact-head major-version stable merge gate while retaining independently scheduled nightly and task-specific real-environment evidence.
-- **Acceptance:** ordinary PR and branch-push events trigger none of the migrated Runner workflows; the release operator launches one documented unified validation by pushing a lightweight `kaiyuan-runner/v2/<exact-sha>` tag; tag suffix, event SHA, commit object, checkout HEAD and current stable ancestry must agree; all eight reusable workflows must succeed; the final result JSON and SHA-256 sidecar are candidate/base/ref/run bound and fail closed.
-- **Verification checkpoint:** local workflow/governance suite `15 passed`; topology CLI `PASS (8 reusable + 1 unified)`; YAML parse `9/9`; development governance `changed_files=22 code_files=4`; final exact-SHA tag pilot and artifact verification remain required before `DONE`.
+- **Acceptance:** ordinary PR and branch-push events trigger none of the migrated Runner workflows; the release operator launches one documented unified validation by pushing a lightweight `kaiyuan-runner/v2/<exact-sha>` tag; the raw remote tag object, tag suffix, event SHA, commit object, checkout HEAD and current stable ancestry must agree; all eight reusable workflows must succeed; the final result JSON and SHA-256 sidecar are candidate/base/ref/run bound and fail closed; the live stable HEAD must still equal artifact `base_sha` immediately before merge.
+- **Verification checkpoint:** pilot head `ca7f05691fbb2a5ee9c1232950f8ad914f4b107f` passed unified run `30800888691`; artifact ZIP SHA-256 `43ef662ce403904019d0c428b634e7aca82d178a84ac02db81f701c436069812` and result JSON SHA-256 `f706719312d22a400a94e15375b493286ae74143d9abefa2198295dceef811fd` were independently verified with all nine results `success`. Final review found four Important gaps; their tag-object, topology, stable-drift and governance-state fixes are included in the closeout candidate. That new exact head still requires one successful unified run, live-base equality and expected-head merge before this `DONE` becomes effective.
 - **Boundary:** workflow/governance only; nightly remains an independent future task because no scheduled workflow exists on the audited baseline; real-device, scientific, corpus, human, migration, security and production evidence remain independently governed. No product, schema, corpus, Qdrant, `local_kb_default`, PR #54 implementation, B10-PR-D/E/F, B11/B12, publishing or `main` change.
 
 ## B10 — Whole-book rule structuring

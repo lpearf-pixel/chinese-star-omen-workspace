@@ -132,12 +132,30 @@ PY
 Match printed run ID, attempt, candidate SHA and base SHA to the GitHub run and
 the recorded release candidate. Save the JSON SHA-256 in `WORK_LOG.md`.
 
+Immediately before marking the PR ready or merging, fetch the live stable ref
+and require it to equal the artifact's `base_sha`:
+
+```bash
+git fetch --no-tags origin \
+  +refs/heads/stable/kaiyuan-v2:refs/remotes/origin/stable/kaiyuan-v2
+live_base_sha=$(git rev-parse refs/remotes/origin/stable/kaiyuan-v2)
+artifact_base_sha=$(python3 -c \
+  'import json; print(json.load(open("major-version-runner-result.json"))["base_sha"])')
+test "$live_base_sha" = "$artifact_base_sha"
+```
+
+If stable moved, update the candidate from the new stable HEAD, rerun all
+applicable local gates and review, and create a new lightweight exact-SHA tag.
+Do not merge a green candidate onto an unverified newer base.
+
 ## Invalidation and retry
 
-Any commit after a successful run invalidates it, including a status-only or
-documentation commit. Run applicable local gates again and create one new
-exact-SHA tag. Do not move/force-push an old tag, reuse a green run from an
-ancestor or rerun the same failed head merely to hide a deterministic failure.
+Any candidate commit after a successful run invalidates it, including a
+status-only or documentation commit. Any movement of `stable/kaiyuan-v2` also
+invalidates the artifact because its recorded `base_sha` is no longer the live
+merge base. Run applicable local gates again and create one new exact-SHA tag.
+Do not move/force-push an old tag, reuse a green run from an ancestor or rerun
+the same failed head merely to hide a deterministic failure.
 
 Runner unavailable or incomplete is recorded as `BLOCKED` or `NOT RUN`. It may
 not be recorded as passed, and the major-version candidate may not merge into

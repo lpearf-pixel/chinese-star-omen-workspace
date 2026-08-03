@@ -38,7 +38,7 @@ The minimum closed loop is:
 
 ```text
 operator pushes lightweight tag kaiyuan-runner/v2/<candidate-sha>
-→ preflight observes tag/event SHA, checkout HEAD and latest stable HEAD
+→ preflight observes the raw remote tag object, event SHA, checkout HEAD and latest stable HEAD
 → preflight accepts or rejects exact identity and ancestry
 → reusable workflows run against the accepted SHA
 → finalizer observes every required job result
@@ -47,14 +47,16 @@ operator pushes lightweight tag kaiyuan-runner/v2/<candidate-sha>
 ```
 
 Any candidate change creates a different SHA and invalidates the previous run.
-Any missing, skipped, cancelled or failed required job produces a failed
-unified result.
+Any movement of `stable/kaiyuan-v2` after preflight also invalidates the result:
+the artifact base must still equal the live stable HEAD immediately before
+merge. Any missing, skipped, cancelled or failed required job produces a
+failed unified result.
 
 ## 4. Subsystems and interfaces
 
 | Subsystem | Input contract | Output contract | Failure behavior |
 |---|---|---|---|
-| Unified entrypoint | push of `kaiyuan-runner/v2/<40-hex-sha>` | verified candidate/base outputs | reject annotated/wrong-name/mismatched/stable-equal/behind candidate |
+| Unified entrypoint | push of `kaiyuan-runner/v2/<40-hex-sha>` | verified candidate/base outputs | require the raw remote tag ref to directly equal the candidate commit; reject annotated/wrong-name/mismatched/stable-equal/behind candidate |
 | Governance workflow | `candidate_sha`, `base_sha` | governance job conclusion | fail on task/log/state violation |
 | Seven reusable test workflows | `candidate_sha` | existing focused/full job conclusions and logs | checkout exact SHA; ordinary PR and branch push cannot trigger |
 | Finalizer | preflight plus all reusable job results | `major-version-runner-result/v1` and `.sha256` | upload evidence and exit nonzero unless all required results are success |
@@ -74,10 +76,11 @@ them but does not copy their test commands.
   repository default branch. The default is protected historical `main`, so a
   new stable-v2-only manual workflow would not be dispatchable without violating
   the project boundary.
-- Decision: use only push tags matching `kaiyuan-runner/v2/*`; require a
-  lightweight tag whose suffix equals `github.sha`, require the object type to
-  be `commit`, require checkout `HEAD` equality, then require current stable to
-  be the exact merge base and the candidate to be strictly ahead.
+- Decision: use only push tags matching `kaiyuan-runner/v2/*`; require the raw
+  remote `refs/tags/<name>` object ID to equal the suffix and `github.sha`
+  directly, require the candidate object type to be `commit`, require checkout
+  `HEAD` equality, then require current stable to be the exact merge base and
+  the candidate to be strictly ahead.
 - Verification: a standard-library static validator and unit tests enforce the
   workflow shape; a controlled lightweight tag on the feature head proves
   GitHub execution and artifact binding.
@@ -114,8 +117,9 @@ remain separate humans and are not workflow reviewers.
 
 | Risk | Test/observation | Reversible response |
 |---|---|---|
-| wrong or annotated tag | ref-name, object-type and event/checkout checks | create a new lightweight exact-SHA tag |
+| wrong or annotated tag | exact `git ls-remote --refs` raw tag-object equality plus ref-name, object-type and event/checkout checks | create a new lightweight exact-SHA tag |
 | candidate is behind stable | merge-base/ancestor preflight | update branch and push a new SHA tag |
+| stable advances after a green run | compare live stable HEAD with artifact `base_sha` immediately before merge | update candidate and push a new exact-SHA tag |
 | reusable workflow omitted | static inventory and finalizer fan-in test | add missing call before merge |
 | branch protection still names obsolete PR checks | inspect repository rules before closeout | update rules separately; do not restore auto triggers silently |
 | nightly or real-environment evidence is confused with unified gate | docs and workflow trigger inventory | keep separate workflow/task contract |

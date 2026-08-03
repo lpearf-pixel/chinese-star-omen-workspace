@@ -251,22 +251,30 @@ git add docs/development/GOV_T04_RUNBOOK.md docs/development/TASKS.md docs/devel
 git commit -m "docs: prepare GOV-T04 Runner pilot"
 ```
 
-- [ ] **Step 4: Push and open a Draft PR**
+- [x] **Step 4: Push and open a Draft PR**
 
 Push `codex/kaiyuan-gov-t04-unified-runner-v1` and create a Draft PR targeting
 only `stable/kaiyuan-v2`. Audit exact changed paths, review findings and live
 PR #54 state.
 
-- [ ] **Step 5: Run the unified pilot on the exact final head tag**
+- [x] **Step 5: Run the unified pilot on the reviewed implementation tag**
 
-Create lightweight tag `kaiyuan-runner/v2/<full-final-sha>` at the feature head
-and push that tag. Verify all jobs, download the result artifact, recompute the
-sidecar hash and require candidate/base/ref/run identities to match.
+Lightweight tag `kaiyuan-runner/v2/ca7f05691fbb2a5ee9c1232950f8ad914f4b107f`
+triggered run `30800888691`. Preflight, all eight reusable groups and finalize
+succeeded. The downloaded ZIP SHA-256 was
+`43ef662ce403904019d0c428b634e7aca82d178a84ac02db81f701c436069812`;
+the sidecar recomputed the result JSON as
+`f706719312d22a400a94e15375b493286ae74143d9abefa2198295dceef811fd`,
+with exact candidate/base/ref/run identity and nine `success` results.
 
-- [ ] **Step 6: Close out only after pilot and review pass**
+- [x] **Step 6: Prepare one non-self-referential closeout candidate**
 
-If any file changes after the pilot, create a new exact-SHA tag. When the
-latest head is green and review has zero Critical/Important findings, record
-the run ID and artifact hash, mark GOV-T04 `DONE` effective on stable, rerun the
-new exact head if that status commit changes it, and squash merge only to
-`stable/kaiyuan-v2` with an expected-head lock.
+The pilot evidence and first final review are recorded in the repository. The
+four Important review findings are fixed together with this status update, and
+GOV-T04 is marked `DONE` effective only if this resulting immutable head passes
+one new exact-SHA tag run and PR #63 then merges to `stable/kaiyuan-v2` with an
+expected-head lock. The new run ID, artifact hashes, zero Critical/Important
+review verdict and merge result are recorded in immutable PR/GitHub metadata,
+not another candidate-changing commit. Immediately before merge, live stable
+must still equal the result artifact's `base_sha`; otherwise the candidate is
+updated and the exact-head gate repeats.
