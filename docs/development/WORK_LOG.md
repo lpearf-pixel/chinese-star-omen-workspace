@@ -11,7 +11,8 @@
 - PR #1 received supersession comment `5162877413` at 2026-08-03T06:05:13Z and closed at 2026-08-03T06:05:15Z with `merged=false`; audited head remained `0eaeffac6d875ce6834e2a5632708ba8933bf812`.
 - PR #7 received supersession comment `5162877570` at 2026-08-03T06:05:14Z and closed at 2026-08-03T06:05:16Z with `merged=false`; audited head remained `3cc654b92514223d069b56162c874b5a1a65e060`.
 - Both legacy branches and histories remain preserved. A live query immediately after their closure returned only Draft PR #54; opening the final closeout added #62, so the current open set is #54/#62 and #54 remains the only non-closeout PR. Its two-human Reviewer A/B gate was not changed.
-- GOV-T02 remains `VERIFYING` only until this final docs-only closeout passes exact-head gates and independent review. No behavior, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12 or `main` operation occurred.
+- PR #62 initial head `3d04102f8e54d7b491f7716f90d5df6f67585fa6` passed all three Actions but review found one Important current-open-set wording issue. Corrected head `cf209033e948afdca0375ae6df76a447ffd2f359` passed Development Governance `30789415141`, Kaiyuan Stable Core `30789415089`, Kaiyuan Upstream Runtime `30789415112`; re-review reported Critical 0 / Important 0 / Minor 0 / Ready YES.
+- GOV-T02 is a `DONE` candidate: the final status-only head must rerun all three exact-head Actions and final review, and the status becomes effective on stable only when PR #62 merges. No behavior, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12 or `main` operation occurred.
 
 
 ## 2026-08-02 — GOV-T02 legacy PR supersession audit
