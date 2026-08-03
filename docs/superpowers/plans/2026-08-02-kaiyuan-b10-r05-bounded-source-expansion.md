@@ -103,7 +103,7 @@ Expected: FAIL only on the new 31-object/15-ID requirements.
 - Modify: this plan.
 
 - [x] Replay all 31 fixed-revision raw URLs and require exact SHA-256/byte counts; separately require the exact 15 registered revision timestamps.
-- [ ] Run the deterministic builder check, focused research tests, contract/downstream gates, compile checks, governance checker and diff hygiene.
+- [x] Run the deterministic builder check, focused research tests, contract/downstream gates, compile checks, governance checker and diff hygiene.
 
 ```bash
 PYTHONPATH=apps/star-omen/src:packages/kb-contracts/python:packages/kb-text-core/python   python scripts/build_b10_r04_source_projection.py --repo-root . --check
@@ -128,6 +128,17 @@ git diff --check
 
 - [x] Independently recompute 31/31 raw identities, 31/31 compact-to-detailed joins, exact 15 target identity/timestamps, unchanged original 16 and unchanged 20 mappings.
 - [x] Review graph closure, reverse projection, title-merge prevention, deferred authority, forbidden side effects and branch scope. Fix and repeat until Critical 0 / Important 0.
-- [ ] Commit the immutable review record and governance-only closeout, then open a Draft PR targeting only `stable/kaiyuan-v2`.
-- [ ] Verify the exact final PR head, changed paths, hosted required Actions and review threads. Add a hash-bound top-level review comment without another branch mutation.
-- [ ] Keep the PR Draft and B10-R05 `VERIFYING` until the user authorizes integration.
+- [x] Commit the immutable review record and governance-only closeout, then open a Draft PR targeting only `stable/kaiyuan-v2`.
+- [x] Verify the exact final PR head, changed paths, hosted required Actions and review threads. Add a hash-bound top-level review comment without another branch mutation.
+- [x] Keep the PR Draft and B10-R05 `VERIFYING` until the user authorizes integration.
+
+
+## Integration closeout
+
+- Draft PR: #59, base `stable/kaiyuan-v2`.
+- Final head: `b084b10216f2be8ea2854768528e209d4c069c77`.
+- Exact-head Actions: Development Governance `30784883162`, Kaiyuan Stable Core `30784883137`, Kaiyuan Upstream Runtime `30784883149`; all `success`.
+- Review/thread audit: zero submitted reviews and zero unresolved threads; independent branch review remained Critical 0 / Important 0 / Minor 0.
+- User authorized integration; PR #59 squash merged as `bcb72c9c922a8d87319cc88aec7a772016a1cf27`.
+- Post-merge stable comparison: identical, ahead 0 / behind 0.
+- Final status: B10-R05 `DONE`; PR #54 remains independently human-review `BLOCKED`.
