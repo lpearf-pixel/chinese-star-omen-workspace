@@ -269,9 +269,9 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ```text
 B10-R05 is integrated and DONE at stable bcb72c9c922a8d87319cc88aec7a772016a1cf27
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
-→ validate real reviewed fixtures and the approval record without AI substitution
-→ publish canonical threshold-freeze.json only after the frozen gates pass
-→ start B10-PR-D only after that exit gate
+→ validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
+→ PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
+→ R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
 → GOV-T02/GOV-T04 may proceed only as separately registered governance tasks and must not weaken PR #54
 ```
 
