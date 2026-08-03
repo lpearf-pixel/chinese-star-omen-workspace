@@ -10,7 +10,7 @@
 - PR #61 squash merged only to `stable/kaiyuan-v2` as `08fb71ab1db7de509154214cca44693a5de4859c`; post-merge compare was identical and the matrix retained blob `9d61ed3daf5d1318e7c4e8d71d96afa7032fd952`.
 - PR #1 received supersession comment `5162877413` at 2026-08-03T06:05:13Z and closed at 2026-08-03T06:05:15Z with `merged=false`; audited head remained `0eaeffac6d875ce6834e2a5632708ba8933bf812`.
 - PR #7 received supersession comment `5162877570` at 2026-08-03T06:05:14Z and closed at 2026-08-03T06:05:16Z with `merged=false`; audited head remained `3cc654b92514223d069b56162c874b5a1a65e060`.
-- Both legacy branches and histories remain preserved. A live open-PR query returned only Draft PR #54; its two-human Reviewer A/B gate was not changed.
+- Both legacy branches and histories remain preserved. A live query immediately after their closure returned only Draft PR #54; opening the final closeout added #62, so the current open set is #54/#62 and #54 remains the only non-closeout PR. Its two-human Reviewer A/B gate was not changed.
 - GOV-T02 remains `VERIFYING` only until this final docs-only closeout passes exact-head gates and independent review. No behavior, corpus, Qdrant, `local_kb_default`, B10-PR-D/E/F, B11/B12 or `main` operation occurred.
 
 
