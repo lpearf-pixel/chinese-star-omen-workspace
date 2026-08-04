@@ -9,9 +9,9 @@ Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Verified at: 2026-08-03
-Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R06 DONE evidence publication; B10-PR-C human-review BLOCKED
-Open PRs at B10-R06 closeout: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 carrying evidence-only review metadata
+Current support PR branch: codex/kaiyuan-b10-core14-second-review-v1
+Current task: B10-R07 VERIFYING provisional usability stratification; B10-PR-C human-review BLOCKED
+Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 carrying research/review metadata
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -47,6 +47,7 @@ B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b79807
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
 B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence support; PR #54 comment 5173585995)
+B10-R07 Core14 provisional usability stratification: VERIFYING (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement)
 B10 overall: IN_PROGRESS
 ```
 
@@ -276,11 +277,11 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-GOV-T02 is DONE at stable 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962; #1/#7 are closed without merge
-→ B10-R05 remains integrated and DONE
-→ GOV-T04 pilot run 30800888691 passed on ca7f0569 and its artifact hash was independently checked; finalize review fixes on one new exact head
-→ run one new lightweight `kaiyuan-runner/v2/<exact-sha>` tag for that immutable closeout head, require live stable to equal artifact base, then merge PR #63 only to stable
-→ keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
+GOV-T04 is DONE and effective on stable c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+→ B10-R06 remains DONE on Draft support PR #64
+→ keep C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47 in provisional internal use pending Reviewer B
+→ keep C03/C24/C33 isolated for evidence supplementation
+→ keep PR #54 Draft and BLOCKED until a different human independently completes Reviewer B
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS

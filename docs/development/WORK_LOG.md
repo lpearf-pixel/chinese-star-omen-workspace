@@ -3,6 +3,18 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-04 — B10-R07 provisional usability stratification entered VERIFYING
+
+- User-approved operational split: `C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47` are `provisional_usable_pending_reviewer_b`; `C03/C24/C33` are `isolated_evidence_supplement`.
+- The register is an operational research layer only. Reviewer A remains `USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN`; Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`; the two-different-humans gate and threshold/release/ingest/promotion/B10-PR-D authorization flags remain false.
+- TDD RED was observed when the focused contract test failed only because `provisional-usability-stratification.json` did not exist. After the minimal register was created, the same test passed: `1 passed`.
+- Machine register: `corpus/research_sources/b10-core14/provisional-usability-stratification.json`, SHA-256 `c1f4221d07a50a5bcfd5ccc951e5b5f3b1fcf73ddc8608d501fd1ff45af2e51e`.
+- Research usage boundary: `docs/research/core14-case-audits/provisional-usability-stratification.md`, SHA-256 `9efb3912e669b228ef46a00535158d0e308bc80e1e6ed4745982599b280bc20e`.
+- Strict JSON parsing and `git diff --check` passed. The task continues on the isolated worktree from exact remote PR #64 head `d183cee5c86bb8587d1cd1c57f1b4b28c02d559f`; live stable remains `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+- Full local verification at the `VERIFYING` checkpoint: focused stratification plus governance tests `6 passed`; explicit governance `changed_files=8 code_files=2`; `PROVISIONAL_USABILITY_REPLAY_OK provisional=11 isolated=3 total=14 gates=false`; strict JSON, `compileall`, `git diff --check`, parent-evidence hashes and frozen/forbidden path scans passed.
+- Remaining before `DONE`: fast-forward Draft PR #64 without force, add one hash-bound PR #54 status comment, re-read live refs/PR states and record the final exact head. PR #54 remains Draft/BLOCKED throughout.
+
+
 ## 2026-08-03 — B10-R06 evidence publication completed
 
 - Draft support PR #64 targets only `stable/kaiyuan-v2`; its evidence commit is `3325ec3022b81387b1f752443125880d0e356f85` with exact tree `35a1a34594cd40d2dabe4b524bb224e1f292b160`. No merge was performed.

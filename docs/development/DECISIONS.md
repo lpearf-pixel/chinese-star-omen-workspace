@@ -254,3 +254,24 @@
 - **Separation:** the unified gate has no `pull_request`, branch `push`, `workflow_dispatch` or `schedule` trigger; only `push.tags = kaiyuan-runner/v2/*` is accepted. Nightly, real macOS/Stellarium, corpus, human, migration, security and production evidence remain separate task contracts and are not inferred from this run.
 - **Reason:** per-PR hosted runs contradicted the accepted local-first policy and consumed capacity without being completion evidence. GitHub requires a `workflow_dispatch` file to exist on the default branch, but the default historical `main` is forbidden for v2 changes. A lightweight exact-SHA tag runs the workflow from the candidate commit without changing `main`; reusable fan-in avoids duplicated test commands.
 - **Rollback:** revert the GOV-T04 workflow/governance commit. No schema, corpus, Qdrant, collection, product or external data migration is involved.
+
+## D-028 — Reviewer A 已确认材料采用临时可用层，不替代双真人门禁
+
+- **Status:** Accepted for the Core14 pilot.
+- **Decision:** Core14 中经 Reviewer A 证据修订并由用户确认的 11 条，可
+  进入 `provisional_usable_pending_reviewer_b` 操作层，用于带来源的内部
+  检索、多文献映射、关系分析、原子规则研究和明确披露待确认状态的研究
+  报告。C03、C24、C33 进入 `isolated_evidence_supplement`，不得进入普通
+  引用或批量样本基线。
+- **Separation:** 临时可用性是研究操作状态，不是新的审核标签，不覆盖
+  Reviewer A/B 工作簿、B10-R02 或 B10-R06 证据记录。Reviewer B 仍须由
+  第二名不同真人独立完成全部 14 行。
+- **Fail-closed gates:** 两组都不能据此满足双真人门禁、冻结阈值、批准
+  正式规则、official ingest、official promotion、解锁 PR #54 或启动
+  B10-PR-D/E/F。临时可用条目的 `formal_release_eligible` 在 Reviewer B
+  与后续批准记录验证前保持 `false`。
+- **Reason:** 已完成的一审证据足以支持可追溯的内部研究，不应让三条
+  未决问题阻塞其余 11 条；但把 AI 辅助加用户确认等同于两名独立真人
+  会破坏校准门禁和一致率证据。
+- **Reversal:** 任一新边界、异文、主体或来源问题都可把单条从临时可用
+  层移回隔离补证层；必须追加理由和证据，不得静默改写历史状态。

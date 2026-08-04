@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
-Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
+Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+Current support PR branch: codex/kaiyuan-b10-core14-second-review-v1
+Current task: B10-R07 IN_PROGRESS provisional usability stratification; B10-PR-C remains BLOCKED on Reviewer B
+Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 carrying research/review metadata
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -204,7 +204,7 @@ merged and the resulting stable head is reverified.
 - **PR and review:** PR #55; independent review found zero Critical, Important or Minor findings after the B9–B10 strategy reconciliation.
 
 ### GOV-T04 — Major-version unified Runner workflow migration
-- **Status:** `DONE` candidate; effective on stable only after the immutable closeout head passes the unified gate and PR #63 merges
+- **Status:** `DONE`; effective on stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`
 - **Branch:** `codex/kaiyuan-gov-t04-unified-runner-v1`
 - **Design:** `docs/superpowers/specs/2026-08-02-kaiyuan-major-version-runner-workflow-design.md`
 - **Goal:** replace transitional per-PR automatic Runner triggers with one explicit exact-head major-version stable merge gate while retaining independently scheduled nightly and task-specific real-environment evidence.
@@ -315,6 +315,24 @@ merged and the resulting stable head is reverified.
   B11/B12, automatic publishing or `main`. Reviewer B remains an independent
   different human and is not completed or simulated by this task.
 
+### B10-R07 — Core14 provisional usability stratification
+- **Status:** `VERIFYING`
+- **Cases:** provisional-use set `C02`, `C09`, `C11`, `C13`, `C14`, `C31`,
+  `C41`, `C43`, `C44`, `C45`, `C47`; isolated evidence-supplement set `C03`,
+  `C24`, `C33`.
+- **Goal:** record the user-approved operational split between cases that may
+  support internal research while awaiting Reviewer B and cases that must stay
+  isolated for additional evidence, without changing any formal review label.
+- **Acceptance:** a deterministic machine-readable register contains exactly
+  the frozen Core14 denominator split 11+3 with no overlap; every provisional
+  case remains explicitly pending Reviewer B; every isolated case remains
+  non-citable; all threshold-freeze, release, ingest and promotion gates remain
+  false; the same boundary is documented for researchers and bound to Draft
+  PR #64/PR #54 metadata.
+- **Boundary:** do not modify Reviewer A/B workbook bytes, R02/R06 decisions,
+  raw corpus, runtime rules, thresholds, formal KB, Qdrant,
+  `local_kb_default`, B10-PR-D/E/F, B11/B12, automatic publishing or `main`.
+
 
 ### B10-R03 — Related Wikisource source localization
 - **Status:** `DONE` (P0)
@@ -393,7 +411,9 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
-→ wait for two different humans to independently complete Reviewer A/B
+→ B10-R06 evidence publication remains DONE on Draft PR #64
+→ B10-R07 records 11 cases as provisional internal-use pending Reviewer B and isolates C03/C24/C33 for evidence supplementation
+→ wait for a different human to independently complete Reviewer B across all 14 cases
 → validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
