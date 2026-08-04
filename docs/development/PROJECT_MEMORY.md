@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Verified at: 2026-08-03
 Current support PR branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R07 VERIFYING provisional usability stratification; B10-PR-C human-review BLOCKED
+Current task: B10-R07 DONE provisional usability stratification; B10-PR-C human-review BLOCKED
 Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 carrying research/review metadata
 Forbidden target: main
 Protected collection: local_kb_default
@@ -47,7 +47,7 @@ B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b79807
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
 B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence support; PR #54 comment 5173585995)
-B10-R07 Core14 provisional usability stratification: VERIFYING (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement)
+B10-R07 Core14 provisional usability stratification: DONE (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement; PR #54 comment 5176472354)
 B10 overall: IN_PROGRESS
 ```
 

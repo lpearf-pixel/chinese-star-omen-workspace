@@ -92,10 +92,10 @@ Record the JSON and Markdown SHA-256 values, exact case counts and the unchanged
 
 Run the focused test, governance unit tests, development-governance checker, strict JSON parse, `compileall`, `git diff --check`, frozen-workbook absence scan and a replay asserting `11+3=14` with zero overlap.
 
-- [ ] **Step 3: Publish by fast-forwarding Draft PR #64 only**
+- [x] **Step 3: Publish by fast-forwarding Draft PR #64 only**
 
 Create a commit whose parent is the live PR #64 head, update `codex/kaiyuan-b10-core14-second-review-v1` without force, and update PR #64 metadata. Add one PR #54 comment binding the new register/report hashes while preserving its exact head and Draft/BLOCKED state.
 
-- [ ] **Step 4: Re-read remote refs and close only B10-R07**
+- [x] **Step 4: Re-read remote refs and close only B10-R07**
 
 Confirm stable and PR #54 heads did not move, PR #64 contains the exact local tree, and both PRs remain Draft. Record the commit/comment references in `WORK_LOG.md`, mark B10-R07 `DONE`, and rerun the complete local validation before the final fast-forward closeout commit.

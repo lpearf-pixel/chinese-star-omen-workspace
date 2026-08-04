@@ -3,6 +3,15 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-04 — B10-R07 provisional usability publication completed
+
+- Draft PR #64 fast-forwarded without force from R06 closeout `d183cee5c86bb8587d1cd1c57f1b4b28c02d559f` to R07 evidence head `00d36d8b9db267d325233bca847b8d5e70e272df`; remote tree `68ed36f72745552de1e0e58d7401a47b580b0405` exactly matched the locally verified candidate tree.
+- PR #54 received hash-bound status comment `5176472354`, recording the exact 11 provisional-use cases, the three isolated cases, both R07 artifact hashes and every unchanged false authorization gate. PR #54 head was not changed.
+- Remote re-read locked stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, PR #54 head at `932f9e68862025bc620e0cf2d439415c5ea37af4` and PR #64 at the R07 evidence head above. The open PR set remained exactly #54/#64; submitted reviews and review threads were zero for both.
+- Final evidence-tree replay: focused stratification plus governance `6 passed`; full stable comparison `changed_files=12 code_files=3`; `PROVISIONAL_USABILITY_FINAL_REPLAY_OK provisional=11 isolated=3 total=14 gates=false`; strict JSON, `compileall`, diff, parent-evidence hashes and frozen/forbidden path scans passed.
+- B10-R07 is `DONE` only as an operational research-stratification task. Reviewer B remains not started, the two-human gate remains false, PR #54 stays Draft/BLOCKED, no threshold freeze exists and B10-PR-D/E/F remain unauthorized.
+
+
 ## 2026-08-04 — B10-R07 provisional usability stratification entered VERIFYING
 
 - User-approved operational split: `C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47` are `provisional_usable_pending_reviewer_b`; `C03/C24/C33` are `isolated_evidence_supplement`.

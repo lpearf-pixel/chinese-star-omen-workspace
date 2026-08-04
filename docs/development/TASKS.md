@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current support PR branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R07 IN_PROGRESS provisional usability stratification; B10-PR-C remains BLOCKED on Reviewer B
+Current task: B10-R07 DONE provisional usability stratification; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 carrying research/review metadata
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -316,7 +316,7 @@ merged and the resulting stable head is reverified.
   different human and is not completed or simulated by this task.
 
 ### B10-R07 — Core14 provisional usability stratification
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Cases:** provisional-use set `C02`, `C09`, `C11`, `C13`, `C14`, `C31`,
   `C41`, `C43`, `C44`, `C45`, `C47`; isolated evidence-supplement set `C03`,
   `C24`, `C33`.
