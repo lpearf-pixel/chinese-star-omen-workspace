@@ -3,6 +3,19 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-03 — B10-R06 disputed-case second review entered VERIFYING
+
+- Worktree branch `codex/kaiyuan-b10-core14-second-review-v1` was created from exact stable `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; the task is evidence/review metadata only.
+- Reviewer A remains `USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN`. Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`; `reviewer_b_completed=false`, the two-different-humans gate is false and no threshold freeze is authorized.
+- The append-only second review covers exactly C03/C24/C33/C47. It does not modify the R02 audit artifacts or either reviewer workbook. C03 is `needs_review` because source divergence is not logical contradiction; C24 remains `ambiguous` with S8/S9 split and unresolved `㑹客環守`; C33 remains `needs_review` at the human gate but the 045-9a right boundary is now recovered and research recommends eligibility after a confirmed section split; C47 remains `eligible` with `duplicate_of=null` and its 《乙巳占》 readings treated as material variants.
+- Structured delta: `corpus/research_sources/b10-core14/disputed-case-second-review.json`, SHA-256 `a7d0f7408b32d6cdccdd6c1efcdfc1829dfc29a46ba3382317bca521e655ea70`.
+- Human-readable adjudication: `docs/research/core14-case-audits/disputed-case-second-review.md`, SHA-256 `127b145df04d069cb2e6e5fbf9704ba69df1aa697f81304d5e60e014d5ae8aec`.
+- Neutral Reviewer B source pack: `docs/research/core14-case-audits/reviewer-b-disputed-case-source-pack.md`, SHA-256 `a20ef8fc1bf975f580761842437c1bd9164fea9c6c6ec7fcd9ad7ad7ac0c95a0`; it exposes no Reviewer A selections or second-review recommendations.
+- Deterministic evidence validation: `SECOND_REVIEW_SCHEMA_OK`, seven frozen input hashes matched, human gate remained false, C24 S8/S9 and C33 previous-section exclusions passed, and C47 duplicate guard passed. Strict JSON parse and `git diff --check` passed.
+- Baseline/focused governance: isolated `pytest==8.3.5`; `scripts/tests/test_check_development_governance.py` -> `5 passed`; explicit five-path development governance -> `changed_files=5 code_files=1`; `compileall` passed.
+- Remaining before B10-R06 can be `DONE`: final full-scope governance/diff/hash replay, publish the support branch as a Draft PR to `stable/kaiyuan-v2`, add a hash-bound status comment to PR #54 without changing its head, and re-read live refs/reviews. PR #54 remains Draft/BLOCKED and B10-PR-D/E/F remain forbidden.
+
+
 ## 2026-08-03 — GOV-T04 pilot verified; final review fixes prepared
 
 - Draft PR #63 targets only `stable/kaiyuan-v2`. Pilot head `ca7f05691fbb2a5ee9c1232950f8ad914f4b107f` was strictly based on stable `96b41a4524d36c7ffb2f1e2ec66ca4aed1565962`; lightweight tag `kaiyuan-runner/v2/ca7f05691fbb2a5ee9c1232950f8ad914f4b107f` directly identified that commit.

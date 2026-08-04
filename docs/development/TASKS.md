@@ -295,6 +295,26 @@ merged and the resulting stable head is reverified.
   `local_kb_default` mutation, no silent source normalization, no B11/B12 and
   no `main`.
 
+### B10-R06 — Core14 disputed-case second evidence review
+- **Status:** `VERIFYING`
+- **Cases:** `C03`, `C24`, `C33`, `C47`.
+- **Goal:** preserve the completed Reviewer A workbook while adding an
+  append-only second-round evidence decision for the four disputed cases,
+  including exact source locators, section boundaries, variants, atomic-rule
+  consequences and a minimal independent handoff for Reviewer B.
+- **Acceptance:** each case has a source-bound delta decision; C03 distinguishes
+  source variation from logical contradiction; C24 keeps the section split and
+  unresolved `客環守`/duration/shape readings; C33 excludes the preceding
+  `留守` clause and recovers the complete right boundary; C47 carries no
+  `duplicate` label without a concrete `duplicate_of`; structured evidence and
+  the human-readable report pass deterministic validation; PR #54 receives a
+  hash-bound review-status comment without changing its head.
+- **Boundary:** evidence and review metadata only; do not modify the frozen
+  Reviewer A/B workbook bytes, original R02 audit artifacts, runtime code, main
+  rules, main data, thresholds, Qdrant, `local_kb_default`, B10-PR-D/E/F,
+  B11/B12, automatic publishing or `main`. Reviewer B remains an independent
+  different human and is not completed or simulated by this task.
+
 
 ### B10-R03 — Related Wikisource source localization
 - **Status:** `DONE` (P0)

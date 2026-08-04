@@ -1,0 +1,255 @@
+{
+  "review_id": "b10-r06-core14-disputed-second-review-v1",
+  "status": "AI_RESEARCH_SECOND_REVIEW_NOT_REVIEWER_B",
+  "created_on": "2026-08-03",
+  "base_sha": "c2e8fcabb04354fd14d0c72b3b6020a47e63a583",
+  "scope": {
+    "case_ids": [
+      "C03",
+      "C24",
+      "C33",
+      "C47"
+    ],
+    "mode": "append_only_delta_over_b10_r02",
+    "original_r02_artifacts_modified": false,
+    "reviewer_workbooks_modified": false
+  },
+  "human_review_state": {
+    "reviewer_a": "USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN",
+    "reviewer_b": "UNLABELLED_HUMAN_REVIEW_NOT_STARTED",
+    "reviewer_b_completed": false,
+    "two_different_humans_gate_satisfied": false,
+    "threshold_freeze_authorized": false
+  },
+  "frozen_inputs": [
+    {
+      "path": "corpus/research_sources/b10-core14/audit-early.json",
+      "sha256": "28ff207c6424f7de1ed12b9422d5d489bc69aafe9d89fda4c65f50f472695cb4"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/audit-middle.json",
+      "sha256": "30d90f31852f5010c9d39c96507a279c09f59e3cd0d51011b69359ec55810121"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/audit-late.json",
+      "sha256": "54d18e61f81f8be32213320ed54781e37d6565126dac88b5cb2cc905066b8ff3"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/wikisource-revision-register.json",
+      "sha256": "b9cb9210c11907bea190ec0626ec18a1b984dfbbec98a67e1a425800fba3e740"
+    },
+    {
+      "path": "corpus/research_sources/b10-core14/kanripo-core14-contexts.txt",
+      "sha256": "3cd34547b08cec48eb5e18629f32f20d9d7a635653b407dd27735fc2eee804db"
+    },
+    {
+      "path": "corpus/research_sources/b10-c24/kanripo-parallel-passages.txt",
+      "sha256": "3a102da16d356e16d5216854f5df16808d0399e15e2dd94cce2e8312433719d1"
+    },
+    {
+      "path": "corpus/research_sources/related-wikisource/core14-mapping.json",
+      "sha256": "3a79afb3cd4559236eb9869dc3b0080d6d92ebb3984b6b0c46e9a33edb056250"
+    }
+  ],
+  "decisions": [
+    {
+      "case_id": "C03",
+      "locator": "卷12 / KR3g0018_WYG_012-5b",
+      "carrier_source": {
+        "title": "唐開元占經_(四庫全書本)/卷012",
+        "wikisource_revision_id": 655898,
+        "permanent_url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷012&oldid=655898",
+        "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+        "kanripo_blob_sha": "4b4450e953bd528ab22bf9f70d88e618338f71b2",
+        "local_volume_sha256": "e07bfff9cea6a18104eec972498de679926e6ece5aadc2347344ec6a448b7d2c"
+      },
+      "first_research_disposition": "conflict",
+      "reviewer_a_disposition": "needs_review",
+      "second_review_disposition": "needs_review",
+      "research_resolution": "source_divergence_is_not_logical_contradiction",
+      "formal_candidate": true,
+      "citation_eligible_current": false,
+      "whole_passage_citation": false,
+      "reviewer_b_required": true,
+      "boundary_findings": {
+        "left": "法令散 completes 春秋緯元命包曰歲星逆犯月 and is not the start of the next source rule.",
+        "right": "The Jupiter block ends after 荆州占曰月吞歲星其國十二歲而敗; 河圖帝覽嬉曰熒惑入月中 begins the Mars block."
+      },
+      "atomic_handling": {
+        "split_by_source": true,
+        "split_by_relation": [
+          "逆犯",
+          "犯",
+          "乘",
+          "貫",
+          "蝕",
+          "吞"
+        ],
+        "unresolved_atoms": {
+          "B10-C03-B": "一年二年乘之 remains syntactically unresolved.",
+          "B10-C03-G": "邦主無 remains a possible lacuna or unresolved reading."
+        },
+        "do_not_merge_outcomes": true
+      },
+      "parallel_evidence": [
+        {
+          "accession_id": "zhws-shiji-027-r7904116",
+          "locator": "卷027〈天官書第五〉月 section; raw line 170",
+          "raw_sha256": "97c9840084005b7a0cb9e29e82be5a333f226a574d5980b5a3914e5f8720e7d1",
+          "finding": "Direct source support for 月蝕歲星，其宿地，飢若亡; it supports one atom and does not reconcile the other source outcomes."
+        }
+      ],
+      "remaining_gate": "Reviewer B must independently decide the case label and confirm that atomic rules remain separate."
+    },
+    {
+      "case_id": "C24",
+      "locator": "卷38 / KR3g0018_WYG_038-13b",
+      "carrier_source": {
+        "title": "唐開元占經_(四庫全書本)/卷038",
+        "wikisource_revision_id": 655950,
+        "permanent_url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷038&oldid=655950",
+        "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+        "kanripo_blob_sha": "0e632ebfa0ab9659fc9b9424063c3a08a970dbf9",
+        "local_volume_sha256": "711cf0f4713daa1b61fb7969a3f82b64a4995dea2de004a56d2409644505ee16"
+      },
+      "first_research_disposition": "ambiguous",
+      "reviewer_a_disposition": "ambiguous",
+      "second_review_disposition": "ambiguous",
+      "research_resolution": "retain_raw_reading_and_split_sections_without_emendation",
+      "formal_candidate": true,
+      "citation_eligible_current": false,
+      "whole_passage_citation": false,
+      "has_citable_atoms": true,
+      "reviewer_b_required": true,
+      "section_split": [
+        {
+          "section_id": "C24-S8",
+          "heading": "填星流動與列星鬭八",
+          "scope": "motion, color change, retrograde motion and conflict with listed stars"
+        },
+        {
+          "section_id": "C24-S9",
+          "heading": "填星穰氣暈彗九",
+          "scope": "fish/dog-shaped qi or cloud, yellow rang qi, halo and broom-like emission"
+        }
+      ],
+      "quoted_source_status": {
+        "洛書": "fragmentary_or_uncertain; no independent complete witness located",
+        "黃帝占": "lost_or_fragmentary; cite 唐開元占經 as the extant carrier",
+        "policy": "A normalized catalog title or later compilation never replaces the printed carrier label."
+      },
+      "unresolved_readings": [
+        {
+          "carrier": "㑹客環守",
+          "same_book_parallels": [
+            "卷23：舍合留舍環守",
+            "卷30：㑹舍還"
+          ],
+          "decision": "No unique reconstruction; do not promote 守 or silently replace carrier glyphs."
+        },
+        {
+          "carrier": "填星旁有雲如狗狀有土功期一月",
+          "later_reception_variant": "《欽定天文正義》電子轉錄見獨雲／期一年",
+          "decision": "Treat as an unpinned later-compilation clue, not authority to emend the fixed Kaiyuan carrier."
+        }
+      ],
+      "operational_gaps": [
+        "angular threshold for 逆行、離舍、凌、鬭、環、守",
+        "shape threshold for 魚形 and 狗狀",
+        "color and brightness threshold for 黃穰",
+        "unit and geometry definition for 長四丈",
+        "missing-observation policy"
+      ],
+      "remaining_gate": "Reviewer B must independently retain or reject the ambiguous label; image-level collation is required before any emendation hypothesis can advance."
+    },
+    {
+      "case_id": "C33",
+      "locator": "卷45 / KR3g0018_WYG_045-8b",
+      "carrier_source": {
+        "title": "唐開元占經_(四庫全書本)/卷045",
+        "wikisource_revision_id": 655964,
+        "permanent_url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷045&oldid=655964",
+        "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+        "kanripo_blob_sha": "722732bd1bb856685ef869ff5cd31a48bc2d3297",
+        "local_volume_sha256": "7e6a6616712bf7d7de82958884b94c359e39fc62a561d5ec2b9ce63df6b5583f"
+      },
+      "first_research_disposition": "eligible",
+      "reviewer_a_disposition": "needs_review",
+      "second_review_disposition": "needs_review",
+      "research_recommendation": "eligible_after_section_split_if_human_review_confirms",
+      "formal_candidate": true,
+      "citation_eligible_current": false,
+      "whole_passage_citation": false,
+      "reviewer_b_required": true,
+      "boundary_findings": {
+        "excluded_left_context": "其留守也野獸食人 belongs to 太白王相休囚死三 and must not be assigned to the next rule.",
+        "new_section_start": "太白光色芒角四 / 荆州占曰秋三月太白出西方色當白而不白逆行",
+        "recovered_right_boundary": "The sentence continues across 045-9a through 警邊境脩邊地; 甘氏曰候太白以秋庚辛 begins the next source unit."
+      },
+      "atomic_handling": {
+        "formal_relation_for_new_section": [
+          "逆"
+        ],
+        "excluded_relations_from_previous_section": [
+          "守",
+          "留"
+        ],
+        "meteor_role": "outcome_or_associated_observation_not_rule_subject",
+        "unresolved": "見此二者 has an uncertain referent and must be isolated from atoms that do not depend on it."
+      },
+      "remaining_gate": "Reviewer B must independently confirm the section split and whether the recovered right boundary is sufficient for case-level eligibility."
+    },
+    {
+      "case_id": "C47",
+      "locator": "卷89 / KR3g0018_WYG_089-18a",
+      "carrier_source": {
+        "title": "唐開元占經_(四庫全書本)/卷089",
+        "wikisource_revision_id": 656052,
+        "permanent_url": "https://zh.wikisource.org/w/index.php?title=唐開元占經_(四庫全書本)/卷089&oldid=656052",
+        "kanripo_commit": "eb17a11a6a8a40922ccff01f727e2b5df7f3e734",
+        "kanripo_blob_sha": "a2df04268d4e5b6b13fc58628f151cd578ae3cc8",
+        "local_volume_sha256": "949933710178a23e8fa4520a51c07b27e894579fc882c7529cd43d472b89b555"
+      },
+      "first_research_disposition": "eligible",
+      "reviewer_a_disposition": "eligible",
+      "second_review_disposition": "eligible",
+      "research_resolution": "parallel_text_is_not_a_duplicate_candidate",
+      "formal_candidate": true,
+      "citation_eligible_current": true,
+      "whole_passage_citation": false,
+      "reviewer_b_required": true,
+      "duplicate_of": null,
+      "special_tags": [],
+      "boundary_findings": {
+        "left": "東井彗孛犯東井 starts the case section after 彗孛犯南方七宿.",
+        "right": "The final sentence continues across 089-19a through 日相當之時見七十日主當之; 鬼彗孛犯輿鬼 starts the next section."
+      },
+      "parallel_evidence": [
+        {
+          "accession_id": "zhws-yisizhan-8-r2623978",
+          "locator": "卷八；彗孛入列宿占第四十八；raw line 11",
+          "raw_sha256": "5f482d92f856eef52452b2b10dd84b4ece887df5bc18bd11fe7d344fcd55acee",
+          "variants": [
+            "開元占經 謀 / 乙巳占 誅",
+            "開元占經 東井 / 乙巳占 井",
+            "開元占經 相當之時 / 乙巳占 相當之"
+          ],
+          "decision": "Preserve as a material parallel with provenance; it does not supply a duplicate passage or candidate ID."
+        }
+      ],
+      "remaining_gate": "Reviewer B must independently confirm eligibility and variant disclosure; a duplicate label is invalid unless a concrete duplicate_of ID is supplied."
+    }
+  ],
+  "forbidden_effects": {
+    "runtime_code_modified": false,
+    "main_rules_modified": false,
+    "main_data_modified": false,
+    "threshold_freeze_created": false,
+    "official_ingest_run": false,
+    "qdrant_accessed": false,
+    "local_kb_default_accessed": false,
+    "b10_pr_d_e_f_started": false,
+    "b11_b12_started": false,
+    "main_modified": false
+  }
+}
