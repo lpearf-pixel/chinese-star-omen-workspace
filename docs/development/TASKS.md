@@ -296,7 +296,7 @@ merged and the resulting stable head is reverified.
   no `main`.
 
 ### B10-R06 — Core14 disputed-case second evidence review
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Cases:** `C03`, `C24`, `C33`, `C47`.
 - **Goal:** preserve the completed Reviewer A workbook while adding an
   append-only second-round evidence decision for the four disputed cases,

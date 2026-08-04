@@ -77,7 +77,7 @@ Use these evidence-constrained states:
 ```text
 C03 = needs_review; not a terminal logical conflict; split by source and relation
 C24 = ambiguous; split S8/S9; 客環守 and duration/shape variants unresolved
-C33 = needs_review; preceding 留守 clause excluded; right boundary incomplete
+C33 = needs_review; preceding 留守 clause excluded; right boundary recovered through 警邊境脩邊地
 C47 = eligible; no duplicate tag without a concrete duplicate_of identifier
 ```
 
@@ -134,18 +134,18 @@ Record SHA-256 for the JSON and report, exact base/head, validation commands, an
 - Consumes: validated Task 2 artifact hashes and exact Git branch head.
 - Produces: a research-support pull request plus a hash-bound PR #54 status comment.
 
-- [ ] **Step 1: Commit and publish the evidence-support branch**
+- [x] **Step 1: Commit and publish the evidence-support branch**
 
 Push `codex/kaiyuan-b10-core14-second-review-v1` and open a Draft PR targeting only `stable/kaiyuan-v2`.
 
-- [ ] **Step 2: Add one PR #54 comment**
+- [x] **Step 2: Add one PR #54 comment**
 
-The comment must name the support PR/head, both artifact hashes, all four case dispositions, Reviewer A completed, Reviewer B not started, and state that PR #54 remains Draft/BLOCKED and PR-D/E/F remain forbidden.
+The comment must name the support PR/head, all three artifact hashes, all four case dispositions, Reviewer A completed, Reviewer B not started, and state that PR #54 remains Draft/BLOCKED and PR-D/E/F remain forbidden.
 
-- [ ] **Step 3: Re-read live refs and PR states**
+- [x] **Step 3: Re-read live refs and PR states**
 
 Confirm `stable/kaiyuan-v2`, PR #54 head, the support PR head, review threads and open-PR set. Any drift is recorded; no merge is performed in this task.
 
-- [ ] **Step 4: Mark B10-R06 `DONE` only after GitHub evidence exists**
+- [x] **Step 4: Mark B10-R06 `DONE` only after GitHub evidence exists**
 
 Record the support PR URL/number and PR #54 comment ID in `WORK_LOG.md`, then mark only B10-R06 `DONE`. B10-PR-C remains `BLOCKED` until a different human returns Reviewer B and the canonical threshold-freeze gate passes.

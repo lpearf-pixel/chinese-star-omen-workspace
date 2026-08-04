@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
-Verified at: 2026-08-02
-Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C human-review BLOCKED
-Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
+Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+Verified at: 2026-08-03
+Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
+Current task: B10-R06 DONE evidence publication; B10-PR-C human-review BLOCKED
+Open PRs at B10-R06 closeout: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 carrying evidence-only review metadata
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -46,6 +46,7 @@ B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
+B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence support; PR #54 comment 5173585995)
 B10 overall: IN_PROGRESS
 ```
 

@@ -3,6 +3,15 @@
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
 
+## 2026-08-03 — B10-R06 evidence publication completed
+
+- Draft support PR #64 targets only `stable/kaiyuan-v2`; its evidence commit is `3325ec3022b81387b1f752443125880d0e356f85` with exact tree `35a1a34594cd40d2dabe4b524bb224e1f292b160`. No merge was performed.
+- PR #54 received hash-bound status comment `5173585995`. The comment records all four case dispositions, the three artifact hashes, Reviewer A readiness, Reviewer B not-started state and the unchanged B10-PR-C/B10-PR-D/E/F boundaries.
+- Live re-read locked stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, PR #54 head at `932f9e68862025bc620e0cf2d439415c5ea37af4`, and support PR #64 evidence head at `3325ec3022b81387b1f752443125880d0e356f85`. The open PR set was exactly #54 and #64; both were Draft with zero submitted reviews and zero review threads.
+- Final replay: `SECOND_REVIEW_FINAL_REPLAY_OK cases=4 frozen_inputs=7 artifacts=3 changed_files=7`; governance unit tests were `5 passed`; explicit governance was `changed_files=7 code_files=1`; strict JSON, `compileall`, `git diff --check`, source-hash and forbidden-path checks passed.
+- B10-R06 is `DONE` as an evidence-publication task. This does not complete or unblock B10-PR-C: Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`, the two-different-humans gate remains false, no canonical threshold freeze is authorized, and PR #54 remains Draft/BLOCKED.
+
+
 ## 2026-08-03 — B10-R06 disputed-case second review entered VERIFYING
 
 - Worktree branch `codex/kaiyuan-b10-core14-second-review-v1` was created from exact stable `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; the task is evidence/review metadata only.
