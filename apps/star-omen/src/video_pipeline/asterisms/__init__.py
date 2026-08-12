@@ -22,6 +22,7 @@ from .mansion_regions import (
     MansionRelationObservationV1,
     assess_mansion_region,
     assess_single_time_relation,
+    require_member_proximity_catalog,
 )
 
 __all__ = [
@@ -43,5 +44,6 @@ __all__ = [
     "MansionRelationObservationV1",
     "assess_mansion_region",
     "assess_single_time_relation",
+    "require_member_proximity_catalog",
     "load_asterism_catalog",
 ]

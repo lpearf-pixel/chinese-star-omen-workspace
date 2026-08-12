@@ -23,6 +23,7 @@ from src.video_pipeline.asterisms.mansion_regions import (
     MansionRelationObservationV1,
     assess_mansion_region,
     assess_single_time_relation,
+    require_member_proximity_catalog,
 )
 from src.video_pipeline.contracts import (
     AstronomyEventV1,
@@ -326,6 +327,7 @@ class SkyfieldEphemerisProvider:
         utc = _ensure_utc(at_utc)
         asterism = self.catalog.catalog.asterism(mansion_id)
         mansion = self.catalog.catalog.mansion(mansion_id)
+        require_member_proximity_catalog(asterism)
         target = self.observe_body(body_id=body_id, at_utc=utc, observer=observer)
         west_boundary = self.observe_catalog_star(
             modern_object_id=mansion.west_boundary_object_id,

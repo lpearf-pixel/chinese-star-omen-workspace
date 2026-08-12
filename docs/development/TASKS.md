@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 2); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 VERIFYING (phase 3); B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `VERIFYING` (phase 2; later phases remain unclaimed)
+- **Status:** `VERIFYING` (phase 3; later phases remain unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -89,12 +89,36 @@ B9 planning: DONE
   `26 files / 15 code files`; full downstream `626 passed`; compileall,
   canonical-hash, diff and forbidden-path checks passed. One final replay is
   required after the evidence commit.
-- **Remaining:** phase 2 exact-head verification and Draft #65 update; full
-  member coverage, all-card navigation and external-media contracts remain
-  later ASTRO-R01 phases and are not claimed complete.
+- **Phase 2 publication:** Draft PR #65 remote head
+  `19c076ddbff60b29a7d22443dbbb9bad0c11a527`; locally reviewed and remote
+  trees both equal `c796215b89e0cdc214e4f3943e365c1ec6bfae72`. Runner was
+  `NOT RUN`; no merge was attempted.
+- **Phase 3 acceptance:** bind the pinned Stellarium fixed-name and line records
+  for all 28 mansion asterisms to Hipparcos I/239 J1991.25 coordinates; preserve
+  157 base members, five cross-asterism related endpoints and 57 line segments
+  without nearest-star inference. Exact complete definitions may expose member
+  proximity; the three status-2 翼宿 identities remain `ambiguous`, so 翼宿
+  remains region-only for relation assessment. 附耳, 钺, 长沙, 左辖 and 右辖
+  remain related objects rather than extra mansion members.
+- **Phase 3 implementation heads:** `d7140af` source snapshots and fixture;
+  `97fa9f3` catalog memberships and completeness validation; `7a8548b`
+  complete-member proximity and provider preflight.
+- **Phase 3 verification checkpoint:** exact denominator `162 entries / 28
+  asterisms / 28 lunar_mansions`, with `157 members / 5 related endpoints / 57
+  line segments`; completeness `26 complete / 1 complete_gold_sample / 1
+  ambiguous`; source suite `6 passed`; asterism suite `43 passed`; focused
+  astronomy/asterism/navigation suite `80 passed`; governance unit tests `21
+  passed`; development-governance scope `31 files / 18 code files`; full
+  downstream `633 passed`; compileall, 14 canonical source/fixture hashes, diff
+  and forbidden-path checks passed. One final replay is required after the
+  evidence commit.
+- **Remaining:** phase 3 exact-head verification and Draft #65 update; all-card navigation
+  and external-media contracts remain later ASTRO-R01 phases and are not
+  claimed complete.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 - **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
+- **Phase 3 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-membership-lines.md`.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`

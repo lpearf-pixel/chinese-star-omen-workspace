@@ -2,6 +2,76 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 phase 3 member and line implementation
+
+- Live recovery reverified stable at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, Draft PR #65 at remote head
+  `19c076ddbff60b29a7d22443dbbb9bad0c11a527`, and the open Draft set as
+  #54/#64/#65. PR #54 remains blocked by two different human reviewers; #64 is
+  unchanged. Local Phase 2 and remote Phase 2 trees both equal
+  `c796215b89e0cdc214e4f3943e365c1ec6bfae72` despite intentionally different
+  local/remote commit topology.
+- Plan/task contract commit `2541100` moved ASTRO-R01 to Phase 3 `IN_PROGRESS`.
+  Scope is limited to exact source-bound mansion members, related line endpoints,
+  line segments, coordinate identities and complete-member proximity. Raw corpus,
+  Reviewer A/B, PR #54/#64, workflows, Qdrant, `local_kb_default`, B11/B12 and
+  `main` remain forbidden.
+- Task 1 RED was `2 failed, 4 passed`: the fourth fixture and all-mansion sources
+  were absent. Two separate pinned Stellarium snapshots now bind the
+  `fe876157...` fixed-name blob and `14eea850...` line blob without combining
+  upstream identities. A third snapshot binds 162 unique CDS VizieR I/239 records
+  at J1991.25 with both proper-motion components. GREEN source suite: `6 passed`.
+  Commit: `d7140af`.
+- Source SHA-256 values: member names
+  `5a3bc4739dbdd8d4f4d9a93d38bd0ffe19c5423f557223ec74ff8dce1a4d38ea`;
+  lines `84f9db2aa8e83641c21c33ff12be8efd708cb912408ed385442d936f97debcc6`;
+  Hipparcos coordinates
+  `c26a3bda043178690024f520c623b492baa5811ee0598f21fb7a53967d034d8c`;
+  membership/line fixture
+  `4e83aa708d267eae13ab56c1ce53d5e8876c7dc979587466c526db4db945663c`.
+- Task 2 RED was `4 failed, 10 passed`: 角宿 still exposed only the defining star,
+  the catalog denominator remained 36, 井宿/轸宿 related endpoints were absent,
+  and 翼宿 remained partial. The catalog now contains exactly `162 entries / 28
+  asterisms / 28 lunar_mansions`, `157` base members, five related endpoints and
+  57 ordered line segments. Completeness is `26 complete`, one preserved 毕宿
+  `complete_gold_sample`, and one 翼宿 `ambiguous`. 翼宿十一/十七/廿一 retain
+  fixed-name status 2 and blocked narration. A deliberate weakened-validator
+  mutation made the new fail-closed test fail before the strict logic was
+  restored. GREEN asterism suite: `43 passed`. Commit: `97fa9f3`.
+- Task 3 RED was `4 failed, 22 passed`: the old evaluator admitted only the gold
+  sample and the provider attempted to resolve ambiguous member stars before
+  rejecting the request. The shared preflight now admits only `complete` and
+  `complete_gold_sample`, so exact 角宿 member proximity works while ambiguous
+  翼宿 remains region-only. A navigation compatibility replay then found the
+  毕宿 card's stale Phase 1 source refs (`1 failed, 79 passed`); only that existing
+  gold card was rebound to the new member-name/line sources. Final focused
+  astronomy/asterism/navigation replay: `80 passed`. Commit: `7a8548b`.
+- ASTRO-R01 is now `VERIFYING (phase 3)`. Exact-head governance, downstream,
+  compile, canonical-hash, diff and forbidden-path gates remain before Draft
+  PR #65 can be updated. Runner remains `NOT RUN`; no merge is authorized.
+
+### ASTRO-R01 phase 3 pre-closeout verification
+
+- Candidate head `0f628c1f77ae8fe46eefa31b59965593768f295f`, tree
+  `1d375d4e92f5e25559d4fa031ae6a23012ea502b`, started clean.
+- Governance unit discovery: `21 passed`; development-governance base-to-head
+  check: `changed_files=31 code_files=18`.
+- Focused asterism/astronomy/navigation replay: `80 passed in 14.82s`.
+- Compileall passed. Canonical byte/hash verification passed for 14 catalog
+  sources plus asterism fixtures. Diff check, clean-worktree check and forbidden
+  corpus/Reviewer/Qdrant/`local_kb_default`/workflow path scan passed.
+- The first full-gate invocation inherited Work Mode's
+  `CODEX_PRIMARY_RUNTIME_PYTHON`; its subprocess selected the runtime-owned
+  interpreter rather than the project `.venv`, so one read-only B10-R04 builder
+  check failed to import repository-local `research_sources` while 632 tests
+  passed. No product code was changed. Replaying that exact test with the
+  injected variable unset passed `1/1`; the environment-bound full command
+  `env -u CODEX_PRIMARY_RUNTIME_PYTHON PATH="$PWD/.venv/bin:$PATH" make downstream-test`
+  then passed `633` tests in `27.80s`.
+- This evidence is pre-closeout because recording it changes the commit. The
+  resulting exact documentation head must rerun governance, focused, downstream,
+  hash, compile, diff, clean-worktree and forbidden-path gates before publication.
+
 ## 2026-08-12 — ASTRO-R01 phase 1 published; phase 2 started
 
 - Live recovery reverified stable at

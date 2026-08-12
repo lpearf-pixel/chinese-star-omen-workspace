@@ -79,7 +79,7 @@ def test_asterism_fixture_manifest_binds_spica_identity_fixture() -> None:
 
     assert manifest_bytes == canonical_json_bytes(manifest)
     assert manifest["schema_version"] == "asterism-fixture-manifest/v1"
-    assert len(manifest["fixtures"]) == 3
+    assert len(manifest["fixtures"]) == 4
     fixtures = {fixture["fixture_id"]: fixture for fixture in manifest["fixtures"]}
     fixture = fixtures["spica-jiao-xiu-1-v1"]
     fixture_path = FIXTURE_ROOT / fixture["path"]
@@ -137,6 +137,20 @@ def test_asterism_fixture_manifest_binds_spica_identity_fixture() -> None:
         for source_id in cycle_payload["source_snapshot_sha256"]
     }
 
+    membership_fixture = fixtures["lunar-mansion-membership-lines-v1"]
+    membership_path = FIXTURE_ROOT / membership_fixture["path"]
+    assert hashlib.sha256(membership_path.read_bytes()).hexdigest() == membership_fixture["sha256"]
+    membership_payload = json.loads(membership_path.read_text(encoding="utf-8"))
+    assert membership_payload["schema_version"] == "lunar-mansion-membership-lines-fixture/v1"
+    assert membership_payload["mansion_count"] == 28
+    assert membership_payload["member_record_count"] == 157
+    assert membership_payload["related_object_count"] == 5
+    assert membership_payload["line_segment_count"] == 57
+    assert membership_payload["source_snapshot_sha256"] == {
+        source_id: source_hashes[source_id]
+        for source_id in membership_payload["source_snapshot_sha256"]
+    }
+
 
 def test_twenty_eight_defining_star_sources_bind_exact_denominators() -> None:
     catalog = load_asterism_catalog(CATALOG_PATH).catalog
@@ -167,3 +181,77 @@ def test_twenty_eight_defining_star_sources_bind_exact_denominators() -> None:
     }
     assert all(record["pm_ra_cosdec_mas_per_year"] is not None for record in coordinate_rows["records"])
     assert all(record["pm_dec_mas_per_year"] is not None for record in coordinate_rows["records"])
+
+
+def test_all_mansion_member_sources_bind_exact_denominators() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+    sources = {source.source_id: source for source in catalog.sources}
+
+    fixed_names_source = sources["source:stellarium-28-mansion-member-names"]
+    fixed_names = json.loads(
+        (APP_ROOT / fixed_names_source.snapshot_path).read_text(encoding="utf-8")
+    )
+    assert fixed_names_source.upstream_content_id == (
+        "fe8761576dc6c5cd4a65e3551a81ead6122c895f"
+    )
+    assert fixed_names["revision"] == "3972e97101e4321079279b5e5660b074fafc030a"
+    assert len(fixed_names["mansion_records"]) == 28
+    assert sum(
+        len(item["member_records"]) for item in fixed_names["mansion_records"]
+    ) == 157
+    assert sum(
+        len(item["related_records"]) for item in fixed_names["mansion_records"]
+    ) == 5
+
+    lines_source = sources["source:stellarium-28-mansion-lines"]
+    lines = json.loads((APP_ROOT / lines_source.snapshot_path).read_text(encoding="utf-8"))
+    assert lines_source.upstream_content_id == "14eea850bc161e4f48a172751fb4e6043154f7f9"
+    assert len(lines["mansion_records"]) == 28
+    assert sum(
+        len(item["line_segments"]) for item in lines["mansion_records"]
+    ) == 57
+    by_name = {
+        item["canonical_chinese_name"]: item
+        for item in fixed_names["mansion_records"]
+    }
+    assert [record["hip_id"] for record in by_name["角宿"]["member_records"]] == [
+        65474,
+        66249,
+    ]
+    assert [record["hip_id"] for record in by_name["井宿"]["related_records"]] == [
+        29655
+    ]
+    assert [record["hip_id"] for record in by_name["轸宿"]["related_records"]] == [
+        60189,
+        61174,
+        59199,
+    ]
+    assert [
+        (record["hip_id"], record["canonical_chinese_name"], record["fixed_name_status"])
+        for record in by_name["翼宿"]["member_records"]
+        if record["fixed_name_status"] != 1
+    ] == [
+        (54214, "翼宿十一?", 2),
+        (56245, "翼宿十七?", 2),
+        (56830, "翼宿廿一?", 2),
+    ]
+
+    hipparcos = sources["source:hipparcos-i-239-mansion-members"]
+    coordinates = json.loads(
+        (APP_ROOT / hipparcos.snapshot_path).read_text(encoding="utf-8")
+    )
+    assert coordinates["coordinate_epoch"] == "J1991.25"
+    assert len(coordinates["records"]) == 162
+    coordinate_ids = [record["hip_id"] for record in coordinates["records"]]
+    assert len(coordinate_ids) == len(set(coordinate_ids))
+    inventory_ids = {
+        record["hip_id"]
+        for mansion in fixed_names["mansion_records"]
+        for record in [*mansion["member_records"], *mansion["related_records"]]
+    }
+    assert set(coordinate_ids) == inventory_ids
+    assert all(
+        record["pm_ra_cosdec_mas_per_year"] is not None
+        and record["pm_dec_mas_per_year"] is not None
+        for record in coordinates["records"]
+    )

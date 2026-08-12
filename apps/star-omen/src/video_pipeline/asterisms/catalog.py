@@ -151,7 +151,12 @@ class AsterismDefinitionV1(_StrictModel):
     defining_star_object_id: str = Field(pattern=_STABLE_ID_PATTERN)
     line_segments: list[list[str]] = Field(default_factory=list)
     source_refs: list[str] = Field(min_length=1)
-    completeness_status: Literal["partial", "complete_gold_sample", "ambiguous"]
+    completeness_status: Literal[
+        "partial",
+        "complete",
+        "complete_gold_sample",
+        "ambiguous",
+    ]
 
     @model_validator(mode="after")
     def validate_definition(self) -> "AsterismDefinitionV1":
@@ -272,18 +277,22 @@ class AsterismCatalogV1(_StrictModel):
                     raise ValueError("asterism references an unknown member object")
                 if entry.asterism_id != definition.asterism_id:
                     raise ValueError("asterism member belongs to a different asterism")
-                if (
-                    definition.completeness_status == "complete_gold_sample"
-                    and entry.editorial_status
-                    not in {
-                        AsterismStatus.VERIFIED_IDENTITY,
-                        AsterismStatus.VERIFIED_MEMBERSHIP,
-                    }
-                ):
+                if definition.completeness_status in {
+                    "complete",
+                    "complete_gold_sample",
+                } and entry.editorial_status not in {
+                    AsterismStatus.VERIFIED_IDENTITY,
+                    AsterismStatus.VERIFIED_MEMBERSHIP,
+                }:
                     raise ValueError("complete asterism members must be verified")
             for object_id in definition.related_object_ids:
                 if object_id not in entry_by_id:
                     raise ValueError("asterism references an unknown related object")
+            if definition.completeness_status == "ambiguous" and not any(
+                entry_by_id[object_id].editorial_status is AsterismStatus.AMBIGUOUS
+                for object_id in definition.member_object_ids
+            ):
+                raise ValueError("ambiguous asterism requires an ambiguous member")
             names = [
                 definition.asterism_id,
                 definition.canonical_chinese_name,

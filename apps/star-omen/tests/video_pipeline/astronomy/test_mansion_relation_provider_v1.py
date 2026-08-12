@@ -156,6 +156,27 @@ def test_provider_applies_only_an_explicit_versioned_near_threshold(
     assert observation.assessment.threshold_id == "research-near-asterism-v1"
 
 
+def test_provider_assesses_complete_non_gold_mansion_members(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    provider = build_provider(monkeypatch)
+
+    observation = provider.assess_mansion_relation(
+        body_id="mars",
+        mansion_id="jiao-xiu",
+        relation_term="临",
+        at_utc=datetime(2026, 8, 12, 0, tzinfo=timezone.utc),
+        observer=shanghai_observer(),
+    )
+
+    assert observation.assessment.nearest_member_object_id in {
+        "hip:65474",
+        "hip:66249",
+    }
+    assert observation.assessment.interpretation_status == "ambiguous_relation"
+    assert observation.assessment.inferred_classical_relation is None
+
+
 def test_provider_preserves_hipparcos_epoch_and_proper_motion(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -169,7 +190,7 @@ def test_provider_preserves_hipparcos_epoch_and_proper_motion(
     assert star.dec_mas_per_year == pytest.approx(-189.36)
 
 
-def test_provider_rejects_unknown_or_incomplete_mansions(
+def test_provider_rejects_unknown_or_ambiguous_mansions(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     provider = build_provider(monkeypatch)
@@ -183,10 +204,10 @@ def test_provider_rejects_unknown_or_incomplete_mansions(
             observer=shanghai_observer(),
         )
 
-    with pytest.raises(ValueError, match="complete member catalog.*region-only"):
+    with pytest.raises(ValueError, match="verified complete member catalog.*region-only"):
         provider.assess_mansion_relation(
             body_id="mars",
-            mansion_id="jiao-xiu",
+            mansion_id="yi-xiu",
             relation_term="临",
             at_utc=datetime(2026, 8, 12, 0, tzinfo=timezone.utc),
             observer=shanghai_observer(),

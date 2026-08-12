@@ -179,6 +179,17 @@ def assess_mansion_region(
     )
 
 
+def require_member_proximity_catalog(asterism: AsterismDefinitionV1) -> None:
+    if asterism.completeness_status not in {
+        "complete",
+        "complete_gold_sample",
+    }:
+        raise ValueError(
+            "member proximity requires a verified complete member catalog; "
+            "use region-only assessment"
+        )
+
+
 def assess_single_time_relation(
     *,
     relation_term: str,
@@ -195,11 +206,7 @@ def assess_single_time_relation(
         raise ValueError("relation term must not be empty")
     if mansion.mansion_id != asterism.asterism_id:
         raise ValueError("mansion and asterism IDs must match")
-    if asterism.completeness_status != "complete_gold_sample":
-        raise ValueError(
-            "member proximity requires a complete member catalog; "
-            "use region-only assessment"
-        )
+    require_member_proximity_catalog(asterism)
     if west_boundary.object_id != mansion.west_boundary_object_id:
         raise ValueError("west boundary object ID does not match the mansion")
     if east_boundary.object_id != mansion.east_boundary_object_id:

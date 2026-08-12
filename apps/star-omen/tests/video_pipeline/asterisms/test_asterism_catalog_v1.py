@@ -122,16 +122,99 @@ def test_committed_catalog_contains_the_exact_closed_twenty_eight_mansion_cycle(
     )
 
 
-def test_partial_mansion_asterism_exposes_only_verified_defining_star() -> None:
+def test_complete_mansion_asterism_exposes_source_bound_members_and_lines() -> None:
     catalog = load_asterism_catalog(CATALOG_PATH).catalog
 
     definition = catalog.asterism("角宿")
 
     assert definition.asterism_id == "jiao-xiu"
-    assert definition.member_object_ids == ["hip:65474"]
+    assert definition.member_object_ids == ["hip:65474", "hip:66249"]
     assert definition.defining_star_object_id == "hip:65474"
-    assert definition.line_segments == []
-    assert definition.completeness_status == "partial"
+    assert definition.line_segments == [["hip:65474", "hip:66249"]]
+    assert definition.completeness_status == "complete"
+
+
+def test_catalog_exposes_exact_all_mansion_membership_denominator() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+
+    assert len(catalog.entries) == 162
+    assert len(catalog.asterisms) == 28
+    assert len(catalog.lunar_mansions) == 28
+    assert sum(len(item.member_object_ids) for item in catalog.asterisms) == 157
+    assert sum(len(item.related_object_ids) for item in catalog.asterisms) == 5
+    assert sum(len(item.line_segments) for item in catalog.asterisms) == 57
+    assert [item.completeness_status for item in catalog.asterisms].count("complete") == 26
+    assert [item.completeness_status for item in catalog.asterisms].count(
+        "complete_gold_sample"
+    ) == 1
+    assert [item.completeness_status for item in catalog.asterisms].count(
+        "ambiguous"
+    ) == 1
+
+
+def test_catalog_keeps_cross_asterism_line_endpoints_related() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+
+    well = catalog.asterism("井宿")
+    assert well.member_object_ids == [
+        "hip:30343",
+        "hip:30883",
+        "hip:31681",
+        "hip:32362",
+        "hip:32246",
+        "hip:32921",
+        "hip:34088",
+        "hip:35350",
+    ]
+    assert well.related_object_ids == ["hip:29655"]
+    assert well.line_segments[-1] == ["hip:30343", "hip:29655"]
+    assert catalog.resolve("钺").modern_object_id == "hip:29655"
+
+    chariot = catalog.asterism("轸宿")
+    assert chariot.related_object_ids == ["hip:60189", "hip:61174", "hip:59199"]
+    assert chariot.line_segments == [
+        ["hip:61359", "hip:60965", "hip:59803", "hip:59316"],
+        ["hip:59803", "hip:60189"],
+        ["hip:60965", "hip:61174"],
+        ["hip:59316", "hip:59199"],
+    ]
+
+
+def test_catalog_keeps_uncertain_wing_members_ambiguous() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+    wing = catalog.asterism("翼宿")
+
+    assert wing.completeness_status == "ambiguous"
+    assert len(wing.member_object_ids) == 18
+    assert catalog.resolve("翼宿十一?").status is AsterismStatus.AMBIGUOUS
+    assert catalog.resolve("翼宿十一").status is AsterismStatus.AMBIGUOUS
+    assert catalog.resolve("翼宿十七?").status is AsterismStatus.AMBIGUOUS
+    assert catalog.resolve("翼宿廿一?").status is AsterismStatus.AMBIGUOUS
+
+
+def test_complete_and_ambiguous_definition_states_fail_closed(tmp_path: Path) -> None:
+    payload = yaml.safe_load(CATALOG_PATH.read_text(encoding="utf-8"))
+
+    promoted = deepcopy(payload)
+    promoted_wing = next(
+        item for item in promoted["asterisms"] if item["asterism_id"] == "yi-xiu"
+    )
+    promoted_wing["completeness_status"] = "complete"
+    promoted_path = tmp_path / "promoted-wing.yaml"
+    promoted_path.write_text(
+        yaml.safe_dump(promoted, allow_unicode=True), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="complete asterism members must be verified"):
+        load_asterism_catalog(promoted_path)
+
+    false_ambiguity = deepcopy(payload)
+    false_ambiguity["asterisms"][0]["completeness_status"] = "ambiguous"
+    false_ambiguity_path = tmp_path / "false-ambiguity.yaml"
+    false_ambiguity_path.write_text(
+        yaml.safe_dump(false_ambiguity, allow_unicode=True), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="ambiguous asterism requires an ambiguous member"):
+        load_asterism_catalog(false_ambiguity_path)
 
 
 def test_complete_mansion_cycle_rejects_missing_sequence_and_broken_edges(
@@ -198,28 +281,25 @@ def test_committed_catalog_resolves_bi_members_by_traditional_name() -> None:
 def test_asterism_definitions_reject_unknown_and_overlapping_members(
     tmp_path: Path,
 ) -> None:
-    text = CATALOG_PATH.read_text(encoding="utf-8")
+    payload = yaml.safe_load(CATALOG_PATH.read_text(encoding="utf-8"))
 
     unknown = tmp_path / "unknown-member.yaml"
+    unknown_payload = deepcopy(payload)
+    unknown_payload["asterisms"][0]["member_object_ids"].append("hip:99999")
     unknown.write_text(
-        text.replace(
-            "member_object_ids:\n",
-            "member_object_ids:\n      - hip:99999\n",
-            1,
-        ),
-        encoding="utf-8",
+        yaml.safe_dump(unknown_payload, allow_unicode=True), encoding="utf-8"
     )
     with pytest.raises(ValueError, match="unknown member object"):
         load_asterism_catalog(unknown)
 
     overlap = tmp_path / "overlapping-member.yaml"
+    overlap_payload = deepcopy(payload)
+    bi_definition = next(
+        item for item in overlap_payload["asterisms"] if item["asterism_id"] == "bi-xiu"
+    )
+    bi_definition["related_object_ids"].append("hip:20889")
     overlap.write_text(
-        text.replace(
-            "related_object_ids: [hip:21683]",
-            "related_object_ids: [hip:21683, hip:20889]",
-            1,
-        ),
-        encoding="utf-8",
+        yaml.safe_dump(overlap_payload, allow_unicode=True), encoding="utf-8"
     )
     with pytest.raises(ValueError, match="member and related object IDs must be disjoint"):
         load_asterism_catalog(overlap)

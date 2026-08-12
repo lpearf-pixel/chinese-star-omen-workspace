@@ -88,20 +88,42 @@ def test_region_only_assessment_handles_the_shi_to_bi_wall_zero_degree_wrap() ->
     assert outside.in_mansion_region is False
 
 
-def test_member_proximity_rejects_partial_asterism_catalogs() -> None:
+def test_member_proximity_accepts_complete_non_gold_asterism_catalogs() -> None:
     catalog = load_asterism_catalog(CATALOG_PATH).catalog
     asterism = catalog.asterism("jiao-xiu")
     mansion = catalog.mansion("jiao-xiu")
 
-    with pytest.raises(ValueError, match="complete member catalog.*region-only"):
+    assessment = assess_single_time_relation(
+        relation_term="临",
+        asterism=asterism,
+        mansion=mansion,
+        target=position("mars", 203.5),
+        west_boundary=position("hip:65474", 201.0),
+        east_boundary=position("hip:69427", 213.0),
+        members=[
+            position("hip:65474", 201.0),
+            position("hip:66249", 203.6),
+        ],
+    )
+
+    assert assessment.nearest_member_object_id == "hip:66249"
+    assert assessment.interpretation_status == "ambiguous_relation"
+
+
+def test_member_proximity_rejects_ambiguous_asterism_catalogs() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+    asterism = catalog.asterism("yi-xiu")
+    mansion = catalog.mansion("yi-xiu")
+
+    with pytest.raises(ValueError, match="verified complete member catalog.*region-only"):
         assess_single_time_relation(
             relation_term="临",
             asterism=asterism,
             mansion=mansion,
-            target=position("mars", 205.0),
-            west_boundary=position("hip:65474", 201.0),
-            east_boundary=position("hip:69427", 213.0),
-            members=[position("hip:65474", 201.0)],
+            target=position("mars", 170.0),
+            west_boundary=position("hip:53740", 165.0),
+            east_boundary=position("hip:59803", 183.0),
+            members=[],
         )
 
 
