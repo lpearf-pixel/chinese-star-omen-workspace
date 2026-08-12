@@ -254,3 +254,38 @@
 - **Separation:** the unified gate has no `pull_request`, branch `push`, `workflow_dispatch` or `schedule` trigger; only `push.tags = kaiyuan-runner/v2/*` is accepted. Nightly, real macOS/Stellarium, corpus, human, migration, security and production evidence remain separate task contracts and are not inferred from this run.
 - **Reason:** per-PR hosted runs contradicted the accepted local-first policy and consumed capacity without being completion evidence. GitHub requires a `workflow_dispatch` file to exist on the default branch, but the default historical `main` is forbidden for v2 changes. A lightweight exact-SHA tag runs the workflow from the candidate commit without changing `main`; reusable fan-in avoids duplicated test commands.
 - **Rollback:** revert the GOV-T04 workflow/governance commit. No schema, corpus, Qdrant, collection, product or external data migration is involved.
+
+## D-028 — 二十八宿计算采用“星官成员＋极圈宿域”双层模型
+
+- **Status:** Accepted for ASTRO-R01.
+- **Decision:** traditional asterism membership and lunar-mansion region are
+  separate versioned facts. Exact member/related-star mappings come from pinned
+  source records. Mansion regions use consecutive defining stars and
+  pole-to-pole equatorial great circles; the region is west-inclusive and
+  east-exclusive and is labelled `derived_region`.
+- **Gold sample:** 毕宿 base members are HIP 20889, 20648, 20455, 20205,
+  21421, 20885, 20713 and 18724. HIP 21683 is related 附耳, not a ninth member;
+  its duplicate fixed-name records keep it `ambiguous`. 毕宿's west defining
+  star is HIP 20889 and its east boundary is the following 觜宿 defining star
+  HIP 26207.
+- **Scientific frame:** identities preserve each source record's coordinate
+  epoch. The Hipparcos I/239 records use ICRS positions at J1991.25 plus both
+  proper-motion components; the existing SIMBAD Spica record remains ICRS
+  J2000. One-time region assessment propagates those identities and uses the
+  target and defining/member stars in the same apparent-equatorial-of-date
+  frame. The result binds actual positions, UTC time and catalog SHA-256.
+- **Relation boundary:** `in_mansion_region`, nearest-member separation and an
+  optional explicitly versioned near threshold are objective measurements.
+  Unqualified `临/臨` remains `ambiguous_relation`. A single time sample cannot
+  establish `犯`, `入`, `守` or `留`; those require separately versioned contact,
+  transition, velocity or duration evidence.
+- **Reason:** a nearest-star-only system confuses membership, proximity and
+  mansion location, while invented closed polygons would misrepresent a modern
+  visualization proxy as an ancient boundary. The dual model remains
+  reproducible and honest about provenance.
+- **Consequence:** all 28 mansions must use the same contracts. Unknown or
+  ambiguous mappings remain explicit. External videos consume measurements as
+  research evidence only and cannot promote classical rules or weather claims.
+- **Boundary:** no raw corpus mutation, Reviewer A/B substitution, threshold
+  freeze, official ingest, Qdrant, `local_kb_default`, B11/B12, automatic
+  publication or `main` operation.

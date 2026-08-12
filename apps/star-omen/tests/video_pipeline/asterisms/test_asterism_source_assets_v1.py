@@ -79,13 +79,39 @@ def test_asterism_fixture_manifest_binds_spica_identity_fixture() -> None:
 
     assert manifest_bytes == canonical_json_bytes(manifest)
     assert manifest["schema_version"] == "asterism-fixture-manifest/v1"
-    assert len(manifest["fixtures"]) == 1
-    fixture = manifest["fixtures"][0]
+    assert len(manifest["fixtures"]) == 2
+    fixtures = {fixture["fixture_id"]: fixture for fixture in manifest["fixtures"]}
+    fixture = fixtures["spica-jiao-xiu-1-v1"]
     fixture_path = FIXTURE_ROOT / fixture["path"]
     assert hashlib.sha256(fixture_path.read_bytes()).hexdigest() == fixture["sha256"]
     payload = json.loads(fixture_path.read_text(encoding="utf-8"))
     assert payload["modern_object_id"] == "hip:65474"
     assert payload["canonical_chinese_name"] == "角宿一"
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+    source_hashes = {item.source_id: item.content_hash for item in catalog.sources}
     assert payload["source_snapshot_sha256"] == {
-        item.source_id: item.content_hash for item in load_asterism_catalog(CATALOG_PATH).catalog.sources
+        source_id: source_hashes[source_id]
+        for source_id in payload["source_snapshot_sha256"]
+    }
+
+    bi_fixture = fixtures["bi-xiu-membership-v1"]
+    bi_fixture_path = FIXTURE_ROOT / bi_fixture["path"]
+    assert hashlib.sha256(bi_fixture_path.read_bytes()).hexdigest() == bi_fixture["sha256"]
+    bi_payload = json.loads(bi_fixture_path.read_text(encoding="utf-8"))
+    assert bi_payload["schema_version"] == "asterism-membership-fixture/v1"
+    assert bi_payload["member_hip_ids"] == [
+        20889,
+        20648,
+        20455,
+        20205,
+        21421,
+        20885,
+        20713,
+        18724,
+    ]
+    assert bi_payload["west_boundary_hip_id"] == 20889
+    assert bi_payload["east_boundary_hip_id"] == 26207
+    assert bi_payload["source_snapshot_sha256"] == {
+        source_id: source_hashes[source_id]
+        for source_id in bi_payload["source_snapshot_sha256"]
     }

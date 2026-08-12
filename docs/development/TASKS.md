@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
-Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
+Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
+Current task: ASTRO-R01 VERIFYING (phase 1); B10-PR-C remains BLOCKED on two independent human reviews
+Open PRs at 2026-08-12 recovery: #54 and #64; both are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -43,6 +43,41 @@ B9 planning: DONE
 - **Public contracts:** `AstronomyEvent/v1`、`RuleAssessment/v1`、`VideoPackage/v1`
 - **Design:** `docs/superpowers/specs/2026-07-20-kaiyuan-evidence-video-pipeline-design.md`
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
+
+### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
+- **Status:** `VERIFYING` (phase 1 only; later phases remain unclaimed)
+- **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+- **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
+- **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
+  defining-star mansion regions and objective relation measurements; then reuse
+  the same contracts for all twenty-eight mansions, navigation cards and an
+  external broadcaster/video claim-audit resource layer.
+- **Phase 1 acceptance:** preserve the existing 角宿一/Spica identity; bind the
+  eight 毕宿 members and the following 觜宿 defining star to pinned Stellarium
+  and Hipparcos records; calculate mansion-region membership separately from
+  nearest-member angular separation; treat an unqualified `临毕` as
+  `ambiguous_relation`; expose no `犯/入/守/留` conclusion without the required
+  distance, transition, velocity or duration evidence.
+- **Later phases:** add all 28 defining stars and regions; add source-backed
+  member/line data and uncertainty states for every mansion; enrich the 28
+  navigation cards; create `ExternalMediaSource/v1`, `ExternalClaim/v1`,
+  `EvidenceLink/v1` and `ExternalAudit/v1`, starting with 祖山觀's 23-item
+  collection and nine priority audits.
+- **Boundary:** research/scientific candidate infrastructure only. No Reviewer
+  A/B substitution, PR #54 or #64 mutation, threshold freeze, formal rule
+  promotion, source-corpus rewrite, official ingest, Qdrant access,
+  `local_kb_default` mutation, automatic weather inference, B11/B12 release or
+  `main` operation.
+- **Phase 1 implementation heads:** `b9e34b3` catalog; `ea98308` pure region
+  evaluator; `ec5db76` provider binding; `a776dda` navigation binding.
+- **Phase 1 verification:** asterism baseline `13 passed`; catalog GREEN
+  `16 passed`; pure evaluator suite `28 passed`; astronomy/asterism focused
+  `58 passed`; navigation/science focused `60 passed`; downstream `613 passed`.
+- **Remaining:** exact-head governance/forbidden-path replay and Draft PR
+  publication. Full 28 defining-star coverage, full member coverage and external
+  media contracts remain later ASTRO-R01 phases and are not claimed complete.
+- **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
+- **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
@@ -373,6 +408,7 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
+→ ASTRO-R01 phase 1 VERIFYING independently; it does not bypass B10-PR-C
 → wait for two different humans to independently complete Reviewer A/B
 → validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes

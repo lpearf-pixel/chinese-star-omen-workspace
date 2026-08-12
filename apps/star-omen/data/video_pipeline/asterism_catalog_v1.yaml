@@ -23,6 +23,39 @@ sources:
     snapshot_path: data/video_pipeline/sources/simbad_spica_v1.json
     locator: HIP 65474 / Spica
     reference_frame: ICRS J2000
+  - source_id: source:stellarium-chinese-star-names-bi-zi
+    source_type: git-file
+    title: Stellarium Chinese sky-culture Bi and Zi star names
+    revision: 3972e97101e4321079279b5e5660b074fafc030a
+    path_or_record: skycultures/chinese/star_names.zh_CN.fab
+    content_hash_algorithm: sha256
+    content_hash: 282b2a761861c1aaef2ba494899c77ecb290b3ab57c60ad46fc74ebaaedd4769
+    snapshot_path: data/video_pipeline/sources/stellarium_bi_zi_v1.json
+    upstream_content_id_algorithm: git-sha1
+    upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+    locator: '毕宿, 附耳 and 觜宿 fixed records'
+  - source_id: source:stellarium-chinese-lunar-system
+    source_type: git-file
+    title: Stellarium Chinese lunar-system defining stars
+    revision: 3972e97101e4321079279b5e5660b074fafc030a
+    path_or_record: skycultures/chinese/index.json
+    content_hash_algorithm: sha256
+    content_hash: 26f1c685986e960f6c88938b80515eeb1762a590cfa46f4b7a745d3343e6ff8e
+    snapshot_path: data/video_pipeline/sources/stellarium_lunar_system_v1.json
+    upstream_content_id_algorithm: git-sha1
+    upstream_content_id: 14eea850bc161e4f48a172751fb4e6043154f7f9
+    locator: lunar_system.defining_stars
+    reference_frame: apparent equatorial of date
+  - source_id: source:hipparcos-i-239-bi-zi
+    source_type: catalog-record
+    title: CDS VizieR Hipparcos Main Catalogue selected Bi and Zi records
+    revision: '2026-08-12'
+    path_or_record: I/239/hip_main selected HIP records
+    content_hash_algorithm: sha256
+    content_hash: 4ace2023388ceffed107a6a02eb4a7213ecea0e4512feea4c210efbe8be5ea4c
+    snapshot_path: data/video_pipeline/sources/hipparcos_bi_zi_v1.json
+    locator: HIP 18724/20205/20455/20648/20713/20885/20889/21421/21683/26207
+    reference_frame: ICRS, coordinate epoch J1991.25
 entries:
   - modern_object_id: hip:65474
     traditional_star_id: jiao-xiu-1
@@ -45,3 +78,146 @@ entries:
     mapping_method: catalog-identity
     confidence: 1.0
     editorial_status: verified_identity
+  - modern_object_id: hip:20889
+    traditional_star_id: bi-xiu-1
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿一
+    aliases: [畢宿一, hip 20889]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 67.15388879, dec_deg: 19.18052092, pm_ra_cosdec_mas_per_year: 107.23, pm_dec_mas_per_year: -36.77}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:20648
+    traditional_star_id: bi-xiu-2
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿二
+    aliases: [畢宿二, hip 20648]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 66.37215593, dec_deg: 17.92798917, pm_ra_cosdec_mas_per_year: 108.26, pm_dec_mas_per_year: -32.47}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:20455
+    traditional_star_id: bi-xiu-3
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿三
+    aliases: [畢宿三, hip 20455]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 65.73344722, dec_deg: 17.54258430, pm_ra_cosdec_mas_per_year: 107.75, pm_dec_mas_per_year: -28.84}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:20205
+    traditional_star_id: bi-xiu-4
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿四
+    aliases: [畢宿四, hip 20205]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 64.94805793, dec_deg: 15.62770031, pm_ra_cosdec_mas_per_year: 115.29, pm_dec_mas_per_year: -23.86}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:21421
+    traditional_star_id: bi-xiu-5
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿五
+    aliases: [畢宿五, hip 21421]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 68.98000195, dec_deg: 16.50976164, pm_ra_cosdec_mas_per_year: 62.78, pm_dec_mas_per_year: -189.36}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:20885
+    traditional_star_id: bi-xiu-6
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿六
+    aliases: [畢宿六, hip 20885]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 67.14346805, dec_deg: 15.96221721, pm_ra_cosdec_mas_per_year: 104.76, pm_dec_mas_per_year: -15.01}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:20713
+    traditional_star_id: bi-xiu-7
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿七
+    aliases: [畢宿七, hip 20713]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 66.58613217, dec_deg: 15.61834620, pm_ra_cosdec_mas_per_year: 114.66, pm_dec_mas_per_year: -33.30}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:18724
+    traditional_star_id: bi-xiu-8
+    asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿八
+    aliases: [畢宿八, hip 18724]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 60.17008591, dec_deg: 12.49037571, pm_ra_cosdec_mas_per_year: -8.15, pm_dec_mas_per_year: -11.98}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:21683
+    traditional_star_id: fu-er
+    asterism_id: fu-er
+    canonical_chinese_name: 附耳
+    aliases: [附耳增四, hip 21683]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 69.81854938, dec_deg: 15.91802420, pm_ra_cosdec_mas_per_year: 82.40, pm_dec_mas_per_year: -19.53}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-membership
+    confidence: 0.5
+    editorial_status: ambiguous
+  - modern_object_id: hip:26207
+    traditional_star_id: zi-xiu-1
+    asterism_id: zi-xiu
+    canonical_chinese_name: 觜宿一
+    aliases: [hip 26207]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 83.78449043, dec_deg: 9.93416294, pm_ra_cosdec_mas_per_year: -1.03, pm_dec_mas_per_year: -1.86}
+    source_refs: [source:stellarium-chinese-star-names-bi-zi, source:hipparcos-i-239-bi-zi]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+asterisms:
+  - asterism_id: bi-xiu
+    canonical_chinese_name: 毕宿
+    aliases: [畢宿]
+    member_object_ids:
+      - hip:20889
+      - hip:20648
+      - hip:20455
+      - hip:20205
+      - hip:21421
+      - hip:20885
+      - hip:20713
+      - hip:18724
+    related_object_ids: [hip:21683]
+    defining_star_object_id: hip:20889
+    line_segments:
+      - [hip:20889, hip:20648, hip:20455, hip:20205]
+      - [hip:21421, hip:20885, hip:20713, hip:20205, hip:18724]
+      - [hip:21421, hip:21683]
+    source_refs:
+      - source:stellarium-chinese-star-names-bi-zi
+      - source:stellarium-chinese-lunar-system
+    completeness_status: complete_gold_sample
+lunar_mansions:
+  - mansion_id: bi-xiu
+    sequence_index: 19
+    west_boundary_object_id: hip:20889
+    east_boundary_object_id: hip:26207
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_gold_sample

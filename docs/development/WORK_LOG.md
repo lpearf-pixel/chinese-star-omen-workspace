@@ -2,6 +2,91 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 pre-publish scientific review
+
+- Fresh-head review found that the selected Hipparcos I/239 positions had been
+  labelled J2000 and their committed proper motions were not passed to
+  Skyfield. Added a RED provider regression, corrected the coordinate epoch to
+  J1991.25, bound both proper-motion components, and retained the existing
+  SIMBAD Spica J2000 identity unchanged.
+- Recomputed the pinned Hipparcos source and gold-fixture hashes. Full local
+  verification passed: 21 governance-script unit tests and 614 downstream
+  pytest cases. No Runner tag is created.
+
+## 2026-08-12 — ASTRO-R01 twenty-eight mansion foundation started
+
+- Live recovery resolved `stable/kaiyuan-v2` to
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; the only open pull requests are
+  Draft #54 and Draft #64. The previously planned
+  `codex/kaiyuan-28-mansions-external-audit-v1` branch did not exist remotely.
+- Workspace maintenance had removed the previous local checkout. A fresh,
+  isolated checkout was restored from the exact stable head and the approved
+  feature branch was created without modifying stable, main, #54 or #64.
+- Existing asterism baseline: `13 passed in 0.72s` for
+  `tests/video_pipeline/asterisms`; the committed scientific catalog contains
+  only the source-backed `HIP 65474 / Spica = 角宿一` identity.
+- Navigation already contains a twenty-eight-mansion overview and mansion
+  cards, but it is not a scientific catalog. A fresh link replay proved all 28
+  overview targets exist; the actual gap was the absence of a machine-bound
+  scientific status block on the 毕宿 card. Navigation must consume versioned
+  scientific status rather than being treated as proof of modern identity.
+- Source research fixed the 毕宿 gold sample to Stellarium commit
+  `3972e97101e4321079279b5e5660b074fafc030a`: member HIP IDs 20889, 20648,
+  20455, 20205, 21421, 20885, 20713 and 18724. The same fixed sky-culture file
+  defines the 毕宿 western boundary as HIP 20889 and the following 觜宿 boundary
+  as HIP 26207. Coordinates will be bound to CDS VizieR catalogue I/239 rather
+  than inferred from display geometry.
+- Boundaries remain unchanged: no corpus rewrite, formal rule promotion,
+  Reviewer A/B substitution, threshold freeze, official ingest, Qdrant,
+  `local_kb_default`, automatic weather inference, B11/B12 or main operation.
+- Runner: `NOT RUN`; this is routine task-sized development under the local-first
+  policy.
+
+### ASTRO-R01 phase 1 implementation and verification
+
+- Task 1 catalog TDD: initial `4 failed, 12 passed` because asterism/mansion
+  methods, 毕宿 mappings and fixture were absent. After strict additive catalog
+  models, three canonical source snapshots, ten object records and the gold
+  fixture, the suite passed `16 passed`. Local commit: `b9e34b3`.
+- Source nuance: fixed Stellarium records name HIP 21683 both `附耳` and
+  `附耳增四`; it is stored as related `fu-er / ambiguous`, outside the eight
+  base members. This is not silently resolved.
+- Task 2 relation TDD: initial collection RED was
+  `ModuleNotFoundError: mansion_regions`. The pure circular interval, spherical
+  separation, same-frame, exact-member and explicit-threshold suite passed
+  `12 passed`; all asterism tests passed `28 passed`. Local commit: `ea98308`.
+- Task 3 provider TDD: initial `4 failed, 11 passed` for missing position-bound
+  assessment fields and provider adapter. The offline Skyfield adapter now binds
+  UTC, catalog SHA and actual target/boundary/member apparent positions. Focused
+  relation tests passed `15`; complete astronomy plus asterism regression passed
+  `58`. Local commit: `ec5db76`.
+- Task 4 navigation TDD: link replay proved the overview already resolves all
+  28 distinct cards; RED was exactly `1 failed, 1 passed` because the 毕宿 card
+  lacked `scientific_catalog`. The card now has a simplified alias, exact member
+  and boundary IDs, `derived_region` disclosure and an explicit `临` ambiguity
+  warning. Navigation plus science passed `60`. Local commit: `a776dda`.
+- First full-gate invocation failed before tests because `.venv/bin` was not on
+  PATH (`pytest: not found`). The second invocation ran 613 tests and produced
+  `612 passed, 1 failed`; the sole failure was a subprocess using the ambient
+  system `CODEX_PRIMARY_RUNTIME_PYTHON`, which lacked the editable
+  `research_sources` package. No test or implementation was changed. With both
+  interpreter paths bound to the repository environment, the exact command
+  completed successfully:
+
+```text
+CODEX_PRIMARY_RUNTIME_PYTHON="$PWD/.venv/bin/python" \
+PATH="$PWD/.venv/bin:$PATH" make downstream-test
+613 passed in 6.26s
+```
+
+- Phase 1 remains `VERIFYING` until the exact governance closeout head passes
+  governance unit/checker, focused/full replay, canonical source/fixture hash
+  checks, diff review and forbidden-path scan. Runner remains `NOT RUN` under
+  the local-first task policy.
+- Unclaimed work: the other 27 mansion definitions, complete 28-mansion cycle,
+  remaining member/line mappings, all-card scientific status and external-media
+  contracts/inventory/audits.
+
 
 ## 2026-08-03 — GOV-T04 pilot verified; final review fixes prepared
 
