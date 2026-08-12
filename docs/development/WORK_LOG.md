@@ -2,6 +2,60 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 phase 5 real-source implementation verified locally
+
+- `f242112` opened the source gate and froze the approved collection denominator
+  at episodes 1–23 while recording the live total of 40 as source drift.
+  `0f5e47a` added the exact public-metadata inventory, nine candidate audit
+  bundles, the WMO context snapshot and a canonical 11-asset manifest.
+  `af085bd` corrected direct-work epoch `1786522330` to its exact UTC value
+  `2026-08-12T08:12:10Z` and added the timezone regression.
+- The inventory contains 23 unique work IDs: 17 notes and 6 videos. Every item
+  binds its exact episode, work ID, media kind, canonical URL, UTC publication
+  time and captured-description SHA-256. No transcript, OCR, image contents or
+  unlocated classical passage was imported.
+- The fixed priority rubric selected episodes `1,2,3,7,9,11,16,20,22`.
+  Episode 22/work `7669807398794598565` splits the caption into the exact spans
+  `毕宿天象的烈风` (`source_missing`) and `能不能对应海上风暴？`
+  (`ambiguous`). The WMO snapshot is `context_only`; it does not establish any
+  equivalence between 烈风 and a maritime storm or tropical cyclone.
+- Independent review found no asset mismatch and no Critical issue. Its two
+  Important gaps were fixed in `3159828`: tests now pin all 23 exact inventory
+  tuples and cross-bind the WMO reference ID, URL and snapshot SHA-256 to the
+  gold audit. A controlled bad-hash mutation failed the inventory test, then
+  the restored suite passed `35`.
+- Fresh pre-publication verification on exact local head
+  `31598286c38be22c98618ec519f0af44b6600ff3`, tree
+  `0a37058a2affe15c65933cc9de723894988dab0b`, passed governance unit tests
+  `21`; development governance `changed_files=91 code_files=32`; combined
+  science/navigation/contracts/external-media regression `179`; canonical
+  source/fixture tests `13`; full downstream `673`; and compileall. Diff check,
+  stable-ancestor, clean-worktree and forbidden raw corpus/Qdrant/
+  `local_kb_default`/workflow/B11/B12/Reviewer path gates also passed.
+- This is pre-publication evidence because recording it changes the head. The
+  resulting documentation head must replay the exact gates, then publish only
+  a non-force fast-forward with identical tree bytes to Draft PR #65. Runner
+  remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 5 real-source gate opened
+
+- The user supplied a direct creator short link and a direct work short link.
+  Browser readback resolved the exact creator as 祖山觀（無用之人）🌓, Douyin
+  number `35031221639`, UID `2129076815950670`, and stable `sec_uid`
+  `MS4wLjABAAAAAzgxglR-dz-mRK53rZNuTqMwh1HktiIHLXa-3ZSVXCH4zDH0xjcWCN8BKyQ3plyK`.
+- The direct work `7673054975425692773` binds the same creator and collection
+  `7664842437629921326` (`8月必看天象值得期待`), with an exact platform
+  timestamp. Collection episode locators 1–23 resolved to 23 unique work IDs,
+  consecutive episode numbers and the same creator/collection identity.
+- The live collection reports 40 episodes. The approved Phase 5 denominator is
+  frozen as episodes 1–23; episodes 24–40 are recorded as source drift and are
+  not silently added. Episode 22 is work `7669807398794598565`, the approved
+  “毕宿天象的烈风，能不能对应海上风暴？” gold sample.
+- ASTRO-R01 moves from source-locator `BLOCKED` to real-source `IN_PROGRESS`.
+  Metadata is public-source evidence only. Missing transcript/classical loci
+  remain explicit; no model approval or 烈风/weather-system equivalence is
+  authorized.
+
 ## 2026-08-12 — ASTRO-R01 phase 5 contract implementation and source block
 
 - Plan/state commit `998e0b5` separated strict contract work from real-source

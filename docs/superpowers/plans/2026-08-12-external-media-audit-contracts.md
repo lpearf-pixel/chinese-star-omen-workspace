@@ -109,18 +109,18 @@ Expected: schemas, manifests, hashes, models and registry agree byte-for-byte.
 - Future create: `apps/star-omen/data/video_pipeline/external_media/祖山觀/*.json`
 - Future create: `tests/fixtures/external-media/祖山觀/*`
 
-- [ ] **Step 1: Resolve the exact creator/account locator**
+- [x] **Step 1: Resolve the exact creator/account locator**
 
 Accept only a direct creator page, collection page or one direct work URL whose
 account identity can be followed to the source collection. Search snippets and
 same-name accounts do not satisfy this gate.
 
-- [ ] **Step 2: Capture the exact 23-work denominator and hashes**
+- [x] **Step 2: Capture the exact 23-work denominator and hashes**
 
 Record immutable work IDs/URLs, publication timestamps, captured metadata/text
 hashes, rights/capture notes and explicit missing states.
 
-- [ ] **Step 3: Audit nine priority works**
+- [x] **Step 3: Audit nine priority works**
 
 Split exact spans into atomic claims and link them to source-bound classical,
 astronomical, historical or modern evidence. The 毕宿烈风/海上风暴 work is the
@@ -133,10 +133,13 @@ and forbidden-path gates. Publish only an exact-tree fast-forward to Draft #65.
 
 ## Current source gate
 
-Public exact-name/title searches and Personal Context recovery on 2026-08-12
-found no 祖山觀 account locator, direct work URL, transcript or time span. Tasks
-1–3 are independently implementable and testable. Task 4 remains externally
-blocked; no placeholder media record is authorized.
+The gate opened on 2026-08-12 from user-supplied direct Douyin links. The
+creator resolves to 祖山觀（無用之人）🌓 / `sec_uid`
+`MS4wLjABAAAAAzgxglR-dz-mRK53rZNuTqMwh1HktiIHLXa-3ZSVXCH4zDH0xjcWCN8BKyQ3plyK`,
+and the work resolves to the same account and collection
+`7664842437629921326`. Freeze the approved denominator as collection episodes
+1–23 even though the live collection now reports 40 episodes. Missing
+transcripts, OCR or cited classical loci remain explicit rather than inferred.
 
 ## Plan self-review
 

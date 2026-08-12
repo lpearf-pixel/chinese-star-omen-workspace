@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 BLOCKED (phase 5 source locator); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 VERIFYING (phase 5 real-source closeout); B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `BLOCKED` (phase 5 real-source locator; later phases remain unclaimed)
+- **Status:** `VERIFYING` (phase 5 exact-head publication; later phases remain unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -144,10 +144,13 @@ B9 planning: DONE
   fixtures. Exact creator/work locators and captured hashes are mandatory;
   missing source bytes must remain `source_missing`, never inferred from search
   snippets or same-name accounts.
-- **Phase 5 source gate:** public search and Personal Context recovery found no
-  exact 祖山觀 account URL, 23 work locators, transcripts or timestamps. Contract
-  implementation may proceed; the real inventory and nine audits remain
-  blocked until an exact creator/account locator is available.
+- **Phase 5 source gate:** opened on 2026-08-12 by the user-supplied direct
+  creator and work short links. They resolve to 祖山觀（無用之人）🌓, Douyin
+  number `35031221639`, UID `2129076815950670`, stable `sec_uid`
+  `MS4wLjABAAAAAzgxglR-dz-mRK53rZNuTqMwh1HktiIHLXa-3ZSVXCH4zDH0xjcWCN8BKyQ3plyK`,
+  and collection `7664842437629921326`. The approved denominator is frozen as
+  collection episodes 1–23; the live collection's growth to 40 is source drift,
+  not permission to expand this phase.
 - **Phase 5 contract implementation heads:** `275ec71` four strict public models;
   `2f5a6c4` fail-closed bundle/cross-reference semantics; `3c315a6` committed
   schemas, registry entries and canonical synthetic fixtures.
@@ -157,9 +160,22 @@ B9 planning: DONE
   passed governance `21`, development governance `78 files / 31 code files`,
   focused science/navigation/contracts/external-media `174`, downstream `668`
   and compileall. Exact evidence-head replay and Draft publication remain.
-- **Remaining/blocker:** a direct 祖山觀 creator page, collection page or one
-  work URL that resolves to the creator account. Without it, the 23-item
-  inventory, nine priority audits and phase 6 expansion cannot be source-bound.
+- **Phase 5 real-source implementation:** `f242112` opened the source gate;
+  `0f5e47a` added the exact 23-item inventory, nine candidate audit bundles and
+  canonical real-asset manifest; `af085bd` fixed the direct-work timestamp to
+  exact UTC; `3159828` pinned all 23 inventory tuples and cross-bound the WMO
+  context snapshot to the gold audit. Episode 22/work `7669807398794598565`
+  remains `ambiguous`; missing classical source is `source_missing` and no
+  weather-system equivalence is inferred.
+- **Phase 5 real-source verification:** independent review found no Critical or
+  asset mismatch; all Important findings were fixed. Pre-publication exact head
+  `3159828`, tree `0a37058a`, passed governance `21`, development governance
+  `91 files / 32 code files`, focused `179`, canonical source/fixture `13`, full
+  downstream `673`, compileall, diff, stable-ancestor, clean-worktree and
+  forbidden-path gates.
+- **Current work:** replay the gates on the evidence-documentation head and
+  publish an identical-tree, non-force fast-forward to Draft PR #65. Runner is
+  not authorized and no merge will be attempted.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 - **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.

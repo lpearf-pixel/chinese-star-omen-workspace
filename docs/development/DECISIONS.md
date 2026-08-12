@@ -289,3 +289,22 @@
 - **Boundary:** no raw corpus mutation, Reviewer A/B substitution, threshold
   freeze, official ingest, Qdrant, `local_kb_default`, B11/B12, automatic
   publication or `main` operation.
+
+## D-029 — 祖山觀首批外部媒体分母冻结为合集第 1–23 集
+
+- **Status:** Accepted for ASTRO-R01 Phase 5 implementation.
+- **Decision:** the user-supplied creator/work links resolve to one exact Douyin
+  account and collection `7664842437629921326`. The approved 23-item denominator
+  means collection episodes 1 through 23, each bound to its immutable platform
+  work ID, canonical work type/URL, UTC publication time and captured metadata
+  hash. Later collection growth does not change this denominator.
+- **Drift:** the live collection reported 40 episodes at capture time. Episodes
+  24–40 are recorded as source drift and excluded from the Phase 5 denominator;
+  adding them requires an explicit later bounded sample or phase update.
+- **Audit:** nine works are selected by an explicit high-risk claim rubric and
+  remain `candidate`. Episode 22 / work `7669807398794598565` is the complete
+  毕宿烈风/海上风暴 sample. Exact metadata spans may be audited; absent
+  transcript, OCR, classical locus or modern authority is not reconstructed.
+- **Boundary:** collection membership proves only source identity. It grants no
+  classical or rule authority, substitutes for no human reviewer, and cannot
+  equate 烈风 with gale, typhoon, tropical cyclone or maritime storm.
