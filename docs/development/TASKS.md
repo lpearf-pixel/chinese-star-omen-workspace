@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 3); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 VERIFYING (phase 4); B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `VERIFYING` (phase 3; later phases remain unclaimed)
+- **Status:** `VERIFYING` (phase 4; later phases remain unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -112,13 +112,35 @@ B9 planning: DONE
   downstream `633 passed`; compileall, 14 canonical source/fixture hashes, diff
   and forbidden-path checks passed. One final replay is required after the
   evidence commit.
-- **Remaining:** phase 3 exact-head verification and Draft #65 update; all-card navigation
-  and external-media contracts remain later ASTRO-R01 phases and are not
+- **Phase 3 publication:** Draft PR #65 remote head
+  `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474`; locally reviewed and remote
+  trees both equal `a40c8eb6290b92ee06e1653922d82e6293cbcb27`. Runner was
+  `NOT RUN`; no merge was attempted.
+- **Phase 4 acceptance:** bind every one of the 28 `lunar_mansion_card` files to
+  its exact catalog definition and mansion region; require overview order to
+  equal sequence 1–28; make simplified/traditional title aliases resolve to the
+  same card; expose completeness, members, related endpoints, ambiguous member
+  IDs, lines, boundaries, provenance and source refs without adding unreviewed
+  classical quotations or omen conclusions.
+- **Phase 4 implementation heads:** `f196507` all-card RED gate; `0303dd8`
+  generated catalog bindings and modern-mapping sections.
+- **Phase 4 verification checkpoint:** RED was `1 failed / 1 passed` and listed
+  all 27 cards missing a status block. GREEN focused navigation/science was `80
+  passed`. The exact card projection is `28 cards / 6 explicit alias variants /
+  157 members / 5 related endpoints / 3 ambiguous members / 57 line segments`;
+  28/28 classical body suffixes were byte-identical after the bounded modern
+  section. Pre-closeout head `86eb156` passed governance `21`, development
+  governance `59 files / 18 code files`, focused `80`, canonical hash tests `8`,
+  downstream `633`, compileall, diff, clean-worktree and forbidden-path scans.
+  The evidence commit requires one exact-head replay before publication.
+- **Remaining:** phase 4 evidence-head replay and publication; external-media
+  contracts and creator audits remain later ASTRO-R01 phases and are not
   claimed complete.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 - **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
 - **Phase 3 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-membership-lines.md`.
+- **Phase 4 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-navigation-status.md`.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`

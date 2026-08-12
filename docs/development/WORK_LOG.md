@@ -2,6 +2,69 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 phase 4 pre-closeout verification
+
+- Candidate head `86eb156d9b2684972b4db4c1ae0c86a2e759c60e`, tree
+  `85420b344e02fb097dc03af08d1e458c5332be8f`, started clean and preserves
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583` as an ancestor.
+- Governance unit discovery passed `21`; development governance passed with
+  `changed_files=59 code_files=18`; focused navigation/asterism/astronomy passed
+  `80` in `14.95s`.
+- Canonical asterism-source and astronomy-fixture hash tests passed `8`;
+  compileall passed. Environment-bound full command
+  `env -u CODEX_PRIMARY_RUNTIME_PYTHON PATH="$PWD/.venv/bin:$PATH" make downstream-test`
+  passed `633` in `27.71s`.
+- Diff check, clean-worktree check and the forbidden raw corpus, Reviewer,
+  Qdrant, `local_kb_default`, workflow and `main` path scan passed. The base
+  comparison contains `59` paths, including the 28 derived navigation cards.
+- This is pre-closeout evidence because recording it changes the commit. The
+  resulting exact documentation head must replay the same gates before Draft
+  #65 publication. Runner remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 4 navigation implementation
+
+- Plan/state commit `c455a8b` limited this phase to the 28 existing
+  single-mansion cards and catalog-derived navigation status. Raw corpus,
+  existing classical claims, PR #54/#64, workflows, Qdrant, `local_kb_default`
+  and `main` remain untouched.
+- Task 1 RED was `1 failed / 1 passed`; the failure reported the exact list of
+  27 cards without `scientific_catalog` while the 28-link overview denominator
+  and catalog sequence already passed. The independent expectation covers
+  sequence, aliases, completeness, members, related and ambiguous IDs, defining
+  star, line segments, both boundaries, coordinate/boundary models, provenance
+  and deduplicated source refs. Commit: `f196507`.
+- Task 2 derives all 28 `mansion-navigation-status/v1` blocks and bounded modern
+  explanations from the validated catalog. Projection totals are `28 cards / 6
+  explicit alias variants / 157 members / 5 related endpoints / 3 ambiguous
+  members / 57 line segments`; completeness remains `26 complete / 1
+  complete_gold_sample / 1 ambiguous`. GREEN navigation/asterism/astronomy:
+  `80 passed`. Commit: `0303dd8`.
+- Content preservation compared every changed card from the existing
+  `## 在《唐開元占經》中的使用方式` heading through EOF against `HEAD` before
+  the card commit: all `28/28` suffixes were byte-identical. Every card has
+  exactly one modern-mapping section; no raw corpus file changed.
+- ASTRO-R01 is now `VERIFYING (phase 4)`. Exact-head governance, downstream,
+  compile, canonical-hash, diff, forbidden-path and Draft #65 publication gates
+  remain. Runner remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 3 published; phase 4 started
+
+- Exact local Phase 3 head `f07aa8a39ebe06b3e78f35905403009d09035906`
+  and remote commit `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474` have the same
+  tree `a40c8eb6290b92ee06e1653922d82e6293cbcb27`. Remote parent is the
+  published Phase 2 commit `19c076d`; the ref update was a non-force fast-forward.
+- Final exact-head replay passed governance `21`, focused scientific/navigation
+  `80`, full downstream `633`, canonical source/fixture hashes `14`, compileall,
+  development-governance `31 files / 18 code files`, diff, clean-worktree and
+  forbidden-path checks.
+- Draft PR #65 remains `open / draft / merged=false` against
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`. Runner was
+  `NOT RUN`; no merge was attempted. PR #54/#64 and protected state remain
+  unchanged.
+- Phase 4 begins with the 28 existing single-mansion navigation cards. It may
+  add catalog-derived status metadata and bounded modern-mapping prose only; it
+  must not invent or rewrite classical quotations, omen outcomes or raw corpus.
+
 ## 2026-08-12 — ASTRO-R01 phase 3 member and line implementation
 
 - Live recovery reverified stable at
