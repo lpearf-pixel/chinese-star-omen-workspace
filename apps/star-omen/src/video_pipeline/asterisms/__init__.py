@@ -16,8 +16,11 @@ from .catalog import (
 from .mansion_regions import (
     AngularThresholdV1,
     EquatorialPositionV1,
+    MansionRegionAssessmentV1,
+    MansionRegionObservationV1,
     MansionRelationAssessmentV1,
     MansionRelationObservationV1,
+    assess_mansion_region,
     assess_single_time_relation,
 )
 
@@ -34,8 +37,11 @@ __all__ = [
     "ReferenceCoordinatesV1",
     "AngularThresholdV1",
     "EquatorialPositionV1",
+    "MansionRegionAssessmentV1",
+    "MansionRegionObservationV1",
     "MansionRelationAssessmentV1",
     "MansionRelationObservationV1",
+    "assess_mansion_region",
     "assess_single_time_relation",
     "load_asterism_catalog",
 ]

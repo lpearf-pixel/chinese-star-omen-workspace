@@ -149,7 +149,7 @@ class AsterismDefinitionV1(_StrictModel):
     member_object_ids: list[str] = Field(min_length=1)
     related_object_ids: list[str] = Field(default_factory=list)
     defining_star_object_id: str = Field(pattern=_STABLE_ID_PATTERN)
-    line_segments: list[list[str]] = Field(min_length=1)
+    line_segments: list[list[str]] = Field(default_factory=list)
     source_refs: list[str] = Field(min_length=1)
     completeness_status: Literal["partial", "complete_gold_sample", "ambiguous"]
 
@@ -163,6 +163,8 @@ class AsterismDefinitionV1(_StrictModel):
             raise ValueError("member and related object IDs must be disjoint")
         if self.defining_star_object_id not in self.member_object_ids:
             raise ValueError("defining star must be an asterism member")
+        if self.completeness_status != "partial" and not self.line_segments:
+            raise ValueError("non-partial asterisms require line segments")
         allowed_endpoints = set(self.member_object_ids) | set(self.related_object_ids)
         for segment in self.line_segments:
             if len(segment) < 2:
@@ -181,7 +183,11 @@ class LunarMansionDefinitionV1(_StrictModel):
     coordinate_system: Literal["apparent-equatorial-of-date"]
     provenance_class: Literal["derived_region"]
     source_refs: list[str] = Field(min_length=1)
-    completeness_status: Literal["partial", "complete_gold_sample"]
+    completeness_status: Literal[
+        "partial",
+        "complete_gold_sample",
+        "complete_region_cycle",
+    ]
 
     @model_validator(mode="after")
     def validate_boundaries(self) -> "LunarMansionDefinitionV1":
@@ -208,6 +214,7 @@ class AsterismCatalogV1(_StrictModel):
     schema_version: Literal["asterism-catalog/v1"]
     catalog_id: str = Field(pattern=_STABLE_ID_PATTERN)
     catalog_version: int = Field(strict=True, ge=1)
+    lunar_mansion_cycle_status: Literal["partial", "complete"] = "partial"
     sources: list[CatalogSourceV1]
     entries: list[AsterismEntryV1]
     asterisms: list[AsterismDefinitionV1] = Field(default_factory=list)
@@ -310,6 +317,31 @@ class AsterismCatalogV1(_StrictModel):
             )
             if mansion.west_boundary_object_id != definition.defining_star_object_id:
                 raise ValueError("lunar mansion west boundary must be the defining star")
+        if self.lunar_mansion_cycle_status == "complete":
+            ordered = sorted(self.lunar_mansions, key=lambda item: item.sequence_index)
+            if [item.sequence_index for item in ordered] != list(range(1, 29)):
+                raise ValueError(
+                    "complete lunar mansion catalog requires sequence indices 1 through 28"
+                )
+            west_boundaries = [item.west_boundary_object_id for item in ordered]
+            if len(set(west_boundaries)) != 28:
+                raise ValueError(
+                    "complete lunar mansion catalog requires 28 unique west boundaries"
+                )
+            if any(item.completeness_status == "partial" for item in ordered):
+                raise ValueError(
+                    "complete lunar mansion cycle cannot contain partial mansion regions"
+                )
+            for current, following in zip(
+                ordered,
+                ordered[1:] + ordered[:1],
+                strict=True,
+            ):
+                if current.east_boundary_object_id != following.west_boundary_object_id:
+                    raise ValueError(
+                        "lunar mansion cycle is broken between sequence "
+                        f"{current.sequence_index} and {following.sequence_index}"
+                    )
         return self
 
     def entry(self, modern_object_id: str) -> AsterismEntryV1:

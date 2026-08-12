@@ -17,6 +17,37 @@ from src.video_pipeline.asterisms import (
 APP_ROOT = Path(__file__).resolve().parents[3]
 CATALOG_PATH = APP_ROOT / "data" / "video_pipeline" / "asterism_catalog_v1.yaml"
 
+EXPECTED_MANSION_CYCLE = [
+    (1, "jiao-xiu", "角宿", "hip:65474", "hip:69427"),
+    (2, "kang-xiu", "亢宿", "hip:69427", "hip:72622"),
+    (3, "di-xiu", "氐宿", "hip:72622", "hip:78265"),
+    (4, "fang-xiu", "房宿", "hip:78265", "hip:80112"),
+    (5, "xin-xiu", "心宿", "hip:80112", "hip:82514"),
+    (6, "wei-tail-xiu", "尾宿", "hip:82514", "hip:88635"),
+    (7, "ji-xiu", "箕宿", "hip:88635", "hip:92041"),
+    (8, "dou-xiu", "斗宿", "hip:92041", "hip:100345"),
+    (9, "niu-xiu", "牛宿", "hip:100345", "hip:102618"),
+    (10, "nu-xiu", "女宿", "hip:102618", "hip:106278"),
+    (11, "xu-xiu", "虚宿", "hip:106278", "hip:109074"),
+    (12, "wei-danger-xiu", "危宿", "hip:109074", "hip:113963"),
+    (13, "shi-xiu", "室宿", "hip:113963", "hip:1067"),
+    (14, "bi-wall-xiu", "壁宿", "hip:1067", "hip:4463"),
+    (15, "kui-xiu", "奎宿", "hip:4463", "hip:8903"),
+    (16, "lou-xiu", "娄宿", "hip:8903", "hip:12719"),
+    (17, "wei-stomach-xiu", "胃宿", "hip:12719", "hip:17499"),
+    (18, "mao-xiu", "昴宿", "hip:17499", "hip:20889"),
+    (19, "bi-xiu", "毕宿", "hip:20889", "hip:26207"),
+    (20, "zi-xiu", "觜宿", "hip:26207", "hip:26727"),
+    (21, "shen-xiu", "参宿", "hip:26727", "hip:30343"),
+    (22, "jing-xiu", "井宿", "hip:30343", "hip:41822"),
+    (23, "gui-xiu", "鬼宿", "hip:41822", "hip:42313"),
+    (24, "liu-xiu", "柳宿", "hip:42313", "hip:46390"),
+    (25, "xing-xiu", "星宿", "hip:46390", "hip:48356"),
+    (26, "zhang-xiu", "张宿", "hip:48356", "hip:53740"),
+    (27, "yi-xiu", "翼宿", "hip:53740", "hip:59803"),
+    (28, "zhen-xiu", "轸宿", "hip:59803", "hip:65474"),
+]
+
 
 def test_committed_catalog_resolves_spica_by_exact_id_and_alias() -> None:
     snapshot = load_asterism_catalog(CATALOG_PATH)
@@ -65,6 +96,86 @@ def test_committed_catalog_contains_complete_bi_asterism_and_mansion() -> None:
     assert mansion.boundary_model == "polar-great-circles"
     assert mansion.coordinate_system == "apparent-equatorial-of-date"
     assert mansion.provenance_class == "derived_region"
+
+
+def test_committed_catalog_contains_the_exact_closed_twenty_eight_mansion_cycle() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+
+    assert catalog.lunar_mansion_cycle_status == "complete"
+    ordered = sorted(catalog.lunar_mansions, key=lambda item: item.sequence_index)
+    actual = [
+        (
+            mansion.sequence_index,
+            mansion.mansion_id,
+            catalog.asterism(mansion.mansion_id).canonical_chinese_name,
+            mansion.west_boundary_object_id,
+            mansion.east_boundary_object_id,
+        )
+        for mansion in ordered
+    ]
+
+    assert actual == EXPECTED_MANSION_CYCLE
+    assert len({item.west_boundary_object_id for item in ordered}) == 28
+    assert all(
+        current.east_boundary_object_id == following.west_boundary_object_id
+        for current, following in zip(ordered, ordered[1:] + ordered[:1], strict=True)
+    )
+
+
+def test_partial_mansion_asterism_exposes_only_verified_defining_star() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+
+    definition = catalog.asterism("角宿")
+
+    assert definition.asterism_id == "jiao-xiu"
+    assert definition.member_object_ids == ["hip:65474"]
+    assert definition.defining_star_object_id == "hip:65474"
+    assert definition.line_segments == []
+    assert definition.completeness_status == "partial"
+
+
+def test_complete_mansion_cycle_rejects_missing_sequence_and_broken_edges(
+    tmp_path: Path,
+) -> None:
+    payload = yaml.safe_load(CATALOG_PATH.read_text(encoding="utf-8"))
+    assert payload["lunar_mansion_cycle_status"] == "complete"
+    assert len(payload["lunar_mansions"]) == 28
+
+    missing = deepcopy(payload)
+    missing["lunar_mansions"] = [
+        item for item in missing["lunar_mansions"] if item["sequence_index"] != 12
+    ]
+    missing_path = tmp_path / "missing-sequence.yaml"
+    missing_path.write_text(yaml.safe_dump(missing, allow_unicode=True), encoding="utf-8")
+    with pytest.raises(ValueError, match="sequence indices 1 through 28"):
+        load_asterism_catalog(missing_path)
+
+    duplicate = deepcopy(payload)
+    duplicate["lunar_mansions"][12]["sequence_index"] = 12
+    duplicate_path = tmp_path / "duplicate-sequence.yaml"
+    duplicate_path.write_text(
+        yaml.safe_dump(duplicate, allow_unicode=True),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="sequence indices must be unique"):
+        load_asterism_catalog(duplicate_path)
+
+    broken = deepcopy(payload)
+    broken["lunar_mansions"][18]["east_boundary_object_id"] = "hip:26727"
+    broken_path = tmp_path / "broken-edge.yaml"
+    broken_path.write_text(yaml.safe_dump(broken, allow_unicode=True), encoding="utf-8")
+    with pytest.raises(ValueError, match="cycle is broken"):
+        load_asterism_catalog(broken_path)
+
+    open_cycle = deepcopy(payload)
+    open_cycle["lunar_mansions"][27]["east_boundary_object_id"] = "hip:69427"
+    open_cycle_path = tmp_path / "open-cycle.yaml"
+    open_cycle_path.write_text(
+        yaml.safe_dump(open_cycle, allow_unicode=True),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="cycle is broken"):
+        load_asterism_catalog(open_cycle_path)
 
 
 def test_committed_catalog_resolves_bi_members_by_traditional_name() -> None:

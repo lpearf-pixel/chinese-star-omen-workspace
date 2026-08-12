@@ -79,7 +79,7 @@ def test_asterism_fixture_manifest_binds_spica_identity_fixture() -> None:
 
     assert manifest_bytes == canonical_json_bytes(manifest)
     assert manifest["schema_version"] == "asterism-fixture-manifest/v1"
-    assert len(manifest["fixtures"]) == 2
+    assert len(manifest["fixtures"]) == 3
     fixtures = {fixture["fixture_id"]: fixture for fixture in manifest["fixtures"]}
     fixture = fixtures["spica-jiao-xiu-1-v1"]
     fixture_path = FIXTURE_ROOT / fixture["path"]
@@ -115,3 +115,55 @@ def test_asterism_fixture_manifest_binds_spica_identity_fixture() -> None:
         source_id: source_hashes[source_id]
         for source_id in bi_payload["source_snapshot_sha256"]
     }
+
+    cycle_fixture = fixtures["lunar-mansion-cycle-v1"]
+    cycle_fixture_path = FIXTURE_ROOT / cycle_fixture["path"]
+    assert hashlib.sha256(cycle_fixture_path.read_bytes()).hexdigest() == cycle_fixture["sha256"]
+    cycle_payload = json.loads(cycle_fixture_path.read_text(encoding="utf-8"))
+    assert cycle_payload["schema_version"] == "lunar-mansion-cycle-fixture/v1"
+    assert cycle_payload["sequence_indices"] == list(range(1, 29))
+    assert cycle_payload["defining_star_hip_ids"] == [
+        65474, 69427, 72622, 78265, 80112, 82514, 88635, 92041,
+        100345, 102618, 106278, 109074, 113963, 1067, 4463, 8903,
+        12719, 17499, 20889, 26207, 26727, 30343, 41822, 42313,
+        46390, 48356, 53740, 59803,
+    ]
+    assert cycle_payload["east_boundary_hip_ids"] == [
+        *cycle_payload["defining_star_hip_ids"][1:],
+        cycle_payload["defining_star_hip_ids"][0],
+    ]
+    assert cycle_payload["source_snapshot_sha256"] == {
+        source_id: source_hashes[source_id]
+        for source_id in cycle_payload["source_snapshot_sha256"]
+    }
+
+
+def test_twenty_eight_defining_star_sources_bind_exact_denominators() -> None:
+    catalog = load_asterism_catalog(CATALOG_PATH).catalog
+    sources = {source.source_id: source for source in catalog.sources}
+
+    stellarium = sources["source:stellarium-28-defining-stars"]
+    fixed_names = json.loads(
+        (APP_ROOT / stellarium.snapshot_path).read_text(encoding="utf-8")
+    )
+    assert fixed_names["revision"] == "3972e97101e4321079279b5e5660b074fafc030a"
+    assert [record["hip_id"] for record in fixed_names["records"]] == [
+        65474, 69427, 72622, 78265, 80112, 82514, 88635, 92041,
+        100345, 102618, 106278, 109074, 113963, 1067, 4463, 8903,
+        12719, 17499, 20889, 26207, 26727, 30343, 41822, 42313,
+        46390, 48356, 53740, 59803,
+    ]
+    assert fixed_names["records"][0]["canonical_chinese_names"] == ["角宿一"]
+    assert fixed_names["records"][-1]["canonical_chinese_names"] == ["轸宿一"]
+
+    hipparcos = sources["source:hipparcos-i-239-defining-stars"]
+    coordinate_rows = json.loads(
+        (APP_ROOT / hipparcos.snapshot_path).read_text(encoding="utf-8")
+    )
+    assert coordinate_rows["coordinate_epoch"] == "J1991.25"
+    assert len(coordinate_rows["records"]) == 28
+    assert {record["hip_id"] for record in coordinate_rows["records"]} == {
+        record["hip_id"] for record in fixed_names["records"]
+    }
+    assert all(record["pm_ra_cosdec_mas_per_year"] is not None for record in coordinate_rows["records"])
+    assert all(record["pm_dec_mas_per_year"] is not None for record in coordinate_rows["records"])

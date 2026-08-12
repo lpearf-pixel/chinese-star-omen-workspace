@@ -10,8 +10,8 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Verified at: 2026-08-12
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 1); B10-PR-C human-review BLOCKED
-Open PRs at recovery: #54 and #64; both are Draft
+Current task: ASTRO-R01 VERIFYING (phase 2); B10-PR-C human-review BLOCKED
+Open PRs at recovery: #54, #64 and #65; all are Draft
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -46,7 +46,7 @@ B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
-ASTRO-R01 twenty-eight mansion and external-media audit foundation: VERIFYING (phase 1)
+ASTRO-R01 twenty-eight mansion and external-media audit foundation: VERIFYING (phase 2)
 B10 overall: IN_PROGRESS
 ```
 
@@ -277,8 +277,8 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 
 ```text
 GOV-T04 is integrated at stable c2e8fcabb04354fd14d0c72b3b6020a47e63a583
-→ ASTRO-R01 phase 1: verify and publish the 毕宿 gold-sample Draft PR
-→ ASTRO-R01 phase 2: add all 28 defining stars and the closed mansion-region cycle
+→ ASTRO-R01 phase 1: published as Draft PR #65 at `09d4ec9781e874ef0bc346a7e48d8072541158cf`
+→ ASTRO-R01 phase 2: VERIFYING; 28 defining stars, the closed mansion-region cycle and region-only assessment are implemented
 → ASTRO-R01 phase 3–4: add complete/ambiguous mansion membership and navigation status
 → ASTRO-R01 phase 5: add external-media contracts and the 祖山觀 bounded audit set
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B

@@ -1,6 +1,7 @@
 schema_version: asterism-catalog/v1
 catalog_id: kaiyuan-chinese-asterisms-v1
 catalog_version: 1
+lunar_mansion_cycle_status: complete
 sources:
   - source_id: source:stellarium-chinese-skyculture
     source_type: git-file
@@ -55,6 +56,27 @@ sources:
     content_hash: 4ace2023388ceffed107a6a02eb4a7213ecea0e4512feea4c210efbe8be5ea4c
     snapshot_path: data/video_pipeline/sources/hipparcos_bi_zi_v1.json
     locator: HIP 18724/20205/20455/20648/20713/20885/20889/21421/21683/26207
+    reference_frame: ICRS, coordinate epoch J1991.25
+  - source_id: source:stellarium-28-defining-stars
+    source_type: git-file
+    title: Stellarium Chinese lunar-mansion defining-star names
+    revision: 3972e97101e4321079279b5e5660b074fafc030a
+    path_or_record: skycultures/chinese/star_names.zh_CN.fab
+    content_hash_algorithm: sha256
+    content_hash: 7f1f66f2656ce80e83a3be7e2200c7fed97a0d381dcc12e18b4fcce570db097a
+    snapshot_path: data/video_pipeline/sources/stellarium_28_defining_stars_v1.json
+    upstream_content_id_algorithm: git-sha1
+    upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+    locator: fixed 宿一 records for lunar_system.defining_stars
+  - source_id: source:hipparcos-i-239-defining-stars
+    source_type: catalog-record
+    title: CDS VizieR Hipparcos Main Catalogue 28 defining-star records
+    revision: '2026-08-12'
+    path_or_record: I/239/hip_main selected 28 lunar-mansion defining-star records
+    content_hash_algorithm: sha256
+    content_hash: 67aaab8802e3a4eace23844fc5377d1ce313cf075451c0640c06bc90b7f3050e
+    snapshot_path: data/video_pipeline/sources/hipparcos_28_defining_stars_v1.json
+    locator: HIP 1067/4463/8903/12719/17499/20889/26207/26727/30343/41822/42313/46390/48356/53740/59803/65474/69427/72622/78265/80112/82514/88635/92041/100345/102618/106278/109074/113963
     reference_frame: ICRS, coordinate epoch J1991.25
 entries:
   - modern_object_id: hip:65474
@@ -188,7 +210,444 @@ entries:
     mapping_method: catalog-identity
     confidence: 1.0
     editorial_status: verified_identity
+  - modern_object_id: hip:69427
+    traditional_star_id: kang-xiu-1
+    asterism_id: kang-xiu
+    canonical_chinese_name: 亢宿一
+    aliases: [hip 69427]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 213.22392088, dec_deg: -10.274044, pm_ra_cosdec_mas_per_year: 8.04, pm_dec_mas_per_year: 140.79}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:72622
+    traditional_star_id: di-xiu-1
+    asterism_id: di-xiu
+    canonical_chinese_name: 氐宿一
+    aliases: [hip 72622]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 222.71990536, dec_deg: -16.04161047, pm_ra_cosdec_mas_per_year: -105.69, pm_dec_mas_per_year: -69.0}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:78265
+    traditional_star_id: fang-xiu-1
+    asterism_id: fang-xiu
+    canonical_chinese_name: 房宿一
+    aliases: [hip 78265]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 239.71300283, dec_deg: -26.1140428, pm_ra_cosdec_mas_per_year: -12.0, pm_dec_mas_per_year: -25.71}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:80112
+    traditional_star_id: xin-xiu-1
+    asterism_id: xin-xiu
+    canonical_chinese_name: 心宿一
+    aliases: [hip 80112]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 245.29717718, dec_deg: -25.59275259, pm_ra_cosdec_mas_per_year: -10.03, pm_dec_mas_per_year: -18.03}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:82514
+    traditional_star_id: wei-tail-xiu-1
+    asterism_id: wei-tail-xiu
+    canonical_chinese_name: 尾宿一
+    aliases: [hip 82514]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 252.96766195, dec_deg: -38.04732717, pm_ra_cosdec_mas_per_year: -8.84, pm_dec_mas_per_year: -21.6}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:88635
+    traditional_star_id: ji-xiu-1
+    asterism_id: ji-xiu
+    canonical_chinese_name: 箕宿一
+    aliases: [hip 88635]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 271.45218586, dec_deg: -30.42365007, pm_ra_cosdec_mas_per_year: -55.75, pm_dec_mas_per_year: -181.53}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:92041
+    traditional_star_id: dou-xiu-1
+    asterism_id: dou-xiu
+    canonical_chinese_name: 斗宿一
+    aliases: [hip 92041]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 281.41397083, dec_deg: -26.9907794, pm_ra_cosdec_mas_per_year: 51.15, pm_dec_mas_per_year: 0.45}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:100345
+    traditional_star_id: niu-xiu-1
+    asterism_id: niu-xiu
+    canonical_chinese_name: 牛宿一
+    aliases: [hip 100345]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 305.25269347, dec_deg: -14.78140119, pm_ra_cosdec_mas_per_year: 48.42, pm_dec_mas_per_year: 14.0}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:102618
+    traditional_star_id: nu-xiu-1
+    asterism_id: nu-xiu
+    canonical_chinese_name: 女宿一
+    aliases: [hip 102618]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 311.91888574, dec_deg: -9.49568988, pm_ra_cosdec_mas_per_year: 31.89, pm_dec_mas_per_year: -35.32}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:106278
+    traditional_star_id: xu-xiu-1
+    asterism_id: xu-xiu
+    canonical_chinese_name: 虚宿一
+    aliases: [虛宿一, hip 106278]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 322.88966951, dec_deg: -5.57115593, pm_ra_cosdec_mas_per_year: 22.79, pm_dec_mas_per_year: -6.7}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:109074
+    traditional_star_id: wei-danger-xiu-1
+    asterism_id: wei-danger-xiu
+    canonical_chinese_name: 危宿一
+    aliases: [hip 109074]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 331.44593869, dec_deg: -0.31982656, pm_ra_cosdec_mas_per_year: 17.9, pm_dec_mas_per_year: -9.93}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:113963
+    traditional_star_id: shi-xiu-1
+    asterism_id: shi-xiu
+    canonical_chinese_name: 室宿一
+    aliases: [hip 113963]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 346.1900702, dec_deg: 15.20536786, pm_ra_cosdec_mas_per_year: 61.1, pm_dec_mas_per_year: -42.56}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:1067
+    traditional_star_id: bi-wall-xiu-1
+    asterism_id: bi-wall-xiu
+    canonical_chinese_name: 壁宿一
+    aliases: [hip 1067]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 3.30895828, dec_deg: 15.18361593, pm_ra_cosdec_mas_per_year: 4.7, pm_dec_mas_per_year: -8.24}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:4463
+    traditional_star_id: kui-xiu-1
+    asterism_id: kui-xiu
+    canonical_chinese_name: 奎宿一
+    aliases: [hip 4463]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 14.30178237, dec_deg: 23.41775997, pm_ra_cosdec_mas_per_year: -43.72, pm_dec_mas_per_year: -46.06}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:8903
+    traditional_star_id: lou-xiu-1
+    asterism_id: lou-xiu
+    canonical_chinese_name: 娄宿一
+    aliases: [婁宿一, hip 8903]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 28.65978771, dec_deg: 20.80829949, pm_ra_cosdec_mas_per_year: 96.32, pm_dec_mas_per_year: -108.8}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:12719
+    traditional_star_id: wei-stomach-xiu-1
+    asterism_id: wei-stomach-xiu
+    canonical_chinese_name: 胃宿一
+    aliases: [hip 12719]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 40.86296031, dec_deg: 27.70717078, pm_ra_cosdec_mas_per_year: 3.51, pm_dec_mas_per_year: -9.97}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:17499
+    traditional_star_id: mao-xiu-1
+    asterism_id: mao-xiu
+    canonical_chinese_name: 昴宿一
+    aliases: [hip 17499]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 56.21884811, dec_deg: 24.1134484, pm_ra_cosdec_mas_per_year: 21.55, pm_dec_mas_per_year: -44.92}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:26727
+    traditional_star_id: shen-xiu-1
+    asterism_id: shen-xiu
+    canonical_chinese_name: 参宿一
+    aliases: [參宿一, hip 26727]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 85.18968672, dec_deg: -1.94257841, pm_ra_cosdec_mas_per_year: 3.99, pm_dec_mas_per_year: 2.54}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:30343
+    traditional_star_id: jing-xiu-1
+    asterism_id: jing-xiu
+    canonical_chinese_name: 井宿一
+    aliases: [hip 30343]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 95.73996302, dec_deg: 22.51385027, pm_ra_cosdec_mas_per_year: 56.84, pm_dec_mas_per_year: -108.79}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:41822
+    traditional_star_id: gui-xiu-1
+    asterism_id: gui-xiu
+    canonical_chinese_name: 鬼宿一
+    aliases: [hip 41822]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 127.8990288, dec_deg: 18.09455771, pm_ra_cosdec_mas_per_year: -60.05, pm_dec_mas_per_year: -56.5}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:42313
+    traditional_star_id: liu-xiu-1
+    asterism_id: liu-xiu
+    canonical_chinese_name: 柳宿一
+    aliases: [hip 42313]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 129.41419739, dec_deg: 5.70379868, pm_ra_cosdec_mas_per_year: -70.27, pm_dec_mas_per_year: -6.99}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:46390
+    traditional_star_id: xing-xiu-1
+    asterism_id: xing-xiu
+    canonical_chinese_name: 星宿一
+    aliases: [hip 46390]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 141.8968826, dec_deg: -8.65868335, pm_ra_cosdec_mas_per_year: -14.49, pm_dec_mas_per_year: 33.25}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:48356
+    traditional_star_id: zhang-xiu-1
+    asterism_id: zhang-xiu
+    canonical_chinese_name: 张宿一
+    aliases: [張宿一, hip 48356]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 147.86951033, dec_deg: -14.84654997, pm_ra_cosdec_mas_per_year: 18.68, pm_dec_mas_per_year: -21.88}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:53740
+    traditional_star_id: yi-xiu-1
+    asterism_id: yi-xiu
+    canonical_chinese_name: 翼宿一
+    aliases: [hip 53740]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 164.94478664, dec_deg: -18.29909723, pm_ra_cosdec_mas_per_year: -462.39, pm_dec_mas_per_year: 129.11}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
+  - modern_object_id: hip:59803
+    traditional_star_id: zhen-xiu-1
+    asterism_id: zhen-xiu
+    canonical_chinese_name: 轸宿一
+    aliases: [軫宿一, hip 59803]
+    catalog_epoch: J1991.25
+    reference_coordinates: {frame: icrs, epoch: J1991.25, ra_deg: 183.95194937, dec_deg: -17.5419837, pm_ra_cosdec_mas_per_year: -159.58, pm_dec_mas_per_year: 22.31}
+    source_refs: [source:stellarium-28-defining-stars, source:hipparcos-i-239-defining-stars]
+    mapping_method: catalog-identity
+    confidence: 1.0
+    editorial_status: verified_identity
 asterisms:
+  - asterism_id: jiao-xiu
+    canonical_chinese_name: 角宿
+    aliases: []
+    member_object_ids: [hip:65474]
+    related_object_ids: []
+    defining_star_object_id: hip:65474
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: kang-xiu
+    canonical_chinese_name: 亢宿
+    aliases: []
+    member_object_ids: [hip:69427]
+    related_object_ids: []
+    defining_star_object_id: hip:69427
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: di-xiu
+    canonical_chinese_name: 氐宿
+    aliases: []
+    member_object_ids: [hip:72622]
+    related_object_ids: []
+    defining_star_object_id: hip:72622
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: fang-xiu
+    canonical_chinese_name: 房宿
+    aliases: []
+    member_object_ids: [hip:78265]
+    related_object_ids: []
+    defining_star_object_id: hip:78265
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: xin-xiu
+    canonical_chinese_name: 心宿
+    aliases: []
+    member_object_ids: [hip:80112]
+    related_object_ids: []
+    defining_star_object_id: hip:80112
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: wei-tail-xiu
+    canonical_chinese_name: 尾宿
+    aliases: []
+    member_object_ids: [hip:82514]
+    related_object_ids: []
+    defining_star_object_id: hip:82514
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: ji-xiu
+    canonical_chinese_name: 箕宿
+    aliases: []
+    member_object_ids: [hip:88635]
+    related_object_ids: []
+    defining_star_object_id: hip:88635
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: dou-xiu
+    canonical_chinese_name: 斗宿
+    aliases: []
+    member_object_ids: [hip:92041]
+    related_object_ids: []
+    defining_star_object_id: hip:92041
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: niu-xiu
+    canonical_chinese_name: 牛宿
+    aliases: []
+    member_object_ids: [hip:100345]
+    related_object_ids: []
+    defining_star_object_id: hip:100345
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: nu-xiu
+    canonical_chinese_name: 女宿
+    aliases: []
+    member_object_ids: [hip:102618]
+    related_object_ids: []
+    defining_star_object_id: hip:102618
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: xu-xiu
+    canonical_chinese_name: 虚宿
+    aliases: [虛宿]
+    member_object_ids: [hip:106278]
+    related_object_ids: []
+    defining_star_object_id: hip:106278
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: wei-danger-xiu
+    canonical_chinese_name: 危宿
+    aliases: []
+    member_object_ids: [hip:109074]
+    related_object_ids: []
+    defining_star_object_id: hip:109074
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: shi-xiu
+    canonical_chinese_name: 室宿
+    aliases: []
+    member_object_ids: [hip:113963]
+    related_object_ids: []
+    defining_star_object_id: hip:113963
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: bi-wall-xiu
+    canonical_chinese_name: 壁宿
+    aliases: []
+    member_object_ids: [hip:1067]
+    related_object_ids: []
+    defining_star_object_id: hip:1067
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: kui-xiu
+    canonical_chinese_name: 奎宿
+    aliases: []
+    member_object_ids: [hip:4463]
+    related_object_ids: []
+    defining_star_object_id: hip:4463
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: lou-xiu
+    canonical_chinese_name: 娄宿
+    aliases: [婁宿]
+    member_object_ids: [hip:8903]
+    related_object_ids: []
+    defining_star_object_id: hip:8903
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: wei-stomach-xiu
+    canonical_chinese_name: 胃宿
+    aliases: []
+    member_object_ids: [hip:12719]
+    related_object_ids: []
+    defining_star_object_id: hip:12719
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: mao-xiu
+    canonical_chinese_name: 昴宿
+    aliases: []
+    member_object_ids: [hip:17499]
+    related_object_ids: []
+    defining_star_object_id: hip:17499
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
   - asterism_id: bi-xiu
     canonical_chinese_name: 毕宿
     aliases: [畢宿]
@@ -211,7 +670,250 @@ asterisms:
       - source:stellarium-chinese-star-names-bi-zi
       - source:stellarium-chinese-lunar-system
     completeness_status: complete_gold_sample
+  - asterism_id: zi-xiu
+    canonical_chinese_name: 觜宿
+    aliases: []
+    member_object_ids: [hip:26207]
+    related_object_ids: []
+    defining_star_object_id: hip:26207
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: shen-xiu
+    canonical_chinese_name: 参宿
+    aliases: [參宿]
+    member_object_ids: [hip:26727]
+    related_object_ids: []
+    defining_star_object_id: hip:26727
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: jing-xiu
+    canonical_chinese_name: 井宿
+    aliases: []
+    member_object_ids: [hip:30343]
+    related_object_ids: []
+    defining_star_object_id: hip:30343
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: gui-xiu
+    canonical_chinese_name: 鬼宿
+    aliases: []
+    member_object_ids: [hip:41822]
+    related_object_ids: []
+    defining_star_object_id: hip:41822
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: liu-xiu
+    canonical_chinese_name: 柳宿
+    aliases: []
+    member_object_ids: [hip:42313]
+    related_object_ids: []
+    defining_star_object_id: hip:42313
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: xing-xiu
+    canonical_chinese_name: 星宿
+    aliases: []
+    member_object_ids: [hip:46390]
+    related_object_ids: []
+    defining_star_object_id: hip:46390
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: zhang-xiu
+    canonical_chinese_name: 张宿
+    aliases: [張宿]
+    member_object_ids: [hip:48356]
+    related_object_ids: []
+    defining_star_object_id: hip:48356
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: yi-xiu
+    canonical_chinese_name: 翼宿
+    aliases: []
+    member_object_ids: [hip:53740]
+    related_object_ids: []
+    defining_star_object_id: hip:53740
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
+  - asterism_id: zhen-xiu
+    canonical_chinese_name: 轸宿
+    aliases: [軫宿]
+    member_object_ids: [hip:59803]
+    related_object_ids: []
+    defining_star_object_id: hip:59803
+    line_segments: []
+    source_refs: [source:stellarium-28-defining-stars, source:stellarium-chinese-lunar-system]
+    completeness_status: partial
 lunar_mansions:
+  - mansion_id: jiao-xiu
+    sequence_index: 1
+    west_boundary_object_id: hip:65474
+    east_boundary_object_id: hip:69427
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: kang-xiu
+    sequence_index: 2
+    west_boundary_object_id: hip:69427
+    east_boundary_object_id: hip:72622
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: di-xiu
+    sequence_index: 3
+    west_boundary_object_id: hip:72622
+    east_boundary_object_id: hip:78265
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: fang-xiu
+    sequence_index: 4
+    west_boundary_object_id: hip:78265
+    east_boundary_object_id: hip:80112
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: xin-xiu
+    sequence_index: 5
+    west_boundary_object_id: hip:80112
+    east_boundary_object_id: hip:82514
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: wei-tail-xiu
+    sequence_index: 6
+    west_boundary_object_id: hip:82514
+    east_boundary_object_id: hip:88635
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: ji-xiu
+    sequence_index: 7
+    west_boundary_object_id: hip:88635
+    east_boundary_object_id: hip:92041
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: dou-xiu
+    sequence_index: 8
+    west_boundary_object_id: hip:92041
+    east_boundary_object_id: hip:100345
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: niu-xiu
+    sequence_index: 9
+    west_boundary_object_id: hip:100345
+    east_boundary_object_id: hip:102618
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: nu-xiu
+    sequence_index: 10
+    west_boundary_object_id: hip:102618
+    east_boundary_object_id: hip:106278
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: xu-xiu
+    sequence_index: 11
+    west_boundary_object_id: hip:106278
+    east_boundary_object_id: hip:109074
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: wei-danger-xiu
+    sequence_index: 12
+    west_boundary_object_id: hip:109074
+    east_boundary_object_id: hip:113963
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: shi-xiu
+    sequence_index: 13
+    west_boundary_object_id: hip:113963
+    east_boundary_object_id: hip:1067
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: bi-wall-xiu
+    sequence_index: 14
+    west_boundary_object_id: hip:1067
+    east_boundary_object_id: hip:4463
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: kui-xiu
+    sequence_index: 15
+    west_boundary_object_id: hip:4463
+    east_boundary_object_id: hip:8903
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: lou-xiu
+    sequence_index: 16
+    west_boundary_object_id: hip:8903
+    east_boundary_object_id: hip:12719
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: wei-stomach-xiu
+    sequence_index: 17
+    west_boundary_object_id: hip:12719
+    east_boundary_object_id: hip:17499
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: mao-xiu
+    sequence_index: 18
+    west_boundary_object_id: hip:17499
+    east_boundary_object_id: hip:20889
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
   - mansion_id: bi-xiu
     sequence_index: 19
     west_boundary_object_id: hip:20889
@@ -221,3 +923,84 @@ lunar_mansions:
     provenance_class: derived_region
     source_refs: [source:stellarium-chinese-lunar-system]
     completeness_status: complete_gold_sample
+  - mansion_id: zi-xiu
+    sequence_index: 20
+    west_boundary_object_id: hip:26207
+    east_boundary_object_id: hip:26727
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: shen-xiu
+    sequence_index: 21
+    west_boundary_object_id: hip:26727
+    east_boundary_object_id: hip:30343
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: jing-xiu
+    sequence_index: 22
+    west_boundary_object_id: hip:30343
+    east_boundary_object_id: hip:41822
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: gui-xiu
+    sequence_index: 23
+    west_boundary_object_id: hip:41822
+    east_boundary_object_id: hip:42313
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: liu-xiu
+    sequence_index: 24
+    west_boundary_object_id: hip:42313
+    east_boundary_object_id: hip:46390
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: xing-xiu
+    sequence_index: 25
+    west_boundary_object_id: hip:46390
+    east_boundary_object_id: hip:48356
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: zhang-xiu
+    sequence_index: 26
+    west_boundary_object_id: hip:48356
+    east_boundary_object_id: hip:53740
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: yi-xiu
+    sequence_index: 27
+    west_boundary_object_id: hip:53740
+    east_boundary_object_id: hip:59803
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle
+  - mansion_id: zhen-xiu
+    sequence_index: 28
+    west_boundary_object_id: hip:59803
+    east_boundary_object_id: hip:65474
+    boundary_model: polar-great-circles
+    coordinate_system: apparent-equatorial-of-date
+    provenance_class: derived_region
+    source_refs: [source:stellarium-chinese-lunar-system]
+    completeness_status: complete_region_cycle

@@ -39,6 +39,37 @@ class AngularThresholdV1(_StrictModel):
     )
 
 
+class MansionRegionAssessmentV1(_StrictModel):
+    schema_version: Literal["mansion-region-assessment/v1"] = (
+        "mansion-region-assessment/v1"
+    )
+    mansion_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    reference_frame: Literal["apparent-equatorial-of-date", "icrs-j2000"]
+    target_position: EquatorialPositionV1
+    west_boundary_position: EquatorialPositionV1
+    east_boundary_position: EquatorialPositionV1
+    in_mansion_region: bool
+
+
+class MansionRegionObservationV1(_StrictModel):
+    schema_version: Literal["mansion-region-observation/v1"] = (
+        "mansion-region-observation/v1"
+    )
+    body_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    at_utc: datetime
+    asterism_catalog_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    assessment: MansionRegionAssessmentV1
+
+    @field_validator("at_utc")
+    @classmethod
+    def validate_utc(cls, value: datetime) -> datetime:
+        if value.tzinfo is None or value.utcoffset() is None:
+            raise ValueError("observation time must be explicit UTC")
+        if value.utcoffset() != timedelta(0):
+            raise ValueError("observation time must be expressed in UTC")
+        return value
+
+
 class MansionRelationAssessmentV1(_StrictModel):
     schema_version: Literal["mansion-relation-assessment/v1"] = (
         "mansion-relation-assessment/v1"
@@ -116,6 +147,38 @@ def _angular_separation_deg(
     return math.degrees(math.acos(max(-1.0, min(1.0, cosine))))
 
 
+def assess_mansion_region(
+    *,
+    mansion: LunarMansionDefinitionV1,
+    target: EquatorialPositionV1,
+    west_boundary: EquatorialPositionV1,
+    east_boundary: EquatorialPositionV1,
+) -> MansionRegionAssessmentV1:
+    if west_boundary.object_id != mansion.west_boundary_object_id:
+        raise ValueError("west boundary object ID does not match the mansion")
+    if east_boundary.object_id != mansion.east_boundary_object_id:
+        raise ValueError("east boundary object ID does not match the mansion")
+    frames = {
+        target.reference_frame,
+        west_boundary.reference_frame,
+        east_boundary.reference_frame,
+    }
+    if len(frames) != 1:
+        raise ValueError("all positions must use the same reference frame")
+    return MansionRegionAssessmentV1(
+        mansion_id=mansion.mansion_id,
+        reference_frame=target.reference_frame,
+        target_position=target,
+        west_boundary_position=west_boundary,
+        east_boundary_position=east_boundary,
+        in_mansion_region=_inside_circular_interval(
+            value=target.ra_deg,
+            west=west_boundary.ra_deg,
+            east=east_boundary.ra_deg,
+        ),
+    )
+
+
 def assess_single_time_relation(
     *,
     relation_term: str,
@@ -132,6 +195,11 @@ def assess_single_time_relation(
         raise ValueError("relation term must not be empty")
     if mansion.mansion_id != asterism.asterism_id:
         raise ValueError("mansion and asterism IDs must match")
+    if asterism.completeness_status != "complete_gold_sample":
+        raise ValueError(
+            "member proximity requires a complete member catalog; "
+            "use region-only assessment"
+        )
     if west_boundary.object_id != mansion.west_boundary_object_id:
         raise ValueError("west boundary object ID does not match the mansion")
     if east_boundary.object_id != mansion.east_boundary_object_id:
@@ -155,10 +223,11 @@ def assess_single_time_relation(
         ),
         key=lambda item: item[1],
     )
-    in_region = _inside_circular_interval(
-        value=target.ra_deg,
-        west=west_boundary.ra_deg,
-        east=east_boundary.ra_deg,
+    region = assess_mansion_region(
+        mansion=mansion,
+        target=target,
+        west_boundary=west_boundary,
+        east_boundary=east_boundary,
     )
 
     if near_threshold is None:
@@ -189,7 +258,7 @@ def assess_single_time_relation(
         nearest_member_position=nearest_member,
         interpretation_status=interpretation_status,
         inferred_classical_relation=None,
-        in_mansion_region=in_region,
+        in_mansion_region=region.in_mansion_region,
         nearest_member_object_id=nearest_member.object_id,
         nearest_member_angular_separation_deg=nearest_separation,
         near_asterism_status=near_status,

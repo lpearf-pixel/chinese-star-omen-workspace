@@ -2,6 +2,76 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 phase 1 published; phase 2 started
+
+- Live recovery reverified stable at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583` and the complete open set as
+  Draft #54, Draft #64 and Draft #65. PR #54 remains blocked by two different
+  human reviewers; #64 is unchanged.
+- Draft PR #65 is open, unmerged and targets only `stable/kaiyuan-v2`; remote
+  head is `09d4ec9781e874ef0bc346a7e48d8072541158cf`. Local phase-1 head
+  `e218a081640be0cf539e7ef438e635d33ffb0b74` and the remote head have different
+  commit histories because the GitHub App published a single remote commit,
+  but both exact trees are `56f0d51c98694d1b5685e6220f8945106a41f824`.
+- The dedicated checkout is clean. Fresh pre-phase-2 focused baseline:
+  `61 passed in 1.75s` for asterism, astronomy and mansion navigation suites.
+- Phase 2 is recorded `IN_PROGRESS`. Its independent plan fixes the denominator
+  at 28 pinned Stellarium defining stars, 28 Hipparcos coordinate records and a
+  circular east-to-next-west cycle. It adds region-only evaluation so the 27
+  incomplete member catalogs cannot emit misleading nearest-member claims.
+- Full mansion member/line coverage, all-card navigation status and external
+  video resources remain unclaimed phases. Raw corpus, Reviewer A/B, PR #54/#64,
+  Qdrant, `local_kb_default`, B11/B12 and `main` remain untouched. Runner:
+  `NOT RUN`.
+
+### ASTRO-R01 phase 2 implementation checkpoint
+
+- Task 1 catalog RED was `5 failed, 11 passed`: complete-cycle state, partial
+  角宿 shell, cycle mutation rejection, third fixture and two fixed sources were
+  absent. The GREEN catalog has 36 entries, 28 asterism definitions and 28
+  mansion definitions; the complete-cycle validator requires sequence 1–28,
+  28 unique western boundaries and east-to-next-west adjacency including
+  軫宿 → 角宿. Catalog/source/fixture regression: `32 passed`. Commit:
+  `9e350d9`.
+- Pinned source hashes: Stellarium defining-star names
+  `7f1f66f2656ce80e83a3be7e2200c7fed97a0d381dcc12e18b4fcce570db097a`;
+  Hipparcos I/239 defining-star coordinates
+  `67aaab8802e3a4eace23844fc5377d1ce313cf075451c0640c06bc90b7f3050e`;
+  closed-cycle fixture
+  `e2acd93dc37e030f5e36df68ac7d2c74650931c90692d7a8cb1704c7544d825d`.
+- Task 2 RED was the expected import failure for the absent region-only model.
+  The implementation exposes pure west-inclusive/east-exclusive region
+  assessment, proves the actual 室宿 → 壁宿 360/0 wrap and rejects nearest-member
+  evaluation for `partial` asterisms. Region suite `18 passed`; all asterism
+  tests `38 passed`. Commit: `adb2396`.
+- Task 3 RED was the expected missing `MansionRegionObservationV1` import.
+  The offline provider now binds body, UTC, catalog hash and target/boundary
+  apparent positions without adding member claims. Provider suite `6 passed`;
+  focused asterism/astronomy/navigation regression `73 passed`. Commit:
+  `04bfd4b`.
+- ASTRO-R01 is now `VERIFYING (phase 2)`. Full downstream, governance,
+  canonical-hash, compile, diff and forbidden-path replay remain before the
+  exact tree can update Draft PR #65. Runner remains `NOT RUN`.
+
+### ASTRO-R01 phase 2 pre-closeout verification
+
+- Governance unit discovery: `21 passed`; development-governance base-to-head
+  check: `changed_files=26 code_files=15`.
+- Focused asterism/astronomy/navigation replay: `73 passed in 5.11s`.
+- The first full-gate invocation remained in `apps/star-omen` and stopped before
+  tests with `No rule to make target 'downstream-test'`; it is recorded as an
+  invocation error, not a code failure. From repository root, with the primary
+  runtime and PATH bound to `.venv`, `make downstream-test` passed
+  `626 passed in 12.00s`.
+- `compileall`, three canonical JSON/hash bindings, `git diff --check` and the
+  forbidden-path scan passed. The 26-path base comparison contains only the
+  approved Phase 1+2 catalog, astronomy, navigation, test, fixture, plan and
+  governance files; no Reviewer, Qdrant, workflow, `local_kb_default` or raw
+  corpus path changed.
+- This evidence is pre-closeout because recording it changes the commit. The
+  resulting exact documentation head must rerun the same governance, focused,
+  downstream, hash, compile and diff gates before publication.
+
 ## 2026-08-12 — ASTRO-R01 pre-publish scientific review
 
 - Fresh-head review found that the selected Hipparcos I/239 positions had been

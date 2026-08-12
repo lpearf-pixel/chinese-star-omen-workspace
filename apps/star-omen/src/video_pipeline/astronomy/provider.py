@@ -19,7 +19,9 @@ from src.video_pipeline.asterisms.catalog import (
 from src.video_pipeline.asterisms.mansion_regions import (
     AngularThresholdV1,
     EquatorialPositionV1,
+    MansionRegionObservationV1,
     MansionRelationObservationV1,
+    assess_mansion_region,
     assess_single_time_relation,
 )
 from src.video_pipeline.contracts import (
@@ -356,6 +358,40 @@ class SkyfieldEphemerisProvider:
             near_threshold=near_threshold,
         )
         return MansionRelationObservationV1(
+            body_id=body_id,
+            at_utc=utc,
+            asterism_catalog_sha256=self.catalog.sha256,
+            assessment=assessment,
+        )
+
+    def assess_mansion_region(
+        self,
+        *,
+        body_id: str,
+        mansion_id: str,
+        at_utc: datetime,
+        observer: ObserverV1,
+    ) -> MansionRegionObservationV1:
+        utc = _ensure_utc(at_utc)
+        mansion = self.catalog.catalog.mansion(mansion_id)
+        target = self.observe_body(body_id=body_id, at_utc=utc, observer=observer)
+        west_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.west_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        east_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.east_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        assessment = assess_mansion_region(
+            mansion=mansion,
+            target=self._apparent_equatorial_position(target),
+            west_boundary=self._apparent_equatorial_position(west_boundary),
+            east_boundary=self._apparent_equatorial_position(east_boundary),
+        )
+        return MansionRegionObservationV1(
             body_id=body_id,
             at_utc=utc,
             asterism_catalog_sha256=self.catalog.sha256,

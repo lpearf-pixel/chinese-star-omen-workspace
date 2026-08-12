@@ -7,7 +7,11 @@ from pathlib import Path
 import pytest
 from skyfield_data import get_skyfield_data_path
 
-from src.video_pipeline.asterisms import AngularThresholdV1, load_asterism_catalog
+from src.video_pipeline.asterisms import (
+    AngularThresholdV1,
+    MansionRegionObservationV1,
+    load_asterism_catalog,
+)
 from src.video_pipeline.astronomy import (
     EphemerisFileSpecV1,
     SkyfieldEphemerisProvider,
@@ -95,6 +99,42 @@ def test_provider_binds_mars_bi_assessment_to_time_and_catalog(
     assert observation.assessment.near_asterism_status == "not_evaluated"
 
 
+@pytest.mark.parametrize(
+    ("mansion_id", "west_id", "east_id"),
+    [
+        ("jiao-xiu", "hip:65474", "hip:69427"),
+        ("shi-xiu", "hip:113963", "hip:1067"),
+    ],
+)
+def test_provider_binds_region_only_assessment_without_member_proximity(
+    monkeypatch: pytest.MonkeyPatch,
+    mansion_id: str,
+    west_id: str,
+    east_id: str,
+) -> None:
+    provider = build_provider(monkeypatch)
+    at = datetime(2026, 8, 12, 0, tzinfo=timezone.utc)
+
+    observation = provider.assess_mansion_region(
+        body_id="mars",
+        mansion_id=mansion_id,
+        at_utc=at,
+        observer=shanghai_observer(),
+    )
+
+    assert isinstance(observation, MansionRegionObservationV1)
+    assert observation.schema_version == "mansion-region-observation/v1"
+    assert observation.body_id == "mars"
+    assert observation.at_utc == at
+    assert observation.asterism_catalog_sha256 == provider.catalog.sha256
+    assert observation.assessment.mansion_id == mansion_id
+    assert observation.assessment.target_position.object_id == "mars"
+    assert observation.assessment.west_boundary_position.object_id == west_id
+    assert observation.assessment.east_boundary_position.object_id == east_id
+    assert observation.assessment.reference_frame == "apparent-equatorial-of-date"
+    assert not hasattr(observation.assessment, "nearest_member_object_id")
+
+
 def test_provider_applies_only_an_explicit_versioned_near_threshold(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -138,6 +178,15 @@ def test_provider_rejects_unknown_or_incomplete_mansions(
         provider.assess_mansion_relation(
             body_id="mars",
             mansion_id="not-a-mansion",
+            relation_term="临",
+            at_utc=datetime(2026, 8, 12, 0, tzinfo=timezone.utc),
+            observer=shanghai_observer(),
+        )
+
+    with pytest.raises(ValueError, match="complete member catalog.*region-only"):
+        provider.assess_mansion_relation(
+            body_id="mars",
+            mansion_id="jiao-xiu",
             relation_term="临",
             at_utc=datetime(2026, 8, 12, 0, tzinfo=timezone.utc),
             observer=shanghai_observer(),

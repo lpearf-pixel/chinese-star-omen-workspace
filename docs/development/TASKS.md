@@ -12,8 +12,8 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 1); B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs at 2026-08-12 recovery: #54 and #64; both are Draft
+Current task: ASTRO-R01 VERIFYING (phase 2); B10-PR-C remains BLOCKED on two independent human reviews
+Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `VERIFYING` (phase 1 only; later phases remain unclaimed)
+- **Status:** `VERIFYING` (phase 2; later phases remain unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -73,11 +73,28 @@ B9 planning: DONE
 - **Phase 1 verification:** asterism baseline `13 passed`; catalog GREEN
   `16 passed`; pure evaluator suite `28 passed`; astronomy/asterism focused
   `58 passed`; navigation/science focused `60 passed`; downstream `613 passed`.
-- **Remaining:** exact-head governance/forbidden-path replay and Draft PR
-  publication. Full 28 defining-star coverage, full member coverage and external
-  media contracts remain later ASTRO-R01 phases and are not claimed complete.
+- **Phase 1 publication:** Draft PR #65, remote head
+  `09d4ec9781e874ef0bc346a7e48d8072541158cf`; locally reviewed and remote trees
+  both equal `56f0d51c98694d1b5685e6220f8945106a41f824`.
+- **Phase 2 acceptance:** add the exact 28 defining-star denominator, require
+  sequence `1..28`, close every eastern boundary to the next western boundary
+  including 軫宿 → 角宿, and expose region-only assessment without treating a
+  partial defining-star shell as complete nearest-member coverage.
+- **Phase 2 implementation heads:** `9e350d9` closed catalog cycle; `adb2396`
+  region-only/member-proximity split; `04bfd4b` offline provider binding.
+- **Phase 2 verification checkpoint:** exact denominator `36 entries / 28
+  asterisms / 28 lunar_mansions`; catalog/source/fixture suite `32 passed`;
+  pure region suite `18 passed`; focused astronomy/asterism/navigation suite
+  `73 passed`; governance unit tests `21 passed`; development-governance scope
+  `26 files / 15 code files`; full downstream `626 passed`; compileall,
+  canonical-hash, diff and forbidden-path checks passed. One final replay is
+  required after the evidence commit.
+- **Remaining:** phase 2 exact-head verification and Draft #65 update; full
+  member coverage, all-card navigation and external-media contracts remain
+  later ASTRO-R01 phases and are not claimed complete.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
+- **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
@@ -408,7 +425,7 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
-→ ASTRO-R01 phase 1 VERIFYING independently; it does not bypass B10-PR-C
+→ ASTRO-R01 phase 2 VERIFYING on Draft PR #65; it does not bypass B10-PR-C
 → wait for two different humans to independently complete Reviewer A/B
 → validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
