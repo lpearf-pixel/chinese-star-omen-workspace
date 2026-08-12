@@ -36,6 +36,16 @@
   resulting documentation head must replay the exact gates, then publish only
   a non-force fast-forward with identical tree bytes to Draft PR #65. Runner
   remains `NOT RUN`; no merge is authorized.
+- That exact replay passed on local head `f742dc3809a1c56711d8461aede500885a635d9b`,
+  tree `2acb2a5b500446f68cfbcaf111cc3c1ccce1e2f8`. GitHub accepted remote commit
+  `3c7c38c1a76ceae5a2f0fc10eb7169c3744e4a20` as a non-force fast-forward
+  from `fc45ba5243ee2d8a570f25ab843d595acf234c76`; its tree is byte-identical.
+  Readback confirmed Draft PR #65 is `open / draft / merged=false`, base remains
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, and the PR body
+  records the 23-source/nine-audit result and exact verification counts.
+- This publication-evidence-only update is the final local documentation head.
+  It must receive the same exact-head replay and one final non-force
+  fast-forward/readback. Runner remains `NOT RUN`; no merge is authorized.
 
 ## 2026-08-12 — ASTRO-R01 phase 5 real-source gate opened
 

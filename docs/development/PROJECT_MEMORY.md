@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Verified at: 2026-08-12
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 5 real-source closeout); B10-PR-C human-review BLOCKED
+Current task: ASTRO-R01 DONE (approved phases 1–5; later expansion unclaimed); B10-PR-C human-review BLOCKED
 Open PRs at recovery: #54, #64 and #65; all are Draft
 Forbidden target: main
 Protected collection: local_kb_default
@@ -46,7 +46,7 @@ B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
-ASTRO-R01 twenty-eight mansion and external-media audit foundation: VERIFYING (phase 5 exact-head publication)
+ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approved phases 1–5)
 B10 overall: IN_PROGRESS
 ```
 

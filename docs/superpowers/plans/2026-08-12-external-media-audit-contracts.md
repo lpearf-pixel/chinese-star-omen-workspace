@@ -126,7 +126,7 @@ Split exact spans into atomic claims and link them to source-bound classical,
 astronomical, historical or modern evidence. The 毕宿烈风/海上风暴 work is the
 complete sample; no weather equivalence is inferred.
 
-- [ ] **Step 4: Verify, record and publish**
+- [x] **Step 4: Verify, record and publish**
 
 Run exact-head governance, full downstream, canonical hashes, compileall, scope
 and forbidden-path gates. Publish only an exact-tree fast-forward to Draft #65.

@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 5 real-source closeout); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 DONE (approved phases 1–5; later expansion unclaimed); B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `VERIFYING` (phase 5 exact-head publication; later phases remain unclaimed)
+- **Status:** `DONE` (approved phases 1–5; later expansion remains unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -173,9 +173,13 @@ B9 planning: DONE
   `91 files / 32 code files`, focused `179`, canonical source/fixture `13`, full
   downstream `673`, compileall, diff, stable-ancestor, clean-worktree and
   forbidden-path gates.
-- **Current work:** replay the gates on the evidence-documentation head and
-  publish an identical-tree, non-force fast-forward to Draft PR #65. Runner is
-  not authorized and no merge will be attempted.
+- **Phase 5 publication checkpoint:** locally reviewed tree `2acb2a5b` was
+  published as remote commit `3c7c38c1` by a non-force fast-forward. Readback
+  confirmed Draft PR #65 remained open, draft and unmerged on the unchanged
+  stable base. The final evidence-only head requires the same exact-head replay
+  and non-force readback; Runner remains unauthorized and no merge is attempted.
+- **Current work:** none inside the approved phases 1–5. Any later creator or
+  corpus expansion must be separately registered and planned before mutation.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 - **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
