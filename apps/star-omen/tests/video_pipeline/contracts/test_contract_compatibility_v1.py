@@ -10,6 +10,10 @@ import pytest
 from src.video_pipeline.contracts import (
     AstronomyEventV1,
     ContractCompatibilityError,
+    EvidenceLinkV1,
+    ExternalAuditV1,
+    ExternalClaimV1,
+    ExternalMediaSourceV1,
     RuleAssessmentV1,
     VideoPackageV1,
     validate_contract_compatibility,
@@ -28,6 +32,10 @@ REGISTRY_PATH = SCHEMA_ROOT / "schema-registry.json"
         (AstronomyEventV1, "v1/astronomy-event.schema.json"),
         (RuleAssessmentV1, "v1/rule-assessment.schema.json"),
         (VideoPackageV1, "v1/video-package.schema.json"),
+        (ExternalMediaSourceV1, "v1/external-media-source.schema.json"),
+        (ExternalClaimV1, "v1/external-claim.schema.json"),
+        (EvidenceLinkV1, "v1/evidence-link.schema.json"),
+        (ExternalAuditV1, "v1/external-audit.schema.json"),
     ],
 )
 def test_committed_schema_matches_model_schema(model: type, relative_path: str) -> None:
@@ -45,6 +53,10 @@ def test_registry_binds_all_contracts_and_fixture_manifest() -> None:
         "astronomy-event/v1",
         "rule-assessment/v1",
         "video-package/v1",
+        "external-media-source/v1",
+        "external-claim/v1",
+        "evidence-link/v1",
+        "external-audit/v1",
     }
     for entry in entries.values():
         assert entry["owner"] == "apps/star-omen"

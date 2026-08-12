@@ -2,6 +2,53 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-12 — ASTRO-R01 phase 5 contract implementation and source block
+
+- Plan/state commit `998e0b5` separated strict contract work from real-source
+  ingestion. A missing creator locator cannot be replaced by placeholders,
+  search snippets or a same-name account.
+- Task 1 RED was the expected import failure for absent `EvidenceLinkV1` and the
+  other external contracts. `275ec71` adds four strict public models plus nested
+  capture/span/assessment records. GREEN model suite: `18 passed`; existing
+  contract regression: `59 passed`.
+- Task 2 RED was the expected missing `ExternalAuditBundleV1`. `2f5a6c4` closes
+  source, capture-hash, claim, evidence and audit references. It requires
+  relationship-appropriate evidence for `supported_exact`, contradiction for
+  `contradicted`, no evidence for `source_missing`, and modern-authority-only
+  evidence for `modern_inference_only`. GREEN external-media suite: `30 passed`.
+- Task 3 RED was `7 failed / 12 passed` because four schemas, registry entries
+  and fixtures were absent. `3c315a6` registers all seven top-level contracts
+  and adds four canonical/hash-bound synthetic fixtures using `Fixture Creator`
+  and `example.invalid`; tests reject real 祖山 data in those fixtures. GREEN
+  contract/external-media suite: `94 passed`.
+- Pre-closeout verification passed governance `21`, development governance
+  `changed_files=78 code_files=31`, focused science/navigation/contracts/external
+  media `174`, downstream `668` and compileall. Diff/scope and exact evidence-head
+  replay remain before Draft #65 publication.
+- ASTRO-R01 is `BLOCKED (phase 5 source locator)`: public exact-name/title search
+  and Personal Context found no direct 祖山觀 creator page, collection page,
+  work URL, transcript or timestamp. The tested contracts are publishable, but
+  no real 23-item inventory or nine-work audit is claimed.
+
+## 2026-08-12 — ASTRO-R01 phase 4 published; phase 5 started
+
+- Exact local Phase 4 head `c49a4c6d18092f22d486facfc1f7435d2d7ff2b0`
+  and remote commit `b7232ef3c6595c8d209255e2a4550a1d7b63f04a` have the same
+  tree `535ea6e62df4aff6ebb72d9fe4e14f45c338d228`. Remote parent is Phase 3
+  `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474`; the update was a non-force
+  fast-forward.
+- Remote readback confirmed Draft PR #65 is `open / draft / merged=false`, head
+  `b7232ef3`, base `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+  Runner was `NOT RUN`; no merge was attempted. PR #54/#64 remain unchanged.
+- Phase 5 source recovery searched exact traditional/simplified creator and gold
+  sample title variants across public web/platform indices and Personal Context.
+  It recovered no exact 祖山觀 account URL, work IDs, 23-item inventory,
+  transcripts or timestamps. Same-name tourism and geomancy results are rejected.
+- Work continues on the approved strict external-media contracts and fail-closed
+  bundle validation. No real inventory item or claim may be created without an
+  immutable work locator and captured-content hash; real audits remain blocked
+  rather than being populated from search snippets.
+
 ## 2026-08-12 — ASTRO-R01 phase 4 pre-closeout verification
 
 - Candidate head `86eb156d9b2684972b4db4c1ae0c86a2e759c60e`, tree

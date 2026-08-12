@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Verified at: 2026-08-12
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 4); B10-PR-C human-review BLOCKED
+Current task: ASTRO-R01 BLOCKED (phase 5 source locator); B10-PR-C human-review BLOCKED
 Open PRs at recovery: #54, #64 and #65; all are Draft
 Forbidden target: main
 Protected collection: local_kb_default
@@ -46,7 +46,7 @@ B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
-ASTRO-R01 twenty-eight mansion and external-media audit foundation: VERIFYING (phase 4)
+ASTRO-R01 twenty-eight mansion and external-media audit foundation: BLOCKED (phase 5 source locator)
 B10 overall: IN_PROGRESS
 ```
 
@@ -278,9 +278,8 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ```text
 GOV-T04 is integrated at stable c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 → ASTRO-R01 phase 1: published as Draft PR #65 at `09d4ec9781e874ef0bc346a7e48d8072541158cf`
-→ ASTRO-R01 phase 2: VERIFYING; 28 defining stars, the closed mansion-region cycle and region-only assessment are implemented
-→ ASTRO-R01 phase 3–4: add complete/ambiguous mansion membership and navigation status
-→ ASTRO-R01 phase 5: add external-media contracts and the 祖山觀 bounded audit set
+→ ASTRO-R01 phases 1–4: published on Draft PR #65 through remote `b7232ef3c6595c8d209255e2a4550a1d7b63f04a`
+→ ASTRO-R01 phase 5: add external-media contracts; 祖山觀 inventory remains fail-closed until an exact account/work locator is recovered
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
 → keep PR #64 Draft; its Core14 provisional-use governance is not part of ASTRO-R01
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED

@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 VERIFYING (phase 4); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 BLOCKED (phase 5 source locator); B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -45,7 +45,7 @@ B9 planning: DONE
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
 
 ### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
-- **Status:** `VERIFYING` (phase 4; later phases remain unclaimed)
+- **Status:** `BLOCKED` (phase 5 real-source locator; later phases remain unclaimed)
 - **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
 - **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
 - **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
@@ -133,14 +133,39 @@ B9 planning: DONE
   governance `59 files / 18 code files`, focused `80`, canonical hash tests `8`,
   downstream `633`, compileall, diff, clean-worktree and forbidden-path scans.
   The evidence commit requires one exact-head replay before publication.
-- **Remaining:** phase 4 evidence-head replay and publication; external-media
-  contracts and creator audits remain later ASTRO-R01 phases and are not
-  claimed complete.
+- **Phase 4 publication:** Draft PR #65 remote head
+  `b7232ef3c6595c8d209255e2a4550a1d7b63f04a`; locally reviewed and remote
+  trees both equal `535ea6e62df4aff6ebb72d9fe4e14f45c338d228`. Its parent is Phase 3
+  `dbfa9d2`; the ref update was a non-force fast-forward. Runner was `NOT RUN`;
+  no merge was attempted.
+- **Phase 5 acceptance:** add strict `ExternalMediaSource/v1`,
+  `ExternalClaim/v1`, `EvidenceLink/v1` and `ExternalAudit/v1` contracts plus a
+  cross-reference bundle validator, committed JSON Schemas and canonical
+  fixtures. Exact creator/work locators and captured hashes are mandatory;
+  missing source bytes must remain `source_missing`, never inferred from search
+  snippets or same-name accounts.
+- **Phase 5 source gate:** public search and Personal Context recovery found no
+  exact 祖山觀 account URL, 23 work locators, transcripts or timestamps. Contract
+  implementation may proceed; the real inventory and nine audits remain
+  blocked until an exact creator/account locator is available.
+- **Phase 5 contract implementation heads:** `275ec71` four strict public models;
+  `2f5a6c4` fail-closed bundle/cross-reference semantics; `3c315a6` committed
+  schemas, registry entries and canonical synthetic fixtures.
+- **Phase 5 verification checkpoint:** Task 1 RED was an import failure, then
+  model GREEN `18` and existing-contract regression `59`; bundle suite GREEN
+  `30`; registered contract/external-media suite GREEN `94`. Pre-closeout head
+  passed governance `21`, development governance `78 files / 31 code files`,
+  focused science/navigation/contracts/external-media `174`, downstream `668`
+  and compileall. Exact evidence-head replay and Draft publication remain.
+- **Remaining/blocker:** a direct 祖山觀 creator page, collection page or one
+  work URL that resolves to the creator account. Without it, the 23-item
+  inventory, nine priority audits and phase 6 expansion cannot be source-bound.
 - **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
 - **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
 - **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
 - **Phase 3 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-membership-lines.md`.
 - **Phase 4 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-navigation-status.md`.
+- **Phase 5 plan:** `docs/superpowers/plans/2026-08-12-external-media-audit-contracts.md`.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
