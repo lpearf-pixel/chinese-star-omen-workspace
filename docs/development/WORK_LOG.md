@@ -2,6 +2,34 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-13 — DOC-R01 durable new-Work handoff implemented
+
+- Live recovery revalidated `stable/kaiyuan-v2` at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583` and exactly three open PRs:
+  #54, #64 and #65, all Draft and unmerged. Old Personal Context branch/PR
+  records were rejected as stale rather than copied into the handoff.
+- `dcd9713` adds root `agent.md` (150 lines) as the compact global onboarding
+  and `summary.md` as the 2026-08-13 project snapshot. `AGENTS.md` and the
+  development manual now require both files in the new-Work read order.
+  `2b3ff52` removes Markdown hard-break whitespace caught by `git diff --check`.
+- The documents separate durable rules from volatile facts: `AGENTS.md` remains
+  authoritative; `agent.md` carries stable workflow/safety policy; `summary.md`
+  records B4–B10, ASTRO-R01 phases 1–5, the 祖山觀 23-source/nine-audit result,
+  current Drafts and the mandatory live-revalidation warning.
+- Pre-publication head `2b3ff526869c20f2473b32ed7a96c25982574d27`, tree
+  `86de334b9dcfa84b14254b69b8082592be719b4a`, passed governance unit tests
+  `21`, development governance `changed_files=95 code_files=32`, the dedicated
+  handoff structure/path/scope/secret check, and full-base `git diff --check`.
+- The repository `.venv` has a pre-existing broken link chain: `python3` and
+  `python3.12` point to absent `.venv/bin/python`. Both attempted commands failed
+  before test startup. The successful governance replay used the available
+  CPython 3.12.13 runtime directly; no virtual-environment bytes were modified
+  or committed.
+- This evidence update changes the head. The resulting documentation head must
+  replay the same gates, publish by non-force fast-forward to Draft PR #65, and
+  receive a final PR/tree readback. Runner remains `NOT RUN`; no merge is
+  authorized.
+
 ## 2026-08-12 — ASTRO-R01 phase 5 real-source implementation verified locally
 
 - `f242112` opened the source gate and froze the approved collection denominator

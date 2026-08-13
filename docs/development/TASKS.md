@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 DONE (approved phases 1–5; later expansion unclaimed); B10-PR-C remains BLOCKED on two independent human reviews
+Current task: DOC-R01 VERIFYING (durable new-Work handoff); ASTRO-R01 DONE; B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -186,6 +186,22 @@ B9 planning: DONE
 - **Phase 3 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-membership-lines.md`.
 - **Phase 4 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-navigation-status.md`.
 - **Phase 5 plan:** `docs/superpowers/plans/2026-08-12-external-media-audit-contracts.md`.
+
+### DOC-R01 — Durable new-Work handoff
+
+- **Status:** `VERIFYING`.
+- **Goal:** add a compact root `agent.md` with stable global instructions and a
+  root `summary.md` with the latest verified project handoff, then make both
+  part of the mandatory new-Work read order.
+- **Allowed scope:** `AGENTS.md`, `agent.md`, `summary.md`,
+  `docs/development/DEVELOPMENT_MANUAL.md`, task/work-log state and the existing
+  Draft PR #65 description/head.
+- **Prohibited:** product code, raw corpus, Reviewer A/B artifacts, Qdrant,
+  `local_kb_default`, workflows, PR #54/#64, Runner, stable merge and `main`.
+- **Acceptance:** a new Work can recover repository roles, safety boundaries,
+  current milestones, exact verification commands and next-action protocol
+  without relying on chat history; volatile facts are explicitly marked for
+  live revalidation.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
