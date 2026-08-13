@@ -31,6 +31,11 @@ PR #65 在本次交接文档任务开始前的远端头为
 `e5aee521e1e69d02a0ac1a81bfd8eb8fe3f0d204`。本文件提交后该 HEAD 会变化，
 因此新 Work 必须读取 PR 实时 head，而不能继续使用这个父级检查点。
 
+本交接资料的内容检查点已发布为远端提交
+`2774a727e4fcd87804fbd3f441ac1fff34762b1a`，树
+`d3a7df3f071dc2553472adcc4d386eedad20e3fd`。后续状态收尾提交会继续改变
+PR head，但 `agent.md`/`summary.md` 的该内容树已经过治理和结构检查。
+
 ## 2. 项目架构
 
 ```text

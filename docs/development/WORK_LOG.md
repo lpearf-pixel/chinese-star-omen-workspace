@@ -29,6 +29,13 @@
   replay the same gates, publish by non-force fast-forward to Draft PR #65, and
   receive a final PR/tree readback. Runner remains `NOT RUN`; no merge is
   authorized.
+- Exact evidence head `7e8be034f6176db632ee65e08239084d25b3bdc8`, tree
+  `d3a7df3f071dc2553472adcc4d386eedad20e3fd`, replayed governance `21`,
+  development governance `95/32`, and the dedicated handoff gate. GitHub
+  published the byte-identical tree as remote commit
+  `2774a727e4fcd87804fbd3f441ac1fff34762b1a` by non-force fast-forward.
+  DOC-R01 is complete; this status-only closeout must receive the same final
+  governance/diff/clean checks and one last non-force Draft readback.
 
 ## 2026-08-12 — ASTRO-R01 phase 5 real-source implementation verified locally
 

@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
 Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: DOC-R01 VERIFYING (durable new-Work handoff); ASTRO-R01 DONE; B10-PR-C remains BLOCKED on two independent human reviews
+Current task: ASTRO-R01 DONE; DOC-R01 DONE; B10-PR-C remains BLOCKED on two independent human reviews
 Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -189,7 +189,7 @@ B9 planning: DONE
 
 ### DOC-R01 — Durable new-Work handoff
 
-- **Status:** `VERIFYING`.
+- **Status:** `DONE`.
 - **Goal:** add a compact root `agent.md` with stable global instructions and a
   root `summary.md` with the latest verified project handoff, then make both
   part of the mandatory new-Work read order.
@@ -202,6 +202,9 @@ B9 planning: DONE
   current milestones, exact verification commands and next-action protocol
   without relying on chat history; volatile facts are explicitly marked for
   live revalidation.
+- **Delivery:** handoff content checkpoint remote commit `2774a727e4fcd87804fbd3f441ac1fff34762b1a`,
+  tree `d3a7df3f071dc2553472adcc4d386eedad20e3fd`; published by non-force
+  fast-forward to Draft PR #65. Final closeout remains documentation-only.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
