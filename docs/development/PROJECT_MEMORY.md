@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
-Verified at: 2026-08-02
-Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C human-review BLOCKED
-Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
+Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+Verified at: 2026-08-12
+Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
+Current task: ASTRO-R01 DONE (approved phases 1–5; later expansion unclaimed); B10-PR-C human-review BLOCKED
+Open PRs at recovery: #54, #64 and #65; all are Draft
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -46,6 +46,7 @@ B10-R01/R02 research source audits: DONE (#56)
 B10-R03 P0 related Wikisource localization: DONE (#57, squash 090f1b95d1c0b798077162408cea3d3bedd975a5)
 B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097fbffe3a8ed43a9a0144c5f)
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
+ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approved phases 1–5)
 B10 overall: IN_PROGRESS
 ```
 
@@ -275,11 +276,12 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-GOV-T02 is DONE at stable 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962; #1/#7 are closed without merge
-→ B10-R05 remains integrated and DONE
-→ GOV-T04 pilot run 30800888691 passed on ca7f0569 and its artifact hash was independently checked; finalize review fixes on one new exact head
-→ run one new lightweight `kaiyuan-runner/v2/<exact-sha>` tag for that immutable closeout head, require live stable to equal artifact base, then merge PR #63 only to stable
+GOV-T04 is integrated at stable c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+→ ASTRO-R01 phase 1: published as Draft PR #65 at `09d4ec9781e874ef0bc346a7e48d8072541158cf`
+→ ASTRO-R01 phases 1–4: published on Draft PR #65 through remote `b7232ef3c6595c8d209255e2a4550a1d7b63f04a`
+→ ASTRO-R01 phase 5: add external-media contracts; 祖山觀 inventory remains fail-closed until an exact account/work locator is recovered
 → keep PR #54 Draft and BLOCKED until two different humans independently complete Reviewer A/B
+→ keep PR #64 Draft; its Core14 provisional-use governance is not part of ASTRO-R01
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS

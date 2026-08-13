@@ -7,14 +7,16 @@ These instructions apply to the entire repository unless a deeper `AGENTS.md` ex
 Before editing code, data, schemas, workflows, tests, or documentation, read and verify these sources in order:
 
 1. `AGENTS.md`
-2. `docs/development/PROJECT_MEMORY.md`
-3. Resolve the current remote `stable/kaiyuan-v2` HEAD and all open pull requests; update stale memory facts before relying on them
-4. `docs/development/DEVELOPMENT_MANUAL.md`
-5. `docs/development/TASKS.md`
-6. `docs/development/DECISIONS.md`
-7. The relevant design in `docs/superpowers/specs/`
-8. The relevant implementation plan in `docs/superpowers/plans/`
-9. The newest applicable entries in `docs/development/WORK_LOG.md`
+2. `agent.md`
+3. `summary.md`
+4. `docs/development/PROJECT_MEMORY.md`
+5. Resolve the current remote `stable/kaiyuan-v2` HEAD and all open pull requests; update stale memory facts before relying on them
+6. `docs/development/DEVELOPMENT_MANUAL.md`
+7. `docs/development/TASKS.md`
+8. `docs/development/DECISIONS.md`
+9. The relevant design in `docs/superpowers/specs/`
+10. The relevant implementation plan in `docs/superpowers/plans/`
+11. The newest applicable entries in `docs/development/WORK_LOG.md`
 
 Do not begin implementation until the active task is recorded in `TASKS.md` and marked `IN_PROGRESS`.
 

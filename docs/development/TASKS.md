@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: 96b41a4524d36c7ffb2f1e2ec66ca4aed1565962
-Current feature branch: codex/kaiyuan-gov-t04-unified-runner-v1
-Current task: GOV-T04 DONE candidate, effective only after final exact-head gate and PR #63 merge; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs at closeout-candidate creation: #54 and #63; #54 is the only non-governance, human-review-blocked PR
+Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
+Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
+Current task: ASTRO-R01 DONE; DOC-R01 DONE; B10-PR-C remains BLOCKED on two independent human reviews
+Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -43,6 +43,168 @@ B9 planning: DONE
 - **Public contracts:** `AstronomyEvent/v1`、`RuleAssessment/v1`、`VideoPackage/v1`
 - **Design:** `docs/superpowers/specs/2026-07-20-kaiyuan-evidence-video-pipeline-design.md`
 - **Plan:** `docs/superpowers/plans/2026-07-20-kaiyuan-evidence-video-pipeline.md`
+
+### ASTRO-R01 — Twenty-eight mansion catalog and external-media audit foundation
+- **Status:** `DONE` (approved phases 1–5; later expansion remains unclaimed)
+- **Base:** `stable/kaiyuan-v2` at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+- **Branch:** `codex/kaiyuan-28-mansions-external-audit-v1`.
+- **Goal:** use 毕宿 as the first complete gold sample for source-bound member stars,
+  defining-star mansion regions and objective relation measurements; then reuse
+  the same contracts for all twenty-eight mansions, navigation cards and an
+  external broadcaster/video claim-audit resource layer.
+- **Phase 1 acceptance:** preserve the existing 角宿一/Spica identity; bind the
+  eight 毕宿 members and the following 觜宿 defining star to pinned Stellarium
+  and Hipparcos records; calculate mansion-region membership separately from
+  nearest-member angular separation; treat an unqualified `临毕` as
+  `ambiguous_relation`; expose no `犯/入/守/留` conclusion without the required
+  distance, transition, velocity or duration evidence.
+- **Later phases:** add all 28 defining stars and regions; add source-backed
+  member/line data and uncertainty states for every mansion; enrich the 28
+  navigation cards; create `ExternalMediaSource/v1`, `ExternalClaim/v1`,
+  `EvidenceLink/v1` and `ExternalAudit/v1`, starting with 祖山觀's 23-item
+  collection and nine priority audits.
+- **Boundary:** research/scientific candidate infrastructure only. No Reviewer
+  A/B substitution, PR #54 or #64 mutation, threshold freeze, formal rule
+  promotion, source-corpus rewrite, official ingest, Qdrant access,
+  `local_kb_default` mutation, automatic weather inference, B11/B12 release or
+  `main` operation.
+- **Phase 1 implementation heads:** `b9e34b3` catalog; `ea98308` pure region
+  evaluator; `ec5db76` provider binding; `a776dda` navigation binding.
+- **Phase 1 verification:** asterism baseline `13 passed`; catalog GREEN
+  `16 passed`; pure evaluator suite `28 passed`; astronomy/asterism focused
+  `58 passed`; navigation/science focused `60 passed`; downstream `613 passed`.
+- **Phase 1 publication:** Draft PR #65, remote head
+  `09d4ec9781e874ef0bc346a7e48d8072541158cf`; locally reviewed and remote trees
+  both equal `56f0d51c98694d1b5685e6220f8945106a41f824`.
+- **Phase 2 acceptance:** add the exact 28 defining-star denominator, require
+  sequence `1..28`, close every eastern boundary to the next western boundary
+  including 軫宿 → 角宿, and expose region-only assessment without treating a
+  partial defining-star shell as complete nearest-member coverage.
+- **Phase 2 implementation heads:** `9e350d9` closed catalog cycle; `adb2396`
+  region-only/member-proximity split; `04bfd4b` offline provider binding.
+- **Phase 2 verification checkpoint:** exact denominator `36 entries / 28
+  asterisms / 28 lunar_mansions`; catalog/source/fixture suite `32 passed`;
+  pure region suite `18 passed`; focused astronomy/asterism/navigation suite
+  `73 passed`; governance unit tests `21 passed`; development-governance scope
+  `26 files / 15 code files`; full downstream `626 passed`; compileall,
+  canonical-hash, diff and forbidden-path checks passed. One final replay is
+  required after the evidence commit.
+- **Phase 2 publication:** Draft PR #65 remote head
+  `19c076ddbff60b29a7d22443dbbb9bad0c11a527`; locally reviewed and remote
+  trees both equal `c796215b89e0cdc214e4f3943e365c1ec6bfae72`. Runner was
+  `NOT RUN`; no merge was attempted.
+- **Phase 3 acceptance:** bind the pinned Stellarium fixed-name and line records
+  for all 28 mansion asterisms to Hipparcos I/239 J1991.25 coordinates; preserve
+  157 base members, five cross-asterism related endpoints and 57 line segments
+  without nearest-star inference. Exact complete definitions may expose member
+  proximity; the three status-2 翼宿 identities remain `ambiguous`, so 翼宿
+  remains region-only for relation assessment. 附耳, 钺, 长沙, 左辖 and 右辖
+  remain related objects rather than extra mansion members.
+- **Phase 3 implementation heads:** `d7140af` source snapshots and fixture;
+  `97fa9f3` catalog memberships and completeness validation; `7a8548b`
+  complete-member proximity and provider preflight.
+- **Phase 3 verification checkpoint:** exact denominator `162 entries / 28
+  asterisms / 28 lunar_mansions`, with `157 members / 5 related endpoints / 57
+  line segments`; completeness `26 complete / 1 complete_gold_sample / 1
+  ambiguous`; source suite `6 passed`; asterism suite `43 passed`; focused
+  astronomy/asterism/navigation suite `80 passed`; governance unit tests `21
+  passed`; development-governance scope `31 files / 18 code files`; full
+  downstream `633 passed`; compileall, 14 canonical source/fixture hashes, diff
+  and forbidden-path checks passed. One final replay is required after the
+  evidence commit.
+- **Phase 3 publication:** Draft PR #65 remote head
+  `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474`; locally reviewed and remote
+  trees both equal `a40c8eb6290b92ee06e1653922d82e6293cbcb27`. Runner was
+  `NOT RUN`; no merge was attempted.
+- **Phase 4 acceptance:** bind every one of the 28 `lunar_mansion_card` files to
+  its exact catalog definition and mansion region; require overview order to
+  equal sequence 1–28; make simplified/traditional title aliases resolve to the
+  same card; expose completeness, members, related endpoints, ambiguous member
+  IDs, lines, boundaries, provenance and source refs without adding unreviewed
+  classical quotations or omen conclusions.
+- **Phase 4 implementation heads:** `f196507` all-card RED gate; `0303dd8`
+  generated catalog bindings and modern-mapping sections.
+- **Phase 4 verification checkpoint:** RED was `1 failed / 1 passed` and listed
+  all 27 cards missing a status block. GREEN focused navigation/science was `80
+  passed`. The exact card projection is `28 cards / 6 explicit alias variants /
+  157 members / 5 related endpoints / 3 ambiguous members / 57 line segments`;
+  28/28 classical body suffixes were byte-identical after the bounded modern
+  section. Pre-closeout head `86eb156` passed governance `21`, development
+  governance `59 files / 18 code files`, focused `80`, canonical hash tests `8`,
+  downstream `633`, compileall, diff, clean-worktree and forbidden-path scans.
+  The evidence commit requires one exact-head replay before publication.
+- **Phase 4 publication:** Draft PR #65 remote head
+  `b7232ef3c6595c8d209255e2a4550a1d7b63f04a`; locally reviewed and remote
+  trees both equal `535ea6e62df4aff6ebb72d9fe4e14f45c338d228`. Its parent is Phase 3
+  `dbfa9d2`; the ref update was a non-force fast-forward. Runner was `NOT RUN`;
+  no merge was attempted.
+- **Phase 5 acceptance:** add strict `ExternalMediaSource/v1`,
+  `ExternalClaim/v1`, `EvidenceLink/v1` and `ExternalAudit/v1` contracts plus a
+  cross-reference bundle validator, committed JSON Schemas and canonical
+  fixtures. Exact creator/work locators and captured hashes are mandatory;
+  missing source bytes must remain `source_missing`, never inferred from search
+  snippets or same-name accounts.
+- **Phase 5 source gate:** opened on 2026-08-12 by the user-supplied direct
+  creator and work short links. They resolve to 祖山觀（無用之人）🌓, Douyin
+  number `35031221639`, UID `2129076815950670`, stable `sec_uid`
+  `MS4wLjABAAAAAzgxglR-dz-mRK53rZNuTqMwh1HktiIHLXa-3ZSVXCH4zDH0xjcWCN8BKyQ3plyK`,
+  and collection `7664842437629921326`. The approved denominator is frozen as
+  collection episodes 1–23; the live collection's growth to 40 is source drift,
+  not permission to expand this phase.
+- **Phase 5 contract implementation heads:** `275ec71` four strict public models;
+  `2f5a6c4` fail-closed bundle/cross-reference semantics; `3c315a6` committed
+  schemas, registry entries and canonical synthetic fixtures.
+- **Phase 5 verification checkpoint:** Task 1 RED was an import failure, then
+  model GREEN `18` and existing-contract regression `59`; bundle suite GREEN
+  `30`; registered contract/external-media suite GREEN `94`. Pre-closeout head
+  passed governance `21`, development governance `78 files / 31 code files`,
+  focused science/navigation/contracts/external-media `174`, downstream `668`
+  and compileall. Exact evidence-head replay and Draft publication remain.
+- **Phase 5 real-source implementation:** `f242112` opened the source gate;
+  `0f5e47a` added the exact 23-item inventory, nine candidate audit bundles and
+  canonical real-asset manifest; `af085bd` fixed the direct-work timestamp to
+  exact UTC; `3159828` pinned all 23 inventory tuples and cross-bound the WMO
+  context snapshot to the gold audit. Episode 22/work `7669807398794598565`
+  remains `ambiguous`; missing classical source is `source_missing` and no
+  weather-system equivalence is inferred.
+- **Phase 5 real-source verification:** independent review found no Critical or
+  asset mismatch; all Important findings were fixed. Pre-publication exact head
+  `3159828`, tree `0a37058a`, passed governance `21`, development governance
+  `91 files / 32 code files`, focused `179`, canonical source/fixture `13`, full
+  downstream `673`, compileall, diff, stable-ancestor, clean-worktree and
+  forbidden-path gates.
+- **Phase 5 publication checkpoint:** locally reviewed tree `2acb2a5b` was
+  published as remote commit `3c7c38c1` by a non-force fast-forward. Readback
+  confirmed Draft PR #65 remained open, draft and unmerged on the unchanged
+  stable base. The final evidence-only head requires the same exact-head replay
+  and non-force readback; Runner remains unauthorized and no merge is attempted.
+- **Current work:** none inside the approved phases 1–5. Any later creator or
+  corpus expansion must be separately registered and planned before mutation.
+- **Design:** `docs/superpowers/specs/2026-08-12-kaiyuan-28-mansions-external-audit-design.md`.
+- **Phase 1 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-bi-mansion-gold-sample.md`.
+- **Phase 2 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-region-cycle.md`.
+- **Phase 3 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-membership-lines.md`.
+- **Phase 4 plan:** `docs/superpowers/plans/2026-08-12-kaiyuan-28-mansion-navigation-status.md`.
+- **Phase 5 plan:** `docs/superpowers/plans/2026-08-12-external-media-audit-contracts.md`.
+
+### DOC-R01 — Durable new-Work handoff
+
+- **Status:** `DONE`.
+- **Goal:** add a compact root `agent.md` with stable global instructions and a
+  root `summary.md` with the latest verified project handoff, then make both
+  part of the mandatory new-Work read order.
+- **Allowed scope:** `AGENTS.md`, `agent.md`, `summary.md`,
+  `docs/development/DEVELOPMENT_MANUAL.md`, task/work-log state and the existing
+  Draft PR #65 description/head.
+- **Prohibited:** product code, raw corpus, Reviewer A/B artifacts, Qdrant,
+  `local_kb_default`, workflows, PR #54/#64, Runner, stable merge and `main`.
+- **Acceptance:** a new Work can recover repository roles, safety boundaries,
+  current milestones, exact verification commands and next-action protocol
+  without relying on chat history; volatile facts are explicitly marked for
+  live revalidation.
+- **Delivery:** handoff content checkpoint remote commit `2774a727e4fcd87804fbd3f441ac1fff34762b1a`,
+  tree `d3a7df3f071dc2553472adcc4d386eedad20e3fd`; published by non-force
+  fast-forward to Draft PR #65. Final closeout remains documentation-only.
 
 ### B9-PR-A — Contract registry and compatibility
 - **Status:** `DONE`
@@ -373,6 +535,7 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
+→ ASTRO-R01 phase 2 VERIFYING on Draft PR #65; it does not bypass B10-PR-C
 → wait for two different humans to independently complete Reviewer A/B
 → validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
