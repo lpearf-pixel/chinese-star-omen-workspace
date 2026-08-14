@@ -10,8 +10,8 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
 Verified at: 2026-08-13
 Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R08 VERIFYING PR #64 stable reconciliation; B10-PR-C human-review BLOCKED
-Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 under stable reconciliation
+Current task: B10-R08 DONE PR #64 stable reconciliation; B10-PR-C human-review BLOCKED
+Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 reconciled and mergeable
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -49,7 +49,7 @@ B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d
 B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence support; PR #54 comment 5173585995)
 B10-R07 Core14 provisional usability stratification: DONE (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement; PR #54 comment 5176472354)
 ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approved phases 1–5)
-B10-R08 PR #64 stable-integration reconciliation: VERIFYING
+B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
 B10 overall: IN_PROGRESS
 ```
 

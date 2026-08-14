@@ -22,8 +22,9 @@
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
 - PR #64：Core14 第二轮证据与 11+3 临时研究分层，正在通过 B10-R08
-  协调到最新 stable；Reviewer B 尚未开始，不能把临时可用性当作正式
-  人工批准。
+  协调到最新 stable；B10-R08 已完成，远端集成提交为
+  `2384533291b1163738fb06f6984a348f78ecc558`，保持 Draft、mergeable；
+  Reviewer B 尚未开始，不能把临时可用性当作正式人工批准。
 - PR #65：ASTRO-R01 批准的 Phase 1–5 已于 2026-08-13 squash merge，
   stable 合并提交为 `c9d490392233b7432f5a0136dcd213613abe05a7`。
 

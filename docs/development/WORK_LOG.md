@@ -2,7 +2,7 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
-## 2026-08-13 — B10-R08 PR #64 stable reconciliation entered VERIFYING
+## 2026-08-13 — B10-R08 PR #64 stable reconciliation completed
 
 - User authorized an isolated reconciliation of Draft PR #64 without merging
   stable or modifying `main`. The original remote head
@@ -33,9 +33,24 @@
   Reviewer B remains not started, every threshold/release/ingest/promotion gate
   remains false, PR #54 stays Draft/BLOCKED, and B10-PR-D/E/F remain
   unauthorized. Runner is `NOT RUN` for this routine Draft reconciliation.
-- B10-R08 is now `VERIFYING`. Next: commit this evidence state, rerun applicable
-  gates on the documentation head, non-force update Draft PR #64, and read back
-  exact remote head/tree/base/draft/mergeability before closeout.
+- Documentation head `d8a1f55c3593200547584459a9498ae4f9554d2c`, tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`, repeated the complete verification
+  matrix above with a clean worktree. Local HTTPS push stopped before remote
+  mutation because the checkout had no Git credentials. The connected GitHub
+  App then created a true two-parent merge commit without force: remote head
+  `2384533291b1163738fb06f6984a348f78ecc558`, exact matching tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`, parents original PR head
+  `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` and stable
+  `c9d490392233b7432f5a0136dcd213613abe05a7`.
+- Final GitHub readback: PR #64 is open, Draft, unmerged and mergeable; base is
+  exact stable `c9d490392233b7432f5a0136dcd213613abe05a7`; topology is ahead 5,
+  behind 0 with stable as merge base; the diff contains exactly 13 approved
+  paths. The PR body records the new head/tree, verification and closed gates.
+  Stable and `main` refs did not move during this reconciliation.
+- B10-R08 is `DONE`. This closeout changes only durable status documents; rerun
+  governance, focused evidence/hash checks and diff/clean checks on the final
+  documentation tree before its non-force Draft update. PR #64 remains Draft
+  and is not authorized for merge.
 
 ## 2026-08-13 — DOC-R01 durable new-Work handoff implemented
 

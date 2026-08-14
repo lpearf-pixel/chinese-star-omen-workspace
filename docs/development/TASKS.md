@@ -12,8 +12,8 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
 Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R08 IN_PROGRESS; B10-PR-C remains BLOCKED on Reviewer B
-Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 under stable reconciliation
+Current task: B10-R08 DONE; B10-PR-C remains BLOCKED on Reviewer B
+Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 reconciled and mergeable
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -496,7 +496,7 @@ merged and the resulting stable head is reverified.
   `local_kb_default`, B10-PR-D/E/F, B11/B12, automatic publishing or `main`.
 
 ### B10-R08 — PR #64 stable-integration reconciliation
-- **Status:** `VERIFYING`
+- **Status:** `DONE`
 - **Current state:** Draft PR #64 head
   `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` is four commits ahead of its
   original base `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; after ASTRO-R01 merged,
@@ -522,6 +522,10 @@ merged and the resulting stable head is reverified.
   `compileall`, `git diff --check`, forbidden-path scan and remote tree readback.
 - **Delivery:** non-force fast-forward update of the existing PR #64 branch;
   keep the PR Draft and do not merge it or modify `stable/kaiyuan-v2`/`main`.
+- **Remote integration result:** GitHub App merge commit
+  `2384533291b1163738fb06f6984a348f78ecc558`, tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`; PR #64 read back open, Draft,
+  mergeable, ahead 5/behind 0 with exact stable merge base and 13 expected paths.
 
 
 ### B10-R03 — Related Wikisource source localization
