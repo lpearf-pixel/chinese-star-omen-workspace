@@ -86,9 +86,27 @@ class CatalogSourceV1(_StrictModel):
 
 class ReferenceCoordinatesV1(_StrictModel):
     frame: Literal["icrs"]
-    epoch: Literal["J2000"]
+    epoch: Literal["J2000", "J1991.25"]
     ra_deg: float = Field(strict=True, ge=0.0, lt=360.0, allow_inf_nan=False)
     dec_deg: float = Field(strict=True, ge=-90.0, le=90.0, allow_inf_nan=False)
+    pm_ra_cosdec_mas_per_year: float | None = Field(
+        default=None,
+        strict=True,
+        allow_inf_nan=False,
+    )
+    pm_dec_mas_per_year: float | None = Field(
+        default=None,
+        strict=True,
+        allow_inf_nan=False,
+    )
+
+    @model_validator(mode="after")
+    def validate_proper_motion_pair(self) -> "ReferenceCoordinatesV1":
+        if (self.pm_ra_cosdec_mas_per_year is None) != (
+            self.pm_dec_mas_per_year is None
+        ):
+            raise ValueError("proper-motion components must appear together")
+        return self
 
 
 class AsterismEntryV1(_StrictModel):
@@ -97,7 +115,7 @@ class AsterismEntryV1(_StrictModel):
     asterism_id: str = Field(pattern=_STABLE_ID_PATTERN)
     canonical_chinese_name: str = Field(min_length=1, max_length=128)
     aliases: list[str] = Field(default_factory=list)
-    catalog_epoch: Literal["J2000"]
+    catalog_epoch: Literal["J2000", "J1991.25"]
     reference_coordinates: ReferenceCoordinatesV1
     source_refs: list[str] = Field(min_length=1)
     mapping_method: Literal["catalog-identity", "catalog-membership", "region-definition"]
@@ -106,6 +124,8 @@ class AsterismEntryV1(_StrictModel):
 
     @model_validator(mode="after")
     def validate_status_claim(self) -> "AsterismEntryV1":
+        if self.catalog_epoch != self.reference_coordinates.epoch:
+            raise ValueError("catalog epoch must match reference-coordinate epoch")
         if self.editorial_status is AsterismStatus.VERIFIED_IDENTITY:
             if self.mapping_method != "catalog-identity" or self.confidence < 0.95:
                 raise ValueError("verified_identity requires catalog identity confidence >= 0.95")
@@ -119,6 +139,65 @@ class AsterismEntryV1(_StrictModel):
         if self.editorial_status is AsterismStatus.REGION_ONLY:
             if self.mapping_method != "region-definition":
                 raise ValueError("region_only requires a region definition")
+        return self
+
+
+class AsterismDefinitionV1(_StrictModel):
+    asterism_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    canonical_chinese_name: str = Field(min_length=1, max_length=128)
+    aliases: list[str] = Field(default_factory=list)
+    member_object_ids: list[str] = Field(min_length=1)
+    related_object_ids: list[str] = Field(default_factory=list)
+    defining_star_object_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    line_segments: list[list[str]] = Field(default_factory=list)
+    source_refs: list[str] = Field(min_length=1)
+    completeness_status: Literal[
+        "partial",
+        "complete",
+        "complete_gold_sample",
+        "ambiguous",
+    ]
+
+    @model_validator(mode="after")
+    def validate_definition(self) -> "AsterismDefinitionV1":
+        if len(self.member_object_ids) != len(set(self.member_object_ids)):
+            raise ValueError("asterism member object IDs must be unique")
+        if len(self.related_object_ids) != len(set(self.related_object_ids)):
+            raise ValueError("asterism related object IDs must be unique")
+        if set(self.member_object_ids) & set(self.related_object_ids):
+            raise ValueError("member and related object IDs must be disjoint")
+        if self.defining_star_object_id not in self.member_object_ids:
+            raise ValueError("defining star must be an asterism member")
+        if self.completeness_status != "partial" and not self.line_segments:
+            raise ValueError("non-partial asterisms require line segments")
+        allowed_endpoints = set(self.member_object_ids) | set(self.related_object_ids)
+        for segment in self.line_segments:
+            if len(segment) < 2:
+                raise ValueError("asterism line segments require at least two objects")
+            if any(endpoint not in allowed_endpoints for endpoint in segment):
+                raise ValueError("asterism line segment references an unknown endpoint")
+        return self
+
+
+class LunarMansionDefinitionV1(_StrictModel):
+    mansion_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    sequence_index: int = Field(strict=True, ge=1, le=28)
+    west_boundary_object_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    east_boundary_object_id: str = Field(pattern=_STABLE_ID_PATTERN)
+    boundary_model: Literal["polar-great-circles"]
+    coordinate_system: Literal["apparent-equatorial-of-date"]
+    provenance_class: Literal["derived_region"]
+    source_refs: list[str] = Field(min_length=1)
+    completeness_status: Literal[
+        "partial",
+        "complete_gold_sample",
+        "complete_region_cycle",
+    ]
+
+    @model_validator(mode="after")
+    def validate_boundaries(self) -> "LunarMansionDefinitionV1":
+        if self.west_boundary_object_id == self.east_boundary_object_id:
+            raise ValueError("mansion boundaries must be distinct")
         return self
 
 
@@ -140,8 +219,11 @@ class AsterismCatalogV1(_StrictModel):
     schema_version: Literal["asterism-catalog/v1"]
     catalog_id: str = Field(pattern=_STABLE_ID_PATTERN)
     catalog_version: int = Field(strict=True, ge=1)
+    lunar_mansion_cycle_status: Literal["partial", "complete"] = "partial"
     sources: list[CatalogSourceV1]
     entries: list[AsterismEntryV1]
+    asterisms: list[AsterismDefinitionV1] = Field(default_factory=list)
+    lunar_mansions: list[LunarMansionDefinitionV1] = Field(default_factory=list)
 
     @staticmethod
     def _normalize_alias(value: str) -> str:
@@ -166,7 +248,12 @@ class AsterismCatalogV1(_StrictModel):
         for entry in self.entries:
             if any(source_ref not in source_set for source_ref in entry.source_refs):
                 raise ValueError("entry references an unknown catalog source")
-            aliases = [entry.modern_object_id, *entry.aliases]
+            aliases = [
+                entry.modern_object_id,
+                entry.traditional_star_id,
+                entry.canonical_chinese_name,
+                *entry.aliases,
+            ]
             normalized_aliases = [self._normalize_alias(alias) for alias in aliases]
             if len(normalized_aliases) != len(set(normalized_aliases)):
                 raise ValueError("entry aliases must be unique")
@@ -175,6 +262,95 @@ class AsterismCatalogV1(_StrictModel):
                 if previous is not None and previous != entry.modern_object_id:
                     raise ValueError("catalog alias must be globally unique")
                 alias_owner[alias] = entry.modern_object_id
+
+        entry_by_id = {entry.modern_object_id: entry for entry in self.entries}
+        asterism_ids = [definition.asterism_id for definition in self.asterisms]
+        if len(asterism_ids) != len(set(asterism_ids)):
+            raise ValueError("asterism definition IDs must be unique")
+        asterism_alias_owner: dict[str, str] = {}
+        for definition in self.asterisms:
+            if any(source_ref not in source_set for source_ref in definition.source_refs):
+                raise ValueError("asterism references an unknown catalog source")
+            for object_id in definition.member_object_ids:
+                entry = entry_by_id.get(object_id)
+                if entry is None:
+                    raise ValueError("asterism references an unknown member object")
+                if entry.asterism_id != definition.asterism_id:
+                    raise ValueError("asterism member belongs to a different asterism")
+                if definition.completeness_status in {
+                    "complete",
+                    "complete_gold_sample",
+                } and entry.editorial_status not in {
+                    AsterismStatus.VERIFIED_IDENTITY,
+                    AsterismStatus.VERIFIED_MEMBERSHIP,
+                }:
+                    raise ValueError("complete asterism members must be verified")
+            for object_id in definition.related_object_ids:
+                if object_id not in entry_by_id:
+                    raise ValueError("asterism references an unknown related object")
+            if definition.completeness_status == "ambiguous" and not any(
+                entry_by_id[object_id].editorial_status is AsterismStatus.AMBIGUOUS
+                for object_id in definition.member_object_ids
+            ):
+                raise ValueError("ambiguous asterism requires an ambiguous member")
+            names = [
+                definition.asterism_id,
+                definition.canonical_chinese_name,
+                *definition.aliases,
+            ]
+            for name in names:
+                normalized = self._normalize_alias(name)
+                previous = asterism_alias_owner.get(normalized)
+                if previous is not None and previous != definition.asterism_id:
+                    raise ValueError("asterism alias must be globally unique")
+                asterism_alias_owner[normalized] = definition.asterism_id
+
+        mansion_ids = [mansion.mansion_id for mansion in self.lunar_mansions]
+        if len(mansion_ids) != len(set(mansion_ids)):
+            raise ValueError("lunar mansion IDs must be unique")
+        sequence_indices = [mansion.sequence_index for mansion in self.lunar_mansions]
+        if len(sequence_indices) != len(set(sequence_indices)):
+            raise ValueError("lunar mansion sequence indices must be unique")
+        asterism_id_set = set(asterism_ids)
+        for mansion in self.lunar_mansions:
+            if mansion.mansion_id not in asterism_id_set:
+                raise ValueError("lunar mansion lacks an asterism definition")
+            if any(source_ref not in source_set for source_ref in mansion.source_refs):
+                raise ValueError("lunar mansion references an unknown catalog source")
+            if mansion.west_boundary_object_id not in entry_by_id:
+                raise ValueError("lunar mansion references an unknown west boundary")
+            if mansion.east_boundary_object_id not in entry_by_id:
+                raise ValueError("lunar mansion references an unknown east boundary")
+            definition = next(
+                item for item in self.asterisms if item.asterism_id == mansion.mansion_id
+            )
+            if mansion.west_boundary_object_id != definition.defining_star_object_id:
+                raise ValueError("lunar mansion west boundary must be the defining star")
+        if self.lunar_mansion_cycle_status == "complete":
+            ordered = sorted(self.lunar_mansions, key=lambda item: item.sequence_index)
+            if [item.sequence_index for item in ordered] != list(range(1, 29)):
+                raise ValueError(
+                    "complete lunar mansion catalog requires sequence indices 1 through 28"
+                )
+            west_boundaries = [item.west_boundary_object_id for item in ordered]
+            if len(set(west_boundaries)) != 28:
+                raise ValueError(
+                    "complete lunar mansion catalog requires 28 unique west boundaries"
+                )
+            if any(item.completeness_status == "partial" for item in ordered):
+                raise ValueError(
+                    "complete lunar mansion cycle cannot contain partial mansion regions"
+                )
+            for current, following in zip(
+                ordered,
+                ordered[1:] + ordered[:1],
+                strict=True,
+            ):
+                if current.east_boundary_object_id != following.west_boundary_object_id:
+                    raise ValueError(
+                        "lunar mansion cycle is broken between sequence "
+                        f"{current.sequence_index} and {following.sequence_index}"
+                    )
         return self
 
     def entry(self, modern_object_id: str) -> AsterismEntryV1:
@@ -183,11 +359,32 @@ class AsterismCatalogV1(_StrictModel):
                 return entry
         raise KeyError(modern_object_id)
 
+    def asterism(self, query: str) -> AsterismDefinitionV1:
+        normalized = self._normalize_alias(query)
+        for definition in self.asterisms:
+            aliases = {
+                self._normalize_alias(definition.asterism_id),
+                self._normalize_alias(definition.canonical_chinese_name),
+                *(self._normalize_alias(alias) for alias in definition.aliases),
+            }
+            if normalized in aliases:
+                return definition
+        raise KeyError(query)
+
+    def mansion(self, query: str) -> LunarMansionDefinitionV1:
+        definition = self.asterism(query)
+        for mansion in self.lunar_mansions:
+            if mansion.mansion_id == definition.asterism_id:
+                return mansion
+        raise KeyError(query)
+
     def resolve(self, query: str) -> AsterismResolutionV1:
         normalized = self._normalize_alias(query)
         for entry in self.entries:
             aliases = {
                 self._normalize_alias(entry.modern_object_id),
+                self._normalize_alias(entry.traditional_star_id),
+                self._normalize_alias(entry.canonical_chinese_name),
                 *(self._normalize_alias(alias) for alias in entry.aliases),
             }
             if normalized in aliases:

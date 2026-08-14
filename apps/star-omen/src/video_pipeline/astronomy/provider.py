@@ -13,7 +13,17 @@ from skyfield.framelib import ecliptic_frame
 from src.interfaces.astronomy import EphemerisPoint
 from src.video_pipeline.asterisms.catalog import (
     AsterismCatalogSnapshotV1,
+    AsterismResolutionV1,
     AsterismStatus,
+)
+from src.video_pipeline.asterisms.mansion_regions import (
+    AngularThresholdV1,
+    EquatorialPositionV1,
+    MansionRegionObservationV1,
+    MansionRelationObservationV1,
+    assess_mansion_region,
+    assess_single_time_relation,
+    require_member_proximity_catalog,
 )
 from src.video_pipeline.contracts import (
     AstronomyEventV1,
@@ -39,6 +49,12 @@ def _ensure_utc(value: datetime) -> datetime:
     if value.utcoffset() != timedelta(0):
         raise ValueError("datetime must be expressed in UTC")
     return value.astimezone(timezone.utc)
+
+
+_CATALOG_EPOCH_JD = {
+    "J1991.25": 2448349.0625,
+    "J2000": 2451545.0,
+}
 
 
 class _StrictModel(BaseModel):
@@ -264,10 +280,7 @@ class SkyfieldEphemerisProvider:
         } or resolution.reference_coordinates is None:
             raise ValueError("catalog object is not a verified star mapping")
         coordinates = resolution.reference_coordinates
-        star = Star(
-            ra_hours=coordinates.ra_deg / 15.0,
-            dec_degrees=coordinates.dec_deg,
-        )
+        star = self._star_from_catalog_resolution(resolution)
         return self._observation_from_target(
             object_id=resolution.modern_object_id or modern_object_id,
             target=star,
@@ -275,6 +288,116 @@ class SkyfieldEphemerisProvider:
             observer=observer,
             identity_coordinates=(coordinates.ra_deg, coordinates.dec_deg),
             mapping_status=resolution.status.value,
+        )
+
+    @staticmethod
+    def _star_from_catalog_resolution(resolution: AsterismResolutionV1) -> Star:
+        coordinates = resolution.reference_coordinates
+        if coordinates is None:
+            raise ValueError("catalog resolution has no reference coordinates")
+        return Star(
+            ra_hours=coordinates.ra_deg / 15.0,
+            dec_degrees=coordinates.dec_deg,
+            ra_mas_per_year=coordinates.pm_ra_cosdec_mas_per_year or 0.0,
+            dec_mas_per_year=coordinates.pm_dec_mas_per_year or 0.0,
+            epoch=_CATALOG_EPOCH_JD[coordinates.epoch],
+        )
+
+    @staticmethod
+    def _apparent_equatorial_position(
+        observation: ScientificObservationV1,
+    ) -> EquatorialPositionV1:
+        return EquatorialPositionV1(
+            object_id=observation.object_id,
+            ra_deg=observation.apparent_ra_deg,
+            dec_deg=observation.apparent_dec_deg,
+            reference_frame="apparent-equatorial-of-date",
+        )
+
+    def assess_mansion_relation(
+        self,
+        *,
+        body_id: str,
+        mansion_id: str,
+        relation_term: str,
+        at_utc: datetime,
+        observer: ObserverV1,
+        near_threshold: AngularThresholdV1 | None = None,
+    ) -> MansionRelationObservationV1:
+        utc = _ensure_utc(at_utc)
+        asterism = self.catalog.catalog.asterism(mansion_id)
+        mansion = self.catalog.catalog.mansion(mansion_id)
+        require_member_proximity_catalog(asterism)
+        target = self.observe_body(body_id=body_id, at_utc=utc, observer=observer)
+        west_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.west_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        east_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.east_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        members = [
+            self.observe_catalog_star(
+                modern_object_id=member_object_id,
+                at_utc=utc,
+                observer=observer,
+            )
+            for member_object_id in asterism.member_object_ids
+        ]
+        assessment = assess_single_time_relation(
+            relation_term=relation_term,
+            asterism=asterism,
+            mansion=mansion,
+            target=self._apparent_equatorial_position(target),
+            west_boundary=self._apparent_equatorial_position(west_boundary),
+            east_boundary=self._apparent_equatorial_position(east_boundary),
+            members=[
+                self._apparent_equatorial_position(member) for member in members
+            ],
+            near_threshold=near_threshold,
+        )
+        return MansionRelationObservationV1(
+            body_id=body_id,
+            at_utc=utc,
+            asterism_catalog_sha256=self.catalog.sha256,
+            assessment=assessment,
+        )
+
+    def assess_mansion_region(
+        self,
+        *,
+        body_id: str,
+        mansion_id: str,
+        at_utc: datetime,
+        observer: ObserverV1,
+    ) -> MansionRegionObservationV1:
+        utc = _ensure_utc(at_utc)
+        mansion = self.catalog.catalog.mansion(mansion_id)
+        target = self.observe_body(body_id=body_id, at_utc=utc, observer=observer)
+        west_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.west_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        east_boundary = self.observe_catalog_star(
+            modern_object_id=mansion.east_boundary_object_id,
+            at_utc=utc,
+            observer=observer,
+        )
+        assessment = assess_mansion_region(
+            mansion=mansion,
+            target=self._apparent_equatorial_position(target),
+            west_boundary=self._apparent_equatorial_position(west_boundary),
+            east_boundary=self._apparent_equatorial_position(east_boundary),
+        )
+        return MansionRegionObservationV1(
+            body_id=body_id,
+            at_utc=utc,
+            asterism_catalog_sha256=self.catalog.sha256,
+            assessment=assessment,
         )
 
     def get_points(
@@ -413,10 +536,7 @@ class SkyfieldEphemerisProvider:
         } or resolution.reference_coordinates is None:
             raise ValueError("target star is not a verified catalog mapping")
         body = self._target(primary_body)
-        star = Star(
-            ra_hours=resolution.reference_coordinates.ra_deg / 15.0,
-            dec_degrees=resolution.reference_coordinates.dec_deg,
-        )
+        star = self._star_from_catalog_resolution(resolution)
         t = self._time(utc)
         observer_vector = self._observer_vector(observer)
         body_apparent = observer_vector.at(t).observe(body).apparent()

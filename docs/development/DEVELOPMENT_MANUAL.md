@@ -49,12 +49,16 @@ docs/kaiyuan-<topic>-v2
 每次开始或恢复开发时，按顺序阅读：
 
 1. 根目录 `AGENTS.md`
-2. 本手册
-3. `docs/development/TASKS.md`
-4. `docs/development/DECISIONS.md`
-5. 当前主题设计文档 `docs/superpowers/specs/...`
-6. 当前主题实施计划 `docs/superpowers/plans/...`
-7. `docs/development/WORK_LOG.md` 中最新相关记录
+2. 根目录 `agent.md`
+3. 根目录 `summary.md`
+4. `docs/development/PROJECT_MEMORY.md`
+5. 实时核验远端 stable HEAD 与全部开放 PR
+6. 本手册
+7. `docs/development/TASKS.md`
+8. `docs/development/DECISIONS.md`
+9. 当前主题设计文档 `docs/superpowers/specs/...`
+10. 当前主题实施计划 `docs/superpowers/plans/...`
+11. `docs/development/WORK_LOG.md` 中最新相关记录
 
 若当前任务未在 `TASKS.md` 中登记，不得开始写代码。聊天、PR 评论和临时笔记不能代替任务台账。
 

@@ -14,6 +14,17 @@ from .compatibility import (
     ContractCompatibilityError,
     validate_contract_compatibility,
 )
+from .external_media_v1 import (
+    AuditDisposition,
+    EvidenceLinkV1,
+    ExternalAuditBundleV1,
+    ExternalAuditV1,
+    ExternalClaimAssessmentV1,
+    ExternalClaimV1,
+    ExternalMediaSourceV1,
+    ExternalSourceSpanV1,
+    MediaCaptureV1,
+)
 from .rule_assessment_v1 import EvidenceReferenceV1, RuleAssessmentV1, RuleMatchV1
 from .video_package_v1 import (
     ClaimV1,
@@ -29,8 +40,17 @@ __all__ = [
     "CompatibilityIssue",
     "CompatibilityReport",
     "ContractCompatibilityError",
+    "AuditDisposition",
+    "EvidenceLinkV1",
     "EvidenceReferenceV1",
+    "ExternalAuditBundleV1",
+    "ExternalAuditV1",
+    "ExternalClaimAssessmentV1",
+    "ExternalClaimV1",
+    "ExternalMediaSourceV1",
+    "ExternalSourceSpanV1",
     "MeasurementV1",
+    "MediaCaptureV1",
     "ObserverV1",
     "RuleAssessmentV1",
     "RuleMatchV1",

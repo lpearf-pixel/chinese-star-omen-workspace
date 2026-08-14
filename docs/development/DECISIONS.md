@@ -255,7 +255,61 @@
 - **Reason:** per-PR hosted runs contradicted the accepted local-first policy and consumed capacity without being completion evidence. GitHub requires a `workflow_dispatch` file to exist on the default branch, but the default historical `main` is forbidden for v2 changes. A lightweight exact-SHA tag runs the workflow from the candidate commit without changing `main`; reusable fan-in avoids duplicated test commands.
 - **Rollback:** revert the GOV-T04 workflow/governance commit. No schema, corpus, Qdrant, collection, product or external data migration is involved.
 
-## D-028 — Reviewer A 已确认材料采用临时可用层，不替代双真人门禁
+## D-028 — 二十八宿计算采用“星官成员＋极圈宿域”双层模型
+
+- **Status:** Accepted for ASTRO-R01.
+- **Decision:** traditional asterism membership and lunar-mansion region are
+  separate versioned facts. Exact member/related-star mappings come from pinned
+  source records. Mansion regions use consecutive defining stars and
+  pole-to-pole equatorial great circles; the region is west-inclusive and
+  east-exclusive and is labelled `derived_region`.
+- **Gold sample:** 毕宿 base members are HIP 20889, 20648, 20455, 20205,
+  21421, 20885, 20713 and 18724. HIP 21683 is related 附耳, not a ninth member;
+  its duplicate fixed-name records keep it `ambiguous`. 毕宿's west defining
+  star is HIP 20889 and its east boundary is the following 觜宿 defining star
+  HIP 26207.
+- **Scientific frame:** identities preserve each source record's coordinate
+  epoch. The Hipparcos I/239 records use ICRS positions at J1991.25 plus both
+  proper-motion components; the existing SIMBAD Spica record remains ICRS
+  J2000. One-time region assessment propagates those identities and uses the
+  target and defining/member stars in the same apparent-equatorial-of-date
+  frame. The result binds actual positions, UTC time and catalog SHA-256.
+- **Relation boundary:** `in_mansion_region`, nearest-member separation and an
+  optional explicitly versioned near threshold are objective measurements.
+  Unqualified `临/臨` remains `ambiguous_relation`. A single time sample cannot
+  establish `犯`, `入`, `守` or `留`; those require separately versioned contact,
+  transition, velocity or duration evidence.
+- **Reason:** a nearest-star-only system confuses membership, proximity and
+  mansion location, while invented closed polygons would misrepresent a modern
+  visualization proxy as an ancient boundary. The dual model remains
+  reproducible and honest about provenance.
+- **Consequence:** all 28 mansions must use the same contracts. Unknown or
+  ambiguous mappings remain explicit. External videos consume measurements as
+  research evidence only and cannot promote classical rules or weather claims.
+- **Boundary:** no raw corpus mutation, Reviewer A/B substitution, threshold
+  freeze, official ingest, Qdrant, `local_kb_default`, B11/B12, automatic
+  publication or `main` operation.
+
+## D-029 — 祖山觀首批外部媒体分母冻结为合集第 1–23 集
+
+- **Status:** Accepted for ASTRO-R01 Phase 5 implementation.
+- **Decision:** the user-supplied creator/work links resolve to one exact Douyin
+  account and collection `7664842437629921326`. The approved 23-item denominator
+  means collection episodes 1 through 23, each bound to its immutable platform
+  work ID, canonical work type/URL, UTC publication time and captured metadata
+  hash. Later collection growth does not change this denominator.
+- **Drift:** the live collection reported 40 episodes at capture time. Episodes
+  24–40 are recorded as source drift and excluded from the Phase 5 denominator;
+  adding them requires an explicit later bounded sample or phase update.
+- **Audit:** nine works are selected by an explicit high-risk claim rubric and
+  remain `candidate`. Episode 22 / work `7669807398794598565` is the complete
+  毕宿烈风/海上风暴 sample. Exact metadata spans may be audited; absent
+  transcript, OCR, classical locus or modern authority is not reconstructed.
+- **Boundary:** collection membership proves only source identity. It grants no
+  classical or rule authority, substitutes for no human reviewer, and cannot
+  equate 烈风 with gale, typhoon, tropical cyclone or maritime storm.
+
+## D-030 — Reviewer A 已确认材料采用临时可用层，不替代双真人门禁
 
 - **Status:** Accepted for the Core14 pilot.
 - **Decision:** Core14 中经 Reviewer A 证据修订并由用户确认的 11 条，可

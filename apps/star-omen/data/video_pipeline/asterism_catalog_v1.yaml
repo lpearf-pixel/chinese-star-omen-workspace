@@ -1,47 +1,4347 @@
 schema_version: asterism-catalog/v1
 catalog_id: kaiyuan-chinese-asterisms-v1
 catalog_version: 1
+lunar_mansion_cycle_status: complete
 sources:
-  - source_id: source:stellarium-chinese-skyculture
-    source_type: git-file
-    title: Stellarium Chinese sky-culture star names
-    revision: 3972e97101e4321079279b5e5660b074fafc030a
-    path_or_record: skycultures/chinese/star_names.zh_CN.fab
-    content_hash_algorithm: sha256
-    content_hash: d036a7f37e3c27ca1197d93739d922808e2a0d60e57b96b7692e7d60ca711229
-    snapshot_path: data/video_pipeline/sources/stellarium_hip65474_v1.json
-    upstream_content_id_algorithm: git-sha1
-    upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
-    locator: '65474|_("角宿一") 1'
-  - source_id: source:simbad-spica
-    source_type: catalog-record
-    title: SIMBAD Spica identity and ICRS coordinates
-    revision: '2026-07-22'
-    path_or_record: SIMBAD/basic?Ident=Spica
-    content_hash_algorithm: sha256
-    content_hash: ecaa14864c3e94648d61a28929ef7e5d729b51d4c387ff2c57b40caf2d9d533d
-    snapshot_path: data/video_pipeline/sources/simbad_spica_v1.json
-    locator: HIP 65474 / Spica
-    reference_frame: ICRS J2000
+- source_id: source:stellarium-chinese-skyculture
+  source_type: git-file
+  title: Stellarium Chinese sky-culture star names
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/star_names.zh_CN.fab
+  content_hash_algorithm: sha256
+  content_hash: d036a7f37e3c27ca1197d93739d922808e2a0d60e57b96b7692e7d60ca711229
+  snapshot_path: data/video_pipeline/sources/stellarium_hip65474_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+  locator: 65474|_("角宿一") 1
+- source_id: source:simbad-spica
+  source_type: catalog-record
+  title: SIMBAD Spica identity and ICRS coordinates
+  revision: '2026-07-22'
+  path_or_record: SIMBAD/basic?Ident=Spica
+  content_hash_algorithm: sha256
+  content_hash: ecaa14864c3e94648d61a28929ef7e5d729b51d4c387ff2c57b40caf2d9d533d
+  snapshot_path: data/video_pipeline/sources/simbad_spica_v1.json
+  locator: HIP 65474 / Spica
+  reference_frame: ICRS J2000
+- source_id: source:stellarium-chinese-star-names-bi-zi
+  source_type: git-file
+  title: Stellarium Chinese sky-culture Bi and Zi star names
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/star_names.zh_CN.fab
+  content_hash_algorithm: sha256
+  content_hash: 282b2a761861c1aaef2ba494899c77ecb290b3ab57c60ad46fc74ebaaedd4769
+  snapshot_path: data/video_pipeline/sources/stellarium_bi_zi_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+  locator: 毕宿, 附耳 and 觜宿 fixed records
+- source_id: source:stellarium-chinese-lunar-system
+  source_type: git-file
+  title: Stellarium Chinese lunar-system defining stars
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/index.json
+  content_hash_algorithm: sha256
+  content_hash: 26f1c685986e960f6c88938b80515eeb1762a590cfa46f4b7a745d3343e6ff8e
+  snapshot_path: data/video_pipeline/sources/stellarium_lunar_system_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: 14eea850bc161e4f48a172751fb4e6043154f7f9
+  locator: lunar_system.defining_stars
+  reference_frame: apparent equatorial of date
+- source_id: source:hipparcos-i-239-bi-zi
+  source_type: catalog-record
+  title: CDS VizieR Hipparcos Main Catalogue selected Bi and Zi records
+  revision: '2026-08-12'
+  path_or_record: I/239/hip_main selected HIP records
+  content_hash_algorithm: sha256
+  content_hash: 4ace2023388ceffed107a6a02eb4a7213ecea0e4512feea4c210efbe8be5ea4c
+  snapshot_path: data/video_pipeline/sources/hipparcos_bi_zi_v1.json
+  locator: HIP 18724/20205/20455/20648/20713/20885/20889/21421/21683/26207
+  reference_frame: ICRS, coordinate epoch J1991.25
+- source_id: source:stellarium-28-defining-stars
+  source_type: git-file
+  title: Stellarium Chinese lunar-mansion defining-star names
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/star_names.zh_CN.fab
+  content_hash_algorithm: sha256
+  content_hash: 7f1f66f2656ce80e83a3be7e2200c7fed97a0d381dcc12e18b4fcce570db097a
+  snapshot_path: data/video_pipeline/sources/stellarium_28_defining_stars_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+  locator: fixed 宿一 records for lunar_system.defining_stars
+- source_id: source:hipparcos-i-239-defining-stars
+  source_type: catalog-record
+  title: CDS VizieR Hipparcos Main Catalogue 28 defining-star records
+  revision: '2026-08-12'
+  path_or_record: I/239/hip_main selected 28 lunar-mansion defining-star records
+  content_hash_algorithm: sha256
+  content_hash: 67aaab8802e3a4eace23844fc5377d1ce313cf075451c0640c06bc90b7f3050e
+  snapshot_path: data/video_pipeline/sources/hipparcos_28_defining_stars_v1.json
+  locator: HIP 1067/4463/8903/12719/17499/20889/26207/26727/30343/41822/42313/46390/48356/53740/59803/65474/69427/72622/78265/80112/82514/88635/92041/100345/102618/106278/109074/113963
+  reference_frame: ICRS, coordinate epoch J1991.25
+- source_id: source:stellarium-28-mansion-member-names
+  source_type: git-file
+  title: Stellarium Chinese lunar-mansion member and related fixed names
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/star_names.zh_CN.fab
+  content_hash_algorithm: sha256
+  content_hash: 5a3bc4739dbdd8d4f4d9a93d38bd0ffe19c5423f557223ec74ff8dce1a4d38ea
+  snapshot_path: data/video_pipeline/sources/stellarium_28_mansion_member_names_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: fe8761576dc6c5cd4a65e3551a81ead6122c895f
+  locator: fixed base-member and related line-endpoint records for 28 lunar mansions
+- source_id: source:stellarium-28-mansion-lines
+  source_type: git-file
+  title: Stellarium Chinese lunar-mansion line records
+  revision: 3972e97101e4321079279b5e5660b074fafc030a
+  path_or_record: skycultures/chinese/index.json
+  content_hash_algorithm: sha256
+  content_hash: 84f9db2aa8e83641c21c33ff12be8efd708cb912408ed385442d936f97debcc6
+  snapshot_path: data/video_pipeline/sources/stellarium_28_mansion_lines_v1.json
+  upstream_content_id_algorithm: git-sha1
+  upstream_content_id: 14eea850bc161e4f48a172751fb4e6043154f7f9
+  locator: constellations records for the 28 named lunar mansions
+- source_id: source:hipparcos-i-239-mansion-members
+  source_type: catalog-record
+  title: CDS VizieR Hipparcos Main Catalogue mansion member records
+  revision: '2026-08-12'
+  path_or_record: I/239/hip_main selected 162 lunar-mansion member and related records
+  content_hash_algorithm: sha256
+  content_hash: c26a3bda043178690024f520c623b492baa5811ee0598f21fb7a53967d034d8c
+  snapshot_path: data/video_pipeline/sources/hipparcos_28_mansion_members_v1.json
+  locator: 162 unique HIP records bound by lunar-mansion-membership-lines-v1
+  reference_frame: ICRS, coordinate epoch J1991.25
 entries:
-  - modern_object_id: hip:65474
-    traditional_star_id: jiao-xiu-1
-    asterism_id: jiao-xiu
-    canonical_chinese_name: 角宿一
-    aliases:
-      - spica
-      - alpha virginis
-      - α virginis
-      - hip 65474
-    catalog_epoch: J2000
-    reference_coordinates:
-      frame: icrs
-      epoch: J2000
-      ra_deg: 201.298247375
-      dec_deg: -11.161319472222223
-    source_refs:
-      - source:stellarium-chinese-skyculture
-      - source:simbad-spica
-    mapping_method: catalog-identity
-    confidence: 1.0
-    editorial_status: verified_identity
+- modern_object_id: hip:65474
+  traditional_star_id: jiao-xiu-1
+  asterism_id: jiao-xiu
+  canonical_chinese_name: 角宿一
+  aliases:
+  - spica
+  - alpha virginis
+  - α virginis
+  - hip 65474
+  catalog_epoch: J2000
+  reference_coordinates:
+    frame: icrs
+    epoch: J2000
+    ra_deg: 201.298247375
+    dec_deg: -11.161319472222223
+  source_refs:
+  - source:stellarium-chinese-skyculture
+  - source:simbad-spica
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20889
+  traditional_star_id: bi-xiu-1
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿一
+  aliases:
+  - 畢宿一
+  - hip 20889
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 67.15388879
+    dec_deg: 19.18052092
+    pm_ra_cosdec_mas_per_year: 107.23
+    pm_dec_mas_per_year: -36.77
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20648
+  traditional_star_id: bi-xiu-2
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿二
+  aliases:
+  - 畢宿二
+  - hip 20648
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 66.37215593
+    dec_deg: 17.92798917
+    pm_ra_cosdec_mas_per_year: 108.26
+    pm_dec_mas_per_year: -32.47
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20455
+  traditional_star_id: bi-xiu-3
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿三
+  aliases:
+  - 畢宿三
+  - hip 20455
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 65.73344722
+    dec_deg: 17.5425843
+    pm_ra_cosdec_mas_per_year: 107.75
+    pm_dec_mas_per_year: -28.84
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20205
+  traditional_star_id: bi-xiu-4
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿四
+  aliases:
+  - 畢宿四
+  - hip 20205
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 64.94805793
+    dec_deg: 15.62770031
+    pm_ra_cosdec_mas_per_year: 115.29
+    pm_dec_mas_per_year: -23.86
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:21421
+  traditional_star_id: bi-xiu-5
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿五
+  aliases:
+  - 畢宿五
+  - hip 21421
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 68.98000195
+    dec_deg: 16.50976164
+    pm_ra_cosdec_mas_per_year: 62.78
+    pm_dec_mas_per_year: -189.36
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20885
+  traditional_star_id: bi-xiu-6
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿六
+  aliases:
+  - 畢宿六
+  - hip 20885
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 67.14346805
+    dec_deg: 15.96221721
+    pm_ra_cosdec_mas_per_year: 104.76
+    pm_dec_mas_per_year: -15.01
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:20713
+  traditional_star_id: bi-xiu-7
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿七
+  aliases:
+  - 畢宿七
+  - hip 20713
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 66.58613217
+    dec_deg: 15.6183462
+    pm_ra_cosdec_mas_per_year: 114.66
+    pm_dec_mas_per_year: -33.3
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:18724
+  traditional_star_id: bi-xiu-8
+  asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿八
+  aliases:
+  - 畢宿八
+  - hip 18724
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 60.17008591
+    dec_deg: 12.49037571
+    pm_ra_cosdec_mas_per_year: -8.15
+    pm_dec_mas_per_year: -11.98
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:21683
+  traditional_star_id: fu-er
+  asterism_id: fu-er
+  canonical_chinese_name: 附耳
+  aliases:
+  - 附耳增四
+  - hip 21683
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 69.81854938
+    dec_deg: 15.9180242
+    pm_ra_cosdec_mas_per_year: 82.4
+    pm_dec_mas_per_year: -19.53
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-membership
+  confidence: 0.5
+  editorial_status: ambiguous
+- modern_object_id: hip:26207
+  traditional_star_id: zi-xiu-1
+  asterism_id: zi-xiu
+  canonical_chinese_name: 觜宿一
+  aliases:
+  - hip 26207
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 83.78449043
+    dec_deg: 9.93416294
+    pm_ra_cosdec_mas_per_year: -1.03
+    pm_dec_mas_per_year: -1.86
+  source_refs:
+  - source:stellarium-chinese-star-names-bi-zi
+  - source:hipparcos-i-239-bi-zi
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:69427
+  traditional_star_id: kang-xiu-1
+  asterism_id: kang-xiu
+  canonical_chinese_name: 亢宿一
+  aliases:
+  - hip 69427
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 213.22392088
+    dec_deg: -10.274044
+    pm_ra_cosdec_mas_per_year: 8.04
+    pm_dec_mas_per_year: 140.79
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:72622
+  traditional_star_id: di-xiu-1
+  asterism_id: di-xiu
+  canonical_chinese_name: 氐宿一
+  aliases:
+  - hip 72622
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 222.71990536
+    dec_deg: -16.04161047
+    pm_ra_cosdec_mas_per_year: -105.69
+    pm_dec_mas_per_year: -69.0
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:78265
+  traditional_star_id: fang-xiu-1
+  asterism_id: fang-xiu
+  canonical_chinese_name: 房宿一
+  aliases:
+  - hip 78265
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 239.71300283
+    dec_deg: -26.1140428
+    pm_ra_cosdec_mas_per_year: -12.0
+    pm_dec_mas_per_year: -25.71
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:80112
+  traditional_star_id: xin-xiu-1
+  asterism_id: xin-xiu
+  canonical_chinese_name: 心宿一
+  aliases:
+  - hip 80112
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 245.29717718
+    dec_deg: -25.59275259
+    pm_ra_cosdec_mas_per_year: -10.03
+    pm_dec_mas_per_year: -18.03
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:82514
+  traditional_star_id: wei-tail-xiu-1
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿一
+  aliases:
+  - hip 82514
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 252.96766195
+    dec_deg: -38.04732717
+    pm_ra_cosdec_mas_per_year: -8.84
+    pm_dec_mas_per_year: -21.6
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:88635
+  traditional_star_id: ji-xiu-1
+  asterism_id: ji-xiu
+  canonical_chinese_name: 箕宿一
+  aliases:
+  - hip 88635
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 271.45218586
+    dec_deg: -30.42365007
+    pm_ra_cosdec_mas_per_year: -55.75
+    pm_dec_mas_per_year: -181.53
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:92041
+  traditional_star_id: dou-xiu-1
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿一
+  aliases:
+  - hip 92041
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 281.41397083
+    dec_deg: -26.9907794
+    pm_ra_cosdec_mas_per_year: 51.15
+    pm_dec_mas_per_year: 0.45
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:100345
+  traditional_star_id: niu-xiu-1
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿一
+  aliases:
+  - hip 100345
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 305.25269347
+    dec_deg: -14.78140119
+    pm_ra_cosdec_mas_per_year: 48.42
+    pm_dec_mas_per_year: 14.0
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:102618
+  traditional_star_id: nu-xiu-1
+  asterism_id: nu-xiu
+  canonical_chinese_name: 女宿一
+  aliases:
+  - hip 102618
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 311.91888574
+    dec_deg: -9.49568988
+    pm_ra_cosdec_mas_per_year: 31.89
+    pm_dec_mas_per_year: -35.32
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:106278
+  traditional_star_id: xu-xiu-1
+  asterism_id: xu-xiu
+  canonical_chinese_name: 虚宿一
+  aliases:
+  - 虛宿一
+  - hip 106278
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 322.88966951
+    dec_deg: -5.57115593
+    pm_ra_cosdec_mas_per_year: 22.79
+    pm_dec_mas_per_year: -6.7
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:109074
+  traditional_star_id: wei-danger-xiu-1
+  asterism_id: wei-danger-xiu
+  canonical_chinese_name: 危宿一
+  aliases:
+  - hip 109074
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 331.44593869
+    dec_deg: -0.31982656
+    pm_ra_cosdec_mas_per_year: 17.9
+    pm_dec_mas_per_year: -9.93
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:113963
+  traditional_star_id: shi-xiu-1
+  asterism_id: shi-xiu
+  canonical_chinese_name: 室宿一
+  aliases:
+  - hip 113963
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 346.1900702
+    dec_deg: 15.20536786
+    pm_ra_cosdec_mas_per_year: 61.1
+    pm_dec_mas_per_year: -42.56
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:1067
+  traditional_star_id: bi-wall-xiu-1
+  asterism_id: bi-wall-xiu
+  canonical_chinese_name: 壁宿一
+  aliases:
+  - hip 1067
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 3.30895828
+    dec_deg: 15.18361593
+    pm_ra_cosdec_mas_per_year: 4.7
+    pm_dec_mas_per_year: -8.24
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:4463
+  traditional_star_id: kui-xiu-1
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿一
+  aliases:
+  - hip 4463
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 14.30178237
+    dec_deg: 23.41775997
+    pm_ra_cosdec_mas_per_year: -43.72
+    pm_dec_mas_per_year: -46.06
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:8903
+  traditional_star_id: lou-xiu-1
+  asterism_id: lou-xiu
+  canonical_chinese_name: 娄宿一
+  aliases:
+  - 婁宿一
+  - hip 8903
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 28.65978771
+    dec_deg: 20.80829949
+    pm_ra_cosdec_mas_per_year: 96.32
+    pm_dec_mas_per_year: -108.8
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:12719
+  traditional_star_id: wei-stomach-xiu-1
+  asterism_id: wei-stomach-xiu
+  canonical_chinese_name: 胃宿一
+  aliases:
+  - hip 12719
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 40.86296031
+    dec_deg: 27.70717078
+    pm_ra_cosdec_mas_per_year: 3.51
+    pm_dec_mas_per_year: -9.97
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17499
+  traditional_star_id: mao-xiu-1
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿一
+  aliases:
+  - hip 17499
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.21884811
+    dec_deg: 24.1134484
+    pm_ra_cosdec_mas_per_year: 21.55
+    pm_dec_mas_per_year: -44.92
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:26727
+  traditional_star_id: shen-xiu-1
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿一
+  aliases:
+  - 參宿一
+  - hip 26727
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 85.18968672
+    dec_deg: -1.94257841
+    pm_ra_cosdec_mas_per_year: 3.99
+    pm_dec_mas_per_year: 2.54
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:30343
+  traditional_star_id: jing-xiu-1
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿一
+  aliases:
+  - hip 30343
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 95.73996302
+    dec_deg: 22.51385027
+    pm_ra_cosdec_mas_per_year: 56.84
+    pm_dec_mas_per_year: -108.79
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:41822
+  traditional_star_id: gui-xiu-1
+  asterism_id: gui-xiu
+  canonical_chinese_name: 鬼宿一
+  aliases:
+  - hip 41822
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 127.8990288
+    dec_deg: 18.09455771
+    pm_ra_cosdec_mas_per_year: -60.05
+    pm_dec_mas_per_year: -56.5
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:42313
+  traditional_star_id: liu-xiu-1
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿一
+  aliases:
+  - hip 42313
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 129.41419739
+    dec_deg: 5.70379868
+    pm_ra_cosdec_mas_per_year: -70.27
+    pm_dec_mas_per_year: -6.99
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:46390
+  traditional_star_id: xing-xiu-1
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿一
+  aliases:
+  - hip 46390
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 141.8968826
+    dec_deg: -8.65868335
+    pm_ra_cosdec_mas_per_year: -14.49
+    pm_dec_mas_per_year: 33.25
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:48356
+  traditional_star_id: zhang-xiu-1
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿一
+  aliases:
+  - 張宿一
+  - hip 48356
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 147.86951033
+    dec_deg: -14.84654997
+    pm_ra_cosdec_mas_per_year: 18.68
+    pm_dec_mas_per_year: -21.88
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:53740
+  traditional_star_id: yi-xiu-1
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿一
+  aliases:
+  - hip 53740
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 164.94478664
+    dec_deg: -18.29909723
+    pm_ra_cosdec_mas_per_year: -462.39
+    pm_dec_mas_per_year: 129.11
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:59803
+  traditional_star_id: zhen-xiu-1
+  asterism_id: zhen-xiu
+  canonical_chinese_name: 轸宿一
+  aliases:
+  - 軫宿一
+  - hip 59803
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 183.95194937
+    dec_deg: -17.5419837
+    pm_ra_cosdec_mas_per_year: -159.58
+    pm_dec_mas_per_year: 22.31
+  source_refs:
+  - source:stellarium-28-defining-stars
+  - source:hipparcos-i-239-defining-stars
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:66249
+  traditional_star_id: jiao-xiu-2
+  asterism_id: jiao-xiu
+  canonical_chinese_name: 角宿二
+  aliases:
+  - hip 66249
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 203.673978
+    dec_deg: -0.59593821
+    pm_ra_cosdec_mas_per_year: -278.89
+    pm_dec_mas_per_year: 48.56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:69701
+  traditional_star_id: kang-xiu-2
+  asterism_id: kang-xiu
+  canonical_chinese_name: 亢宿二
+  aliases:
+  - hip 69701
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 214.00368717
+    dec_deg: -5.99952622
+    pm_ra_cosdec_mas_per_year: -25.84
+    pm_dec_mas_per_year: -419.84
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:70755
+  traditional_star_id: kang-xiu-3
+  asterism_id: kang-xiu
+  canonical_chinese_name: 亢宿三
+  aliases:
+  - hip 70755
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 217.05091806
+    dec_deg: -2.22795009
+    pm_ra_cosdec_mas_per_year: -140.94
+    pm_dec_mas_per_year: -2.92
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:69974
+  traditional_star_id: kang-xiu-4
+  asterism_id: kang-xiu
+  canonical_chinese_name: 亢宿四
+  aliases:
+  - hip 69974
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 214.77750771
+    dec_deg: -13.37116634
+    pm_ra_cosdec_mas_per_year: -17.12
+    pm_dec_mas_per_year: 29.39
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:74392
+  traditional_star_id: di-xiu-2
+  asterism_id: di-xiu
+  canonical_chinese_name: 氐宿二
+  aliases:
+  - hip 74392
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 228.05546736
+    dec_deg: -19.79163143
+    pm_ra_cosdec_mas_per_year: -35.59
+    pm_dec_mas_per_year: -32.55
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:76333
+  traditional_star_id: di-xiu-3
+  asterism_id: di-xiu
+  canonical_chinese_name: 氐宿三
+  aliases:
+  - hip 76333
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 233.88141398
+    dec_deg: -14.78955365
+    pm_ra_cosdec_mas_per_year: 65.67
+    pm_dec_mas_per_year: 6.93
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:74785
+  traditional_star_id: di-xiu-4
+  asterism_id: di-xiu
+  canonical_chinese_name: 氐宿四
+  aliases:
+  - hip 74785
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 229.25196591
+    dec_deg: -9.38286694
+    pm_ra_cosdec_mas_per_year: -96.39
+    pm_dec_mas_per_year: -20.76
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:78104
+  traditional_star_id: fang-xiu-2
+  asterism_id: fang-xiu
+  canonical_chinese_name: 房宿二
+  aliases:
+  - hip 78104
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 239.22119438
+    dec_deg: -29.21401221
+    pm_ra_cosdec_mas_per_year: -15.2
+    pm_dec_mas_per_year: -25.1
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:78401
+  traditional_star_id: fang-xiu-3
+  asterism_id: fang-xiu
+  canonical_chinese_name: 房宿三
+  aliases:
+  - hip 78401
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 240.08338225
+    dec_deg: -22.62162024
+    pm_ra_cosdec_mas_per_year: -8.67
+    pm_dec_mas_per_year: -36.9
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:78820
+  traditional_star_id: fang-xiu-4
+  asterism_id: fang-xiu
+  canonical_chinese_name: 房宿四
+  aliases:
+  - hip 78820
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 241.35931206
+    dec_deg: -19.80539286
+    pm_ra_cosdec_mas_per_year: -6.75
+    pm_dec_mas_per_year: -24.89
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:80763
+  traditional_star_id: xin-xiu-2
+  asterism_id: xin-xiu
+  canonical_chinese_name: 心宿二
+  aliases:
+  - hip 80763
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 247.35194804
+    dec_deg: -26.43194608
+    pm_ra_cosdec_mas_per_year: -10.16
+    pm_dec_mas_per_year: -23.21
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:81266
+  traditional_star_id: xin-xiu-3
+  asterism_id: xin-xiu
+  canonical_chinese_name: 心宿三
+  aliases:
+  - hip 81266
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 248.97066423
+    dec_deg: -28.21596156
+    pm_ra_cosdec_mas_per_year: -8.59
+    pm_dec_mas_per_year: -22.5
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:82396
+  traditional_star_id: wei-tail-xiu-2
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿二
+  aliases:
+  - hip 82396
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 252.54268738
+    dec_deg: -34.29260982
+    pm_ra_cosdec_mas_per_year: -611.83
+    pm_dec_mas_per_year: -255.87
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:82671
+  traditional_star_id: wei-tail-xiu-3
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿三
+  aliases:
+  - hip 82671
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 253.49886366
+    dec_deg: -42.36201968
+    pm_ra_cosdec_mas_per_year: -0.48
+    pm_dec_mas_per_year: -2.17
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:84143
+  traditional_star_id: wei-tail-xiu-4
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿四
+  aliases:
+  - hip 84143
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 258.038233
+    dec_deg: -43.23849039
+    pm_ra_cosdec_mas_per_year: 22.01
+    pm_dec_mas_per_year: -287.41
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:86228
+  traditional_star_id: wei-tail-xiu-5
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿五
+  aliases:
+  - hip 86228
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 264.32969072
+    dec_deg: -42.99782155
+    pm_ra_cosdec_mas_per_year: 6.06
+    pm_dec_mas_per_year: -0.95
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:87073
+  traditional_star_id: wei-tail-xiu-6
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿六
+  aliases:
+  - hip 87073
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 266.89617137
+    dec_deg: -40.12698197
+    pm_ra_cosdec_mas_per_year: 0.44
+    pm_dec_mas_per_year: -6.4
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:86670
+  traditional_star_id: wei-tail-xiu-7
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿七
+  aliases:
+  - hip 86670
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 265.62199908
+    dec_deg: -39.02992092
+    pm_ra_cosdec_mas_per_year: -6.49
+    pm_dec_mas_per_year: -25.55
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:85927
+  traditional_star_id: wei-tail-xiu-8
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿八
+  aliases:
+  - hip 85927
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 263.40219373
+    dec_deg: -37.10374835
+    pm_ra_cosdec_mas_per_year: -8.9
+    pm_dec_mas_per_year: -29.95
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:85696
+  traditional_star_id: wei-tail-xiu-9
+  asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿九
+  aliases:
+  - hip 85696
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 262.69099501
+    dec_deg: -37.29574016
+    pm_ra_cosdec_mas_per_year: -4.19
+    pm_dec_mas_per_year: -29.14
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:89931
+  traditional_star_id: ji-xiu-2
+  asterism_id: ji-xiu
+  canonical_chinese_name: 箕宿二
+  aliases:
+  - hip 89931
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 275.24842337
+    dec_deg: -29.82803914
+    pm_ra_cosdec_mas_per_year: 29.96
+    pm_dec_mas_per_year: -26.38
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:90185
+  traditional_star_id: ji-xiu-3
+  asterism_id: ji-xiu
+  canonical_chinese_name: 箕宿三
+  aliases:
+  - hip 90185
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 276.04310967
+    dec_deg: -34.3843146
+    pm_ra_cosdec_mas_per_year: -39.61
+    pm_dec_mas_per_year: -124.05
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:89642
+  traditional_star_id: ji-xiu-4
+  asterism_id: ji-xiu
+  canonical_chinese_name: 箕宿四
+  aliases:
+  - hip 89642
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 274.4072049
+    dec_deg: -36.76128103
+    pm_ra_cosdec_mas_per_year: -129.27
+    pm_dec_mas_per_year: -166.61
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:90496
+  traditional_star_id: dou-xiu-2
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿二
+  aliases:
+  - hip 90496
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 276.99278955
+    dec_deg: -25.42124732
+    pm_ra_cosdec_mas_per_year: -44.81
+    pm_dec_mas_per_year: -186.29
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:89341
+  traditional_star_id: dou-xiu-3
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿三
+  aliases:
+  - hip 89341
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 273.44086963
+    dec_deg: -21.05883031
+    pm_ra_cosdec_mas_per_year: 1.72
+    pm_dec_mas_per_year: -1.39
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:92855
+  traditional_star_id: dou-xiu-4
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿四
+  aliases:
+  - hip 92855
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 283.81631956
+    dec_deg: -26.29659428
+    pm_ra_cosdec_mas_per_year: 13.87
+    pm_dec_mas_per_year: -52.65
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:93864
+  traditional_star_id: dou-xiu-5
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿五
+  aliases:
+  - hip 93864
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 286.73517629
+    dec_deg: -27.66981416
+    pm_ra_cosdec_mas_per_year: -50.79
+    pm_dec_mas_per_year: -250.51
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:93506
+  traditional_star_id: dou-xiu-6
+  asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿六
+  aliases:
+  - hip 93506
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 285.65301428
+    dec_deg: -29.88011429
+    pm_ra_cosdec_mas_per_year: -14.1
+    pm_dec_mas_per_year: 3.66
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:100064
+  traditional_star_id: niu-xiu-2
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿二
+  aliases:
+  - hip 100064
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 304.5134103
+    dec_deg: -12.54485877
+    pm_ra_cosdec_mas_per_year: 61.78
+    pm_dec_mas_per_year: 2.85
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:99572
+  traditional_star_id: niu-xiu-3
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿三
+  aliases:
+  - hip 99572
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 303.10731366
+    dec_deg: -12.61702214
+    pm_ra_cosdec_mas_per_year: 193.25
+    pm_dec_mas_per_year: -195.6
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:100881
+  traditional_star_id: niu-xiu-4
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿四
+  aliases:
+  - hip 100881
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 306.83001454
+    dec_deg: -18.21169433
+    pm_ra_cosdec_mas_per_year: 10.32
+    pm_dec_mas_per_year: -10.87
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:101123
+  traditional_star_id: niu-xiu-5
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿五
+  aliases:
+  - hip 101123
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 307.47454931
+    dec_deg: -18.58298474
+    pm_ra_cosdec_mas_per_year: 25.56
+    pm_dec_mas_per_year: -79.45
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:101027
+  traditional_star_id: niu-xiu-6
+  asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿六
+  aliases:
+  - hip 101027
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 307.21509857
+    dec_deg: -17.81366828
+    pm_ra_cosdec_mas_per_year: -15.79
+    pm_dec_mas_per_year: -7.66
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:103045
+  traditional_star_id: nu-xiu-2
+  asterism_id: nu-xiu
+  canonical_chinese_name: 女宿二
+  aliases:
+  - hip 103045
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 313.16335749
+    dec_deg: -8.98323782
+    pm_ra_cosdec_mas_per_year: 47.06
+    pm_dec_mas_per_year: -32.91
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:102945
+  traditional_star_id: nu-xiu-3
+  asterism_id: nu-xiu
+  canonical_chinese_name: 女宿三
+  aliases:
+  - hip 102945
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 312.85705076
+    dec_deg: -5.6266358
+    pm_ra_cosdec_mas_per_year: 95.77
+    pm_dec_mas_per_year: 1.25
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:102624
+  traditional_star_id: nu-xiu-4
+  asterism_id: nu-xiu
+  canonical_chinese_name: 女宿四
+  aliases:
+  - hip 102624
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 311.93432462
+    dec_deg: -5.02760303
+    pm_ra_cosdec_mas_per_year: -3.3
+    pm_dec_mas_per_year: -40.24
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:104987
+  traditional_star_id: xu-xiu-2
+  asterism_id: xu-xiu
+  canonical_chinese_name: 虚宿二
+  aliases:
+  - 虛宿二
+  - hip 104987
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 318.95581976
+    dec_deg: 5.2480739
+    pm_ra_cosdec_mas_per_year: 59.63
+    pm_dec_mas_per_year: -94.33
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:109427
+  traditional_star_id: wei-danger-xiu-2
+  asterism_id: wei-danger-xiu
+  canonical_chinese_name: 危宿二
+  aliases:
+  - hip 109427
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 332.54924902
+    dec_deg: 6.197789
+    pm_ra_cosdec_mas_per_year: 281.96
+    pm_dec_mas_per_year: 31.23
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:107315
+  traditional_star_id: wei-danger-xiu-3
+  asterism_id: wei-danger-xiu
+  canonical_chinese_name: 危宿三
+  aliases:
+  - hip 107315
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 326.04641808
+    dec_deg: 9.87500791
+    pm_ra_cosdec_mas_per_year: 30.02
+    pm_dec_mas_per_year: 1.38
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:113881
+  traditional_star_id: shi-xiu-2
+  asterism_id: shi-xiu
+  canonical_chinese_name: 室宿二
+  aliases:
+  - hip 113881
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 345.94305575
+    dec_deg: 28.08245462
+    pm_ra_cosdec_mas_per_year: 187.76
+    pm_dec_mas_per_year: 137.61
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:677
+  traditional_star_id: bi-wall-xiu-2
+  asterism_id: bi-wall-xiu
+  canonical_chinese_name: 壁宿二
+  aliases:
+  - hip 677
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 2.09653333
+    dec_deg: 29.09082805
+    pm_ra_cosdec_mas_per_year: 135.68
+    pm_dec_mas_per_year: -162.95
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:3693
+  traditional_star_id: kui-xiu-2
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿二
+  aliases:
+  - hip 3693
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 11.83495908
+    dec_deg: 24.26737703
+    pm_ra_cosdec_mas_per_year: -101.23
+    pm_dec_mas_per_year: -81.89
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:3885
+  traditional_star_id: kui-xiu-3
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿三
+  aliases:
+  - hip 3885
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 12.47128657
+    dec_deg: 27.71031105
+    pm_ra_cosdec_mas_per_year: 86.54
+    pm_dec_mas_per_year: -10.2
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:3031
+  traditional_star_id: kui-xiu-4
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿四
+  aliases:
+  - hip 3031
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 9.63958024
+    dec_deg: 29.312369
+    pm_ra_cosdec_mas_per_year: -229.41
+    pm_dec_mas_per_year: -254.08
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:3092
+  traditional_star_id: kui-xiu-5
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿五
+  aliases:
+  - hip 3092
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 9.83165567
+    dec_deg: 30.86122579
+    pm_ra_cosdec_mas_per_year: 115.38
+    pm_dec_mas_per_year: -83.05
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:2912
+  traditional_star_id: kui-xiu-6
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿六
+  aliases:
+  - hip 2912
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 9.22016239
+    dec_deg: 33.71935227
+    pm_ra_cosdec_mas_per_year: 15.23
+    pm_dec_mas_per_year: -3.56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:3881
+  traditional_star_id: kui-xiu-7
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿七
+  aliases:
+  - hip 3881
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 12.45345723
+    dec_deg: 41.07895474
+    pm_ra_cosdec_mas_per_year: 22.68
+    pm_dec_mas_per_year: -18.05
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:4436
+  traditional_star_id: kui-xiu-8
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿八
+  aliases:
+  - hip 4436
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 14.18790699
+    dec_deg: 38.49925513
+    pm_ra_cosdec_mas_per_year: 152.78
+    pm_dec_mas_per_year: 36.82
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5447
+  traditional_star_id: kui-xiu-9
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿九
+  aliases:
+  - hip 5447
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 17.43248991
+    dec_deg: 35.62083048
+    pm_ra_cosdec_mas_per_year: 175.59
+    pm_dec_mas_per_year: -112.23
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5175
+  traditional_star_id: kui-xiu-10
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十
+  aliases:
+  - hip 5175
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 16.54664936
+    dec_deg: 32.18154253
+    pm_ra_cosdec_mas_per_year: 7.38
+    pm_dec_mas_per_year: -23.53
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5586
+  traditional_star_id: kui-xiu-11
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十一
+  aliases:
+  - hip 5586
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 17.91494471
+    dec_deg: 30.08972962
+    pm_ra_cosdec_mas_per_year: 74.29
+    pm_dec_mas_per_year: -37.61
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:6315
+  traditional_star_id: kui-xiu-12
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十二
+  aliases:
+  - hip 6315
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 20.28064145
+    dec_deg: 28.73838983
+    pm_ra_cosdec_mas_per_year: 28.53
+    pm_dec_mas_per_year: -75.19
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:6193
+  traditional_star_id: kui-xiu-13
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十三
+  aliases:
+  - hip 6193
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 19.86657455
+    dec_deg: 27.26408682
+    pm_ra_cosdec_mas_per_year: 26.21
+    pm_dec_mas_per_year: -11.62
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5742
+  traditional_star_id: kui-xiu-14
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十四
+  aliases:
+  - hip 5742
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 18.43723014
+    dec_deg: 24.58376482
+    pm_ra_cosdec_mas_per_year: 18.58
+    pm_dec_mas_per_year: -21.26
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5571
+  traditional_star_id: kui-xiu-15
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十五
+  aliases:
+  - hip 5571
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 17.86330901
+    dec_deg: 21.03467568
+    pm_ra_cosdec_mas_per_year: 41.66
+    pm_dec_mas_per_year: -10.55
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:5131
+  traditional_star_id: kui-xiu-16
+  asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿十六
+  aliases:
+  - hip 5131
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 16.42053152
+    dec_deg: 21.4732162
+    pm_ra_cosdec_mas_per_year: 44.3
+    pm_dec_mas_per_year: -14.32
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:8832
+  traditional_star_id: lou-xiu-2
+  asterism_id: lou-xiu
+  canonical_chinese_name: 娄宿二
+  aliases:
+  - 婁宿二
+  - hip 8832
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 28.38235506
+    dec_deg: 19.29409264
+    pm_ra_cosdec_mas_per_year: 79.43
+    pm_dec_mas_per_year: -99.1
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:9884
+  traditional_star_id: lou-xiu-3
+  asterism_id: lou-xiu
+  canonical_chinese_name: 娄宿三
+  aliases:
+  - 婁宿三
+  - hip 9884
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 31.79285757
+    dec_deg: 23.46277743
+    pm_ra_cosdec_mas_per_year: 190.73
+    pm_dec_mas_per_year: -145.77
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:13061
+  traditional_star_id: wei-stomach-xiu-2
+  asterism_id: wei-stomach-xiu
+  canonical_chinese_name: 胃宿二
+  aliases:
+  - hip 13061
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 41.97683942
+    dec_deg: 29.24742385
+    pm_ra_cosdec_mas_per_year: 148.42
+    pm_dec_mas_per_year: -125.76
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:13209
+  traditional_star_id: wei-stomach-xiu-3
+  asterism_id: wei-stomach-xiu
+  canonical_chinese_name: 胃宿三
+  aliases:
+  - hip 13209
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 42.49578911
+    dec_deg: 27.26079044
+    pm_ra_cosdec_mas_per_year: 65.47
+    pm_dec_mas_per_year: -116.59
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17531
+  traditional_star_id: mao-xiu-2
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿二
+  aliases:
+  - hip 17531
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.30200876
+    dec_deg: 24.46737879
+    pm_ra_cosdec_mas_per_year: 19.35
+    pm_dec_mas_per_year: -41.63
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17579
+  traditional_star_id: mao-xiu-3
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿三
+  aliases:
+  - hip 17579
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.47693278
+    dec_deg: 24.55462128
+    pm_ra_cosdec_mas_per_year: 19.44
+    pm_dec_mas_per_year: -45.36
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17573
+  traditional_star_id: mao-xiu-4
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿四
+  aliases:
+  - hip 17573
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.45663804
+    dec_deg: 24.36785796
+    pm_ra_cosdec_mas_per_year: 21.09
+    pm_dec_mas_per_year: -45.03
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17608
+  traditional_star_id: mao-xiu-5
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿五
+  aliases:
+  - hip 17608
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.58150135
+    dec_deg: 23.94846207
+    pm_ra_cosdec_mas_per_year: 21.17
+    pm_dec_mas_per_year: -42.67
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17702
+  traditional_star_id: mao-xiu-6
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿六
+  aliases:
+  - hip 17702
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 56.87110065
+    dec_deg: 24.10524193
+    pm_ra_cosdec_mas_per_year: 19.35
+    pm_dec_mas_per_year: -43.11
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:17847
+  traditional_star_id: mao-xiu-7
+  asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿七
+  aliases:
+  - hip 17847
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 57.29054669
+    dec_deg: 24.05352412
+    pm_ra_cosdec_mas_per_year: 17.77
+    pm_dec_mas_per_year: -44.7
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:26176
+  traditional_star_id: zi-xiu-2
+  asterism_id: zi-xiu
+  canonical_chinese_name: 觜宿二
+  aliases:
+  - hip 26176
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 83.70515764
+    dec_deg: 9.48958528
+    pm_ra_cosdec_mas_per_year: -1.24
+    pm_dec_mas_per_year: -2.49
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:26366
+  traditional_star_id: zi-xiu-3
+  asterism_id: zi-xiu
+  canonical_chinese_name: 觜宿三
+  aliases:
+  - hip 26366
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 84.22637775
+    dec_deg: 9.291412
+    pm_ra_cosdec_mas_per_year: 96.84
+    pm_dec_mas_per_year: -304.18
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:26311
+  traditional_star_id: shen-xiu-2
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿二
+  aliases:
+  - 參宿二
+  - hip 26311
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 84.05338572
+    dec_deg: -1.20191725
+    pm_ra_cosdec_mas_per_year: 1.49
+    pm_dec_mas_per_year: -1.06
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:25930
+  traditional_star_id: shen-xiu-3
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿三
+  aliases:
+  - 參宿三
+  - hip 25930
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 83.00166562
+    dec_deg: -0.2990934
+    pm_ra_cosdec_mas_per_year: 1.67
+    pm_dec_mas_per_year: 0.56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:27989
+  traditional_star_id: shen-xiu-4
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿四
+  aliases:
+  - 參宿四
+  - hip 27989
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 88.79287161
+    dec_deg: 7.40703634
+    pm_ra_cosdec_mas_per_year: 27.33
+    pm_dec_mas_per_year: 10.86
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:25336
+  traditional_star_id: shen-xiu-5
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿五
+  aliases:
+  - 參宿五
+  - hip 25336
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 81.28278416
+    dec_deg: 6.34973451
+    pm_ra_cosdec_mas_per_year: -8.75
+    pm_dec_mas_per_year: -13.28
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:27366
+  traditional_star_id: shen-xiu-6
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿六
+  aliases:
+  - 參宿六
+  - hip 27366
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 86.93911641
+    dec_deg: -9.66960186
+    pm_ra_cosdec_mas_per_year: 1.55
+    pm_dec_mas_per_year: -1.2
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:24436
+  traditional_star_id: shen-xiu-7
+  asterism_id: shen-xiu
+  canonical_chinese_name: 参宿七
+  aliases:
+  - 參宿七
+  - hip 24436
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 78.63446353
+    dec_deg: -8.20163919
+    pm_ra_cosdec_mas_per_year: 1.87
+    pm_dec_mas_per_year: -0.56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:30883
+  traditional_star_id: jing-xiu-2
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿二
+  aliases:
+  - hip 30883
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 97.24079361
+    dec_deg: 20.2121672
+    pm_ra_cosdec_mas_per_year: -5.98
+    pm_dec_mas_per_year: -14.08
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:31681
+  traditional_star_id: jing-xiu-3
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿三
+  aliases:
+  - hip 31681
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 99.42792641
+    dec_deg: 16.39941482
+    pm_ra_cosdec_mas_per_year: -2.04
+    pm_dec_mas_per_year: -66.92
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:32362
+  traditional_star_id: jing-xiu-4
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿四
+  aliases:
+  - hip 32362
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 101.3226398
+    dec_deg: 12.89605513
+    pm_ra_cosdec_mas_per_year: -115.16
+    pm_dec_mas_per_year: -190.91
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:32246
+  traditional_star_id: jing-xiu-5
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿五
+  aliases:
+  - hip 32246
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 100.98304088
+    dec_deg: 25.13115531
+    pm_ra_cosdec_mas_per_year: -5.93
+    pm_dec_mas_per_year: -12.81
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:32921
+  traditional_star_id: jing-xiu-6
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿六
+  aliases:
+  - hip 32921
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 102.88770733
+    dec_deg: 21.76123162
+    pm_ra_cosdec_mas_per_year: -6.11
+    pm_dec_mas_per_year: -34.48
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:34088
+  traditional_star_id: jing-xiu-7
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿七
+  aliases:
+  - hip 34088
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 106.02723079
+    dec_deg: 20.57029939
+    pm_ra_cosdec_mas_per_year: -5.72
+    pm_dec_mas_per_year: -0.96
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:35350
+  traditional_star_id: jing-xiu-8
+  asterism_id: jing-xiu
+  canonical_chinese_name: 井宿八
+  aliases:
+  - hip 35350
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 109.52336162
+    dec_deg: 16.54047526
+    pm_ra_cosdec_mas_per_year: -46.09
+    pm_dec_mas_per_year: -37.9
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:29655
+  traditional_star_id: yue
+  asterism_id: yue
+  canonical_chinese_name: 钺
+  aliases:
+  - 鉞
+  - hip 29655
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 93.71956952
+    dec_deg: 22.50682376
+    pm_ra_cosdec_mas_per_year: -62.53
+    pm_dec_mas_per_year: -10.24
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:41909
+  traditional_star_id: gui-xiu-2
+  asterism_id: gui-xiu
+  canonical_chinese_name: 鬼宿二
+  aliases:
+  - hip 41909
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 128.17718645
+    dec_deg: 20.44127049
+    pm_ra_cosdec_mas_per_year: -44.65
+    pm_dec_mas_per_year: -44.71
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:42806
+  traditional_star_id: gui-xiu-3
+  asterism_id: gui-xiu
+  canonical_chinese_name: 鬼宿三
+  aliases:
+  - hip 42806
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 130.82172127
+    dec_deg: 21.46859609
+    pm_ra_cosdec_mas_per_year: -106.94
+    pm_dec_mas_per_year: -39.25
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:42911
+  traditional_star_id: gui-xiu-4
+  asterism_id: gui-xiu
+  canonical_chinese_name: 鬼宿四
+  aliases:
+  - hip 42911
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 131.17129209
+    dec_deg: 18.15486399
+    pm_ra_cosdec_mas_per_year: -17.1
+    pm_dec_mas_per_year: -228.46
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:42402
+  traditional_star_id: liu-xiu-2
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿二
+  aliases:
+  - hip 42402
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 129.68936993
+    dec_deg: 3.34147477
+    pm_ra_cosdec_mas_per_year: -19.03
+    pm_dec_mas_per_year: -16.29
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:42799
+  traditional_star_id: liu-xiu-3
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿三
+  aliases:
+  - hip 42799
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 130.80619315
+    dec_deg: 3.39866539
+    pm_ra_cosdec_mas_per_year: -19.14
+    pm_dec_mas_per_year: -1.29
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:43234
+  traditional_star_id: liu-xiu-4
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿四
+  aliases:
+  - hip 43234
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 132.10825351
+    dec_deg: 5.83788486
+    pm_ra_cosdec_mas_per_year: -17.51
+    pm_dec_mas_per_year: -29.79
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:43109
+  traditional_star_id: liu-xiu-5
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿五
+  aliases:
+  - hip 43109
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 131.6943593
+    dec_deg: 6.41890691
+    pm_ra_cosdec_mas_per_year: -231.04
+    pm_dec_mas_per_year: -40.17
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:43813
+  traditional_star_id: liu-xiu-6
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿六
+  aliases:
+  - hip 43813
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 133.84868687
+    dec_deg: 5.9455277
+    pm_ra_cosdec_mas_per_year: -99.76
+    pm_dec_mas_per_year: 14.65
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:44659
+  traditional_star_id: liu-xiu-7
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿七
+  aliases:
+  - hip 44659
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 136.49324097
+    dec_deg: 5.09234249
+    pm_ra_cosdec_mas_per_year: -18.97
+    pm_dec_mas_per_year: -11.01
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:45336
+  traditional_star_id: liu-xiu-8
+  asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿八
+  aliases:
+  - hip 45336
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 138.59080529
+    dec_deg: 2.31502422
+    pm_ra_cosdec_mas_per_year: 112.57
+    pm_dec_mas_per_year: -306.07
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:46509
+  traditional_star_id: xing-xiu-2
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿二
+  aliases:
+  - hip 46509
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 142.28682816
+    dec_deg: -2.76895627
+    pm_ra_cosdec_mas_per_year: 100.93
+    pm_dec_mas_per_year: -3.15
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:46776
+  traditional_star_id: xing-xiu-3
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿三
+  aliases:
+  - hip 46776
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 142.99556148
+    dec_deg: -1.18465438
+    pm_ra_cosdec_mas_per_year: -11.42
+    pm_dec_mas_per_year: -3.87
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:47431
+  traditional_star_id: xing-xiu-4
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿四
+  aliases:
+  - hip 47431
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 144.96389156
+    dec_deg: -1.14265722
+    pm_ra_cosdec_mas_per_year: 47.81
+    pm_dec_mas_per_year: -62.92
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:45811
+  traditional_star_id: xing-xiu-5
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿五
+  aliases:
+  - hip 45811
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 140.12094162
+    dec_deg: -9.55562948
+    pm_ra_cosdec_mas_per_year: -13.42
+    pm_dec_mas_per_year: -26.8
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:45751
+  traditional_star_id: xing-xiu-6
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿六
+  aliases:
+  - hip 45751
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 139.94332821
+    dec_deg: -11.97488214
+    pm_ra_cosdec_mas_per_year: -27.92
+    pm_dec_mas_per_year: 12.16
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:46744
+  traditional_star_id: xing-xiu-7
+  asterism_id: xing-xiu
+  canonical_chinese_name: 星宿七
+  aliases:
+  - hip 46744
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 142.91236818
+    dec_deg: -10.55196998
+    pm_ra_cosdec_mas_per_year: 33.05
+    pm_dec_mas_per_year: -17.67
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:49841
+  traditional_star_id: zhang-xiu-2
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿二
+  aliases:
+  - 張宿二
+  - hip 49841
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 152.64748785
+    dec_deg: -12.35383921
+    pm_ra_cosdec_mas_per_year: -200.33
+    pm_dec_mas_per_year: -100.28
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:51069
+  traditional_star_id: zhang-xiu-3
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿三
+  aliases:
+  - 張宿三
+  - hip 51069
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 156.52293768
+    dec_deg: -16.83609584
+    pm_ra_cosdec_mas_per_year: -128.51
+    pm_dec_mas_per_year: -80.06
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:49321
+  traditional_star_id: zhang-xiu-4
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿四
+  aliases:
+  - 張宿四
+  - hip 49321
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 151.01178567
+    dec_deg: -18.10141491
+    pm_ra_cosdec_mas_per_year: -27.28
+    pm_dec_mas_per_year: 3.65
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:47452
+  traditional_star_id: zhang-xiu-5
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿五
+  aliases:
+  - 張宿五
+  - hip 47452
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 145.07657975
+    dec_deg: -14.33224542
+    pm_ra_cosdec_mas_per_year: -26.32
+    pm_dec_mas_per_year: -19.25
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:52085
+  traditional_star_id: zhang-xiu-6
+  asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿六
+  aliases:
+  - 張宿六
+  - hip 52085
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 159.6458878
+    dec_deg: -16.87663687
+    pm_ra_cosdec_mas_per_year: -98.57
+    pm_dec_mas_per_year: 26.75
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:55705
+  traditional_star_id: yi-xiu-2
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿二
+  aliases:
+  - hip 55705
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 171.22076335
+    dec_deg: -17.68401748
+    pm_ra_cosdec_mas_per_year: -97.01
+    pm_dec_mas_per_year: 3.22
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:57283
+  traditional_star_id: yi-xiu-3
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿三
+  aliases:
+  - hip 57283
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 176.19066226
+    dec_deg: -18.35061467
+    pm_ra_cosdec_mas_per_year: 27.15
+    pm_dec_mas_per_year: -24.56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:55598
+  traditional_star_id: yi-xiu-4
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿四
+  aliases:
+  - hip 55598
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 170.84196837
+    dec_deg: -18.77990277
+    pm_ra_cosdec_mas_per_year: -305.91
+    pm_dec_mas_per_year: -29.06
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:52943
+  traditional_star_id: yi-xiu-5
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿五
+  aliases:
+  - hip 52943
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 162.40596699
+    dec_deg: -16.19413208
+    pm_ra_cosdec_mas_per_year: 92.77
+    pm_dec_mas_per_year: 199.02
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:58188
+  traditional_star_id: yi-xiu-6
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿六
+  aliases:
+  - hip 58188
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 179.00409802
+    dec_deg: -17.15080863
+    pm_ra_cosdec_mas_per_year: -49.07
+    pm_dec_mas_per_year: -8.23
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:55282
+  traditional_star_id: yi-xiu-7
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿七
+  aliases:
+  - hip 55282
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 169.83551103
+    dec_deg: -14.77904358
+    pm_ra_cosdec_mas_per_year: -124.47
+    pm_dec_mas_per_year: 206.61
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:56802
+  traditional_star_id: yi-xiu-8
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿八
+  aliases:
+  - hip 56802
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 174.66648767
+    dec_deg: -13.20224958
+    pm_ra_cosdec_mas_per_year: 99.62
+    pm_dec_mas_per_year: 126.17
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:55874
+  traditional_star_id: yi-xiu-9
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿九
+  aliases:
+  - hip 55874
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 171.78989699
+    dec_deg: -12.3568071
+    pm_ra_cosdec_mas_per_year: -98.3
+    pm_dec_mas_per_year: 23.82
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:55687
+  traditional_star_id: yi-xiu-10
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十
+  aliases:
+  - hip 55687
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 171.15252245
+    dec_deg: -10.85938276
+    pm_ra_cosdec_mas_per_year: -24.14
+    pm_dec_mas_per_year: 24.46
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:54214
+  traditional_star_id: yi-xiu-11
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十一?
+  aliases:
+  - 翼宿十一
+  - hip 54214
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 166.39158166
+    dec_deg: -11.08872717
+    pm_ra_cosdec_mas_per_year: 25.8
+    pm_dec_mas_per_year: -71.37
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-membership
+  confidence: 0.5
+  editorial_status: ambiguous
+- modern_object_id: hip:53975
+  traditional_star_id: yi-xiu-12
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十二
+  aliases:
+  - hip 53975
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 165.63027398
+    dec_deg: -9.99483632
+    pm_ra_cosdec_mas_per_year: -32.25
+    pm_dec_mas_per_year: -6.61
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:56633
+  traditional_star_id: yi-xiu-13
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十三
+  aliases:
+  - hip 56633
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 174.17061875
+    dec_deg: -9.80225368
+    pm_ra_cosdec_mas_per_year: -59.32
+    pm_dec_mas_per_year: 2.82
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:57587
+  traditional_star_id: yi-xiu-14
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十四
+  aliases:
+  - hip 57587
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 177.09812514
+    dec_deg: -10.3128395
+    pm_ra_cosdec_mas_per_year: -105.9
+    pm_dec_mas_per_year: -109.06
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:54682
+  traditional_star_id: yi-xiu-16
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十六
+  aliases:
+  - hip 54682
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 167.91452617
+    dec_deg: -22.82560642
+    pm_ra_cosdec_mas_per_year: 4.73
+    pm_dec_mas_per_year: -99.06
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:56245
+  traditional_star_id: yi-xiu-17
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿十七?
+  aliases:
+  - 翼宿十七
+  - hip 56245
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 172.94843846
+    dec_deg: -20.77656734
+    pm_ra_cosdec_mas_per_year: -118.1
+    pm_dec_mas_per_year: 39.3
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-membership
+  confidence: 0.5
+  editorial_status: ambiguous
+- modern_object_id: hip:54204
+  traditional_star_id: yi-xiu-20
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿廿
+  aliases:
+  - hip 54204
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 166.33346925
+    dec_deg: -27.29359566
+    pm_ra_cosdec_mas_per_year: -190.74
+    pm_dec_mas_per_year: -6.87
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:56830
+  traditional_star_id: yi-xiu-21
+  asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿廿一?
+  aliases:
+  - 翼宿廿一
+  - hip 56830
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 174.75175926
+    dec_deg: -24.72050905
+    pm_ra_cosdec_mas_per_year: 30.75
+    pm_dec_mas_per_year: -240.23
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-membership
+  confidence: 0.5
+  editorial_status: ambiguous
+- modern_object_id: hip:59316
+  traditional_star_id: zhen-xiu-2
+  asterism_id: zhen-xiu
+  canonical_chinese_name: 轸宿二
+  aliases:
+  - 軫宿二
+  - hip 59316
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 182.53135773
+    dec_deg: -22.61979211
+    pm_ra_cosdec_mas_per_year: -71.52
+    pm_dec_mas_per_year: 10.55
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:60965
+  traditional_star_id: zhen-xiu-3
+  asterism_id: zhen-xiu
+  canonical_chinese_name: 轸宿三
+  aliases:
+  - 軫宿三
+  - hip 60965
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 187.4665965
+    dec_deg: -16.51509397
+    pm_ra_cosdec_mas_per_year: -209.97
+    pm_dec_mas_per_year: -139.3
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:61359
+  traditional_star_id: zhen-xiu-4
+  asterism_id: zhen-xiu
+  canonical_chinese_name: 轸宿四
+  aliases:
+  - 軫宿四
+  - hip 61359
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 188.59680864
+    dec_deg: -23.39662306
+    pm_ra_cosdec_mas_per_year: 0.86
+    pm_dec_mas_per_year: -56
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:60189
+  traditional_star_id: changsha
+  asterism_id: changsha
+  canonical_chinese_name: 长沙
+  aliases:
+  - 長沙
+  - hip 60189
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 185.14046113
+    dec_deg: -22.21583387
+    pm_ra_cosdec_mas_per_year: -109.68
+    pm_dec_mas_per_year: -27.71
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:61174
+  traditional_star_id: zuo-xia
+  asterism_id: zuo-xia
+  canonical_chinese_name: 左辖
+  aliases:
+  - 左轄
+  - hip 61174
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 188.01868646
+    dec_deg: -16.19586556
+    pm_ra_cosdec_mas_per_year: -424.37
+    pm_dec_mas_per_year: -58.41
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+- modern_object_id: hip:59199
+  traditional_star_id: you-xia
+  asterism_id: you-xia
+  canonical_chinese_name: 右辖
+  aliases:
+  - 右轄
+  - hip 59199
+  catalog_epoch: J1991.25
+  reference_coordinates:
+    frame: icrs
+    epoch: J1991.25
+    ra_deg: 182.10313607
+    dec_deg: -24.72877993
+    pm_ra_cosdec_mas_per_year: 100.18
+    pm_dec_mas_per_year: -39.33
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:hipparcos-i-239-mansion-members
+  mapping_method: catalog-identity
+  confidence: 1.0
+  editorial_status: verified_identity
+asterisms:
+- asterism_id: jiao-xiu
+  canonical_chinese_name: 角宿
+  aliases: []
+  member_object_ids:
+  - hip:65474
+  - hip:66249
+  related_object_ids: []
+  defining_star_object_id: hip:65474
+  line_segments:
+  - - hip:65474
+    - hip:66249
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: kang-xiu
+  canonical_chinese_name: 亢宿
+  aliases: []
+  member_object_ids:
+  - hip:69427
+  - hip:69701
+  - hip:70755
+  - hip:69974
+  related_object_ids: []
+  defining_star_object_id: hip:69427
+  line_segments:
+  - - hip:69427
+    - hip:69701
+    - hip:70755
+  - - hip:69427
+    - hip:69974
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: di-xiu
+  canonical_chinese_name: 氐宿
+  aliases: []
+  member_object_ids:
+  - hip:72622
+  - hip:74392
+  - hip:76333
+  - hip:74785
+  related_object_ids: []
+  defining_star_object_id: hip:72622
+  line_segments:
+  - - hip:72622
+    - hip:74392
+    - hip:76333
+    - hip:74785
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: fang-xiu
+  canonical_chinese_name: 房宿
+  aliases: []
+  member_object_ids:
+  - hip:78265
+  - hip:78104
+  - hip:78401
+  - hip:78820
+  related_object_ids: []
+  defining_star_object_id: hip:78265
+  line_segments:
+  - - hip:78820
+    - hip:78401
+    - hip:78265
+    - hip:78104
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: xin-xiu
+  canonical_chinese_name: 心宿
+  aliases: []
+  member_object_ids:
+  - hip:80112
+  - hip:80763
+  - hip:81266
+  related_object_ids: []
+  defining_star_object_id: hip:80112
+  line_segments:
+  - - hip:80112
+    - hip:80763
+    - hip:81266
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: wei-tail-xiu
+  canonical_chinese_name: 尾宿
+  aliases: []
+  member_object_ids:
+  - hip:82514
+  - hip:82396
+  - hip:82671
+  - hip:84143
+  - hip:86228
+  - hip:87073
+  - hip:86670
+  - hip:85927
+  - hip:85696
+  related_object_ids: []
+  defining_star_object_id: hip:82514
+  line_segments:
+  - - hip:82396
+    - hip:82514
+    - hip:82671
+    - hip:84143
+    - hip:86228
+    - hip:87073
+    - hip:86670
+    - hip:85927
+  - - hip:86670
+    - hip:85696
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: ji-xiu
+  canonical_chinese_name: 箕宿
+  aliases: []
+  member_object_ids:
+  - hip:88635
+  - hip:89931
+  - hip:90185
+  - hip:89642
+  related_object_ids: []
+  defining_star_object_id: hip:88635
+  line_segments:
+  - - hip:88635
+    - hip:89931
+    - hip:90185
+    - hip:89642
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: dou-xiu
+  canonical_chinese_name: 斗宿
+  aliases: []
+  member_object_ids:
+  - hip:92041
+  - hip:90496
+  - hip:89341
+  - hip:92855
+  - hip:93864
+  - hip:93506
+  related_object_ids: []
+  defining_star_object_id: hip:92041
+  line_segments:
+  - - hip:89341
+    - hip:90496
+    - hip:92041
+    - hip:92855
+    - hip:93864
+    - hip:93506
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: niu-xiu
+  canonical_chinese_name: 牛宿
+  aliases: []
+  member_object_ids:
+  - hip:100345
+  - hip:100064
+  - hip:99572
+  - hip:100881
+  - hip:101123
+  - hip:101027
+  related_object_ids: []
+  defining_star_object_id: hip:100345
+  line_segments:
+  - - hip:100064
+    - hip:100345
+    - hip:99572
+  - - hip:100345
+    - hip:100881
+    - hip:101123
+    - hip:101027
+  - - hip:100345
+    - hip:101027
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: nu-xiu
+  canonical_chinese_name: 女宿
+  aliases: []
+  member_object_ids:
+  - hip:102618
+  - hip:103045
+  - hip:102945
+  - hip:102624
+  related_object_ids: []
+  defining_star_object_id: hip:102618
+  line_segments:
+  - - hip:102618
+    - hip:103045
+    - hip:102945
+    - hip:102624
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: xu-xiu
+  canonical_chinese_name: 虚宿
+  aliases:
+  - 虛宿
+  member_object_ids:
+  - hip:106278
+  - hip:104987
+  related_object_ids: []
+  defining_star_object_id: hip:106278
+  line_segments:
+  - - hip:106278
+    - hip:104987
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: wei-danger-xiu
+  canonical_chinese_name: 危宿
+  aliases: []
+  member_object_ids:
+  - hip:109074
+  - hip:109427
+  - hip:107315
+  related_object_ids: []
+  defining_star_object_id: hip:109074
+  line_segments:
+  - - hip:109074
+    - hip:109427
+    - hip:107315
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: shi-xiu
+  canonical_chinese_name: 室宿
+  aliases: []
+  member_object_ids:
+  - hip:113963
+  - hip:113881
+  related_object_ids: []
+  defining_star_object_id: hip:113963
+  line_segments:
+  - - hip:113963
+    - hip:113881
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: bi-wall-xiu
+  canonical_chinese_name: 壁宿
+  aliases: []
+  member_object_ids:
+  - hip:1067
+  - hip:677
+  related_object_ids: []
+  defining_star_object_id: hip:1067
+  line_segments:
+  - - hip:1067
+    - hip:677
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: kui-xiu
+  canonical_chinese_name: 奎宿
+  aliases: []
+  member_object_ids:
+  - hip:4463
+  - hip:3693
+  - hip:3885
+  - hip:3031
+  - hip:3092
+  - hip:2912
+  - hip:3881
+  - hip:4436
+  - hip:5447
+  - hip:5175
+  - hip:5586
+  - hip:6315
+  - hip:6193
+  - hip:5742
+  - hip:5571
+  - hip:5131
+  related_object_ids: []
+  defining_star_object_id: hip:4463
+  line_segments:
+  - - hip:4463
+    - hip:3693
+    - hip:3885
+    - hip:3031
+    - hip:3092
+    - hip:2912
+    - hip:3881
+    - hip:4436
+    - hip:5447
+    - hip:5175
+    - hip:5586
+    - hip:6315
+    - hip:6193
+    - hip:5742
+    - hip:5571
+    - hip:5131
+    - hip:4463
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: lou-xiu
+  canonical_chinese_name: 娄宿
+  aliases:
+  - 婁宿
+  member_object_ids:
+  - hip:8903
+  - hip:8832
+  - hip:9884
+  related_object_ids: []
+  defining_star_object_id: hip:8903
+  line_segments:
+  - - hip:9884
+    - hip:8903
+    - hip:8832
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: wei-stomach-xiu
+  canonical_chinese_name: 胃宿
+  aliases: []
+  member_object_ids:
+  - hip:12719
+  - hip:13061
+  - hip:13209
+  related_object_ids: []
+  defining_star_object_id: hip:12719
+  line_segments:
+  - - hip:12719
+    - hip:13061
+    - hip:13209
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: mao-xiu
+  canonical_chinese_name: 昴宿
+  aliases: []
+  member_object_ids:
+  - hip:17499
+  - hip:17531
+  - hip:17579
+  - hip:17573
+  - hip:17608
+  - hip:17702
+  - hip:17847
+  related_object_ids: []
+  defining_star_object_id: hip:17499
+  line_segments:
+  - - hip:17499
+    - hip:17531
+    - hip:17579
+    - hip:17573
+  - - hip:17499
+    - hip:17608
+    - hip:17702
+    - hip:17847
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: bi-xiu
+  canonical_chinese_name: 毕宿
+  aliases:
+  - 畢宿
+  member_object_ids:
+  - hip:20889
+  - hip:20648
+  - hip:20455
+  - hip:20205
+  - hip:21421
+  - hip:20885
+  - hip:20713
+  - hip:18724
+  related_object_ids:
+  - hip:21683
+  defining_star_object_id: hip:20889
+  line_segments:
+  - - hip:20889
+    - hip:20648
+    - hip:20455
+    - hip:20205
+  - - hip:21421
+    - hip:20885
+    - hip:20713
+    - hip:20205
+    - hip:18724
+  - - hip:21421
+    - hip:21683
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete_gold_sample
+- asterism_id: zi-xiu
+  canonical_chinese_name: 觜宿
+  aliases: []
+  member_object_ids:
+  - hip:26207
+  - hip:26176
+  - hip:26366
+  related_object_ids: []
+  defining_star_object_id: hip:26207
+  line_segments:
+  - - hip:26207
+    - hip:26176
+  - - hip:26207
+    - hip:26366
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: shen-xiu
+  canonical_chinese_name: 参宿
+  aliases:
+  - 參宿
+  member_object_ids:
+  - hip:26727
+  - hip:26311
+  - hip:25930
+  - hip:27989
+  - hip:25336
+  - hip:27366
+  - hip:24436
+  related_object_ids: []
+  defining_star_object_id: hip:26727
+  line_segments:
+  - - hip:27989
+    - hip:26727
+    - hip:26311
+    - hip:25930
+    - hip:24436
+  - - hip:25930
+    - hip:25336
+  - - hip:26727
+    - hip:27366
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: jing-xiu
+  canonical_chinese_name: 井宿
+  aliases: []
+  member_object_ids:
+  - hip:30343
+  - hip:30883
+  - hip:31681
+  - hip:32362
+  - hip:32246
+  - hip:32921
+  - hip:34088
+  - hip:35350
+  related_object_ids:
+  - hip:29655
+  defining_star_object_id: hip:30343
+  line_segments:
+  - - hip:35350
+    - hip:34088
+    - hip:32921
+    - hip:32246
+  - - hip:32921
+    - hip:30883
+    - hip:30343
+  - - hip:30883
+    - hip:31681
+    - hip:34088
+  - - hip:31681
+    - hip:32362
+  - - hip:30343
+    - hip:29655
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: gui-xiu
+  canonical_chinese_name: 鬼宿
+  aliases: []
+  member_object_ids:
+  - hip:41822
+  - hip:41909
+  - hip:42806
+  - hip:42911
+  related_object_ids: []
+  defining_star_object_id: hip:41822
+  line_segments:
+  - - hip:41822
+    - hip:41909
+    - hip:42806
+    - hip:42911
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: liu-xiu
+  canonical_chinese_name: 柳宿
+  aliases: []
+  member_object_ids:
+  - hip:42313
+  - hip:42402
+  - hip:42799
+  - hip:43234
+  - hip:43109
+  - hip:43813
+  - hip:44659
+  - hip:45336
+  related_object_ids: []
+  defining_star_object_id: hip:42313
+  line_segments:
+  - - hip:43234
+    - hip:42799
+    - hip:42402
+    - hip:42313
+    - hip:43109
+    - hip:43813
+    - hip:44659
+    - hip:45336
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: xing-xiu
+  canonical_chinese_name: 星宿
+  aliases: []
+  member_object_ids:
+  - hip:46390
+  - hip:46509
+  - hip:46776
+  - hip:47431
+  - hip:45811
+  - hip:45751
+  - hip:46744
+  related_object_ids: []
+  defining_star_object_id: hip:46390
+  line_segments:
+  - - hip:46390
+    - hip:46509
+    - hip:46776
+    - hip:47431
+  - - hip:46390
+    - hip:45811
+    - hip:45751
+    - hip:46744
+  - - hip:46390
+    - hip:46744
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: zhang-xiu
+  canonical_chinese_name: 张宿
+  aliases:
+  - 張宿
+  member_object_ids:
+  - hip:48356
+  - hip:49841
+  - hip:51069
+  - hip:49321
+  - hip:47452
+  - hip:52085
+  related_object_ids: []
+  defining_star_object_id: hip:48356
+  line_segments:
+  - - hip:48356
+    - hip:49841
+    - hip:51069
+    - hip:49321
+  - - hip:48356
+    - hip:49321
+  - - hip:48356
+    - hip:47452
+  - - hip:51069
+    - hip:52085
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+- asterism_id: yi-xiu
+  canonical_chinese_name: 翼宿
+  aliases: []
+  member_object_ids:
+  - hip:53740
+  - hip:55705
+  - hip:57283
+  - hip:55598
+  - hip:52943
+  - hip:58188
+  - hip:55282
+  - hip:56802
+  - hip:55874
+  - hip:55687
+  - hip:54214
+  - hip:53975
+  - hip:56633
+  - hip:57587
+  - hip:54682
+  - hip:56245
+  - hip:54204
+  - hip:56830
+  related_object_ids: []
+  defining_star_object_id: hip:53740
+  line_segments:
+  - - hip:53740
+    - hip:55705
+  - - hip:53740
+    - hip:55598
+  - - hip:53740
+    - hip:52943
+  - - hip:55705
+    - hip:57283
+    - hip:55598
+  - - hip:57283
+    - hip:58188
+  - - hip:55705
+    - hip:55282
+    - hip:56802
+    - hip:55874
+    - hip:55687
+    - hip:54214
+    - hip:53975
+  - - hip:55687
+    - hip:56633
+    - hip:57587
+  - - hip:55598
+    - hip:54682
+    - hip:56245
+    - hip:54204
+    - hip:56830
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: ambiguous
+- asterism_id: zhen-xiu
+  canonical_chinese_name: 轸宿
+  aliases:
+  - 軫宿
+  member_object_ids:
+  - hip:59803
+  - hip:59316
+  - hip:60965
+  - hip:61359
+  related_object_ids:
+  - hip:60189
+  - hip:61174
+  - hip:59199
+  defining_star_object_id: hip:59803
+  line_segments:
+  - - hip:61359
+    - hip:60965
+    - hip:59803
+    - hip:59316
+  - - hip:59803
+    - hip:60189
+  - - hip:60965
+    - hip:61174
+  - - hip:59316
+    - hip:59199
+  source_refs:
+  - source:stellarium-28-mansion-member-names
+  - source:stellarium-28-mansion-lines
+  completeness_status: complete
+lunar_mansions:
+- mansion_id: jiao-xiu
+  sequence_index: 1
+  west_boundary_object_id: hip:65474
+  east_boundary_object_id: hip:69427
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: kang-xiu
+  sequence_index: 2
+  west_boundary_object_id: hip:69427
+  east_boundary_object_id: hip:72622
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: di-xiu
+  sequence_index: 3
+  west_boundary_object_id: hip:72622
+  east_boundary_object_id: hip:78265
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: fang-xiu
+  sequence_index: 4
+  west_boundary_object_id: hip:78265
+  east_boundary_object_id: hip:80112
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: xin-xiu
+  sequence_index: 5
+  west_boundary_object_id: hip:80112
+  east_boundary_object_id: hip:82514
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: wei-tail-xiu
+  sequence_index: 6
+  west_boundary_object_id: hip:82514
+  east_boundary_object_id: hip:88635
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: ji-xiu
+  sequence_index: 7
+  west_boundary_object_id: hip:88635
+  east_boundary_object_id: hip:92041
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: dou-xiu
+  sequence_index: 8
+  west_boundary_object_id: hip:92041
+  east_boundary_object_id: hip:100345
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: niu-xiu
+  sequence_index: 9
+  west_boundary_object_id: hip:100345
+  east_boundary_object_id: hip:102618
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: nu-xiu
+  sequence_index: 10
+  west_boundary_object_id: hip:102618
+  east_boundary_object_id: hip:106278
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: xu-xiu
+  sequence_index: 11
+  west_boundary_object_id: hip:106278
+  east_boundary_object_id: hip:109074
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: wei-danger-xiu
+  sequence_index: 12
+  west_boundary_object_id: hip:109074
+  east_boundary_object_id: hip:113963
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: shi-xiu
+  sequence_index: 13
+  west_boundary_object_id: hip:113963
+  east_boundary_object_id: hip:1067
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: bi-wall-xiu
+  sequence_index: 14
+  west_boundary_object_id: hip:1067
+  east_boundary_object_id: hip:4463
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: kui-xiu
+  sequence_index: 15
+  west_boundary_object_id: hip:4463
+  east_boundary_object_id: hip:8903
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: lou-xiu
+  sequence_index: 16
+  west_boundary_object_id: hip:8903
+  east_boundary_object_id: hip:12719
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: wei-stomach-xiu
+  sequence_index: 17
+  west_boundary_object_id: hip:12719
+  east_boundary_object_id: hip:17499
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: mao-xiu
+  sequence_index: 18
+  west_boundary_object_id: hip:17499
+  east_boundary_object_id: hip:20889
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: bi-xiu
+  sequence_index: 19
+  west_boundary_object_id: hip:20889
+  east_boundary_object_id: hip:26207
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_gold_sample
+- mansion_id: zi-xiu
+  sequence_index: 20
+  west_boundary_object_id: hip:26207
+  east_boundary_object_id: hip:26727
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: shen-xiu
+  sequence_index: 21
+  west_boundary_object_id: hip:26727
+  east_boundary_object_id: hip:30343
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: jing-xiu
+  sequence_index: 22
+  west_boundary_object_id: hip:30343
+  east_boundary_object_id: hip:41822
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: gui-xiu
+  sequence_index: 23
+  west_boundary_object_id: hip:41822
+  east_boundary_object_id: hip:42313
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: liu-xiu
+  sequence_index: 24
+  west_boundary_object_id: hip:42313
+  east_boundary_object_id: hip:46390
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: xing-xiu
+  sequence_index: 25
+  west_boundary_object_id: hip:46390
+  east_boundary_object_id: hip:48356
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: zhang-xiu
+  sequence_index: 26
+  west_boundary_object_id: hip:48356
+  east_boundary_object_id: hip:53740
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: yi-xiu
+  sequence_index: 27
+  west_boundary_object_id: hip:53740
+  east_boundary_object_id: hip:59803
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle
+- mansion_id: zhen-xiu
+  sequence_index: 28
+  west_boundary_object_id: hip:59803
+  east_boundary_object_id: hip:65474
+  boundary_model: polar-great-circles
+  coordinate_system: apparent-equatorial-of-date
+  provenance_class: derived_region
+  source_refs:
+  - source:stellarium-chinese-lunar-system
+  completeness_status: complete_region_cycle

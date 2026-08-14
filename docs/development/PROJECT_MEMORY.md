@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
-Verified at: 2026-08-03
-Current support PR branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R07 DONE provisional usability stratification; B10-PR-C human-review BLOCKED
-Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 carrying research/review metadata
+Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
+Verified at: 2026-08-13
+Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
+Current task: B10-R08 VERIFYING PR #64 stable reconciliation; B10-PR-C human-review BLOCKED
+Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 under stable reconciliation
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -48,6 +48,8 @@ B10-R04 reversible multi-text source model: DONE (#58; squash 1a30070d3517d07097
 B10-R05 bounded 15-accession source expansion: DONE (#59; squash `bcb72c9c922a8d87319cc88aec7a772016a1cf27`)
 B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence support; PR #54 comment 5173585995)
 B10-R07 Core14 provisional usability stratification: DONE (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement; PR #54 comment 5176472354)
+ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approved phases 1–5)
+B10-R08 PR #64 stable-integration reconciliation: VERIFYING
 B10 overall: IN_PROGRESS
 ```
 
@@ -277,8 +279,8 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-GOV-T04 is DONE and effective on stable c2e8fcabb04354fd14d0c72b3b6020a47e63a583
-→ B10-R06 remains DONE on Draft support PR #64
+ASTRO-R01 phases 1–5 and DOC-R01 are integrated at stable c9d490392233b7432f5a0136dcd213613abe05a7
+→ reconcile Draft PR #64 without changing its R06/R07 evidence decisions
 → keep C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47 in provisional internal use pending Reviewer B
 → keep C03/C24/C33 isolated for evidence supplementation
 → keep PR #54 Draft and BLOCKED until a different human independently completes Reviewer B

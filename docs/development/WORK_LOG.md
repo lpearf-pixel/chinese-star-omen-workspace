@@ -2,6 +2,475 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-13 — B10-R08 PR #64 stable reconciliation entered VERIFYING
+
+- User authorized an isolated reconciliation of Draft PR #64 without merging
+  stable or modifying `main`. The original remote head
+  `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` passed its pre-merge baseline:
+  Core14 focused `1`, contracts `93`, text-core `26`, downstream `593`, upstream
+  `188 passed / 3 skipped`, governance unit `21` and development governance
+  `12 changed / 3 code`.
+- B10-R08 was registered `IN_PROGRESS` before integration. Non-rewriting merge
+  head `9585aeb` brings exact stable
+  `c9d490392233b7432f5a0136dcd213613abe05a7` into the PR branch. Conflicts were
+  limited to `DECISIONS`, `PROJECT_MEMORY` and `TASKS`; `WORK_LOG` merged
+  automatically. Stable ASTRO-R01/DOC-R01 state and the R06/R07 evidence state
+  were both retained. The Core14 decision was renumbered from the colliding
+  D-028 to D-030 without changing its meaning.
+- Post-merge verification passed: Core14 focused `1`, contracts `93`, text-core
+  `26`, downstream `673`, upstream `188 passed / 3 skipped`, governance unit
+  `21`, development governance `12 changed / 3 code`, strict JSON, compileall,
+  stable ancestry and diff checks.
+- Frozen hashes remain exact: R06 JSON
+  `a7d0f7408b32d6cdccdd6c1efcdfc1829dfc29a46ba3382317bca521e655ea70`,
+  R06 report `127b145df04d069cb2e6e5fbf9704ba69df1aa697f81304d5e60e014d5ae8aec`,
+  Reviewer B source pack
+  `a20ef8fc1bf975f580761842437c1bd9164fea9c6c6ec7fcd9ad7ad7ac0c95a0`,
+  R07 JSON `c1f4221d07a50a5bcfd5ccc951e5b5f3b1fcf73ddc8608d501fd1ff45af2e51e`
+  and R07 report
+  `9efb3912e669b228ef46a00535158d0e308bc80e1e6ed4745982599b280bc20e`.
+- The 11 provisional-use plus three isolated-evidence denominator is unchanged;
+  Reviewer B remains not started, every threshold/release/ingest/promotion gate
+  remains false, PR #54 stays Draft/BLOCKED, and B10-PR-D/E/F remain
+  unauthorized. Runner is `NOT RUN` for this routine Draft reconciliation.
+- B10-R08 is now `VERIFYING`. Next: commit this evidence state, rerun applicable
+  gates on the documentation head, non-force update Draft PR #64, and read back
+  exact remote head/tree/base/draft/mergeability before closeout.
+
+## 2026-08-13 — DOC-R01 durable new-Work handoff implemented
+
+- Live recovery revalidated `stable/kaiyuan-v2` at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583` and exactly three open PRs:
+  #54, #64 and #65, all Draft and unmerged. Old Personal Context branch/PR
+  records were rejected as stale rather than copied into the handoff.
+- `dcd9713` adds root `agent.md` (150 lines) as the compact global onboarding
+  and `summary.md` as the 2026-08-13 project snapshot. `AGENTS.md` and the
+  development manual now require both files in the new-Work read order.
+  `2b3ff52` removes Markdown hard-break whitespace caught by `git diff --check`.
+- The documents separate durable rules from volatile facts: `AGENTS.md` remains
+  authoritative; `agent.md` carries stable workflow/safety policy; `summary.md`
+  records B4–B10, ASTRO-R01 phases 1–5, the 祖山觀 23-source/nine-audit result,
+  current Drafts and the mandatory live-revalidation warning.
+- Pre-publication head `2b3ff526869c20f2473b32ed7a96c25982574d27`, tree
+  `86de334b9dcfa84b14254b69b8082592be719b4a`, passed governance unit tests
+  `21`, development governance `changed_files=95 code_files=32`, the dedicated
+  handoff structure/path/scope/secret check, and full-base `git diff --check`.
+- The repository `.venv` has a pre-existing broken link chain: `python3` and
+  `python3.12` point to absent `.venv/bin/python`. Both attempted commands failed
+  before test startup. The successful governance replay used the available
+  CPython 3.12.13 runtime directly; no virtual-environment bytes were modified
+  or committed.
+- This evidence update changes the head. The resulting documentation head must
+  replay the same gates, publish by non-force fast-forward to Draft PR #65, and
+  receive a final PR/tree readback. Runner remains `NOT RUN`; no merge is
+  authorized.
+- Exact evidence head `7e8be034f6176db632ee65e08239084d25b3bdc8`, tree
+  `d3a7df3f071dc2553472adcc4d386eedad20e3fd`, replayed governance `21`,
+  development governance `95/32`, and the dedicated handoff gate. GitHub
+  published the byte-identical tree as remote commit
+  `2774a727e4fcd87804fbd3f441ac1fff34762b1a` by non-force fast-forward.
+  DOC-R01 is complete; this status-only closeout must receive the same final
+  governance/diff/clean checks and one last non-force Draft readback.
+
+## 2026-08-12 — ASTRO-R01 phase 5 real-source implementation verified locally
+
+- `f242112` opened the source gate and froze the approved collection denominator
+  at episodes 1–23 while recording the live total of 40 as source drift.
+  `0f5e47a` added the exact public-metadata inventory, nine candidate audit
+  bundles, the WMO context snapshot and a canonical 11-asset manifest.
+  `af085bd` corrected direct-work epoch `1786522330` to its exact UTC value
+  `2026-08-12T08:12:10Z` and added the timezone regression.
+- The inventory contains 23 unique work IDs: 17 notes and 6 videos. Every item
+  binds its exact episode, work ID, media kind, canonical URL, UTC publication
+  time and captured-description SHA-256. No transcript, OCR, image contents or
+  unlocated classical passage was imported.
+- The fixed priority rubric selected episodes `1,2,3,7,9,11,16,20,22`.
+  Episode 22/work `7669807398794598565` splits the caption into the exact spans
+  `毕宿天象的烈风` (`source_missing`) and `能不能对应海上风暴？`
+  (`ambiguous`). The WMO snapshot is `context_only`; it does not establish any
+  equivalence between 烈风 and a maritime storm or tropical cyclone.
+- Independent review found no asset mismatch and no Critical issue. Its two
+  Important gaps were fixed in `3159828`: tests now pin all 23 exact inventory
+  tuples and cross-bind the WMO reference ID, URL and snapshot SHA-256 to the
+  gold audit. A controlled bad-hash mutation failed the inventory test, then
+  the restored suite passed `35`.
+- Fresh pre-publication verification on exact local head
+  `31598286c38be22c98618ec519f0af44b6600ff3`, tree
+  `0a37058a2affe15c65933cc9de723894988dab0b`, passed governance unit tests
+  `21`; development governance `changed_files=91 code_files=32`; combined
+  science/navigation/contracts/external-media regression `179`; canonical
+  source/fixture tests `13`; full downstream `673`; and compileall. Diff check,
+  stable-ancestor, clean-worktree and forbidden raw corpus/Qdrant/
+  `local_kb_default`/workflow/B11/B12/Reviewer path gates also passed.
+- This is pre-publication evidence because recording it changes the head. The
+  resulting documentation head must replay the exact gates, then publish only
+  a non-force fast-forward with identical tree bytes to Draft PR #65. Runner
+  remains `NOT RUN`; no merge is authorized.
+- That exact replay passed on local head `f742dc3809a1c56711d8461aede500885a635d9b`,
+  tree `2acb2a5b500446f68cfbcaf111cc3c1ccce1e2f8`. GitHub accepted remote commit
+  `3c7c38c1a76ceae5a2f0fc10eb7169c3744e4a20` as a non-force fast-forward
+  from `fc45ba5243ee2d8a570f25ab843d595acf234c76`; its tree is byte-identical.
+  Readback confirmed Draft PR #65 is `open / draft / merged=false`, base remains
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, and the PR body
+  records the 23-source/nine-audit result and exact verification counts.
+- This publication-evidence-only update is the final local documentation head.
+  It must receive the same exact-head replay and one final non-force
+  fast-forward/readback. Runner remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 5 real-source gate opened
+
+- The user supplied a direct creator short link and a direct work short link.
+  Browser readback resolved the exact creator as 祖山觀（無用之人）🌓, Douyin
+  number `35031221639`, UID `2129076815950670`, and stable `sec_uid`
+  `MS4wLjABAAAAAzgxglR-dz-mRK53rZNuTqMwh1HktiIHLXa-3ZSVXCH4zDH0xjcWCN8BKyQ3plyK`.
+- The direct work `7673054975425692773` binds the same creator and collection
+  `7664842437629921326` (`8月必看天象值得期待`), with an exact platform
+  timestamp. Collection episode locators 1–23 resolved to 23 unique work IDs,
+  consecutive episode numbers and the same creator/collection identity.
+- The live collection reports 40 episodes. The approved Phase 5 denominator is
+  frozen as episodes 1–23; episodes 24–40 are recorded as source drift and are
+  not silently added. Episode 22 is work `7669807398794598565`, the approved
+  “毕宿天象的烈风，能不能对应海上风暴？” gold sample.
+- ASTRO-R01 moves from source-locator `BLOCKED` to real-source `IN_PROGRESS`.
+  Metadata is public-source evidence only. Missing transcript/classical loci
+  remain explicit; no model approval or 烈风/weather-system equivalence is
+  authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 5 contract implementation and source block
+
+- Plan/state commit `998e0b5` separated strict contract work from real-source
+  ingestion. A missing creator locator cannot be replaced by placeholders,
+  search snippets or a same-name account.
+- Task 1 RED was the expected import failure for absent `EvidenceLinkV1` and the
+  other external contracts. `275ec71` adds four strict public models plus nested
+  capture/span/assessment records. GREEN model suite: `18 passed`; existing
+  contract regression: `59 passed`.
+- Task 2 RED was the expected missing `ExternalAuditBundleV1`. `2f5a6c4` closes
+  source, capture-hash, claim, evidence and audit references. It requires
+  relationship-appropriate evidence for `supported_exact`, contradiction for
+  `contradicted`, no evidence for `source_missing`, and modern-authority-only
+  evidence for `modern_inference_only`. GREEN external-media suite: `30 passed`.
+- Task 3 RED was `7 failed / 12 passed` because four schemas, registry entries
+  and fixtures were absent. `3c315a6` registers all seven top-level contracts
+  and adds four canonical/hash-bound synthetic fixtures using `Fixture Creator`
+  and `example.invalid`; tests reject real 祖山 data in those fixtures. GREEN
+  contract/external-media suite: `94 passed`.
+- Pre-closeout verification passed governance `21`, development governance
+  `changed_files=78 code_files=31`, focused science/navigation/contracts/external
+  media `174`, downstream `668` and compileall. Diff/scope and exact evidence-head
+  replay remain before Draft #65 publication.
+- ASTRO-R01 is `BLOCKED (phase 5 source locator)`: public exact-name/title search
+  and Personal Context found no direct 祖山觀 creator page, collection page,
+  work URL, transcript or timestamp. The tested contracts are publishable, but
+  no real 23-item inventory or nine-work audit is claimed.
+
+## 2026-08-12 — ASTRO-R01 phase 4 published; phase 5 started
+
+- Exact local Phase 4 head `c49a4c6d18092f22d486facfc1f7435d2d7ff2b0`
+  and remote commit `b7232ef3c6595c8d209255e2a4550a1d7b63f04a` have the same
+  tree `535ea6e62df4aff6ebb72d9fe4e14f45c338d228`. Remote parent is Phase 3
+  `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474`; the update was a non-force
+  fast-forward.
+- Remote readback confirmed Draft PR #65 is `open / draft / merged=false`, head
+  `b7232ef3`, base `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+  Runner was `NOT RUN`; no merge was attempted. PR #54/#64 remain unchanged.
+- Phase 5 source recovery searched exact traditional/simplified creator and gold
+  sample title variants across public web/platform indices and Personal Context.
+  It recovered no exact 祖山觀 account URL, work IDs, 23-item inventory,
+  transcripts or timestamps. Same-name tourism and geomancy results are rejected.
+- Work continues on the approved strict external-media contracts and fail-closed
+  bundle validation. No real inventory item or claim may be created without an
+  immutable work locator and captured-content hash; real audits remain blocked
+  rather than being populated from search snippets.
+
+## 2026-08-12 — ASTRO-R01 phase 4 pre-closeout verification
+
+- Candidate head `86eb156d9b2684972b4db4c1ae0c86a2e759c60e`, tree
+  `85420b344e02fb097dc03af08d1e458c5332be8f`, started clean and preserves
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583` as an ancestor.
+- Governance unit discovery passed `21`; development governance passed with
+  `changed_files=59 code_files=18`; focused navigation/asterism/astronomy passed
+  `80` in `14.95s`.
+- Canonical asterism-source and astronomy-fixture hash tests passed `8`;
+  compileall passed. Environment-bound full command
+  `env -u CODEX_PRIMARY_RUNTIME_PYTHON PATH="$PWD/.venv/bin:$PATH" make downstream-test`
+  passed `633` in `27.71s`.
+- Diff check, clean-worktree check and the forbidden raw corpus, Reviewer,
+  Qdrant, `local_kb_default`, workflow and `main` path scan passed. The base
+  comparison contains `59` paths, including the 28 derived navigation cards.
+- This is pre-closeout evidence because recording it changes the commit. The
+  resulting exact documentation head must replay the same gates before Draft
+  #65 publication. Runner remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 4 navigation implementation
+
+- Plan/state commit `c455a8b` limited this phase to the 28 existing
+  single-mansion cards and catalog-derived navigation status. Raw corpus,
+  existing classical claims, PR #54/#64, workflows, Qdrant, `local_kb_default`
+  and `main` remain untouched.
+- Task 1 RED was `1 failed / 1 passed`; the failure reported the exact list of
+  27 cards without `scientific_catalog` while the 28-link overview denominator
+  and catalog sequence already passed. The independent expectation covers
+  sequence, aliases, completeness, members, related and ambiguous IDs, defining
+  star, line segments, both boundaries, coordinate/boundary models, provenance
+  and deduplicated source refs. Commit: `f196507`.
+- Task 2 derives all 28 `mansion-navigation-status/v1` blocks and bounded modern
+  explanations from the validated catalog. Projection totals are `28 cards / 6
+  explicit alias variants / 157 members / 5 related endpoints / 3 ambiguous
+  members / 57 line segments`; completeness remains `26 complete / 1
+  complete_gold_sample / 1 ambiguous`. GREEN navigation/asterism/astronomy:
+  `80 passed`. Commit: `0303dd8`.
+- Content preservation compared every changed card from the existing
+  `## 在《唐開元占經》中的使用方式` heading through EOF against `HEAD` before
+  the card commit: all `28/28` suffixes were byte-identical. Every card has
+  exactly one modern-mapping section; no raw corpus file changed.
+- ASTRO-R01 is now `VERIFYING (phase 4)`. Exact-head governance, downstream,
+  compile, canonical-hash, diff, forbidden-path and Draft #65 publication gates
+  remain. Runner remains `NOT RUN`; no merge is authorized.
+
+## 2026-08-12 — ASTRO-R01 phase 3 published; phase 4 started
+
+- Exact local Phase 3 head `f07aa8a39ebe06b3e78f35905403009d09035906`
+  and remote commit `dbfa9d26e90cf8f1e31bc8b0fecdbb1129344474` have the same
+  tree `a40c8eb6290b92ee06e1653922d82e6293cbcb27`. Remote parent is the
+  published Phase 2 commit `19c076d`; the ref update was a non-force fast-forward.
+- Final exact-head replay passed governance `21`, focused scientific/navigation
+  `80`, full downstream `633`, canonical source/fixture hashes `14`, compileall,
+  development-governance `31 files / 18 code files`, diff, clean-worktree and
+  forbidden-path checks.
+- Draft PR #65 remains `open / draft / merged=false` against
+  `stable/kaiyuan-v2@c2e8fcabb04354fd14d0c72b3b6020a47e63a583`. Runner was
+  `NOT RUN`; no merge was attempted. PR #54/#64 and protected state remain
+  unchanged.
+- Phase 4 begins with the 28 existing single-mansion navigation cards. It may
+  add catalog-derived status metadata and bounded modern-mapping prose only; it
+  must not invent or rewrite classical quotations, omen outcomes or raw corpus.
+
+## 2026-08-12 — ASTRO-R01 phase 3 member and line implementation
+
+- Live recovery reverified stable at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, Draft PR #65 at remote head
+  `19c076ddbff60b29a7d22443dbbb9bad0c11a527`, and the open Draft set as
+  #54/#64/#65. PR #54 remains blocked by two different human reviewers; #64 is
+  unchanged. Local Phase 2 and remote Phase 2 trees both equal
+  `c796215b89e0cdc214e4f3943e365c1ec6bfae72` despite intentionally different
+  local/remote commit topology.
+- Plan/task contract commit `2541100` moved ASTRO-R01 to Phase 3 `IN_PROGRESS`.
+  Scope is limited to exact source-bound mansion members, related line endpoints,
+  line segments, coordinate identities and complete-member proximity. Raw corpus,
+  Reviewer A/B, PR #54/#64, workflows, Qdrant, `local_kb_default`, B11/B12 and
+  `main` remain forbidden.
+- Task 1 RED was `2 failed, 4 passed`: the fourth fixture and all-mansion sources
+  were absent. Two separate pinned Stellarium snapshots now bind the
+  `fe876157...` fixed-name blob and `14eea850...` line blob without combining
+  upstream identities. A third snapshot binds 162 unique CDS VizieR I/239 records
+  at J1991.25 with both proper-motion components. GREEN source suite: `6 passed`.
+  Commit: `d7140af`.
+- Source SHA-256 values: member names
+  `5a3bc4739dbdd8d4f4d9a93d38bd0ffe19c5423f557223ec74ff8dce1a4d38ea`;
+  lines `84f9db2aa8e83641c21c33ff12be8efd708cb912408ed385442d936f97debcc6`;
+  Hipparcos coordinates
+  `c26a3bda043178690024f520c623b492baa5811ee0598f21fb7a53967d034d8c`;
+  membership/line fixture
+  `4e83aa708d267eae13ab56c1ce53d5e8876c7dc979587466c526db4db945663c`.
+- Task 2 RED was `4 failed, 10 passed`: 角宿 still exposed only the defining star,
+  the catalog denominator remained 36, 井宿/轸宿 related endpoints were absent,
+  and 翼宿 remained partial. The catalog now contains exactly `162 entries / 28
+  asterisms / 28 lunar_mansions`, `157` base members, five related endpoints and
+  57 ordered line segments. Completeness is `26 complete`, one preserved 毕宿
+  `complete_gold_sample`, and one 翼宿 `ambiguous`. 翼宿十一/十七/廿一 retain
+  fixed-name status 2 and blocked narration. A deliberate weakened-validator
+  mutation made the new fail-closed test fail before the strict logic was
+  restored. GREEN asterism suite: `43 passed`. Commit: `97fa9f3`.
+- Task 3 RED was `4 failed, 22 passed`: the old evaluator admitted only the gold
+  sample and the provider attempted to resolve ambiguous member stars before
+  rejecting the request. The shared preflight now admits only `complete` and
+  `complete_gold_sample`, so exact 角宿 member proximity works while ambiguous
+  翼宿 remains region-only. A navigation compatibility replay then found the
+  毕宿 card's stale Phase 1 source refs (`1 failed, 79 passed`); only that existing
+  gold card was rebound to the new member-name/line sources. Final focused
+  astronomy/asterism/navigation replay: `80 passed`. Commit: `7a8548b`.
+- ASTRO-R01 is now `VERIFYING (phase 3)`. Exact-head governance, downstream,
+  compile, canonical-hash, diff and forbidden-path gates remain before Draft
+  PR #65 can be updated. Runner remains `NOT RUN`; no merge is authorized.
+
+### ASTRO-R01 phase 3 pre-closeout verification
+
+- Candidate head `0f628c1f77ae8fe46eefa31b59965593768f295f`, tree
+  `1d375d4e92f5e25559d4fa031ae6a23012ea502b`, started clean.
+- Governance unit discovery: `21 passed`; development-governance base-to-head
+  check: `changed_files=31 code_files=18`.
+- Focused asterism/astronomy/navigation replay: `80 passed in 14.82s`.
+- Compileall passed. Canonical byte/hash verification passed for 14 catalog
+  sources plus asterism fixtures. Diff check, clean-worktree check and forbidden
+  corpus/Reviewer/Qdrant/`local_kb_default`/workflow path scan passed.
+- The first full-gate invocation inherited Work Mode's
+  `CODEX_PRIMARY_RUNTIME_PYTHON`; its subprocess selected the runtime-owned
+  interpreter rather than the project `.venv`, so one read-only B10-R04 builder
+  check failed to import repository-local `research_sources` while 632 tests
+  passed. No product code was changed. Replaying that exact test with the
+  injected variable unset passed `1/1`; the environment-bound full command
+  `env -u CODEX_PRIMARY_RUNTIME_PYTHON PATH="$PWD/.venv/bin:$PATH" make downstream-test`
+  then passed `633` tests in `27.80s`.
+- This evidence is pre-closeout because recording it changes the commit. The
+  resulting exact documentation head must rerun governance, focused, downstream,
+  hash, compile, diff, clean-worktree and forbidden-path gates before publication.
+
+## 2026-08-12 — ASTRO-R01 phase 1 published; phase 2 started
+
+- Live recovery reverified stable at
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583` and the complete open set as
+  Draft #54, Draft #64 and Draft #65. PR #54 remains blocked by two different
+  human reviewers; #64 is unchanged.
+- Draft PR #65 is open, unmerged and targets only `stable/kaiyuan-v2`; remote
+  head is `09d4ec9781e874ef0bc346a7e48d8072541158cf`. Local phase-1 head
+  `e218a081640be0cf539e7ef438e635d33ffb0b74` and the remote head have different
+  commit histories because the GitHub App published a single remote commit,
+  but both exact trees are `56f0d51c98694d1b5685e6220f8945106a41f824`.
+- The dedicated checkout is clean. Fresh pre-phase-2 focused baseline:
+  `61 passed in 1.75s` for asterism, astronomy and mansion navigation suites.
+- Phase 2 is recorded `IN_PROGRESS`. Its independent plan fixes the denominator
+  at 28 pinned Stellarium defining stars, 28 Hipparcos coordinate records and a
+  circular east-to-next-west cycle. It adds region-only evaluation so the 27
+  incomplete member catalogs cannot emit misleading nearest-member claims.
+- Full mansion member/line coverage, all-card navigation status and external
+  video resources remain unclaimed phases. Raw corpus, Reviewer A/B, PR #54/#64,
+  Qdrant, `local_kb_default`, B11/B12 and `main` remain untouched. Runner:
+  `NOT RUN`.
+
+### ASTRO-R01 phase 2 implementation checkpoint
+
+- Task 1 catalog RED was `5 failed, 11 passed`: complete-cycle state, partial
+  角宿 shell, cycle mutation rejection, third fixture and two fixed sources were
+  absent. The GREEN catalog has 36 entries, 28 asterism definitions and 28
+  mansion definitions; the complete-cycle validator requires sequence 1–28,
+  28 unique western boundaries and east-to-next-west adjacency including
+  軫宿 → 角宿. Catalog/source/fixture regression: `32 passed`. Commit:
+  `9e350d9`.
+- Pinned source hashes: Stellarium defining-star names
+  `7f1f66f2656ce80e83a3be7e2200c7fed97a0d381dcc12e18b4fcce570db097a`;
+  Hipparcos I/239 defining-star coordinates
+  `67aaab8802e3a4eace23844fc5377d1ce313cf075451c0640c06bc90b7f3050e`;
+  closed-cycle fixture
+  `e2acd93dc37e030f5e36df68ac7d2c74650931c90692d7a8cb1704c7544d825d`.
+- Task 2 RED was the expected import failure for the absent region-only model.
+  The implementation exposes pure west-inclusive/east-exclusive region
+  assessment, proves the actual 室宿 → 壁宿 360/0 wrap and rejects nearest-member
+  evaluation for `partial` asterisms. Region suite `18 passed`; all asterism
+  tests `38 passed`. Commit: `adb2396`.
+- Task 3 RED was the expected missing `MansionRegionObservationV1` import.
+  The offline provider now binds body, UTC, catalog hash and target/boundary
+  apparent positions without adding member claims. Provider suite `6 passed`;
+  focused asterism/astronomy/navigation regression `73 passed`. Commit:
+  `04bfd4b`.
+- ASTRO-R01 is now `VERIFYING (phase 2)`. Full downstream, governance,
+  canonical-hash, compile, diff and forbidden-path replay remain before the
+  exact tree can update Draft PR #65. Runner remains `NOT RUN`.
+
+### ASTRO-R01 phase 2 pre-closeout verification
+
+- Governance unit discovery: `21 passed`; development-governance base-to-head
+  check: `changed_files=26 code_files=15`.
+- Focused asterism/astronomy/navigation replay: `73 passed in 5.11s`.
+- The first full-gate invocation remained in `apps/star-omen` and stopped before
+  tests with `No rule to make target 'downstream-test'`; it is recorded as an
+  invocation error, not a code failure. From repository root, with the primary
+  runtime and PATH bound to `.venv`, `make downstream-test` passed
+  `626 passed in 12.00s`.
+- `compileall`, three canonical JSON/hash bindings, `git diff --check` and the
+  forbidden-path scan passed. The 26-path base comparison contains only the
+  approved Phase 1+2 catalog, astronomy, navigation, test, fixture, plan and
+  governance files; no Reviewer, Qdrant, workflow, `local_kb_default` or raw
+  corpus path changed.
+- This evidence is pre-closeout because recording it changes the commit. The
+  resulting exact documentation head must rerun the same governance, focused,
+  downstream, hash, compile and diff gates before publication.
+
+## 2026-08-12 — ASTRO-R01 pre-publish scientific review
+
+- Fresh-head review found that the selected Hipparcos I/239 positions had been
+  labelled J2000 and their committed proper motions were not passed to
+  Skyfield. Added a RED provider regression, corrected the coordinate epoch to
+  J1991.25, bound both proper-motion components, and retained the existing
+  SIMBAD Spica J2000 identity unchanged.
+- Recomputed the pinned Hipparcos source and gold-fixture hashes. Full local
+  verification passed: 21 governance-script unit tests and 614 downstream
+  pytest cases. No Runner tag is created.
+
+## 2026-08-12 — ASTRO-R01 twenty-eight mansion foundation started
+
+- Live recovery resolved `stable/kaiyuan-v2` to
+  `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; the only open pull requests are
+  Draft #54 and Draft #64. The previously planned
+  `codex/kaiyuan-28-mansions-external-audit-v1` branch did not exist remotely.
+- Workspace maintenance had removed the previous local checkout. A fresh,
+  isolated checkout was restored from the exact stable head and the approved
+  feature branch was created without modifying stable, main, #54 or #64.
+- Existing asterism baseline: `13 passed in 0.72s` for
+  `tests/video_pipeline/asterisms`; the committed scientific catalog contains
+  only the source-backed `HIP 65474 / Spica = 角宿一` identity.
+- Navigation already contains a twenty-eight-mansion overview and mansion
+  cards, but it is not a scientific catalog. A fresh link replay proved all 28
+  overview targets exist; the actual gap was the absence of a machine-bound
+  scientific status block on the 毕宿 card. Navigation must consume versioned
+  scientific status rather than being treated as proof of modern identity.
+- Source research fixed the 毕宿 gold sample to Stellarium commit
+  `3972e97101e4321079279b5e5660b074fafc030a`: member HIP IDs 20889, 20648,
+  20455, 20205, 21421, 20885, 20713 and 18724. The same fixed sky-culture file
+  defines the 毕宿 western boundary as HIP 20889 and the following 觜宿 boundary
+  as HIP 26207. Coordinates will be bound to CDS VizieR catalogue I/239 rather
+  than inferred from display geometry.
+- Boundaries remain unchanged: no corpus rewrite, formal rule promotion,
+  Reviewer A/B substitution, threshold freeze, official ingest, Qdrant,
+  `local_kb_default`, automatic weather inference, B11/B12 or main operation.
+- Runner: `NOT RUN`; this is routine task-sized development under the local-first
+  policy.
+
+### ASTRO-R01 phase 1 implementation and verification
+
+- Task 1 catalog TDD: initial `4 failed, 12 passed` because asterism/mansion
+  methods, 毕宿 mappings and fixture were absent. After strict additive catalog
+  models, three canonical source snapshots, ten object records and the gold
+  fixture, the suite passed `16 passed`. Local commit: `b9e34b3`.
+- Source nuance: fixed Stellarium records name HIP 21683 both `附耳` and
+  `附耳增四`; it is stored as related `fu-er / ambiguous`, outside the eight
+  base members. This is not silently resolved.
+- Task 2 relation TDD: initial collection RED was
+  `ModuleNotFoundError: mansion_regions`. The pure circular interval, spherical
+  separation, same-frame, exact-member and explicit-threshold suite passed
+  `12 passed`; all asterism tests passed `28 passed`. Local commit: `ea98308`.
+- Task 3 provider TDD: initial `4 failed, 11 passed` for missing position-bound
+  assessment fields and provider adapter. The offline Skyfield adapter now binds
+  UTC, catalog SHA and actual target/boundary/member apparent positions. Focused
+  relation tests passed `15`; complete astronomy plus asterism regression passed
+  `58`. Local commit: `ec5db76`.
+- Task 4 navigation TDD: link replay proved the overview already resolves all
+  28 distinct cards; RED was exactly `1 failed, 1 passed` because the 毕宿 card
+  lacked `scientific_catalog`. The card now has a simplified alias, exact member
+  and boundary IDs, `derived_region` disclosure and an explicit `临` ambiguity
+  warning. Navigation plus science passed `60`. Local commit: `a776dda`.
+- First full-gate invocation failed before tests because `.venv/bin` was not on
+  PATH (`pytest: not found`). The second invocation ran 613 tests and produced
+  `612 passed, 1 failed`; the sole failure was a subprocess using the ambient
+  system `CODEX_PRIMARY_RUNTIME_PYTHON`, which lacked the editable
+  `research_sources` package. No test or implementation was changed. With both
+  interpreter paths bound to the repository environment, the exact command
+  completed successfully:
+
+```text
+CODEX_PRIMARY_RUNTIME_PYTHON="$PWD/.venv/bin/python" \
+PATH="$PWD/.venv/bin:$PATH" make downstream-test
+613 passed in 6.26s
+```
+
+- Phase 1 remains `VERIFYING` until the exact governance closeout head passes
+  governance unit/checker, focused/full replay, canonical source/fixture hash
+  checks, diff review and forbidden-path scan. Runner remains `NOT RUN` under
+  the local-first task policy.
+- Unclaimed work: the other 27 mansion definitions, complete 28-mansion cycle,
+  remaining member/line mappings, all-card scientific status and external-media
+  contracts/inventory/audits.
+
 
 ## 2026-08-04 — B10-R07 provisional usability publication completed
 
