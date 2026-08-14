@@ -1,0 +1,198 @@
+{
+  "schema_version": "b10-core14-provisional-usability/v1",
+  "recorded_at": "2026-08-04",
+  "authority": "user_approved_operational_research_stratification",
+  "not_a_formal_review_decision": true,
+  "scope": {
+    "case_count": 14,
+    "case_ids": [
+      "C02",
+      "C03",
+      "C09",
+      "C11",
+      "C13",
+      "C14",
+      "C24",
+      "C31",
+      "C33",
+      "C41",
+      "C43",
+      "C44",
+      "C45",
+      "C47"
+    ],
+    "provisional_usable_count": 11,
+    "isolated_evidence_supplement_count": 3
+  },
+  "review_state": {
+    "reviewer_a_state": "USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN",
+    "reviewer_b_state": "UNLABELLED_HUMAN_REVIEW_NOT_STARTED",
+    "reviewer_b_completed": false,
+    "two_distinct_humans_gate_passed": false
+  },
+  "authorization_gates": {
+    "threshold_freeze_authorized": false,
+    "formal_rule_release_authorized": false,
+    "official_ingest_authorized": false,
+    "official_promotion_authorized": false,
+    "b10_pr_d_start_authorized": false
+  },
+  "permitted_internal_uses": [
+    "source_bound_retrieval",
+    "multi_text_mapping",
+    "relationship_analysis",
+    "atomic_rule_research",
+    "source_bound_research_reporting"
+  ],
+  "cases": [
+    {
+      "case_id": "C02",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C03",
+      "evidence_state": "needs_review",
+      "operational_status": "isolated_evidence_supplement",
+      "internal_research_use_allowed": false,
+      "provisional_citation_eligible": false,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false,
+      "isolation_reason": "Source and relation atoms require separation; source divergence is not by itself a logical conflict."
+    },
+    {
+      "case_id": "C09",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C11",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C13",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C14",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C24",
+      "evidence_state": "ambiguous",
+      "operational_status": "isolated_evidence_supplement",
+      "internal_research_use_allowed": false,
+      "provisional_citation_eligible": false,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false,
+      "isolation_reason": "Section S8/S9 split is retained, while 㑹客環守 and the duration and shape variants remain unresolved."
+    },
+    {
+      "case_id": "C31",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C33",
+      "evidence_state": "needs_review",
+      "operational_status": "isolated_evidence_supplement",
+      "internal_research_use_allowed": false,
+      "provisional_citation_eligible": false,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false,
+      "isolation_reason": "The right boundary is recovered and the preceding 留守 clause is excluded, but the section split still requires independent human confirmation."
+    },
+    {
+      "case_id": "C41",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C43",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C44",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C45",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    },
+    {
+      "case_id": "C47",
+      "evidence_state": "eligible",
+      "operational_status": "provisional_usable_pending_reviewer_b",
+      "internal_research_use_allowed": true,
+      "provisional_citation_eligible": true,
+      "final_human_approval": false,
+      "reviewer_b_confirmation_required": true,
+      "formal_release_eligible": false
+    }
+  ],
+  "evidence_bindings": {
+    "second_review_register": "corpus/research_sources/b10-core14/disputed-case-second-review.json",
+    "second_review_register_sha256": "a7d0f7408b32d6cdccdd6c1efcdfc1829dfc29a46ba3382317bca521e655ea70",
+    "reviewer_b_source_pack": "docs/research/core14-case-audits/reviewer-b-disputed-case-source-pack.md",
+    "reviewer_b_source_pack_sha256": "a20ef8fc1bf975f580761842437c1bd9164fea9c6c6ec7fcd9ad7ad7ac0c95a0"
+  }
+}

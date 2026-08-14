@@ -17,19 +17,21 @@
 
 2026-08-13 读取 GitHub 后确认：
 
-- `stable/kaiyuan-v2`：`c2e8fcabb04354fd14d0c72b3b6020a47e63a583`。
-- 开放 PR 只有 #54、#64、#65，三者均为 Draft、未合并。
+- `stable/kaiyuan-v2`：`c9d490392233b7432f5a0136dcd213613abe05a7`。
+- 开放 PR 只有 #54、#64，二者均为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
-- PR #64：Core14 第二轮证据与 11+3 临时研究分层，保持独立 Draft；
+- PR #64：Core14 第二轮证据与 11+3 临时研究分层，正在通过 B10-R08
+  协调到最新 stable；B10-R08 已完成，远端集成提交为
+  `2384533291b1163738fb06f6984a348f78ecc558`，保持 Draft、mergeable；
   Reviewer B 尚未开始，不能把临时可用性当作正式人工批准。
-- PR #65：ASTRO-R01，base 为 `stable/kaiyuan-v2`，已完成批准的 Phase
-  1–5，保持 Draft、未合并、Runner `NOT RUN`。
+- PR #65：ASTRO-R01 批准的 Phase 1–5 已于 2026-08-13 squash merge，
+  stable 合并提交为 `c9d490392233b7432f5a0136dcd213613abe05a7`。
 
-PR #65 在本次交接文档任务开始前的远端头为
-`4cb97a16a67102068b5dc7302758cfd2892a23a0`，树为
-`e5aee521e1e69d02a0ac1a81bfd8eb8fe3f0d204`。本文件提交后该 HEAD 会变化，
-因此新 Work 必须读取 PR 实时 head，而不能继续使用这个父级检查点。
+PR #65 的最终远端 head 为
+`c76a229ed4dc00217b973f2407c0adbb95624601`；合并前验证绑定树
+`ad9dac014ae0e62a93d471ff0d467d047f073449`。该历史只证明 ASTRO-R01
+交付，不能替代后续任务的实时 ref 核验。
 
 本交接资料的内容检查点已发布为远端提交
 `2774a727e4fcd87804fbd3f441ac1fff34762b1a`，树
@@ -157,7 +159,7 @@ WMO 快照的 reference ID、URL 与 SHA-256 已交叉绑定。它只说明现�
 - full downstream：673 passed；
 - compileall、diff、stable ancestry、clean worktree、forbidden-path scan：通过；
 - independent review：无 Critical/asset mismatch；两项 Important 已修复；
-- Runner：`NOT RUN`；PR #65 保持 Draft、unmerged。
+- Runner：`NOT RUN`；PR #65 已按任务级本地优先政策合入 stable。
 
 审查修复包括：逐条锁定 23 个 episode/work/type/time/URL/description-hash
 tuple，以及把 WMO evidence_ref_id/URL/SHA 与 canonical snapshot 交叉绑定。

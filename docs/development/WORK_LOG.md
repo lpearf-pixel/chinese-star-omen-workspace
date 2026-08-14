@@ -2,6 +2,56 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-13 — B10-R08 PR #64 stable reconciliation completed
+
+- User authorized an isolated reconciliation of Draft PR #64 without merging
+  stable or modifying `main`. The original remote head
+  `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` passed its pre-merge baseline:
+  Core14 focused `1`, contracts `93`, text-core `26`, downstream `593`, upstream
+  `188 passed / 3 skipped`, governance unit `21` and development governance
+  `12 changed / 3 code`.
+- B10-R08 was registered `IN_PROGRESS` before integration. Non-rewriting merge
+  head `9585aeb` brings exact stable
+  `c9d490392233b7432f5a0136dcd213613abe05a7` into the PR branch. Conflicts were
+  limited to `DECISIONS`, `PROJECT_MEMORY` and `TASKS`; `WORK_LOG` merged
+  automatically. Stable ASTRO-R01/DOC-R01 state and the R06/R07 evidence state
+  were both retained. The Core14 decision was renumbered from the colliding
+  D-028 to D-030 without changing its meaning.
+- Post-merge verification passed: Core14 focused `1`, contracts `93`, text-core
+  `26`, downstream `673`, upstream `188 passed / 3 skipped`, governance unit
+  `21`, development governance `12 changed / 3 code`, strict JSON, compileall,
+  stable ancestry and diff checks.
+- Frozen hashes remain exact: R06 JSON
+  `a7d0f7408b32d6cdccdd6c1efcdfc1829dfc29a46ba3382317bca521e655ea70`,
+  R06 report `127b145df04d069cb2e6e5fbf9704ba69df1aa697f81304d5e60e014d5ae8aec`,
+  Reviewer B source pack
+  `a20ef8fc1bf975f580761842437c1bd9164fea9c6c6ec7fcd9ad7ad7ac0c95a0`,
+  R07 JSON `c1f4221d07a50a5bcfd5ccc951e5b5f3b1fcf73ddc8608d501fd1ff45af2e51e`
+  and R07 report
+  `9efb3912e669b228ef46a00535158d0e308bc80e1e6ed4745982599b280bc20e`.
+- The 11 provisional-use plus three isolated-evidence denominator is unchanged;
+  Reviewer B remains not started, every threshold/release/ingest/promotion gate
+  remains false, PR #54 stays Draft/BLOCKED, and B10-PR-D/E/F remain
+  unauthorized. Runner is `NOT RUN` for this routine Draft reconciliation.
+- Documentation head `d8a1f55c3593200547584459a9498ae4f9554d2c`, tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`, repeated the complete verification
+  matrix above with a clean worktree. Local HTTPS push stopped before remote
+  mutation because the checkout had no Git credentials. The connected GitHub
+  App then created a true two-parent merge commit without force: remote head
+  `2384533291b1163738fb06f6984a348f78ecc558`, exact matching tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`, parents original PR head
+  `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` and stable
+  `c9d490392233b7432f5a0136dcd213613abe05a7`.
+- Final GitHub readback: PR #64 is open, Draft, unmerged and mergeable; base is
+  exact stable `c9d490392233b7432f5a0136dcd213613abe05a7`; topology is ahead 5,
+  behind 0 with stable as merge base; the diff contains exactly 13 approved
+  paths. The PR body records the new head/tree, verification and closed gates.
+  Stable and `main` refs did not move during this reconciliation.
+- B10-R08 is `DONE`. This closeout changes only durable status documents; rerun
+  governance, focused evidence/hash checks and diff/clean checks on the final
+  documentation tree before its non-force Draft update. PR #64 remains Draft
+  and is not authorized for merge.
+
 ## 2026-08-13 — DOC-R01 durable new-Work handoff implemented
 
 - Live recovery revalidated `stable/kaiyuan-v2` at
@@ -435,6 +485,49 @@ PATH="$PWD/.venv/bin:$PATH" make downstream-test
 - Unclaimed work: the other 27 mansion definitions, complete 28-mansion cycle,
   remaining member/line mappings, all-card scientific status and external-media
   contracts/inventory/audits.
+
+
+## 2026-08-04 — B10-R07 provisional usability publication completed
+
+- Draft PR #64 fast-forwarded without force from R06 closeout `d183cee5c86bb8587d1cd1c57f1b4b28c02d559f` to R07 evidence head `00d36d8b9db267d325233bca847b8d5e70e272df`; remote tree `68ed36f72745552de1e0e58d7401a47b580b0405` exactly matched the locally verified candidate tree.
+- PR #54 received hash-bound status comment `5176472354`, recording the exact 11 provisional-use cases, the three isolated cases, both R07 artifact hashes and every unchanged false authorization gate. PR #54 head was not changed.
+- Remote re-read locked stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, PR #54 head at `932f9e68862025bc620e0cf2d439415c5ea37af4` and PR #64 at the R07 evidence head above. The open PR set remained exactly #54/#64; submitted reviews and review threads were zero for both.
+- Final evidence-tree replay: focused stratification plus governance `6 passed`; full stable comparison `changed_files=12 code_files=3`; `PROVISIONAL_USABILITY_FINAL_REPLAY_OK provisional=11 isolated=3 total=14 gates=false`; strict JSON, `compileall`, diff, parent-evidence hashes and frozen/forbidden path scans passed.
+- B10-R07 is `DONE` only as an operational research-stratification task. Reviewer B remains not started, the two-human gate remains false, PR #54 stays Draft/BLOCKED, no threshold freeze exists and B10-PR-D/E/F remain unauthorized.
+
+
+## 2026-08-04 — B10-R07 provisional usability stratification entered VERIFYING
+
+- User-approved operational split: `C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47` are `provisional_usable_pending_reviewer_b`; `C03/C24/C33` are `isolated_evidence_supplement`.
+- The register is an operational research layer only. Reviewer A remains `USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN`; Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`; the two-different-humans gate and threshold/release/ingest/promotion/B10-PR-D authorization flags remain false.
+- TDD RED was observed when the focused contract test failed only because `provisional-usability-stratification.json` did not exist. After the minimal register was created, the same test passed: `1 passed`.
+- Machine register: `corpus/research_sources/b10-core14/provisional-usability-stratification.json`, SHA-256 `c1f4221d07a50a5bcfd5ccc951e5b5f3b1fcf73ddc8608d501fd1ff45af2e51e`.
+- Research usage boundary: `docs/research/core14-case-audits/provisional-usability-stratification.md`, SHA-256 `9efb3912e669b228ef46a00535158d0e308bc80e1e6ed4745982599b280bc20e`.
+- Strict JSON parsing and `git diff --check` passed. The task continues on the isolated worktree from exact remote PR #64 head `d183cee5c86bb8587d1cd1c57f1b4b28c02d559f`; live stable remains `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`.
+- Full local verification at the `VERIFYING` checkpoint: focused stratification plus governance tests `6 passed`; explicit governance `changed_files=8 code_files=2`; `PROVISIONAL_USABILITY_REPLAY_OK provisional=11 isolated=3 total=14 gates=false`; strict JSON, `compileall`, `git diff --check`, parent-evidence hashes and frozen/forbidden path scans passed.
+- Remaining before `DONE`: fast-forward Draft PR #64 without force, add one hash-bound PR #54 status comment, re-read live refs/PR states and record the final exact head. PR #54 remains Draft/BLOCKED throughout.
+
+
+## 2026-08-03 — B10-R06 evidence publication completed
+
+- Draft support PR #64 targets only `stable/kaiyuan-v2`; its evidence commit is `3325ec3022b81387b1f752443125880d0e356f85` with exact tree `35a1a34594cd40d2dabe4b524bb224e1f292b160`. No merge was performed.
+- PR #54 received hash-bound status comment `5173585995`. The comment records all four case dispositions, the three artifact hashes, Reviewer A readiness, Reviewer B not-started state and the unchanged B10-PR-C/B10-PR-D/E/F boundaries.
+- Live re-read locked stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`, PR #54 head at `932f9e68862025bc620e0cf2d439415c5ea37af4`, and support PR #64 evidence head at `3325ec3022b81387b1f752443125880d0e356f85`. The open PR set was exactly #54 and #64; both were Draft with zero submitted reviews and zero review threads.
+- Final replay: `SECOND_REVIEW_FINAL_REPLAY_OK cases=4 frozen_inputs=7 artifacts=3 changed_files=7`; governance unit tests were `5 passed`; explicit governance was `changed_files=7 code_files=1`; strict JSON, `compileall`, `git diff --check`, source-hash and forbidden-path checks passed.
+- B10-R06 is `DONE` as an evidence-publication task. This does not complete or unblock B10-PR-C: Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`, the two-different-humans gate remains false, no canonical threshold freeze is authorized, and PR #54 remains Draft/BLOCKED.
+
+
+## 2026-08-03 — B10-R06 disputed-case second review entered VERIFYING
+
+- Worktree branch `codex/kaiyuan-b10-core14-second-review-v1` was created from exact stable `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; the task is evidence/review metadata only.
+- Reviewer A remains `USER_CONFIRMED_EVIDENCE_REVISED_READY_FOR_RETURN`. Reviewer B remains `UNLABELLED_HUMAN_REVIEW_NOT_STARTED`; `reviewer_b_completed=false`, the two-different-humans gate is false and no threshold freeze is authorized.
+- The append-only second review covers exactly C03/C24/C33/C47. It does not modify the R02 audit artifacts or either reviewer workbook. C03 is `needs_review` because source divergence is not logical contradiction; C24 remains `ambiguous` with S8/S9 split and unresolved `㑹客環守`; C33 remains `needs_review` at the human gate but the 045-9a right boundary is now recovered and research recommends eligibility after a confirmed section split; C47 remains `eligible` with `duplicate_of=null` and its 《乙巳占》 readings treated as material variants.
+- Structured delta: `corpus/research_sources/b10-core14/disputed-case-second-review.json`, SHA-256 `a7d0f7408b32d6cdccdd6c1efcdfc1829dfc29a46ba3382317bca521e655ea70`.
+- Human-readable adjudication: `docs/research/core14-case-audits/disputed-case-second-review.md`, SHA-256 `127b145df04d069cb2e6e5fbf9704ba69df1aa697f81304d5e60e014d5ae8aec`.
+- Neutral Reviewer B source pack: `docs/research/core14-case-audits/reviewer-b-disputed-case-source-pack.md`, SHA-256 `a20ef8fc1bf975f580761842437c1bd9164fea9c6c6ec7fcd9ad7ad7ac0c95a0`; it exposes no Reviewer A selections or second-review recommendations.
+- Deterministic evidence validation: `SECOND_REVIEW_SCHEMA_OK`, seven frozen input hashes matched, human gate remained false, C24 S8/S9 and C33 previous-section exclusions passed, and C47 duplicate guard passed. Strict JSON parse and `git diff --check` passed.
+- Baseline/focused governance: isolated `pytest==8.3.5`; `scripts/tests/test_check_development_governance.py` -> `5 passed`; explicit five-path development governance -> `changed_files=5 code_files=1`; `compileall` passed.
+- Remaining before B10-R06 can be `DONE`: final full-scope governance/diff/hash replay, publish the support branch as a Draft PR to `stable/kaiyuan-v2`, add a hash-bound status comment to PR #54 without changing its head, and re-read live refs/reviews. PR #54 remains Draft/BLOCKED and B10-PR-D/E/F remain forbidden.
 
 
 ## 2026-08-03 — GOV-T04 pilot verified; final review fixes prepared

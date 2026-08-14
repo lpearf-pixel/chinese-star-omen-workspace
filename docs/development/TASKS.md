@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c2e8fcabb04354fd14d0c72b3b6020a47e63a583
-Current feature branch: codex/kaiyuan-28-mansions-external-audit-v1
-Current task: ASTRO-R01 DONE; DOC-R01 DONE; B10-PR-C remains BLOCKED on two independent human reviews
-Open PRs at 2026-08-12 recovery: #54, #64 and #65; all are Draft
+Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
+Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
+Current task: B10-R08 DONE; B10-PR-C remains BLOCKED on Reviewer B
+Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 reconciled and mergeable
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -366,7 +366,7 @@ merged and the resulting stable head is reverified.
 - **PR and review:** PR #55; independent review found zero Critical, Important or Minor findings after the B9–B10 strategy reconciliation.
 
 ### GOV-T04 — Major-version unified Runner workflow migration
-- **Status:** `DONE` candidate; effective on stable only after the immutable closeout head passes the unified gate and PR #63 merges
+- **Status:** `DONE`; effective on stable at `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`
 - **Branch:** `codex/kaiyuan-gov-t04-unified-runner-v1`
 - **Design:** `docs/superpowers/specs/2026-08-02-kaiyuan-major-version-runner-workflow-design.md`
 - **Goal:** replace transitional per-PR automatic Runner triggers with one explicit exact-head major-version stable merge gate while retaining independently scheduled nightly and task-specific real-environment evidence.
@@ -457,6 +457,76 @@ merged and the resulting stable head is reverified.
   `local_kb_default` mutation, no silent source normalization, no B11/B12 and
   no `main`.
 
+### B10-R06 — Core14 disputed-case second evidence review
+- **Status:** `DONE`
+- **Cases:** `C03`, `C24`, `C33`, `C47`.
+- **Goal:** preserve the completed Reviewer A workbook while adding an
+  append-only second-round evidence decision for the four disputed cases,
+  including exact source locators, section boundaries, variants, atomic-rule
+  consequences and a minimal independent handoff for Reviewer B.
+- **Acceptance:** each case has a source-bound delta decision; C03 distinguishes
+  source variation from logical contradiction; C24 keeps the section split and
+  unresolved `客環守`/duration/shape readings; C33 excludes the preceding
+  `留守` clause and recovers the complete right boundary; C47 carries no
+  `duplicate` label without a concrete `duplicate_of`; structured evidence and
+  the human-readable report pass deterministic validation; PR #54 receives a
+  hash-bound review-status comment without changing its head.
+- **Boundary:** evidence and review metadata only; do not modify the frozen
+  Reviewer A/B workbook bytes, original R02 audit artifacts, runtime code, main
+  rules, main data, thresholds, Qdrant, `local_kb_default`, B10-PR-D/E/F,
+  B11/B12, automatic publishing or `main`. Reviewer B remains an independent
+  different human and is not completed or simulated by this task.
+
+### B10-R07 — Core14 provisional usability stratification
+- **Status:** `DONE`
+- **Cases:** provisional-use set `C02`, `C09`, `C11`, `C13`, `C14`, `C31`,
+  `C41`, `C43`, `C44`, `C45`, `C47`; isolated evidence-supplement set `C03`,
+  `C24`, `C33`.
+- **Goal:** record the user-approved operational split between cases that may
+  support internal research while awaiting Reviewer B and cases that must stay
+  isolated for additional evidence, without changing any formal review label.
+- **Acceptance:** a deterministic machine-readable register contains exactly
+  the frozen Core14 denominator split 11+3 with no overlap; every provisional
+  case remains explicitly pending Reviewer B; every isolated case remains
+  non-citable; all threshold-freeze, release, ingest and promotion gates remain
+  false; the same boundary is documented for researchers and bound to Draft
+  PR #64/PR #54 metadata.
+- **Boundary:** do not modify Reviewer A/B workbook bytes, R02/R06 decisions,
+  raw corpus, runtime rules, thresholds, formal KB, Qdrant,
+  `local_kb_default`, B10-PR-D/E/F, B11/B12, automatic publishing or `main`.
+
+### B10-R08 — PR #64 stable-integration reconciliation
+- **Status:** `DONE`
+- **Current state:** Draft PR #64 head
+  `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` is four commits ahead of its
+  original base `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; after ASTRO-R01 merged,
+  live `stable/kaiyuan-v2` is
+  `c9d490392233b7432f5a0136dcd213613abe05a7` and GitHub reports the PR as
+  one commit behind and not mergeable.
+- **Goal:** replay the frozen R06/R07 evidence on the new stable baseline,
+  preserve both sides of governance and handoff history, and restore Draft PR
+  #64 to an auditable mergeable state without changing any research decision.
+- **Allowed scope:** the existing 12 PR #64 evidence, report, plan, test and
+  governance paths plus the stable handoff files needed to record exact
+  integration state.
+- **Prohibited:** Reviewer workbook changes, new case labels, threshold freeze,
+  B10-PR-D/E/F, official ingest or promotion, Qdrant, `local_kb_default`, raw
+  corpus normalization, automatic publishing, `main`, or stable merge.
+- **Done:** the branch contains the new stable ancestor; R06/R07 artifacts and
+  hashes remain byte-identical; the 11+3 denominator and every false gate are
+  preserved; conflicts are resolved with no dropped ASTRO-R01/DOC-R01 state;
+  focused, governance, contract, text-core, downstream and upstream checks pass;
+  Draft PR #64 is updated and read back as open, Draft and mergeable.
+- **Verify:** run the Core14 focused test, governance unit/checker, contracts,
+  text-core, full downstream and upstream suites, strict JSON/hash replay,
+  `compileall`, `git diff --check`, forbidden-path scan and remote tree readback.
+- **Delivery:** non-force fast-forward update of the existing PR #64 branch;
+  keep the PR Draft and do not merge it or modify `stable/kaiyuan-v2`/`main`.
+- **Remote integration result:** GitHub App merge commit
+  `2384533291b1163738fb06f6984a348f78ecc558`, tree
+  `d7149bd569b3840733ef7aacd0663396d112e322`; PR #64 read back open, Draft,
+  mergeable, ahead 5/behind 0 with exact stable merge base and 13 expected paths.
+
 
 ### B10-R03 — Related Wikisource source localization
 - **Status:** `DONE` (P0)
@@ -535,8 +605,11 @@ merged and the resulting stable head is reverified.
 
 ```text
 B10-R05 merged and recorded DONE
-→ ASTRO-R01 phase 2 VERIFYING on Draft PR #65; it does not bypass B10-PR-C
-→ wait for two different humans to independently complete Reviewer A/B
+→ ASTRO-R01 phases 1–5 and DOC-R01 merged to stable at c9d490392233b7432f5a0136dcd213613abe05a7
+→ B10-R06 evidence publication remains DONE on Draft PR #64
+→ B10-R07 records 11 cases as provisional internal-use pending Reviewer B and isolates C03/C24/C33 for evidence supplementation
+→ B10-R08 reconciles Draft PR #64 with the new stable baseline without changing those decisions
+→ wait for a different human to independently complete Reviewer B across all 14 cases
 → validate the real reviewed fixtures and approval record; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
