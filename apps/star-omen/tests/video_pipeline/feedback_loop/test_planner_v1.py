@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 from src.video_pipeline.feedback_loop.comparison import compare_external_audit
 from src.video_pipeline.feedback_loop.planner import (
     build_initial_publication_handoff,
@@ -44,6 +46,55 @@ def test_episode_22_plans_only_bounded_non_applying_candidates() -> None:
         & set(candidate.contradicting_observation_ids)
         for candidate in candidates
     )
+
+
+def test_episode_22_candidates_have_fixed_canonical_identity_and_order() -> None:
+    """Catches changed candidate IDs, confidence, or caller-order-dependent output."""
+    observations = episode_22_observations()
+    first = plan_improvement_candidates(observations=observations)
+    repeated = plan_improvement_candidates(observations=observations)
+    reversed_input = plan_improvement_candidates(
+        observations=tuple(reversed(observations))
+    )
+
+    assert len(first) == 4
+    assert [(candidate.candidate_id, candidate.confidence) for candidate in first] == [
+        (
+            "candidate:vfl:corpus_research:"
+            "observation:audit:douyin:zushan:episode-22:"
+            "claim:douyin:zushan:episode-22:01",
+            0.85,
+        ),
+        (
+            "candidate:vfl:retrieval:"
+            "observation:audit:douyin:zushan:episode-22:"
+            "claim:douyin:zushan:episode-22:01",
+            0.60,
+        ),
+        (
+            "candidate:vfl:semantic_policy:"
+            "observation:audit:douyin:zushan:episode-22:"
+            "claim:douyin:zushan:episode-22:02",
+            0.90,
+        ),
+        (
+            "candidate:vfl:video_editorial:"
+            "observation:audit:douyin:zushan:episode-22:"
+            "claim:douyin:zushan:episode-22:01",
+            0.90,
+        ),
+    ]
+
+    def serialized(candidates) -> bytes:
+        return json.dumps(
+            [candidate.model_dump(mode="json") for candidate in candidates],
+            ensure_ascii=False,
+            separators=(",", ":"),
+            sort_keys=True,
+        ).encode("utf-8")
+
+    assert serialized(repeated) == serialized(first)
+    assert serialized(reversed_input) == serialized(first)
 
 
 def test_candidate_policy_is_keyed_to_typed_dispositions() -> None:
