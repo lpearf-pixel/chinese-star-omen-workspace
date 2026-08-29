@@ -36,6 +36,7 @@ def load_episode_22_audit() -> ExternalAuditBundleV1:
 def probe_for(
     claim_id: str,
     *,
+    probe_id: str | None = None,
     result_state: str = "unresolved",
     source_id: str | None = None,
     evidence_references: list[dict] | None = None,
@@ -43,7 +44,7 @@ def probe_for(
     payload = valid_local_probe_payload()
     payload.update(
         {
-            "probe_id": f"probe:vfl:{claim_id.rsplit(':', 1)[-1]}",
+            "probe_id": probe_id or f"probe:vfl:{claim_id.rsplit(':', 1)[-1]}",
             "claim_id": claim_id,
             "source_id": source_id
             or "media:douyin:zushan:collection-7664842437629921326:episode-22",
@@ -99,6 +100,43 @@ def test_not_searched_probe_remains_unknown_not_a_contradiction() -> None:
     assert observation.local_result_state == "not_searched"
     assert observation.operational_disposition == "not_searched"
     assert observation.local_evidence_ref_ids == []
+
+
+@pytest.mark.parametrize(
+    ("result_state", "relationship", "operational_disposition"),
+    [
+        ("corroborated", "supports", "supported"),
+        ("contradicted", "contradicts", "contradicted"),
+    ],
+)
+def test_explicit_local_evidence_narrows_the_context_only_claim(
+    result_state: str, relationship: str, operational_disposition: str
+) -> None:
+    """Catches context-only policy masking explicit local evidence states."""
+    evidence_ref_id = f"local-evidence:vfl:context-{result_state}"
+    observations = compare_external_audit(
+        audit_bundle=load_episode_22_audit(),
+        local_probes=(
+            probe_for(CLAIM_IDS[0]),
+            probe_for(
+                CLAIM_IDS[1],
+                result_state=result_state,
+                evidence_references=[
+                    local_reference(
+                        evidence_ref_id=evidence_ref_id, relationship=relationship
+                    )
+                ],
+            ),
+        ),
+    )
+
+    observation = observations[1]
+    assert observation.external_disposition == "ambiguous"
+    assert observation.external_evidence_link_ids == [
+        "evidence-link:douyin:zushan:episode-22:wmo-context"
+    ]
+    assert observation.local_evidence_ref_ids == [evidence_ref_id]
+    assert observation.operational_disposition == operational_disposition
 
 
 @pytest.mark.parametrize(
@@ -165,6 +203,17 @@ def test_invalid_probe_joins_fail_closed(probes, error: str) -> None:
     with pytest.raises(ValueError, match=error):
         compare_external_audit(
             audit_bundle=load_episode_22_audit(), local_probes=probes()
+        )
+
+
+def test_duplicate_probe_ids_across_distinct_claims_fail_closed() -> None:
+    """Catches run-wide probe identity collisions hidden by distinct claim IDs."""
+    first = probe_for(CLAIM_IDS[0])
+    probes = (first, probe_for(CLAIM_IDS[1], probe_id=first.probe_id))
+
+    with pytest.raises(ValueError, match="duplicate probe_id"):
+        compare_external_audit(
+            audit_bundle=load_episode_22_audit(), local_probes=probes
         )
 
 

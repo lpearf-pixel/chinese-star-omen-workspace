@@ -24,13 +24,17 @@ def compare_external_audit(
     probes.sort(key=lambda probe: probe.claim_id)
 
     probes_by_claim_id: dict[str, LocalEvidenceProbeV1] = {}
+    probe_ids: set[str] = set()
     for probe in probes:
+        if probe.probe_id in probe_ids:
+            raise ValueError(f"duplicate probe_id {probe.probe_id}")
         if probe.claim_id in probes_by_claim_id:
             raise ValueError(f"duplicate probe for claim_id {probe.claim_id}")
         if probe.claim_id not in set(audit.audit.claim_ids):
             raise ValueError(f"probe references unknown claim_id {probe.claim_id}")
         if probe.source_id != audit.source.source_id:
             raise ValueError("probe source_id must equal audit source_id")
+        probe_ids.add(probe.probe_id)
         probes_by_claim_id[probe.claim_id] = probe
 
     audit_claim_ids = set(audit.audit.claim_ids)
@@ -88,12 +92,12 @@ def _operational_disposition(
 ) -> OperationalDisposition:
     if local_result_state == "not_searched":
         return "not_searched"
-    if context_only or external_disposition == "modern_inference_only":
-        return "modern_context_only"
     if local_result_state == "contradicted":
         return "contradicted"
     if local_result_state == "corroborated":
         return "supported"
+    if context_only or external_disposition == "modern_inference_only":
+        return "modern_context_only"
     if external_disposition == "source_missing":
         return "source_missing"
     if external_disposition == "supported_exact":
