@@ -329,3 +329,29 @@
   会破坏校准门禁和一致率证据。
 - **Reversal:** 任一新边界、异文、主体或来源问题都可把单条从临时可用
   层移回隔离补证层；必须追加理由和证据，不得静默改写历史状态。
+
+## D-031 — 先建离线证据到视频反馈骨架，不提前解锁正式发布或跨模块应用
+
+- **Status:** Accepted for VFL-T01 S0 implementation.
+- **Decision:** 允许在 B10-PR-C 仍被 Reviewer B 和阈值冻结门禁阻塞时，
+  独立建立一个 interface-only、offline、manual-handoff 的反馈控制平面。
+  它只能消费已冻结的 B9 与 external-media 契约、调用方提供的只读本地
+  证据探针，输出比较观察、不可自动应用的改进候选、B9 视频生产请求、
+  人工发布交接和可选的学习更新提案。
+- **Pilot:** S0 只以祖山觀 episode 22 为金样本；必须保留
+  `source_missing`、`ambiguous` 与 `modern_authority/context_only`，不得
+  补写不存在的古典引文或把烈风等同于台风、热带气旋或海上风暴。
+- **Lifecycle:** observation、hypothesis、decision、outcome 与 proposal
+  分对象记录并只允许向前引用。每项 candidate/proposal 都固定
+  `apply_allowed=false`；真正改动须在拥有该模块的独立任务、测试、审核和
+  回滚计划内完成。
+- **Reason:** 用户批准的目标是先验证完整系统反馈路径，再按模块逐步
+  优化。接口骨架可以在不冒用人审、语料或发布权限的情况下尽早暴露
+  数据契约、状态机和模块边界问题。
+- **Non-authority:** 本决定不启动 B10-PR-D/E/F，不解锁 B11/B12，不
+  改变 PR #54、Reviewer A/B 或 threshold-freeze 状态，也不批准正式
+  规则、模型训练、official ingest、Qdrant/`local_kb_default` 写入、媒体
+  渲染、账号凭证或自动发布。
+- **Delivery:** S0 仅能交付到 `stable/kaiyuan-v2` 的 feature PR；禁止
+  直接写 stable 或操作 `main`。后续 live source/local-KB adapter、模型、
+  TTS/media 或上传分别需要新的阶段决定。

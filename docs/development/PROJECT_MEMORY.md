@@ -7,11 +7,11 @@
 ```text
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
-Verified at: 2026-08-13
-Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R08 DONE PR #64 stable reconciliation; B10-PR-C human-review BLOCKED
-Open PRs: #54 and #64; both Draft, with #54 blocked on Reviewer B and #64 reconciled and mergeable
+Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
+Verified at: 2026-08-29
+Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
+Current task: VFL-T01 offline feedback-loop skeleton IN_PROGRESS; B10-PR-C human-review BLOCKED
+Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
 Protected collection: local_kb_default
 ```
@@ -50,7 +50,9 @@ B10-R06 Core14 disputed-case second evidence review: DONE (#64 Draft evidence su
 B10-R07 Core14 provisional usability stratification: DONE (#64 continuation; 11 provisional-use + 3 isolated evidence-supplement; PR #54 comment 5176472354)
 ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approved phases 1–5)
 B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
+PR #64 merged to stable: DONE (2026-08-14, `99c0a85c1f944add8d013aedbae830fe022b7c3b`)
 B10 overall: IN_PROGRESS
+VFL-T01 offline evidence-to-video feedback skeleton: IN_PROGRESS (S0, episode 22, manual handoff only)
 ```
 
 ## 3. B9 merge chain
@@ -279,17 +281,21 @@ B9 已在 stable 生效为 `DONE`。这不授权自动发布、TTS、批量媒�
 ## 10. 下一动作
 
 ```text
-ASTRO-R01 phases 1–5 and DOC-R01 are integrated at stable c9d490392233b7432f5a0136dcd213613abe05a7
-→ reconcile Draft PR #64 without changing its R06/R07 evidence decisions
+ASTRO-R01 phases 1–5, DOC-R01 and PR #64 are integrated at stable 99c0a85c1f944add8d013aedbae830fe022b7c3b
 → keep C02/C09/C11/C13/C14/C31/C41/C43/C44/C45/C47 in provisional internal use pending Reviewer B
 → keep C03/C24/C33 isolated for evidence supplementation
 → keep PR #54 Draft and BLOCKED until a different human independently completes Reviewer B
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
+↳ independently execute VFL-T01 S0 against frozen B9/external-audit interfaces
+→ stop VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals
 → GOV-T04 does not replace nightly, real-device, corpus, scientific, security, migration or human evidence
 ```
 
 The R05 merge does not authorize a production multi-text schema, new Core14
 claims, official ingest, Qdrant access, `local_kb_default` access, B11/B12,
 automatic publishing or any operation on `main`.
+
+D-031 permits only the additive VFL-T01 offline control plane. It does not
+change the preceding B10/B11/B12 gates and cannot apply cross-module changes.

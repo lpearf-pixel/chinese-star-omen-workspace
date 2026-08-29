@@ -10,10 +10,10 @@
 
 ```text
 Stable branch: stable/kaiyuan-v2
-Last verified stable HEAD: c9d490392233b7432f5a0136dcd213613abe05a7
-Current feature branch: codex/kaiyuan-b10-core14-second-review-v1
-Current task: B10-R08 DONE; B10-PR-C remains BLOCKED on Reviewer B
-Open PRs: #54 and #64; both Draft, with #54 human-review blocked and #64 reconciled and mergeable
+Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
+Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
+Current task: VFL-T01 IN_PROGRESS; B10-PR-C remains BLOCKED on Reviewer B
+Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
 B10 overall: IN_PROGRESS
@@ -497,7 +497,7 @@ merged and the resulting stable head is reverified.
 
 ### B10-R08 — PR #64 stable-integration reconciliation
 - **Status:** `DONE`
-- **Current state:** Draft PR #64 head
+- **Historical reconciliation state:** Draft PR #64 head
   `35c2a77c7da3b964555a6bb1e41ec8a23d35ec55` is four commits ahead of its
   original base `c2e8fcabb04354fd14d0c72b3b6020a47e63a583`; after ASTRO-R01 merged,
   live `stable/kaiyuan-v2` is
@@ -526,6 +526,9 @@ merged and the resulting stable head is reverified.
   `2384533291b1163738fb06f6984a348f78ecc558`, tree
   `d7149bd569b3840733ef7aacd0663396d112e322`; PR #64 read back open, Draft,
   mergeable, ahead 5/behind 0 with exact stable merge base and 13 expected paths.
+- **Later repository state:** PR #64 was merged on 2026-08-14; its stable merge
+  result is `99c0a85c1f944add8d013aedbae830fe022b7c3b`. This does not change PR #54,
+  Reviewer B or any threshold-freeze gate.
 
 
 ### B10-R03 — Related Wikisource source localization
@@ -597,6 +600,37 @@ merged and the resulting stable head is reverified.
 ## B11 — Rule engine 2.0
 - **Status:** `BACKLOG`
 
+## VFL — Evidence-to-video feedback loop
+
+### VFL-T01 — Offline control-plane skeleton
+- **Status:** `IN_PROGRESS`
+- **Base:** `stable/kaiyuan-v2` at
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`.
+- **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
+- **Goal:** connect an already audited external-media bundle, caller-supplied
+  read-only local evidence probes, deterministic comparison, non-applying
+  improvement candidates, a B9-bound production request, manual publication
+  handoff and optional caller-supplied outcome in one offline auditable run.
+- **Pilot:** 祖山觀 episode 22 / work `7669807398794598565`.
+- **Design:**
+  `docs/superpowers/specs/2026-08-29-kaiyuan-evidence-feedback-loop-skeleton-design.md`.
+- **Plan:**
+  `docs/superpowers/plans/2026-08-29-kaiyuan-evidence-feedback-loop-skeleton.md`.
+- **Acceptance:** the episode 22 pilot is deterministic; external audit status
+  and modern-context-only limits are preserved; every candidate records
+  `apply_allowed=false`; the production request forbids absent classical quotes
+  and storm-equivalence claims; publication remains manually blocked; invalid
+  input, broken references and output collisions fail without partial output.
+- **Verification:** TDD RED/GREEN evidence; feedback-loop focused tests;
+  external-media and B9 package/review regression; full downstream tests;
+  strict JSON, compileall, governance, diff and forbidden-path checks; independent
+  review with no unresolved Critical or Important finding.
+- **Boundary:** additive offline research/control plane only. No live scraping,
+  transcript/OCR reconstruction, model training, corpus/rule/threshold mutation,
+  official ingest, Qdrant or `local_kb_default` access, account credentials,
+  rendering/upload side effect, Reviewer A/B substitution, PR #54 mutation,
+  B10-PR-D/E/F start, B11/B12 release or `main` operation.
+
 ## B12 — Batch media and publishing assistance
 - **Status:** `BACKLOG`
 - **Boundary:** automatic publishing requires a separate safety decision
@@ -614,6 +648,8 @@ B10-R05 merged and recorded DONE
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
 → B10-PR-G/H and B11 remain BACKLOG behind the accepted B10 sequence
+↳ independently, VFL-T01 may build an offline interface-only feedback skeleton against frozen B9/external-audit contracts
+→ VFL-T01 stops at a manual handoff and may emit proposals only; it does not start or release B12
 ```
 
 Current prohibitions:
@@ -623,4 +659,5 @@ Current prohibitions:
 - no AI substitution for Reviewer A/B;
 - no official Qdrant or `local_kb_default` mutation;
 - no automatic publishing or `final.mp4`;
+- no automatic application of a VFL improvement or learning proposal;
 - no claim that hosted CI replaces human, corpus, scientific or real-device evidence.

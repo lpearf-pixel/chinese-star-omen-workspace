@@ -1,6 +1,6 @@
 # Chinese Star Omen Workspace — 项目交接总结
 
-**快照日期：** 2026-08-13
+**快照日期：** 2026-08-29
 
 **仓库：** `lpearf-pixel/chinese-star-omen-workspace`
 
@@ -15,16 +15,16 @@
 
 ## 1. 最近实时核验状态
 
-2026-08-13 读取 GitHub 后确认：
+2026-08-29 读取 GitHub 后确认：
 
-- `stable/kaiyuan-v2`：`c9d490392233b7432f5a0136dcd213613abe05a7`。
-- 开放 PR 只有 #54、#64，二者均为 Draft、未合并。
+- `stable/kaiyuan-v2`：`99c0a85c1f944add8d013aedbae830fe022b7c3b`。
+- 开放 PR 只有 #54；它仍为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
-- PR #64：Core14 第二轮证据与 11+3 临时研究分层，正在通过 B10-R08
-  协调到最新 stable；B10-R08 已完成，远端集成提交为
-  `2384533291b1163738fb06f6984a348f78ecc558`，保持 Draft、mergeable；
-  Reviewer B 尚未开始，不能把临时可用性当作正式人工批准。
+- PR #64：Core14 第二轮证据与 11+3 临时研究分层已于 2026-08-14
+  合并；stable 合并提交为
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`。Reviewer B 仍未完成，
+  不能把临时可用性或 PR 合并当作正式双真人批准。
 - PR #65：ASTRO-R01 批准的 Phase 1–5 已于 2026-08-13 squash merge，
   stable 合并提交为 `c9d490392233b7432f5a0136dcd213613abe05a7`。
 
@@ -83,6 +83,17 @@ B10 整体仍 `IN_PROGRESS`：
 - 11 条 `provisional_usable_pending_reviewer_b` 只允许明示待 B 确认的内部
   检索、多文映射和研究，不能进入正式规则、official ingest 或阈值冻结；
 - B10-PR-D/E/F 与 B11/B12 未获当前任务授权。
+
+### VFL-T01
+
+VFL-T01 已于 2026-08-29 登记为 `IN_PROGRESS`。它实现用户此前批准的
+“先搭完整系统骨架、再逐模块优化”方向：把既有外部媒体审计、调用方提供的
+只读本地证据探针、确定性比较、不可自动应用的改进候选、B9 视频生产请求、
+人工发布交接和可选结果反馈连接为一个离线控制平面。
+
+S0 只运行祖山觀 episode 22 金样本，不抓取直播数据、不重建 transcript/OCR，
+不训练模型、不改语料/规则/Qdrant、不渲染或上传视频，也不解锁 B12。所有
+改进和学习输出都固定为 proposal，必须在所属模块的新任务中独立批准。
 
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 
@@ -171,8 +182,10 @@ tuple，以及把 WMO evidence_ref_id/URL/SHA 与 canonical snapshot 交叉绑�
 - 不写/删/重建 `local_kb_default`，不由下游执行 official ingest。
 - 不静默改原始古籍，不用模型代替 Reviewer A/B。
 - 不把外部视频或现代气象材料升级为古典证据/规则权威。
-- 不改 PR #54/#64 来完成 ASTRO-R01 或文档交接。
-- 不自动启动 B10-PR-D、B11、B12 或 ASTRO-R01 Phase 6。
+- 不改 PR #54 来完成 VFL-T01、ASTRO-R01 或文档交接。
+- 不自动启动 B10-PR-D、B11、B12 或 ASTRO-R01 Phase 6；VFL-T01 仅是
+  已单独授权的离线接口骨架，不构成这些阶段的启动或发布。
+- 不自动应用 VFL 候选/提案，不自动渲染、上传或发布。
 - 不为普通 Draft/文档提交运行 Runner；只有 exact major-version stable
   merge candidate 才运行一次统一 Runner。
 

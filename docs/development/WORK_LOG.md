@@ -2,6 +2,37 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-29 — VFL-T01 offline feedback-loop skeleton started
+
+- Live recovery read back `stable/kaiyuan-v2` at exact head
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`. PR #64 and #65 are merged;
+  the only open PR is Draft #54 at head
+  `932f9e68862025bc620e0cf2d439415c5ea37af4`, still blocked on independent
+  Reviewer B and threshold freeze. Older handoff text that described #64/#65
+  as Draft was corrected before implementation.
+- The user continued the previously approved direction: prioritise an automatic
+  video framework, compare audited Douyin claims with local evidence, build the
+  whole feedback skeleton first, and optimise modules later without unapproved
+  cross-module changes. VFL-T01 was recorded `IN_PROGRESS` on isolated branch
+  `codex/kaiyuan-evidence-feedback-loop-skeleton-v1` from the exact stable head.
+- D-031 and the System Engineering Blueprint limit S0 to an offline control
+  plane: existing external audit → caller-supplied read-only local probe →
+  deterministic observation/candidate planning → B9 production request →
+  manual publication handoff → optional caller-supplied outcome/proposal.
+- Forbidden throughout: model training, raw corpus or rule mutation, official
+  ingest, Qdrant/`local_kb_default` access, Reviewer A/B substitution, PR #54
+  mutation, B10-PR-D/E/F, B11/B12 release, account credentials, video upload,
+  direct stable push and `main`.
+- The declared project dependencies were absent from the system interpreter, so
+  the first baseline command stopped before pytest collection. A worktree-local,
+  ignored `.venv` was created from CPython 3.12.13 and installed with
+  `pip install -e apps/star-omen`; no repository dependency file was changed.
+  Baseline external-media plus B9 vertical-package regression then passed:
+  `39 passed in 1.47s`.
+- Next: finish the detailed execution plan, observe focused TDD RED for the new
+  contracts/orchestrator, implement the episode 22 pilot, then run independent
+  review and the complete applicable verification matrix.
+
 ## 2026-08-13 — B10-R08 PR #64 stable reconciliation completed
 
 - User authorized an isolated reconciliation of Draft PR #64 without merging
