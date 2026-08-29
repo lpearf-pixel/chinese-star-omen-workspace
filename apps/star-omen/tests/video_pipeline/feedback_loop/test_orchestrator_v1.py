@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from src.video_pipeline.feedback_loop.contracts_v1 import FeedbackOutcomeV1
+from src.video_pipeline.feedback_loop.contracts_v1 import (
+    FeedbackOutcomeV1,
+    ManualPublicationHandoffV1,
+)
 from src.video_pipeline.feedback_loop.orchestrator import (
     FeedbackLoopBuild,
     build_feedback_loop_run,
@@ -216,10 +219,30 @@ def test_build_defensively_revalidates_inputs() -> None:
             policy_version=POLICY_VERSION,
         )
 
+    probes = list(episode_22_probes())
+    object.__setattr__(probes[0], "source_id", "media:douyin:zushan:other")
+    with pytest.raises(ValueError, match="source_id"):
+        build_feedback_loop_run(
+            audit_bundle=load_episode_22_audit(),
+            local_probes=probes,
+            policy_version=POLICY_VERSION,
+        )
+
     outcome = synthetic_outcome()
     object.__setattr__(outcome, "handoff_id", "handoff:vfl:other")
     with pytest.raises(ValueError, match="handoff_id"):
         episode_22_build(outcome=outcome)
+
+
+def test_build_members_are_read_only_and_preserve_original_bytes() -> None:
+    """Catches callers replacing hash-bound member bytes after a valid build."""
+    build = episode_22_build()
+    original = build.members["feedback-loop-run.json"]
+
+    with pytest.raises(TypeError):
+        build.members["feedback-loop-run.json"] = b"{}"  # type: ignore[index]
+
+    assert build.members["feedback-loop-run.json"] == original
 
 
 def test_publish_writes_complete_package_and_refuses_occupied_targets(
@@ -274,6 +297,22 @@ def test_publish_rejects_invalid_build_without_partial_or_staging_output(
     assert not output.exists()
     assert_no_staging(tmp_path, output.name)
 
+
+def test_publish_rejects_hash_valid_canonical_semantic_tamper(
+    tmp_path: Path,
+) -> None:
+    """Catches publishing canonical members that disagree with deterministic rebuild."""
+    build = episode_22_build()
+    tampered_members = dict(build.members)
+    handoff_payload = json.loads(tampered_members["manual-publication-handoff.json"])
+    handoff_payload["blocked_reasons"] = [
+        "Canonical contract-valid drift that was not derived by the planner."
+    ]
+    tampered_handoff = ManualPublicationHandoffV1.model_validate(handoff_payload)
+    tampered_members["manual-publication-handoff.json"] = canonical_json_bytes(
+        tampered_handoff.model_dump(mode="json", exclude_none=False)
+    )
+
     self_consistent_manifest = build_package_manifest(
         package_id=build.run.run_id,
         members=tampered_members,
@@ -283,7 +322,15 @@ def test_publish_rejects_invalid_build_without_partial_or_staging_output(
         manifest=self_consistent_manifest,
         members=tampered_members,
     )
-    with pytest.raises(ValueError, match="canonical.*member|identity"):
+    output = tmp_path / "semantic-tamper"
+
+    assert verify_package_members(invalid.manifest, invalid.members) is True
+    assert json.loads(invalid.members["manual-publication-handoff.json"])
+    with pytest.raises(
+        ValueError,
+        match="canonical feedback-loop member identity does not match build",
+    ):
         publish_feedback_loop_run(output_dir=output, build=invalid)
+
     assert not output.exists()
     assert_no_staging(tmp_path, output.name)
