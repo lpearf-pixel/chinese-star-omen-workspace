@@ -133,6 +133,36 @@ def test_run_rejects_broken_lifecycle_references_and_identity() -> None:
         FeedbackLoopRunV1.model_validate(wrong_handoff_request)
 
 
+def test_run_observation_state_must_equal_its_authoritative_probe_state() -> None:
+    """Catches an observation copying a local result that differs from its probe."""
+    payload = valid_run_payload()
+    payload["observations"][0]["local_result_state"] = "contradicted"
+    with pytest.raises(ValidationError, match="local_result_state"):
+        FeedbackLoopRunV1.model_validate(payload)
+
+
+def test_run_rejects_duplicate_evidence_ids_across_distinct_probes() -> None:
+    """Catches flattened evidence identity collapsing two different local references."""
+    payload = valid_run_payload()
+    second_probe = deepcopy(payload["local_probes"][0])
+    second_probe["probe_id"] = "probe:fixture:002"
+    second_probe["claim_id"] = "claim:fixture:002"
+    second_probe["evidence_references"][0]["evidence_locator"] = (
+        "fixture://local/citation-002"
+    )
+    second_probe["evidence_references"][0]["evidence_sha256"] = "b" * 64
+    payload["local_probes"].append(second_probe)
+
+    second_observation = deepcopy(payload["observations"][0])
+    second_observation["observation_id"] = "observation:fixture:002"
+    second_observation["claim_id"] = "claim:fixture:002"
+    second_observation["probe_id"] = "probe:fixture:002"
+    payload["observations"].append(second_observation)
+
+    with pytest.raises(ValidationError, match="run evidence_references"):
+        FeedbackLoopRunV1.model_validate(payload)
+
+
 def test_outcome_and_proposal_are_paired_and_match_the_handoff() -> None:
     """Catches a proposal without a human outcome or an outcome in the wrong stage."""
     proposal_without_outcome = valid_run_payload()

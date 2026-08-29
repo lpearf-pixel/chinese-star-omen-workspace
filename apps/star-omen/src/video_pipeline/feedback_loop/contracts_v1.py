@@ -249,6 +249,14 @@ class FeedbackLoopRunV1(StrictContractModel):
             "improvement_candidates",
         )
         ensure_unique([metric.metric_id for metric in self.metrics], "metrics")
+        ensure_unique(
+            [
+                reference.evidence_ref_id
+                for probe in self.local_probes
+                for reference in probe.evidence_references
+            ],
+            "run evidence_references",
+        )
 
         for probe in self.local_probes:
             if probe.source_id != self.source_id:
@@ -263,6 +271,10 @@ class FeedbackLoopRunV1(StrictContractModel):
                 raise ValueError("observation references an unknown probe")
             if observation.claim_id != probe.claim_id:
                 raise ValueError("observation claim_id must equal probe claim_id")
+            if observation.local_result_state != probe.result_state:
+                raise ValueError(
+                    "observation local_result_state must equal probe result_state"
+                )
             probe_evidence_ids = {
                 reference.evidence_ref_id for reference in probe.evidence_references
             }
