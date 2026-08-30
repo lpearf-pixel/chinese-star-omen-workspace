@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Verified at: 2026-08-29
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 offline feedback-loop skeleton VERIFYING; B10-PR-C human-review BLOCKED
+Current task: VFL-T01 local S0 DONE; B10-PR-C human-review BLOCKED
 Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
 Protected collection: local_kb_default
@@ -52,10 +52,10 @@ ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approv
 B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
 PR #64 merged to stable: DONE (2026-08-14, `99c0a85c1f944add8d013aedbae830fe022b7c3b`)
 B10 overall: IN_PROGRESS
-VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (review fixes approved in scope; reconciled documentation head review pending)
+VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0 implementation/review scope; remote delivery unclaimed
 ```
 
-### VFL-T01 verification candidate
+### VFL-T01 local S0 closeout
 
 - Tasks 1–5 deliver strict lifecycle contracts, defensive local-probe
   comparison, deterministic non-applying candidates and B9 requests, atomic
@@ -79,9 +79,15 @@ VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (review fixes app
   with manifest SHA-256
   `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`.
 - An occupied destination returned nonzero with the entire package unchanged
-  and no staging residue. Runner is `NOT RUN`; no push, PR, render, publication
-  or merge occurred. Renewed independent whole-branch review of the reconciled
-  documentation head remains the exit gate, so the task is not `DONE`.
+  and no staging residue. Renewed whole-branch review approved exact candidate
+  `33657fae698970a9d820870ab180c3712e9f295a`, tree
+  `8bcce81842e6130d0328b525168f8b46c9955d7e`, across `15 commits / 25 paths /
+  15 code files` with `0 Critical / 0 Important / 0 Minor`. FR-01/FR-02 remain
+  closed, recorded findings.
+- Local S0 is `DONE`. Runner is `NOT RUN`; the feature branch is unpushed and
+  has no PR; no stable merge, render, upload or publication occurred. These
+  absent remote/media states are not required for the explicitly local S0
+  closeout and remain unclaimed.
 
 ## 3. B9 merge chain
 
@@ -316,8 +322,8 @@ ASTRO-R01 phases 1–5, DOC-R01 and PR #64 are integrated at stable 99c0a85c1f94
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-↳ independently review the VFL-T01 S0 verification candidate against frozen B9/external-audit interfaces
-→ keep VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals
+↳ VFL-T01 local S0 is DONE after renewed review of 33657fa / 8bcce818
+→ keep VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals and any later stage requires a separate task
 → GOV-T04 does not replace nightly, real-device, corpus, scientific, security, migration or human evidence
 ```
 

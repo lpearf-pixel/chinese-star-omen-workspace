@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 VERIFYING; B10-PR-C remains BLOCKED on Reviewer B
+Current task: VFL-T01 DONE for local S0; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -603,9 +603,8 @@ merged and the resulting stable head is reverified.
 ## VFL — Evidence-to-video feedback loop
 
 ### VFL-T01 — Offline control-plane skeleton
-- **Status:** `VERIFYING` (the original whole-branch review findings are fixed
-  and scoped re-review approved them; the reconciled documentation head still
-  requires renewed independent whole-branch review)
+- **Status:** `DONE` for the local S0 implementation/review scope; remote
+  delivery, integration, rendering and publication remain unclaimed
 - **Base:** `stable/kaiyuan-v2` at
   `99c0a85c1f944add8d013aedbae830fe022b7c3b`.
 - **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
@@ -659,12 +658,17 @@ merged and the resulting stable head is reverified.
   `fcacc7ac898f2a082147209b2cee28ae3144a450e59f974dd73f62bd0dada315`.
   An occupied-output replay exited `1`, preserved the complete tree and left
   zero staging residue.
+- **Renewed whole-branch review:** exact candidate
+  `33657fae698970a9d820870ab180c3712e9f295a`, tree
+  `8bcce81842e6130d0328b525168f8b46c9955d7e`, contains `15 commits / 25
+  changed paths / 15 code files` from stable and was approved with
+  `0 Critical / 0 Important / 0 Minor`. FR-01 and FR-02 remain recorded as
+  closed findings rather than erased history.
 - **Residual:** the implementation code head is
   `21e69048b7277023458ee5217acec85d259eebb8` with tree
-  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`. Status remains `VERIFYING`
-  until renewed independent whole-branch review approves the reconciled
-  documentation head. Runner is `NOT RUN`; no push, PR creation/update,
-  publication or merge was performed in Task 6.
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`. Local S0 is complete, but Runner
+  is `NOT RUN`; the feature branch is unpushed and has no PR; no stable merge,
+  render, upload or publication was performed.
 - **Boundary:** additive offline research/control plane only. No live scraping,
   transcript/OCR reconstruction, model training, corpus/rule/threshold mutation,
   official ingest, Qdrant or `local_kb_default` access, account credentials,
@@ -688,8 +692,8 @@ B10-R05 merged and recorded DONE
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
 → B10-PR-G/H and B11 remain BACKLOG behind the accepted B10 sequence
-↳ independently, VFL-T01 may build an offline interface-only feedback skeleton against frozen B9/external-audit contracts
-→ VFL-T01 stops at a manual handoff and may emit proposals only; it does not start or release B12
+↳ VFL-T01 local S0 is DONE against frozen B9/external-audit interfaces
+→ VFL-T01 remains at a manual handoff and may emit proposals only; any later adapter/stage requires separate authorization and it does not start or release B12
 ```
 
 Current prohibitions:

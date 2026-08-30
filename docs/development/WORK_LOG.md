@@ -2,7 +2,7 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
-## 2026-08-30 — VFL-T01 review fixes approved in scope; governance reconciled
+## 2026-08-30 — VFL-T01 local S0 implementation/review scope closed
 
 ### Initial governance candidate and delivered behavior
 
@@ -102,6 +102,22 @@ development governance
   passed
 ```
 
+### Renewed whole-branch review and local closeout
+
+- Renewed independent review approved exact candidate
+  `33657fae698970a9d820870ab180c3712e9f295a`, tree
+  `8bcce81842e6130d0328b525168f8b46c9955d7e`, with
+  `0 Critical / 0 Important / 0 Minor` across `15 commits / 25 changed paths /
+  15 code files` relative to stable.
+- The reviewer covered the complete blueprint, D-031 authority boundary,
+  Tasks 1–6, the original FR-01/FR-02 findings, their scoped approval,
+  deterministic/atomic package evidence and governance consistency. FR-01 and
+  FR-02 are closed, not deleted from the record.
+- This documentation-only commit records local completion without attempting
+  to name its own SHA. The independently reviewed pre-closeout candidate above
+  remains the review identity; the ignored closeout report records the actual
+  documentation-only commit SHA/tree after creation.
+
 ### Canonical episode 22 CLI evidence
 
 Two real no-outcome CLI runs used the committed episode 22 audit and probe
@@ -158,10 +174,11 @@ parents were removed.
 - Runner is `NOT RUN`. No push, PR creation/update, render, upload, publication
   or merge was performed. B10-PR-C / PR #54 remains human-review blocked;
   B10-PR-D/E/F and B11/B12 remain locked.
-- VFL-T01 is `VERIFYING`, not `DONE`. The original review and scoped fix
-  approval are complete, but this reconciled documentation head still requires
-  renewed independent whole-branch review. Task 6 does not substitute
-  implementer self-review for that outstanding exact-head gate.
+- VFL-T01 is `DONE` for the completed local S0 implementation/review scope.
+  Runner remains `NOT RUN`; the feature branch is unpushed with no PR; stable
+  and PR #54 are unchanged; no merge, render, upload or publication occurred.
+  This local closeout does not claim or require any of those remote/media states
+  and does not authorize a later VFL stage.
 
 ## 2026-08-29 — VFL-T01 offline feedback-loop skeleton started
 

@@ -86,7 +86,7 @@ B10 整体仍 `IN_PROGRESS`：
 
 ### VFL-T01
 
-VFL-T01 当前为 `VERIFYING`，不是 `DONE`。Tasks 1–5 已在本地实现用户此前批准的
+VFL-T01 的本地 S0 implementation/review scope 当前为 `DONE`。Tasks 1–5 已实现用户此前批准的
 “先搭完整系统骨架、再逐模块优化”方向：把既有外部媒体审计、调用方提供的
 只读本地证据探针、确定性比较、不可自动应用的改进候选、B9 视频生产请求、
 人工发布交接和可选结果反馈连接为一个离线控制平面。
@@ -115,9 +115,15 @@ retrieval evidence 产生决定性结果，FR-02 允许 outcome/run metric ID �
 `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`；
 manifest SHA-256 为
 `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`。
-占用输出重跑非零退出且整树不变、无 staging 残留。Runner 为 `NOT RUN`，Task 6
-没有 push、PR、发布或 merge；reconciled documentation head 仍须 renewed
-whole-branch review，因此状态保持 `VERIFYING`。
+占用输出重跑非零退出且整树不变、无 staging 残留。Renewed whole-branch review
+批准 exact candidate `33657fae698970a9d820870ab180c3712e9f295a` / tree
+`8bcce81842e6130d0328b525168f8b46c9955d7e`，覆盖 `15 commits / 25 paths /
+15 code files`，结论为 `0 Critical / 0 Important / 0 Minor`；FR-01/FR-02
+保留为已关闭 findings。
+
+Runner 为 `NOT RUN`，feature branch 未 push 且没有 PR，stable 与 PR #54 未变，
+没有 merge、render、upload 或 publication。这些远端/媒体状态未被宣称，也不影响
+已明确限定为本地 S0 的 `DONE`；任何后续 VFL stage 仍须独立授权。
 
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 

@@ -367,10 +367,13 @@
   and two fresh episode 22 CLI runs produced the same deterministic eight-file
   package. The no-outcome run ID is
   `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`.
-  An occupied destination failed without byte or staging changes. Runner is
-  `NOT RUN`; renewed independent whole-branch review of the reconciled
-  documentation head remains outstanding, so VFL-T01 remains `VERIFYING` and
-  no push, PR, publication or merge is claimed.
+  An occupied destination failed without byte or staging changes. Renewed
+  whole-branch review approved exact candidate `33657fa`, tree `8bcce818`,
+  covering `15 commits / 25 paths / 15 code files` with
+  `0 Critical / 0 Important / 0 Minor`. This closes VFL-T01's local S0
+  implementation/review scope without expanding D-031 authority. Runner is
+  `NOT RUN`; the branch is unpushed with no PR, and no stable merge, render,
+  upload or publication is claimed.
 - **Reason:** 用户批准的目标是先验证完整系统反馈路径，再按模块逐步
   优化。接口骨架可以在不冒用人审、语料或发布权限的情况下尽早暴露
   数据契约、状态机和模块边界问题。
