@@ -1,0 +1,1 @@
+{"fixture_policy":"canonical-json-test-only-no-classical-or-publication-authority","fixtures":[{"path":"episode-22-probes.json","sha256":"a136d6b64c2ee7842a10cc5721bf49382c12af89dc27122948384e911e5e056d"},{"path":"synthetic-human-outcome.json","sha256":"6385e9a367a1cb1fede6e4ea618fec84839c46f1b6538daf710874297a6b7e68"}],"schema_version":"video-feedback-loop-fixture-manifest/v1"}
