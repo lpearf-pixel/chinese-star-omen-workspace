@@ -1,12 +1,12 @@
 # Kaiyuan Evidence-to-video Feedback-loop Skeleton Design
 
-**Status:** APPROVED DIRECTION RESTORED FOR IMPLEMENTATION  
+**Status:** APPROVED DIRECTION RESTORED FOR IMPLEMENTATION
 **Approval basis:** the user previously approved prioritising an automatic-video
 framework, comparing external Douyin material against the local corpus, building
 the cross-module skeleton first, and optimising modules only behind their own
-later gates; the 2026-08-29 instruction was to continue that project.  
-**Task:** VFL-T01  
-**Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`  
+later gates; the 2026-08-29 instruction was to continue that project.
+**Task:** VFL-T01
+**Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`
 **Base:** `stable/kaiyuan-v2@99c0a85c1f944add8d013aedbae830fe022b7c3b`
 
 ## 1. Mission and S0 success

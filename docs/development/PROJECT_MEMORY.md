@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Verified at: 2026-08-29
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 offline feedback-loop skeleton IN_PROGRESS; B10-PR-C human-review BLOCKED
+Current task: VFL-T01 offline feedback-loop skeleton VERIFYING; B10-PR-C human-review BLOCKED
 Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
 Protected collection: local_kb_default
@@ -52,8 +52,29 @@ ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approv
 B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
 PR #64 merged to stable: DONE (2026-08-14, `99c0a85c1f944add8d013aedbae830fe022b7c3b`)
 B10 overall: IN_PROGRESS
-VFL-T01 offline evidence-to-video feedback skeleton: IN_PROGRESS (S0, episode 22, manual handoff only)
+VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (Tasks 1–5 complete locally; independent whole-branch review pending)
 ```
+
+### VFL-T01 verification candidate
+
+- Tasks 1–5 deliver strict lifecycle contracts, defensive local-probe
+  comparison, deterministic non-applying candidates and B9 requests, atomic
+  package closure, and the episode 22 offline CLI.
+- Task 5 was hardened twice after the initial CLI delivery: `b190614` protects
+  literal shell path bytes, while `a951680` prevents Make-function evaluation
+  and internal transport-alias override. The code checkpoint is exact head
+  `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`, tree
+  `9bf5671a7e11a9fe8a4b55d3e27911816191734e`.
+- Fresh local evidence: focused/related `122 passed`; full supported downstream
+  `747 passed`; governance unit `21 passed`; compileall and development
+  governance passed. The canonical eight-member no-outcome CLI run is
+  `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`,
+  with manifest SHA-256
+  `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`.
+- An occupied destination returned nonzero with the entire package unchanged
+  and no staging residue. Runner is `NOT RUN`; no push, PR, render, publication
+  or merge occurred. Final independent whole-branch review remains the exit
+  gate, so the task is not `DONE`.
 
 ## 3. B9 merge chain
 
@@ -288,8 +309,8 @@ ASTRO-R01 phases 1–5, DOC-R01 and PR #64 are integrated at stable 99c0a85c1f94
 → validate real reviewed fixtures and the approval record without AI substitution; any frozen-gate failure remains BLOCKED
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
-↳ independently execute VFL-T01 S0 against frozen B9/external-audit interfaces
-→ stop VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals
+↳ independently review the VFL-T01 S0 verification candidate against frozen B9/external-audit interfaces
+→ keep VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals
 → GOV-T04 does not replace nightly, real-device, corpus, scientific, security, migration or human evidence
 ```
 

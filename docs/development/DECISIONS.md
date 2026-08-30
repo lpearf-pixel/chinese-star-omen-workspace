@@ -345,6 +345,22 @@
   分对象记录并只允许向前引用。每项 candidate/proposal 都固定
   `apply_allowed=false`；真正改动须在拥有该模块的独立任务、测试、审核和
   回滚计划内完成。
+- **Implementation evidence:** VFL-T01 Tasks 1–5 now implement the approved
+  S0 boundary as strict lifecycle contracts, pure comparison, deterministic
+  non-applying planning, semantic-closure-checked atomic packaging and an
+  episode 22 offline CLI. Task 5 additionally received two Make-only hardening
+  rounds: `b190614` preserves literal shell path bytes and `a951680` prevents
+  GNU Make function expansion or internal-alias override. The final code head
+  is `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`; this is implementation
+  evidence for D-031, not a new authorization.
+- **Verification evidence:** local focused/related tests passed `122`, the
+  supported downstream gate passed `747`, governance unit tests passed `21`,
+  and two fresh episode 22 CLI runs produced the same deterministic eight-file
+  package. The no-outcome run ID is
+  `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`.
+  An occupied destination failed without byte or staging changes. Runner is
+  `NOT RUN`; final independent whole-branch review remains outstanding, so
+  VFL-T01 remains `VERIFYING` and no push, PR, publication or merge is claimed.
 - **Reason:** 用户批准的目标是先验证完整系统反馈路径，再按模块逐步
   优化。接口骨架可以在不冒用人审、语料或发布权限的情况下尽早暴露
   数据契约、状态机和模块边界问题。

@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 IN_PROGRESS; B10-PR-C remains BLOCKED on Reviewer B
+Current task: VFL-T01 VERIFYING; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -603,7 +603,8 @@ merged and the resulting stable head is reverified.
 ## VFL — Evidence-to-video feedback loop
 
 ### VFL-T01 — Offline control-plane skeleton
-- **Status:** `IN_PROGRESS`
+- **Status:** `VERIFYING` (Tasks 1–5 implemented and locally verified; final
+  independent whole-branch review remains outstanding)
 - **Base:** `stable/kaiyuan-v2` at
   `99c0a85c1f944add8d013aedbae830fe022b7c3b`.
 - **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
@@ -616,6 +617,18 @@ merged and the resulting stable head is reverified.
   `docs/superpowers/specs/2026-08-29-kaiyuan-evidence-feedback-loop-skeleton-design.md`.
 - **Plan:**
   `docs/superpowers/plans/2026-08-29-kaiyuan-evidence-feedback-loop-skeleton.md`.
+- **Implemented Tasks 1–5:** strict non-authorizing lifecycle contracts;
+  defensive external-audit/local-probe comparison; deterministic bounded
+  improvement and safe B9 request planning; semantic-closure-checked atomic
+  package assembly; and the canonical episode 22 fixture plus offline CLI.
+  Final task heads are `72ca961`、`dba073b`、`6e87823`、`07f4d97` and
+  `a951680` respectively.
+- **Task 5 hardening:** after the initial CLI commit `663cc26`, fix
+  `b190614` preserved literal shell metacharacters and embedded quotes across
+  the Make recipe boundary. Fix `a951680` then prevented GNU Make function
+  expansion and command-line override of the private transport aliases. Both
+  rounds use real Make/CLI regressions; no Python production or fixture bytes
+  changed in either round.
 - **Acceptance:** the episode 22 pilot is deterministic; external audit status
   and modern-context-only limits are preserved; every candidate records
   `apply_allowed=false`; the production request forbids absent classical quotes
@@ -625,6 +638,24 @@ merged and the resulting stable head is reverified.
   external-media and B9 package/review regression; full downstream tests;
   strict JSON, compileall, governance, diff and forbidden-path checks; independent
   review with no unresolved Critical or Important finding.
+- **Local verification candidate:** focused/related `122 passed in 6.56s`;
+  complete supported downstream `747 passed in 45.68s`; compileall exit `0`;
+  governance unit `21 passed`; development governance `25 changed / 15 code`.
+  Two fresh canonical CLI runs produced the same eight relative members and
+  run ID
+  `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`;
+  manifest SHA-256 is
+  `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`
+  and the canonical member-path/hash list SHA-256 is
+  `fcacc7ac898f2a082147209b2cee28ae3144a450e59f974dd73f62bd0dada315`.
+  An occupied-output replay exited `1`, preserved the complete tree and left
+  zero staging residue.
+- **Residual:** the implementation code head is
+  `a95168054b7b8aa805b0c8c709af4a1c49dd7f18` with tree
+  `9bf5671a7e11a9fe8a4b55d3e27911816191734e`. Status remains `VERIFYING`
+  until the final independent whole-branch review is completed. Runner is
+  `NOT RUN`; no push, PR creation/update, publication or merge was performed
+  in Task 6.
 - **Boundary:** additive offline research/control plane only. No live scraping,
   transcript/OCR reconstruction, model training, corpus/rule/threshold mutation,
   official ingest, Qdrant or `local_kb_default` access, account credentials,

@@ -2,6 +2,117 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-30 — VFL-T01 implementation verified locally; final independent review pending
+
+### Candidate identity and delivered behavior
+
+- Task 6 started from the required clean implementation head
+  `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`, tree
+  `9bf5671a7e11a9fe8a4b55d3e27911816191734e`, on
+  `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`. Read-only remote ref
+  checks still resolve `stable/kaiyuan-v2` to
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b` and PR #54's head ref to
+  `932f9e68862025bc620e0cf2d439415c5ea37af4`. No remote ref was changed.
+- Task 1 ends at `72ca961`: strict additive lifecycle models validate stable
+  identity, unique references, copied probe state, cross-probe evidence
+  identity and schema-fixed `apply_allowed=false` /
+  `auto_publish_allowed=false` authority boundaries.
+- Task 2 ends at `dba073b`: pure defensive comparison rejects incomplete,
+  duplicate or mismatched probe joins while preserving `source_missing`,
+  modern-context-only evidence and explicit local support/contradiction.
+- Task 3 ends at `6e87823`: deterministic typed policy produces exactly
+  bounded non-applying candidates, a safe `video-package/v1` source-audit
+  request and a human-blocked handoff without inventing a classical quote or
+  storm-system equivalence.
+- Task 4 ends at `07f4d97`: canonical run identity, manifest-bound members and
+  B9 no-replace atomic output are coupled to semantic reconstruction, so even
+  a hash-valid canonical member tamper fails before publication.
+- Task 5 initially ends at `663cc26`: canonical episode 22 probe/outcome
+  fixtures, strict local JSON CLI and `vfl-s0-run`. Hardening round 1
+  (`b190614`) treats shell metacharacters and embedded quotes as literal path
+  bytes. Hardening round 2 (`a951680`) prevents recursive GNU Make functions
+  from executing and prevents command-line replacement of private transport
+  aliases. Both fix rounds changed only `Makefile` and real Make/CLI tests; no
+  Python production or fixture byte changed.
+
+### Fresh local verification
+
+Commands ran with the supported worktree virtual environment and
+`CODEX_PRIMARY_RUNTIME_PYTHON` unset where subprocess selection matters:
+
+```text
+focused feedback-loop + external-media + atomic/e2e package regression
+  122 passed in 6.56s
+complete apps/star-omen downstream gate
+  747 passed in 45.68s
+compileall src scripts tests
+  exit 0
+root governance unittest discovery
+  21 tests, OK
+development governance, stable..implementation head
+  passed; changed_files=25 code_files=15
+```
+
+The initial stable-to-implementation `git diff --check` reported exactly four
+trailing-space lines in the design status/approval/task/branch header. Task 6
+removes only those trailing spaces; no design content is reinterpreted. The
+final documentation head must replay governance, diff and path gates.
+
+### Canonical episode 22 CLI evidence
+
+Two real no-outcome CLI runs used the committed episode 22 audit and probe
+fixture with two independently fresh temporary parents. All eight relative
+pathnames and bytes matched. Deterministic identity and aggregate evidence:
+
+```text
+run_id
+  feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0
+manifest SHA-256
+  00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4
+canonical member-path/hash-list SHA-256
+  fcacc7ac898f2a082147209b2cee28ae3144a450e59f974dd73f62bd0dada315
+```
+
+Exact member evidence:
+
+```text
+external-audit-bundle.json       4712  3d843d02813d1903e64d8c78b7d908a2397224dd10a28d1d5a06ba7795d7e434
+feedback-loop-run.json           8440  cedd7196b11029bc6459b4805f0a95ba89e3e88afb69a1288e45d83792edc6f1
+feedback-observations.json       1285  e74f85f168cfe27084dc9ca213800dc8461840dda6454cb8c5b924ce6f578272
+improvement-candidates.json      2794  350b351ab35e9ca05599e5be7af27c2b0d85aca073aeb7e6e217c0cd33643129
+local-evidence-probes.json        988  fed470fc613210f7dc1d38bb0469df89de0fca87ba34d6a7bab1039759b9c27b
+manifest.json                    1360  00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4
+manual-publication-handoff.json   648  7b7c2ee84e3eeae7c5cd577fd6a854867dadea18b1283bad76228cb5af535bfc
+video-production-request.json    1650  1900cc22ddd811f952673a144fc328f7bd571b05fccc15de851af13f0a14d3c3
+```
+
+Re-running the CLI against the first occupied output returned exit `1`. The
+complete relative-path/byte-hash set remained identical and staging residue
+was `0`. Both validated temporary parents were then removed.
+
+### Scope, authority and residual status
+
+- Stable-to-candidate path audit found zero changes under raw corpus,
+  `apps/local-kb-unified`, Qdrant/collection configuration, workflows, B10 rule
+  fixtures, Reviewer workbooks or account/publisher code.
+- Added-text scanning found no secret pattern or absolute machine path.
+  `local_kb_default`, B10/B11/B12, Reviewer and PR #54 matches are documented
+  prohibitions. `apply_allowed` and `auto_publish_allowed` matches are literal
+  false schema/tests. `publish_feedback_loop_run` means local atomic package
+  directory creation, not account, platform or automatic media publication.
+- No raw corpus, official knowledge, rule, threshold, Qdrant, collection,
+  review workbook, account or remote publication state was read for mutation
+  or changed. Episode 22 remains `source_missing` / `ambiguous`; WMO remains
+  `modern_authority/context_only`; no classical authority or storm equivalence
+  is claimed.
+- Runner is `NOT RUN`. No push, PR creation/update, render, upload, publication
+  or merge was performed. B10-PR-C / PR #54 remains human-review blocked;
+  B10-PR-D/E/F and B11/B12 remain locked.
+- VFL-T01 is `VERIFYING`, not `DONE`. Tasks 1–5 and the local verification pass
+  are complete, but the final independent whole-branch review has not yet
+  occurred. Task 6 therefore records a review candidate and does not substitute
+  implementer self-review for the outstanding independent gate.
+
 ## 2026-08-29 — VFL-T01 offline feedback-loop skeleton started
 
 - Live recovery read back `stable/kaiyuan-v2` at exact head

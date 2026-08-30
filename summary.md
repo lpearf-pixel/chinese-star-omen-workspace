@@ -86,7 +86,7 @@ B10 整体仍 `IN_PROGRESS`：
 
 ### VFL-T01
 
-VFL-T01 已于 2026-08-29 登记为 `IN_PROGRESS`。它实现用户此前批准的
+VFL-T01 当前为 `VERIFYING`，不是 `DONE`。Tasks 1–5 已在本地实现用户此前批准的
 “先搭完整系统骨架、再逐模块优化”方向：把既有外部媒体审计、调用方提供的
 只读本地证据探针、确定性比较、不可自动应用的改进候选、B9 视频生产请求、
 人工发布交接和可选结果反馈连接为一个离线控制平面。
@@ -94,6 +94,22 @@ VFL-T01 已于 2026-08-29 登记为 `IN_PROGRESS`。它实现用户此前批准�
 S0 只运行祖山觀 episode 22 金样本，不抓取直播数据、不重建 transcript/OCR，
 不训练模型、不改语料/规则/Qdrant、不渲染或上传视频，也不解锁 B12。所有
 改进和学习输出都固定为 proposal，必须在所属模块的新任务中独立批准。
+
+Tasks 1–4 分别冻结严格生命周期契约、实现防御性比较、生成确定性非应用提案/
+B9 请求，并复用 B9 原子发布原语完成语义闭包校验。Task 5 增加真实 episode 22
+fixture 与离线 CLI；其后 `b190614` 修复 shell 路径字节边界，`a951680` 再阻止
+GNU Make function 展开和内部 alias 覆盖。最终实现代码 head 为
+`a95168054b7b8aa805b0c8c709af4a1c49dd7f18`。
+
+本地验证为 focused/related `122 passed`、完整 downstream `747 passed`、治理
+unit `21 passed`，compileall 与 development governance 通过。两次 fresh CLI
+运行产生同一八成员 run
+`feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`；
+manifest SHA-256 为
+`00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`。
+占用输出重跑非零退出且整树不变、无 staging 残留。Runner 为 `NOT RUN`，Task 6
+没有 push、PR、发布或 merge；最终独立 whole-branch review 尚未执行，因此状态
+保持 `VERIFYING`。
 
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 
