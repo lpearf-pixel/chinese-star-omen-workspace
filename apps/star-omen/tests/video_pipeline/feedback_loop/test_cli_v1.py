@@ -336,3 +336,64 @@ def test_make_target_omits_empty_outcome_and_passes_nonempty_outcome(
         (with_outcome / "learning-update-proposal.json").read_bytes()
     )
     assert proposal["apply_allowed"] is False
+
+
+def test_make_target_preserves_shell_metacharacters_in_all_path_values(
+    tmp_path: Path,
+) -> None:
+    """Catches Make reparsing caller-supplied path bytes as shell source."""
+    literal_output = tmp_path / "run-`printf vfl_substituted`"
+    substituted_output = tmp_path / "run-vfl_substituted"
+    common = [
+        "make",
+        "-s",
+        "vfl-s0-run",
+        f"PYTHON={sys.executable}",
+        f"VFL_AUDIT={AUDIT_PATH}",
+        f"VFL_PROBES={PROBES_PATH}",
+        f"VFL_OUTPUT={literal_output}",
+        "VFL_OUTCOME=",
+    ]
+
+    backtick_result = subprocess.run(
+        common,
+        cwd=WORKSPACE_ROOT,
+        env=subprocess_env(),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert backtick_result.returncode == 0, backtick_result.stderr
+    assert not substituted_output.exists()
+    assert (literal_output / "feedback-loop-run.json").is_file()
+
+    quoted_audit = tmp_path / 'audit-"literal-quoted".json'
+    quoted_probes = tmp_path / 'probes-"literal-quoted".json'
+    quoted_outcome = tmp_path / 'outcome-"literal-quoted".json'
+    quoted_output = tmp_path / 'run-"literal-quoted"'
+    quoted_audit.write_bytes(AUDIT_PATH.read_bytes())
+    quoted_probes.write_bytes(PROBES_PATH.read_bytes())
+    quoted_outcome.write_bytes(OUTCOME_PATH.read_bytes())
+
+    quote_result = subprocess.run(
+        [
+            "make",
+            "-s",
+            "vfl-s0-run",
+            f"PYTHON={sys.executable}",
+            f"VFL_AUDIT={quoted_audit}",
+            f"VFL_PROBES={quoted_probes}",
+            f"VFL_OUTPUT={quoted_output}",
+            f"VFL_OUTCOME={quoted_outcome}",
+        ],
+        cwd=WORKSPACE_ROOT,
+        env=subprocess_env(),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert quote_result.returncode == 0, quote_result.stderr
+    assert (quoted_output / "feedback-outcome.json").is_file()
+    assert (quoted_output / "learning-update-proposal.json").is_file()

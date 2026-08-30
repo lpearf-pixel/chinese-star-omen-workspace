@@ -28,25 +28,32 @@ b9-preview:
 	B9_FFPROBE_BIN="$(B9_FFPROBE_BIN)" \
 	$(PYTHON) scripts/b9_preview.py --package-dir "$(B9_OUTPUT_DIR)"
 
+vfl-s0-run: export VFL_S0_AUDIT_PATH := $(value VFL_AUDIT)
+vfl-s0-run: export VFL_S0_PROBES_PATH := $(value VFL_PROBES)
+vfl-s0-run: export VFL_S0_OUTPUT_PATH := $(value VFL_OUTPUT)
+vfl-s0-run: export VFL_S0_OUTCOME_PATH := $(value VFL_OUTCOME)
 vfl-s0-run:
-	@test -n "$(VFL_AUDIT)" || { \
+	@test -n "$${VFL_S0_AUDIT_PATH}" || { \
 	  printf 'VFL_AUDIT is required\n' >&2; \
 	  exit 2; \
 	}
-	@test -n "$(VFL_PROBES)" || { \
+	@test -n "$${VFL_S0_PROBES_PATH}" || { \
 	  printf 'VFL_PROBES is required\n' >&2; \
 	  exit 2; \
 	}
-	@test -n "$(VFL_OUTPUT)" || { \
+	@test -n "$${VFL_S0_OUTPUT_PATH}" || { \
 	  printf 'VFL_OUTPUT is required\n' >&2; \
 	  exit 2; \
 	}
+	@set -- \
+	  --audit "$${VFL_S0_AUDIT_PATH}" \
+	  --probes "$${VFL_S0_PROBES_PATH}" \
+	  --output "$${VFL_S0_OUTPUT_PATH}"; \
+	if test -n "$${VFL_S0_OUTCOME_PATH}"; then \
+	  set -- "$$@" --outcome "$${VFL_S0_OUTCOME_PATH}"; \
+	fi; \
 	PYTHONPATH=$(DOWNSTREAM_DIR):packages/kb-contracts/python:packages/kb-text-core/python \
-	$(PYTHON) $(DOWNSTREAM_DIR)/scripts/run_video_feedback_loop.py \
-	  --audit "$(VFL_AUDIT)" \
-	  --probes "$(VFL_PROBES)" \
-	  --output "$(VFL_OUTPUT)" \
-	  $(if $(strip $(VFL_OUTCOME)),--outcome "$(VFL_OUTCOME)",)
+	$(PYTHON) $(DOWNSTREAM_DIR)/scripts/run_video_feedback_loop.py "$$@"
 
 sync-kaiyuan-source:
 	python scripts/sync_kaiyuan_source.py $(if $(KAIYUAN_SOURCE_DIR),--source-dir "$(KAIYUAN_SOURCE_DIR)",) --clean
