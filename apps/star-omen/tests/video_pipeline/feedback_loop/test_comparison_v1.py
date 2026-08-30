@@ -175,6 +175,35 @@ def test_explicit_local_evidence_is_preserved(
 
 
 @pytest.mark.parametrize(
+    "evidence_class",
+    ["modern_authority", "retrieval_record"],
+)
+def test_defensive_validation_rejects_non_authoritative_corroboration(
+    evidence_class: str,
+) -> None:
+    """Catches a mutated modern/retrieval-only probe becoming supported."""
+    purported = probe_for(
+        CLAIM_IDS[1],
+        result_state="corroborated",
+        evidence_references=[
+            local_reference(
+                evidence_ref_id=f"local-evidence:vfl:{evidence_class}",
+                relationship="supports",
+            )
+        ],
+    )
+    object.__setattr__(
+        purported.evidence_references[0], "evidence_class", evidence_class
+    )
+
+    with pytest.raises(ValueError, match="citable|historical"):
+        compare_external_audit(
+            audit_bundle=load_episode_22_audit(),
+            local_probes=(probe_for(CLAIM_IDS[0]), purported),
+        )
+
+
+@pytest.mark.parametrize(
     ("probes", "error"),
     [
         (

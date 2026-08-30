@@ -33,6 +33,12 @@ from tests.video_pipeline.feedback_loop.helpers import (
 )
 
 
+def valid_run_with_noncolliding_outcome_payload() -> dict:
+    payload = valid_run_payload(with_outcome=True)
+    payload["outcome"]["metrics"][0]["metric_id"] = "metric:fixture:outcome-001"
+    return payload
+
+
 @pytest.mark.parametrize(
     ("model", "payload_factory"),
     [
@@ -96,6 +102,86 @@ def test_probe_state_must_agree_with_its_local_evidence() -> None:
     not_searched_with_evidence["result_state"] = "not_searched"
     with pytest.raises(ValidationError, match="not_searched"):
         LocalEvidenceProbeV1.model_validate(not_searched_with_evidence)
+
+
+@pytest.mark.parametrize(
+    ("result_state", "relationship"),
+    [
+        ("corroborated", "supports"),
+        ("contradicted", "contradicts"),
+    ],
+)
+@pytest.mark.parametrize(
+    "evidence_class",
+    ["modern_authority", "retrieval_record"],
+)
+def test_decisive_probe_states_require_citable_or_historical_authority(
+    result_state: str,
+    relationship: str,
+    evidence_class: str,
+) -> None:
+    """Catches modern or retrieval context granting a decisive local result."""
+    payload = valid_local_probe_payload()
+    payload["result_state"] = result_state
+    payload["evidence_references"][0]["evidence_class"] = evidence_class
+    payload["evidence_references"][0]["relationship"] = relationship
+
+    with pytest.raises(ValidationError, match="citable|historical"):
+        LocalEvidenceProbeV1.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    "evidence_class",
+    ["modern_authority", "retrieval_record"],
+)
+def test_context_only_citable_reference_cannot_mask_non_authoritative_support(
+    evidence_class: str,
+) -> None:
+    """Catches a safe context-only reference masking modern or retrieval support."""
+    payload = valid_local_probe_payload()
+    payload["evidence_references"][0]["relationship"] = "context_only"
+    non_authoritative = deepcopy(payload["evidence_references"][0])
+    non_authoritative.update(
+        {
+            "evidence_ref_id": f"local-evidence:fixture:{evidence_class}",
+            "evidence_class": evidence_class,
+            "relationship": "supports",
+        }
+    )
+    payload["evidence_references"].append(non_authoritative)
+
+    with pytest.raises(ValidationError, match="citable|historical"):
+        LocalEvidenceProbeV1.model_validate(payload)
+
+
+def test_decisive_probe_preserves_extra_non_authoritative_context() -> None:
+    """Catches rejecting audit context after citable evidence grants authority."""
+    payload = valid_local_probe_payload()
+    modern_context = deepcopy(payload["evidence_references"][0])
+    modern_context.update(
+        {
+            "evidence_ref_id": "local-evidence:fixture:modern-context",
+            "evidence_class": "modern_authority",
+            "relationship": "context_only",
+        }
+    )
+    retrieval_context = deepcopy(payload["evidence_references"][0])
+    retrieval_context.update(
+        {
+            "evidence_ref_id": "local-evidence:fixture:retrieval-context",
+            "evidence_class": "retrieval_record",
+            "relationship": "context_only",
+        }
+    )
+    payload["evidence_references"].extend([modern_context, retrieval_context])
+
+    probe = LocalEvidenceProbeV1.model_validate(payload)
+
+    assert [item.evidence_ref_id for item in probe.evidence_references] == [
+        "local-evidence:fixture:001",
+        "local-evidence:fixture:modern-context",
+        "local-evidence:fixture:retrieval-context",
+    ]
 
 
 def test_reference_collections_reject_duplicate_identifiers() -> None:
@@ -170,17 +256,33 @@ def test_outcome_and_proposal_are_paired_and_match_the_handoff() -> None:
     with pytest.raises(ValidationError, match="outcome and learning_update_proposal"):
         FeedbackLoopRunV1.model_validate(proposal_without_outcome)
 
-    outcome_before_video_package = valid_run_payload(with_outcome=True)
+    outcome_before_video_package = valid_run_with_noncolliding_outcome_payload()
     outcome_before_video_package["manual_publication_handoff"]["state"] = (
         "awaiting_video_package"
     )
     with pytest.raises(ValidationError, match="learning_proposal_ready"):
         FeedbackLoopRunV1.model_validate(outcome_before_video_package)
 
-    wrong_outcome_handoff = valid_run_payload(with_outcome=True)
+    wrong_outcome_handoff = valid_run_with_noncolliding_outcome_payload()
     wrong_outcome_handoff["outcome"]["handoff_id"] = "handoff:fixture:other"
     with pytest.raises(ValidationError, match="outcome handoff_id"):
         FeedbackLoopRunV1.model_validate(wrong_outcome_handoff)
+
+
+def test_run_rejects_metric_id_collision_across_run_and_outcome() -> None:
+    """Catches two different metrics sharing one ID across lifecycle layers."""
+    payload = valid_run_with_noncolliding_outcome_payload()
+    payload["outcome"]["metrics"][0].update(
+        {
+            "metric_id": payload["metrics"][0]["metric_id"],
+            "metric_name": "reviewer_effort",
+            "value": 3.0,
+            "unit": "minutes",
+        }
+    )
+
+    with pytest.raises(ValidationError, match="metric"):
+        FeedbackLoopRunV1.model_validate(payload)
 
 
 @pytest.mark.parametrize(
@@ -195,7 +297,7 @@ def test_callers_cannot_enable_apply_or_auto_publish_authority(
     field_path: tuple[str | int, ...], value: bool
 ) -> None:
     """Catches any literal-false authority flag changed to a caller-controlled bool."""
-    payload = valid_run_payload(with_outcome=True)
+    payload = valid_run_with_noncolliding_outcome_payload()
     target: dict = payload
     for part in field_path[:-1]:
         target = target[part]  # type: ignore[index]

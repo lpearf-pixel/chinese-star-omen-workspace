@@ -67,19 +67,27 @@ class LocalEvidenceProbeV1(StrictContractModel):
     def validate_probe_state(self) -> "LocalEvidenceProbeV1":
         evidence_ids = [item.evidence_ref_id for item in self.evidence_references]
         ensure_unique(evidence_ids, "evidence_references")
+        decisive_evidence_classes = {"citable_passage", "historical_source"}
         if self.result_state in {"corroborated", "contradicted"} and not evidence_ids:
             raise ValueError(f"{self.result_state} probes require evidence_references")
         if self.result_state == "not_searched" and evidence_ids:
             raise ValueError("not_searched probes cannot contain evidence_references")
         if self.result_state == "corroborated" and not any(
-            item.relationship in {"supports", "qualifies"}
+            item.evidence_class in decisive_evidence_classes
+            and item.relationship in {"supports", "qualifies"}
             for item in self.evidence_references
         ):
-            raise ValueError("corroborated probes require supporting evidence")
+            raise ValueError(
+                "corroborated probes require citable or historical supporting evidence"
+            )
         if self.result_state == "contradicted" and not any(
-            item.relationship == "contradicts" for item in self.evidence_references
+            item.evidence_class in decisive_evidence_classes
+            and item.relationship == "contradicts"
+            for item in self.evidence_references
         ):
-            raise ValueError("contradicted probes require contradicting evidence")
+            raise ValueError(
+                "contradicted probes require citable or historical contradicting evidence"
+            )
         return self
 
 
@@ -248,7 +256,10 @@ class FeedbackLoopRunV1(StrictContractModel):
             [candidate.candidate_id for candidate in self.improvement_candidates],
             "improvement_candidates",
         )
-        ensure_unique([metric.metric_id for metric in self.metrics], "metrics")
+        metric_ids = [metric.metric_id for metric in self.metrics]
+        if self.outcome is not None:
+            metric_ids.extend(metric.metric_id for metric in self.outcome.metrics)
+        ensure_unique(metric_ids, "run and outcome metrics")
         ensure_unique(
             [
                 reference.evidence_ref_id

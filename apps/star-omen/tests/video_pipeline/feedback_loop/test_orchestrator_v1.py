@@ -5,6 +5,7 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from src.video_pipeline.feedback_loop.contracts_v1 import (
     FeedbackOutcomeV1,
@@ -56,6 +57,19 @@ def synthetic_outcome() -> FeedbackOutcomeV1:
             "metrics": [],
         }
     )
+
+
+def synthetic_outcome_with_metric(*, metric_id: str) -> FeedbackOutcomeV1:
+    payload = synthetic_outcome().model_dump(mode="python")
+    payload["metrics"] = [
+        {
+            "metric_id": metric_id,
+            "metric_name": "reviewer_effort",
+            "value": 3.0,
+            "unit": "minutes",
+        }
+    ]
+    return FeedbackOutcomeV1.model_validate(payload)
 
 
 def episode_22_build(*, outcome: FeedbackOutcomeV1 | None = None):
@@ -179,6 +193,26 @@ def test_optional_outcome_adds_one_linked_non_applying_proposal() -> None:
     assert json.loads(build.members["learning-update-proposal.json"])[
         "proposal_id"
     ] == proposal.proposal_id
+
+
+def test_optional_outcome_metric_cannot_collide_with_run_metric_namespace() -> None:
+    """Catches an outcome reusing the deterministic claim-count metric ID."""
+    outcome = synthetic_outcome_with_metric(metric_id="metric:vfl:claim-count")
+
+    with pytest.raises(ValidationError, match="metric"):
+        episode_22_build(outcome=outcome)
+
+
+def test_optional_outcome_with_noncolliding_metric_builds() -> None:
+    """Catches a namespace guard that rejects distinct outcome metric IDs."""
+    outcome = synthetic_outcome_with_metric(metric_id="metric:vfl:reviewer-effort")
+
+    build = episode_22_build(outcome=outcome)
+
+    assert build.run.outcome is not None
+    assert [metric.metric_id for metric in build.run.outcome.metrics] == [
+        "metric:vfl:reviewer-effort"
+    ]
 
 
 def test_no_outcome_omits_outcome_and_proposal_members() -> None:
