@@ -350,17 +350,27 @@
   non-applying planning, semantic-closure-checked atomic packaging and an
   episode 22 offline CLI. Task 5 additionally received two Make-only hardening
   rounds: `b190614` preserves literal shell path bytes and `a951680` prevents
-  GNU Make function expansion or internal-alias override. The final code head
-  is `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`; this is implementation
-  evidence for D-031, not a new authorization.
-- **Verification evidence:** local focused/related tests passed `122`, the
-  supported downstream gate passed `747`, governance unit tests passed `21`,
+  GNU Make function expansion or internal-alias override. The original
+  whole-branch review of governance head `59af182` then found FR-01 and FR-02,
+  exactly two Important findings with no Critical or Minor finding. Contract
+  commit `21e6904` now requires the same decisive reference to have both an
+  authority-bearing evidence class and relationship, and makes metric IDs
+  unique across the run/outcome union. Its exact four-path fix was approved by
+  the same reviewer with zero remaining scoped findings after
+  exhaustive/adversarial matrices. Final code head
+  `21e69048b7277023458ee5217acec85d259eebb8`, tree
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`, is implementation evidence for
+  D-031, not a new authorization.
+- **Verification evidence:** final-review focused tests passed `58`, the
+  feedback-loop suite passed `86`, related regressions passed `112`, the
+  supported downstream gate passed `759`, governance unit tests passed `21`,
   and two fresh episode 22 CLI runs produced the same deterministic eight-file
   package. The no-outcome run ID is
   `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`.
   An occupied destination failed without byte or staging changes. Runner is
-  `NOT RUN`; final independent whole-branch review remains outstanding, so
-  VFL-T01 remains `VERIFYING` and no push, PR, publication or merge is claimed.
+  `NOT RUN`; renewed independent whole-branch review of the reconciled
+  documentation head remains outstanding, so VFL-T01 remains `VERIFYING` and
+  no push, PR, publication or merge is claimed.
 - **Reason:** 用户批准的目标是先验证完整系统反馈路径，再按模块逐步
   优化。接口骨架可以在不冒用人审、语料或发布权限的情况下尽早暴露
   数据契约、状态机和模块边界问题。

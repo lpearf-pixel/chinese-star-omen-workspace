@@ -52,7 +52,7 @@ ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approv
 B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
 PR #64 merged to stable: DONE (2026-08-14, `99c0a85c1f944add8d013aedbae830fe022b7c3b`)
 B10 overall: IN_PROGRESS
-VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (Tasks 1–5 complete locally; independent whole-branch review pending)
+VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (review fixes approved in scope; reconciled documentation head review pending)
 ```
 
 ### VFL-T01 verification candidate
@@ -62,19 +62,26 @@ VFL-T01 offline evidence-to-video feedback skeleton: VERIFYING (Tasks 1–5 comp
   package closure, and the episode 22 offline CLI.
 - Task 5 was hardened twice after the initial CLI delivery: `b190614` protects
   literal shell path bytes, while `a951680` prevents Make-function evaluation
-  and internal transport-alias override. The code checkpoint is exact head
-  `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`, tree
-  `9bf5671a7e11a9fe8a4b55d3e27911816191734e`.
-- Fresh local evidence: focused/related `122 passed`; full supported downstream
-  `747 passed`; governance unit `21 passed`; compileall and development
+  and internal transport-alias override.
+- The first whole-branch review at `59af182` found exactly FR-01 and FR-02 as
+  Important, with `0 Critical / 0 Minor`: non-authoritative modern/retrieval
+  evidence could become decisive, and outcome/run metric IDs could collide.
+  Contract-owned invariants in exact four-path fix `21e6904` close both gaps.
+  The same reviewer approved the scoped fixes with zero remaining findings
+  after exhaustive/adversarial matrices. Current code head is
+  `21e69048b7277023458ee5217acec85d259eebb8`, tree
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`.
+- Fresh local evidence: final-review focused `58 passed`; feedback-loop
+  `86 passed`; related regressions `112 passed`; full supported downstream
+  `759 passed`; governance unit `21 passed`; compileall and development
   governance passed. The canonical eight-member no-outcome CLI run is
   `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`,
   with manifest SHA-256
   `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`.
 - An occupied destination returned nonzero with the entire package unchanged
   and no staging residue. Runner is `NOT RUN`; no push, PR, render, publication
-  or merge occurred. Final independent whole-branch review remains the exit
-  gate, so the task is not `DONE`.
+  or merge occurred. Renewed independent whole-branch review of the reconciled
+  documentation head remains the exit gate, so the task is not `DONE`.
 
 ## 3. B9 merge chain
 

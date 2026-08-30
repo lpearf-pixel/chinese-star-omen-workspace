@@ -98,18 +98,26 @@ S0 只运行祖山觀 episode 22 金样本，不抓取直播数据、不重建 t
 Tasks 1–4 分别冻结严格生命周期契约、实现防御性比较、生成确定性非应用提案/
 B9 请求，并复用 B9 原子发布原语完成语义闭包校验。Task 5 增加真实 episode 22
 fixture 与离线 CLI；其后 `b190614` 修复 shell 路径字节边界，`a951680` 再阻止
-GNU Make function 展开和内部 alias 覆盖。最终实现代码 head 为
-`a95168054b7b8aa805b0c8c709af4a1c49dd7f18`。
+GNU Make function 展开和内部 alias 覆盖。`59af182` 的首次 whole-branch review
+随后发现恰好两个 Important（`0 Critical / 0 Minor`）：FR-01 允许非权威 modern/
+retrieval evidence 产生决定性结果，FR-02 允许 outcome/run metric ID 冲突。
 
-本地验证为 focused/related `122 passed`、完整 downstream `747 passed`、治理
-unit `21 passed`，compileall 与 development governance 通过。两次 fresh CLI
-运行产生同一八成员 run
+`21e6904` 在 contract owner 内修复两项不变量，且只改一份 contract production
+文件和三份针对性测试。相同 final reviewer 以 exhaustive/adversarial matrices
+完成 scoped re-review，结论为两项修复均 `APPROVED`、remaining findings `0`。
+当前实现代码 head/tree 为
+`21e69048b7277023458ee5217acec85d259eebb8` /
+`c869c1f3f81a5cdedf92ec026054b22e8e9bb958`。
+
+当前本地验证为 focused `58 passed`、feedback-loop `86 passed`、related
+`112 passed`、完整 downstream `759 passed`、治理 unit `21 passed`，compileall
+与 development governance 通过。两次 fresh CLI 运行产生同一八成员 run
 `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`；
 manifest SHA-256 为
 `00b96fd7dec1ad90da94af29bea90860b85b6712ad336c7bb7d345e412a8ebc4`。
 占用输出重跑非零退出且整树不变、无 staging 残留。Runner 为 `NOT RUN`，Task 6
-没有 push、PR、发布或 merge；最终独立 whole-branch review 尚未执行，因此状态
-保持 `VERIFYING`。
+没有 push、PR、发布或 merge；reconciled documentation head 仍须 renewed
+whole-branch review，因此状态保持 `VERIFYING`。
 
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 

@@ -603,8 +603,9 @@ merged and the resulting stable head is reverified.
 ## VFL — Evidence-to-video feedback loop
 
 ### VFL-T01 — Offline control-plane skeleton
-- **Status:** `VERIFYING` (Tasks 1–5 implemented and locally verified; final
-  independent whole-branch review remains outstanding)
+- **Status:** `VERIFYING` (the original whole-branch review findings are fixed
+  and scoped re-review approved them; the reconciled documentation head still
+  requires renewed independent whole-branch review)
 - **Base:** `stable/kaiyuan-v2` at
   `99c0a85c1f944add8d013aedbae830fe022b7c3b`.
 - **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
@@ -629,6 +630,13 @@ merged and the resulting stable head is reverified.
   expansion and command-line override of the private transport aliases. Both
   rounds use real Make/CLI regressions; no Python production or fixture bytes
   changed in either round.
+- **Final-review fixes:** the whole-branch review of `59af182` found exactly
+  two Important findings and no Critical or Minor finding. FR-01 allowed
+  modern-authority/retrieval-only evidence to authorize a decisive local
+  result; FR-02 allowed an outcome metric ID to collide with a run metric ID.
+  Commit `21e6904` fixes both in contract-owned validators across exactly four
+  code/test paths. The same reviewer approved the scoped fixes with zero
+  remaining findings after exhaustive/adversarial matrices.
 - **Acceptance:** the episode 22 pilot is deterministic; external audit status
   and modern-context-only limits are preserved; every candidate records
   `apply_allowed=false`; the production request forbids absent classical quotes
@@ -638,9 +646,10 @@ merged and the resulting stable head is reverified.
   external-media and B9 package/review regression; full downstream tests;
   strict JSON, compileall, governance, diff and forbidden-path checks; independent
   review with no unresolved Critical or Important finding.
-- **Local verification candidate:** focused/related `122 passed in 6.56s`;
-  complete supported downstream `747 passed in 45.68s`; compileall exit `0`;
-  governance unit `21 passed`; development governance `25 changed / 15 code`.
+- **Local verification candidate:** final-review focused `58 passed`; complete
+  feedback-loop `86 passed`; related external-media/B9/package regression
+  `112 passed`; complete supported downstream `759 passed`; compileall exit
+  `0`; governance unit `21 passed`; development governance passed.
   Two fresh canonical CLI runs produced the same eight relative members and
   run ID
   `feedback-run:vfl:e2fb1a2d98be3ea09b2c885f68832530741772afc588a40c9005c3761dcef6e0`;
@@ -651,11 +660,11 @@ merged and the resulting stable head is reverified.
   An occupied-output replay exited `1`, preserved the complete tree and left
   zero staging residue.
 - **Residual:** the implementation code head is
-  `a95168054b7b8aa805b0c8c709af4a1c49dd7f18` with tree
-  `9bf5671a7e11a9fe8a4b55d3e27911816191734e`. Status remains `VERIFYING`
-  until the final independent whole-branch review is completed. Runner is
-  `NOT RUN`; no push, PR creation/update, publication or merge was performed
-  in Task 6.
+  `21e69048b7277023458ee5217acec85d259eebb8` with tree
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`. Status remains `VERIFYING`
+  until renewed independent whole-branch review approves the reconciled
+  documentation head. Runner is `NOT RUN`; no push, PR creation/update,
+  publication or merge was performed in Task 6.
 - **Boundary:** additive offline research/control plane only. No live scraping,
   transcript/OCR reconstruction, model training, corpus/rule/threshold mutation,
   official ingest, Qdrant or `local_kb_default` access, account credentials,

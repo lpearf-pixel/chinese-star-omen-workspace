@@ -2,9 +2,9 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
-## 2026-08-30 — VFL-T01 implementation verified locally; final independent review pending
+## 2026-08-30 — VFL-T01 review fixes approved in scope; governance reconciled
 
-### Candidate identity and delivered behavior
+### Initial governance candidate and delivered behavior
 
 - Task 6 started from the required clean implementation head
   `a95168054b7b8aa805b0c8c709af4a1c49dd7f18`, tree
@@ -35,7 +35,7 @@
   aliases. Both fix rounds changed only `Makefile` and real Make/CLI tests; no
   Python production or fixture byte changed.
 
-### Fresh local verification
+### Initial governance-candidate verification (historical)
 
 Commands ran with the supported worktree virtual environment and
 `CODEX_PRIMARY_RUNTIME_PYTHON` unset where subprocess selection matters:
@@ -57,6 +57,50 @@ The initial stable-to-implementation `git diff --check` reported exactly four
 trailing-space lines in the design status/approval/task/branch header. Task 6
 removes only those trailing spaces; no design content is reinterpreted. The
 final documentation head must replay governance, diff and path gates.
+
+### Whole-branch review and contract-owned fixes
+
+- The original independent whole-branch review targeted exact governance head
+  `59af182f75c4a175db366b991a0af65d6de83e53` and found exactly
+  `0 Critical / 2 Important / 0 Minor`.
+- FR-01 showed that `modern_authority` or `retrieval_record` evidence with a
+  supporting/contradicting relationship could authorize `corroborated` or
+  `contradicted`. FR-02 showed that caller outcome metrics and deterministic
+  run metrics could reuse the same stable metric ID.
+- Commit `21e69048b7277023458ee5217acec85d259eebb8`, tree
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`, fixes both findings in the owning
+  `contracts_v1.py` validators. FR-01 now couples an authority-bearing class
+  (`citable_passage` or `historical_source`) and decisive relationship on the
+  same reference. FR-02 enforces one unique metric-ID namespace across the
+  complete run/outcome union.
+- The fix commit changes exactly four paths: `contracts_v1.py` plus the
+  comparison, contract and orchestrator test files. `comparison.py` and
+  `orchestrator.py` required no production change; defensive revalidation
+  consumes the strengthened contracts.
+- Scoped re-review by the same final reviewer APPROVED both fixes with zero
+  remaining findings. Its exhaustive/adversarial matrices covered both
+  decisive states, both non-authoritative classes, mixed-reference bypasses,
+  legitimate authoritative evidence plus extra context, direct run collision,
+  orchestrator collision and a non-colliding outcome metric.
+
+### Fixed-code verification candidate
+
+```text
+focused contracts + comparison + orchestrator
+  58 passed in 0.53s
+complete feedback-loop suite
+  86 passed in 4.67s
+external-media + B9 contracts + atomic/e2e package regression
+  112 passed in 1.95s
+complete supported downstream
+  759 passed in 43.49s
+compileall src scripts tests
+  exit 0
+root governance unittest discovery
+  21 tests, OK
+development governance
+  passed
+```
 
 ### Canonical episode 22 CLI evidence
 
@@ -90,6 +134,12 @@ Re-running the CLI against the first occupied output returned exit `1`. The
 complete relative-path/byte-hash set remained identical and staging residue
 was `0`. Both validated temporary parents were then removed.
 
+A fresh replay after `21e6904` and this governance reconciliation reproduced
+the same run ID, eight member paths, every member SHA-256, manifest SHA-256 and
+canonical member-list SHA-256 above. Its occupied replay again exited `1` with
+the tree unchanged and zero staging residue; both newly validated temporary
+parents were removed.
+
 ### Scope, authority and residual status
 
 - Stable-to-candidate path audit found zero changes under raw corpus,
@@ -108,10 +158,10 @@ was `0`. Both validated temporary parents were then removed.
 - Runner is `NOT RUN`. No push, PR creation/update, render, upload, publication
   or merge was performed. B10-PR-C / PR #54 remains human-review blocked;
   B10-PR-D/E/F and B11/B12 remain locked.
-- VFL-T01 is `VERIFYING`, not `DONE`. Tasks 1–5 and the local verification pass
-  are complete, but the final independent whole-branch review has not yet
-  occurred. Task 6 therefore records a review candidate and does not substitute
-  implementer self-review for the outstanding independent gate.
+- VFL-T01 is `VERIFYING`, not `DONE`. The original review and scoped fix
+  approval are complete, but this reconciled documentation head still requires
+  renewed independent whole-branch review. Task 6 does not substitute
+  implementer self-review for that outstanding exact-head gate.
 
 ## 2026-08-29 — VFL-T01 offline feedback-loop skeleton started
 
