@@ -28,10 +28,11 @@ b9-preview:
 	B9_FFPROBE_BIN="$(B9_FFPROBE_BIN)" \
 	$(PYTHON) scripts/b9_preview.py --package-dir "$(B9_OUTPUT_DIR)"
 
-vfl-s0-run: export VFL_S0_AUDIT_PATH := $(value VFL_AUDIT)
-vfl-s0-run: export VFL_S0_PROBES_PATH := $(value VFL_PROBES)
-vfl-s0-run: export VFL_S0_OUTPUT_PATH := $(value VFL_OUTPUT)
-vfl-s0-run: export VFL_S0_OUTCOME_PATH := $(value VFL_OUTCOME)
+unexport VFL_AUDIT VFL_PROBES VFL_OUTPUT VFL_OUTCOME
+vfl-s0-run: private override export VFL_S0_AUDIT_PATH := $(value VFL_AUDIT)
+vfl-s0-run: private override export VFL_S0_PROBES_PATH := $(value VFL_PROBES)
+vfl-s0-run: private override export VFL_S0_OUTPUT_PATH := $(value VFL_OUTPUT)
+vfl-s0-run: private override export VFL_S0_OUTCOME_PATH := $(value VFL_OUTCOME)
 vfl-s0-run:
 	@test -n "$${VFL_S0_AUDIT_PATH}" || { \
 	  printf 'VFL_AUDIT is required\n' >&2; \

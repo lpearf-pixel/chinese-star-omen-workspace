@@ -397,3 +397,124 @@ def test_make_target_preserves_shell_metacharacters_in_all_path_values(
     assert quote_result.returncode == 0, quote_result.stderr
     assert (quoted_output / "feedback-outcome.json").is_file()
     assert (quoted_output / "learning-update-proposal.json").is_file()
+
+
+def test_make_target_does_not_expand_make_functions_in_public_path_values(
+    tmp_path: Path,
+) -> None:
+    """Catches automatic environment export evaluating recursive VFL values."""
+    def make_expression(label: str) -> str:
+        return f"$(shell printf MAKE_ >&2; printf {label}_EXECUTED >&2)"
+
+    markers = [
+        "MAKE_AUDIT_EXECUTED",
+        "MAKE_PROBES_EXECUTED",
+        "MAKE_OUTPUT_EXECUTED",
+        "MAKE_OUTCOME_EXECUTED",
+    ]
+    audit = tmp_path / f"audit-{make_expression('AUDIT')}.json"
+    probes = tmp_path / f"probes-{make_expression('PROBES')}.json"
+    output = tmp_path / f"run-{make_expression('OUTPUT')}"
+    outcome = tmp_path / f"outcome-{make_expression('OUTCOME')}.json"
+    audit.write_bytes(AUDIT_PATH.read_bytes())
+    probes.write_bytes(PROBES_PATH.read_bytes())
+    outcome.write_bytes(OUTCOME_PATH.read_bytes())
+
+    result = subprocess.run(
+        [
+            "make",
+            "-s",
+            "vfl-s0-run",
+            f"PYTHON={sys.executable}",
+            f"VFL_AUDIT={audit}",
+            f"VFL_PROBES={probes}",
+            f"VFL_OUTPUT={output}",
+            f"VFL_OUTCOME={outcome}",
+        ],
+        cwd=WORKSPACE_ROOT,
+        env=subprocess_env(),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    combined_output = result.stdout + result.stderr
+    assert all(marker not in combined_output for marker in markers)
+    assert (output / "feedback-outcome.json").is_file()
+    assert (output / "learning-update-proposal.json").is_file()
+
+
+def test_internal_make_alias_cannot_supply_a_missing_public_required_value(
+    tmp_path: Path,
+) -> None:
+    """Catches a command-line internal alias bypassing the public input gate."""
+    output = tmp_path / "missing-public-audit"
+
+    result = subprocess.run(
+        [
+            "make",
+            "-s",
+            "vfl-s0-run",
+            f"PYTHON={sys.executable}",
+            f"VFL_S0_AUDIT_PATH={AUDIT_PATH}",
+            f"VFL_PROBES={PROBES_PATH}",
+            f"VFL_OUTPUT={output}",
+        ],
+        cwd=WORKSPACE_ROOT,
+        env=subprocess_env(),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode != 0
+    assert "VFL_AUDIT is required" in result.stderr
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "internal_alias",
+    [
+        "VFL_S0_AUDIT_PATH",
+        "VFL_S0_PROBES_PATH",
+        "VFL_S0_OUTPUT_PATH",
+        "VFL_S0_OUTCOME_PATH",
+    ],
+)
+def test_internal_make_alias_cannot_override_a_public_path(
+    tmp_path: Path, internal_alias: str
+) -> None:
+    """Catches any internal transport variable taking command-line precedence."""
+    output = tmp_path / f"public-{internal_alias.lower()}"
+    redirected_output = tmp_path / f"internal-{internal_alias.lower()}"
+    wrong_values = {
+        "VFL_S0_AUDIT_PATH": str(tmp_path / "missing-internal-audit.json"),
+        "VFL_S0_PROBES_PATH": str(tmp_path / "missing-internal-probes.json"),
+        "VFL_S0_OUTPUT_PATH": str(redirected_output),
+        "VFL_S0_OUTCOME_PATH": str(OUTCOME_PATH),
+    }
+
+    result = subprocess.run(
+        [
+            "make",
+            "-s",
+            "vfl-s0-run",
+            f"PYTHON={sys.executable}",
+            f"VFL_AUDIT={AUDIT_PATH}",
+            f"VFL_PROBES={PROBES_PATH}",
+            f"VFL_OUTPUT={output}",
+            "VFL_OUTCOME=",
+            f"{internal_alias}={wrong_values[internal_alias]}",
+        ],
+        cwd=WORKSPACE_ROOT,
+        env=subprocess_env(),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert (output / "feedback-loop-run.json").is_file()
+    assert not redirected_output.exists()
+    assert not (output / "feedback-outcome.json").exists()
