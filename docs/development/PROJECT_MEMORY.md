@@ -8,9 +8,10 @@
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
-Verified at: 2026-08-29
+Verified at: 2026-08-31
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 local S0 DONE; B10-PR-C human-review BLOCKED
+Current task: VFL-T01-D1 remote-delivery reconciliation VERIFYING; VFL-T01
+local S0 DONE; B10-PR-C human-review BLOCKED
 Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
 Protected collection: local_kb_default
@@ -52,7 +53,9 @@ ASTRO-R01 twenty-eight mansion and external-media audit foundation: DONE (approv
 B10-R08 PR #64 stable-integration reconciliation: DONE (integration commit `2384533291b1163738fb06f6984a348f78ecc558`)
 PR #64 merged to stable: DONE (2026-08-14, `99c0a85c1f944add8d013aedbae830fe022b7c3b`)
 B10 overall: IN_PROGRESS
-VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0 implementation/review scope; remote delivery unclaimed
+VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0
+implementation/review scope; feature branch delivered remotely at `f36b146`;
+PR/integration/render/publication unclaimed
 ```
 
 ### VFL-T01 local S0 closeout
@@ -84,10 +87,17 @@ VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0 implement
   `8bcce81842e6130d0328b525168f8b46c9955d7e`, across `15 commits / 25 paths /
   15 code files` with `0 Critical / 0 Important / 0 Minor`. FR-01/FR-02 remain
   closed, recorded findings.
-- Local S0 is `DONE`. Runner is `NOT RUN`; the feature branch is unpushed and
-  has no PR; no stable merge, render, upload or publication occurred. These
-  absent remote/media states are not required for the explicitly local S0
-  closeout and remain unclaimed.
+- Local S0 is `DONE`. At the 2026-08-30 closeout, Runner was `NOT RUN` and the
+  feature branch was unpushed with no PR; no stable merge, render, upload or
+  publication had occurred. This remains the accurate historical closeout
+  boundary.
+- On 2026-08-31 the reviewed closeout head
+  `f36b146ddb08809b6b23a8db5e5fc94393165a21`, tree
+  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`, was non-force pushed as
+  `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`. Remote stable remained
+  `99c0a85`; open PRs remained only human-blocked Draft #54. No VFL PR, merge,
+  Runner, render, upload or publication occurred, and no later stage was
+  authorized.
 
 ## 3. B9 merge chain
 

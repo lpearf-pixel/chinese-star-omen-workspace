@@ -371,9 +371,13 @@
   whole-branch review approved exact candidate `33657fa`, tree `8bcce818`,
   covering `15 commits / 25 paths / 15 code files` with
   `0 Critical / 0 Important / 0 Minor`. This closes VFL-T01's local S0
-  implementation/review scope without expanding D-031 authority. Runner is
-  `NOT RUN`; the branch is unpushed with no PR, and no stable merge, render,
-  upload or publication is claimed.
+  implementation/review scope without expanding D-031 authority. At that local
+  closeout Runner was `NOT RUN`; the branch was unpushed with no PR, and no
+  stable merge, render, upload or publication was claimed. On 2026-08-31 the
+  exact closeout `f36b146`, tree `fe4babc`, was subsequently non-force pushed
+  to `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`. That remote delivery
+  created no VFL PR or merge, left stable and PR #54 unchanged, kept Runner
+  `NOT RUN`, and grants no additional D-031 authority.
 - **Reason:** 用户批准的目标是先验证完整系统反馈路径，再按模块逐步
   优化。接口骨架可以在不冒用人审、语料或发布权限的情况下尽早暴露
   数据契约、状态机和模块边界问题。

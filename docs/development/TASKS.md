@@ -12,7 +12,8 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01 DONE for local S0; B10-PR-C remains BLOCKED on Reviewer B
+Current task: VFL-T01-D1 remote-delivery reconciliation VERIFYING; VFL-T01
+local S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -603,8 +604,9 @@ merged and the resulting stable head is reverified.
 ## VFL — Evidence-to-video feedback loop
 
 ### VFL-T01 — Offline control-plane skeleton
-- **Status:** `DONE` for the local S0 implementation/review scope; remote
-  delivery, integration, rendering and publication remain unclaimed
+- **Status:** `DONE` for the local S0 implementation/review scope; exact feature
+  branch delivery is complete, while PR/integration/rendering/publication remain
+  unclaimed
 - **Base:** `stable/kaiyuan-v2` at
   `99c0a85c1f944add8d013aedbae830fe022b7c3b`.
 - **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
@@ -666,14 +668,45 @@ merged and the resulting stable head is reverified.
   closed findings rather than erased history.
 - **Residual:** the implementation code head is
   `21e69048b7277023458ee5217acec85d259eebb8` with tree
-  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`. Local S0 is complete, but Runner
-  is `NOT RUN`; the feature branch is unpushed and has no PR; no stable merge,
-  render, upload or publication was performed.
+  `c869c1f3f81a5cdedf92ec026054b22e8e9bb958`. Local S0 is complete and Runner
+  is `NOT RUN`. The 2026-08-30 local closeout was initially unpushed; on
+  2026-08-31 exact closeout `f36b146`, tree `fe4babc`, was non-force pushed to
+  the same feature branch. It still has no PR; no stable merge, render, upload
+  or publication was performed.
 - **Boundary:** additive offline research/control plane only. No live scraping,
   transcript/OCR reconstruction, model training, corpus/rule/threshold mutation,
   official ingest, Qdrant or `local_kb_default` access, account credentials,
   rendering/upload side effect, Reviewer A/B substitution, PR #54 mutation,
   B10-PR-D/E/F start, B11/B12 release or `main` operation.
+
+### VFL-T01-D1 — Remote delivery state reconciliation
+
+- **Status:** `VERIFYING`.
+- **Base:** completed VFL-T01 local closeout
+  `f36b146ddb08809b6b23a8db5e5fc94393165a21`, tree
+  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`.
+- **Branch:** `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
+- **Goal:** replace the historical pre-push wording with exact, read-back
+  remote delivery evidence while preserving VFL-T01's completed local S0
+  implementation/review result and every D-031 authority boundary.
+- **Allowed scope:** `docs/development/TASKS.md`, `DECISIONS.md`,
+  `PROJECT_MEMORY.md`, `WORK_LOG.md`, root `summary.md` and a bounded execution
+  status note in the existing VFL plan.
+- **Prohibited:** product/test code, S1 or later VFL adapters, PR #54, Reviewer
+  state, B10-PR-D/E/F, B11/B12, raw corpus, Qdrant, `local_kb_default`, media
+  rendering/upload/publication, PR creation/merge, direct stable writes,
+  `main`, force push or Runner dispatch.
+- **Done:** all durable state agrees that the feature branch was non-force
+  pushed at exact head `f36b146`; remote `stable/kaiyuan-v2` remains
+  `99c0a85`; no PR, merge, render, upload or publication is claimed; docs and
+  governance checks pass on the final documentation head.
+- **Verify:** governance unit discovery; development-governance comparison to
+  `99c0a85`; full downstream regression; `compileall`; `git diff --check`;
+  exact changed-path/content scans; clean status after commit; remote branch,
+  stable and `main` ref readback.
+- **Delivery:** one documentation-only commit on the existing feature branch,
+  followed by a non-force fast-forward push and exact remote readback. Keep
+  Runner `NOT RUN`; do not create or modify a PR.
 
 ## B12 — Batch media and publishing assistance
 - **Status:** `BACKLOG`

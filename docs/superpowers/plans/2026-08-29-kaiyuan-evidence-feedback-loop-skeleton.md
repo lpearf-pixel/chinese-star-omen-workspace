@@ -20,6 +20,15 @@ or account adapter.
 **Tech stack:** Python 3.12, Pydantic v2, canonical JSON, pytest, existing
 `ExternalAuditBundleV1` and B9 package primitives.
 
+**Execution status (2026-08-31):** Tasks 1–6 are complete for the approved S0
+scope. Local implementation/review closed at
+`f36b146ddb08809b6b23a8db5e5fc94393165a21`, tree
+`fe4babc7c34328a4b18f22bbea998882ae38b2dc`, and that exact closeout was later
+non-force pushed to `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`.
+Runner remains `NOT RUN`; no VFL PR, merge, render, upload or publication is
+claimed. S1 and every later adapter remain outside this plan and require a new
+task and decision.
+
 ## Global constraints
 
 - Base is

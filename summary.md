@@ -1,6 +1,6 @@
 # Chinese Star Omen Workspace — 项目交接总结
 
-**快照日期：** 2026-08-29
+**快照日期：** 2026-08-31
 
 **仓库：** `lpearf-pixel/chinese-star-omen-workspace`
 
@@ -15,9 +15,13 @@
 
 ## 1. 最近实时核验状态
 
-2026-08-29 读取 GitHub 后确认：
+2026-08-31 重新读取 GitHub 后确认：
 
 - `stable/kaiyuan-v2`：`99c0a85c1f944add8d013aedbae830fe022b7c3b`。
+- VFL 功能分支 `codex/kaiyuan-evidence-feedback-loop-skeleton-v1` 已通过
+  非强制新分支推送发布为
+  `f36b146ddb08809b6b23a8db5e5fc94393165a21`，tree
+  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`。
 - 开放 PR 只有 #54；它仍为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
@@ -121,9 +125,11 @@ manifest SHA-256 为
 15 code files`，结论为 `0 Critical / 0 Important / 0 Minor`；FR-01/FR-02
 保留为已关闭 findings。
 
-Runner 为 `NOT RUN`，feature branch 未 push 且没有 PR，stable 与 PR #54 未变，
-没有 merge、render、upload 或 publication。这些远端/媒体状态未被宣称，也不影响
-已明确限定为本地 S0 的 `DONE`；任何后续 VFL stage 仍须独立授权。
+2026-08-30 本地 closeout 时 Runner 为 `NOT RUN`，feature branch 尚未 push
+且没有 PR；这是当时的历史事实。2026-08-31 随后的远端交付只把已审查的
+exact closeout `f36b146` 非强制推送到同名功能分支。当前仍无 VFL PR、merge、
+render、upload 或 publication；stable 与 PR #54 未变，Runner 仍为 `NOT RUN`。
+该远端分支交付不扩大本地 S0 的 `DONE` 范围；任何后续 VFL stage 仍须独立授权。
 
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 

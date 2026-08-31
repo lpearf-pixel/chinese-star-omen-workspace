@@ -2,6 +2,41 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-08-31 — VFL-T01-D1 remote delivery reconciliation started
+
+### Entry state and authority
+
+- The user authorized continuing the existing plan through completion and a
+  direct feature-branch push. Repository governance still forbids direct
+  stable writes, `main`, PR #54 mutation, force push and unapproved later-stage
+  work.
+- Live readback resolved `stable/kaiyuan-v2` to
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`. The only open PR remained Draft
+  #54 at `932f9e68862025bc620e0cf2d439415c5ea37af4`, still blocked on two
+  independent human reviews and threshold freeze.
+- Before this reconciliation task, reviewed VFL closeout
+  `f36b146ddb08809b6b23a8db5e5fc94393165a21`, tree
+  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`, was non-force pushed as the new
+  remote branch `codex/kaiyuan-evidence-feedback-loop-skeleton-v1`. Remote
+  readback matched the exact SHA; stable and `main` were not changed. No VFL PR
+  was created.
+- VFL-T01-D1 is documentation-only. It may reconcile the subsequent delivery
+  fact but cannot reinterpret the historical 2026-08-30 local closeout or
+  authorize S1, B10-PR-D/E/F, B11/B12, media/account side effects, corpus/rule
+  changes, Qdrant or `local_kb_default` access.
+
+### Isolated baseline
+
+- A linked worktree was created on the existing VFL feature branch at exact
+  `f36b146`; its local `.venv` was recreated from the declared
+  `apps/star-omen` dependencies without changing repository dependency files.
+- Governance unit discovery passed `21 tests`; development governance passed
+  against stable with `25 changed files / 15 code files`.
+- The complete supported downstream baseline passed `759 tests`.
+- Durable state was moved to `VERIFYING` only after the remote-delivery wording
+  was reconciled. Final documentation-head gates, diff review, commit, push and
+  remote readback remain required before VFL-T01-D1 may be marked `DONE`.
+
 ## 2026-08-30 — VFL-T01 local S0 implementation/review scope closed
 
 ### Initial governance candidate and delivered behavior
