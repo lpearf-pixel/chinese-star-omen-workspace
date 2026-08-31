@@ -19,9 +19,11 @@
 
 - `stable/kaiyuan-v2`：`99c0a85c1f944add8d013aedbae830fe022b7c3b`。
 - VFL 功能分支 `codex/kaiyuan-evidence-feedback-loop-skeleton-v1` 已通过
-  非强制新分支推送发布为
+  非强制新分支推送包含已审查 closeout
   `f36b146ddb08809b6b23a8db5e5fc94393165a21`，tree
-  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`。
+  `fe4babc7c34328a4b18f22bbea998882ae38b2dc`；随后交付状态校准检查点
+  `857a7a02c26d0cdf6d6d484345b4ded577ec232c`，tree
+  `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`，也已非强制推送并读回一致。
 - 开放 PR 只有 #54；它仍为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。

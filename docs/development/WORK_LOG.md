@@ -2,7 +2,7 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
-## 2026-08-31 — VFL-T01-D1 remote delivery reconciliation started
+## 2026-08-31 — VFL-T01-D1 remote delivery reconciliation completed
 
 ### Entry state and authority
 
@@ -34,8 +34,32 @@
   against stable with `25 changed files / 15 code files`.
 - The complete supported downstream baseline passed `759 tests`.
 - Durable state was moved to `VERIFYING` only after the remote-delivery wording
-  was reconciled. Final documentation-head gates, diff review, commit, push and
-  remote readback remain required before VFL-T01-D1 may be marked `DONE`.
+  was reconciled.
+
+### Exact checkpoint verification, review and delivery
+
+- Documentation checkpoint
+  `857a7a02c26d0cdf6d6d484345b4ded577ec232c`, tree
+  `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`, changes exactly six authorized
+  documentation paths relative to `f36b146`; no product, test, corpus,
+  workflow, configuration, package or account path changed.
+- Exact-checkpoint verification passed: complete downstream `759 tests`;
+  governance unit discovery `21 tests`; development governance against
+  `99c0a85`; compileall; `git diff --check`; allowed-path and forbidden-path
+  scans; secret/absolute-machine-path scan; clean worktree and exact SHA/tree
+  readback.
+- Scoped review of `f36b146..857a7a0` against VFL-T01-D1 and D-031 found
+  `0 Critical / 0 Important / 0 Minor`. Historical pre-push wording remains
+  explicitly time-bound; current delivery wording does not imply a PR, merge,
+  Runner, render, upload, publication or later-stage authorization.
+- `857a7a0` was non-force fast-forward pushed to
+  `codex/kaiyuan-evidence-feedback-loop-skeleton-v1` and remote readback matched
+  exactly. `stable/kaiyuan-v2` remained `99c0a85`; `main` remained
+  `98e0bb713a164a384d890b273af47d3b9b444682`;
+  the open PR set remained only human-blocked Draft #54. Runner is `NOT RUN`.
+- VFL-T01-D1 is `DONE`. The following state-only closeout commit records that
+  delivered checkpoint; it changes no behavior and grants no additional
+  authority.
 
 ## 2026-08-30 — VFL-T01 local S0 implementation/review scope closed
 

@@ -12,8 +12,8 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: VFL-T01-D1 remote-delivery reconciliation VERIFYING; VFL-T01
-local S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
+Current task: no unblocked implementation task; VFL-T01-D1 and VFL-T01 local
+S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -681,7 +681,7 @@ merged and the resulting stable head is reverified.
 
 ### VFL-T01-D1 — Remote delivery state reconciliation
 
-- **Status:** `VERIFYING`.
+- **Status:** `DONE`.
 - **Base:** completed VFL-T01 local closeout
   `f36b146ddb08809b6b23a8db5e5fc94393165a21`, tree
   `fe4babc7c34328a4b18f22bbea998882ae38b2dc`.
@@ -696,17 +696,23 @@ merged and the resulting stable head is reverified.
   state, B10-PR-D/E/F, B11/B12, raw corpus, Qdrant, `local_kb_default`, media
   rendering/upload/publication, PR creation/merge, direct stable writes,
   `main`, force push or Runner dispatch.
-- **Done:** all durable state agrees that the feature branch was non-force
-  pushed at exact head `f36b146`; remote `stable/kaiyuan-v2` remains
-  `99c0a85`; no PR, merge, render, upload or publication is claimed; docs and
-  governance checks pass on the final documentation head.
+- **Done:** all durable state agrees that reviewed closeout `f36b146` was
+  non-force pushed and that documentation checkpoint
+  `857a7a02c26d0cdf6d6d484345b4ded577ec232c`, tree
+  `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`, was subsequently verified and
+  delivered to the same branch. Remote `stable/kaiyuan-v2` remains `99c0a85`;
+  no PR, merge, render, upload or publication is claimed.
 - **Verify:** governance unit discovery; development-governance comparison to
   `99c0a85`; full downstream regression; `compileall`; `git diff --check`;
   exact changed-path/content scans; clean status after commit; remote branch,
   stable and `main` ref readback.
-- **Delivery:** one documentation-only commit on the existing feature branch,
-  followed by a non-force fast-forward push and exact remote readback. Keep
-  Runner `NOT RUN`; do not create or modify a PR.
+- **Verification:** checkpoint `857a7a0` passed governance unit `21`, full
+  downstream `759`, development governance, compileall, diff, six-path scope,
+  secret/absolute-path and clean-worktree checks. Scoped review found
+  `0 Critical / 0 Important / 0 Minor`.
+- **Delivery:** checkpoint `857a7a0` was non-force fast-forward pushed and read
+  back exactly; this final state-only closeout follows on the same feature
+  branch. Runner remains `NOT RUN`; no PR was created or modified.
 
 ## B12 — Batch media and publishing assistance
 - **Status:** `BACKLOG`
