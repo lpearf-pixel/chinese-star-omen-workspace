@@ -10,7 +10,7 @@ Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Verified at: 2026-09-03
 Current feature branch: codex/kaiyuan-feedback-loop-readonly-adapters-v1
-Current task: VFL-T02 S1 read-only adapters IN_PROGRESS; VFL-T01-D1 and
+Current task: VFL-T02 S1 read-only adapters VERIFYING; VFL-T01-D1 and
 VFL-T01 local S0 DONE; B10-PR-C human-review BLOCKED
 Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
@@ -56,9 +56,9 @@ B10 overall: IN_PROGRESS
 VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0
 implementation/review scope; feature branch delivered remotely at `f36b146`;
 PR/integration/render/publication unclaimed
-VFL-T02 read-only local evidence adapters: IN_PROGRESS on a separate stacked
-feature branch; design approved and remotely delivered at `fc65e2f` /
-`a6660fd`; implementation not yet claimed
+VFL-T02 read-only local evidence adapters: VERIFYING on a separate stacked
+feature branch; Task 1–5 implementation delivered at `4d902ef` / `7bac6c9`;
+complete local matrix and fresh whole-branch review pending
 ```
 
 ### VFL-T01 local S0 closeout
@@ -107,9 +107,9 @@ feature branch; design approved and remotely delivered at `fc65e2f` /
   verification matrix and was non-force pushed/read back on the same feature
   branch. It changes delivery records only and grants no new authority.
 
-### VFL-T02 S1 read-only adapter start
+### VFL-T02 S1 read-only adapter verification
 
-- VFL-T02 starts from exact stacked base
+- VFL-T02 started from exact stacked base
   `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8` on isolated branch
   `codex/kaiyuan-feedback-loop-readonly-adapters-v1`. Stable remains
   `99c0a85c1f944add8d013aedbae830fe022b7c3b`; the only open PR remains Draft
@@ -141,6 +141,13 @@ feature branch; design approved and remotely delivered at `fc65e2f` /
   equality before the next task starts. Missing real local-KB service/snapshot
   evidence is reported accurately as `BLOCKED` but does not invalidate
   hermetic implementation completion.
+- Task 1–5 implementation is delivered at
+  `4d902efef46a122e9a19128cba4c7d75eee67b14`, tree
+  `7bac6c9359d6c503307851d8ea55d3eb86142b41`. The fetched, tree-equal task
+  checkpoints are `f0ead94`, `c393609`, `56f8dbb`, `2524067`, `29ceaeb` and
+  `4d902ef`; every task-level review closed with `0 Critical / 0 Important`.
+  VFL-T02 is now `VERIFYING`; complete local gates and a fresh whole-branch
+  implementation review are still required before `DONE`.
 - The committed episode-22 query-plan asset is `hermetic_test` only and uses a
   `test_vfl_ephemeral_*` collection. Production `main` accepts only a separately
   reviewed `reviewed_live` plan for `local_kb_kaiyuan_v2`; there is no injected

@@ -514,7 +514,7 @@ def test_episode_22_two_fresh_builds_emit_safe_hash_evidence(tmp_path: Path) -> 
     ).hexdigest()
     member_list_sha = _member_hash_list_sha256(manifests[0])
     print(
-        f"S1_EVIDENCE run_id={run_ids[0]} "
+        f"\nS1_E2E_HASH_EVIDENCE run_id={run_ids[0]} "
         f"manifest_sha256={manifest_sha} member_hash_list_sha256={member_list_sha}"
     )
 
@@ -540,9 +540,14 @@ def test_occupied_output_preserves_tree_and_leaves_no_staging(tmp_path: Path) ->
 
     after = _whole_tree_sha256(output)
     staging = list(output.parent.glob(f".{output.name}.*"))
+    staging_entries = len(staging)
     assert before == after
-    assert staging == []
-    print(f"S1_COLLISION before_tree_sha256={before} after_tree_sha256={after} staging=0")
+    assert staging_entries == 0
+    print(
+        "\nS1_OCCUPIED_OUTPUT_EVIDENCE "
+        f"before_tree_sha256={before} after_tree_sha256={after} "
+        f"staging_entries={staging_entries}"
+    )
 
 
 def test_second_request_failure_leaves_no_output_or_staging(tmp_path: Path) -> None:
@@ -568,8 +573,15 @@ def test_second_request_failure_leaves_no_output_or_staging(tmp_path: Path) -> N
 
     assert caught.value.code is ReadOnlyErrorCode.TRANSPORT_FAILED
     assert caught.value.failed_claim_id == CLAIM_IDS[1]
-    assert not output.exists()
-    _assert_no_staging(output)
+    output_exists = output.exists()
+    staging_entries = len(list(output.parent.glob(f".{output.name}.*")))
+    assert output_exists is False
+    assert staging_entries == 0
+    print(
+        "\nS1_SECOND_REQUEST_FAILURE_EVIDENCE "
+        f"output_exists={str(output_exists).lower()} "
+        f"staging_entries={staging_entries}"
+    )
 
 
 def test_stdout_stderr_and_package_add_no_retrieval_secrets(
@@ -610,18 +622,19 @@ def test_stdout_stderr_and_package_add_no_retrieval_secrets(
         resolver=recording_resolver,
     )
     captured = capsys.readouterr()
-    package_blob = b"".join(path.read_bytes() for path in output.iterdir())
-    forbidden = (
-        retrieval_secret,
-        api_key,
-        RAW_TEXT,
-        str(root),
-        str(root / RELATIVE_PATH),
-    )
+    package_surfaces = {
+        path.name: path.read_bytes() for path in output.iterdir() if path.is_file()
+    }
+    forbidden_fields = {
+        "api_key": (api_key,),
+        "raw_response_body": (f"/private/{retrieval_secret}",),
+        "retrieved_text": (retrieval_secret, RAW_TEXT),
+        "kb_root": (str(root),),
+        "absolute_source_path": (str(root / RELATIVE_PATH),),
+    }
     assert seen_contexts == [TEST_CONTEXT, TEST_CONTEXT]
     assert all(item is TEST_CONTEXT for item in seen_contexts)
-    assert all(value not in captured.out and value not in captured.err for value in forbidden)
-    assert all(value.encode("utf-8") not in package_blob for value in forbidden)
+    assert set(package_surfaces) == PACKAGE_PATHS
 
     sentinel = "INVALID-CORPUS-SECRET-7f42"
     bad_plan = tmp_path / "bad-plan.json"
@@ -654,6 +667,34 @@ def test_stdout_stderr_and_package_add_no_retrieval_secrets(
     assert not failed_output.exists()
     _assert_no_staging(failed_output)
     assert all(sentinel not in path.name for path in tmp_path.iterdir())
+    checked_surfaces = {
+        "stdout": (captured.out.encode("utf-8"), rejected.out.encode("utf-8")),
+        "stderr": (captured.err.encode("utf-8"), rejected.err.encode("utf-8")),
+        "package": tuple(package_surfaces.values()),
+    }
+    privacy_checks = {
+        field_name: {
+            surface_name: all(
+                sentinel_value.encode("utf-8") not in surface_bytes
+                for sentinel_value in sentinels
+                for surface_bytes in surface_values
+            )
+            for surface_name, surface_values in checked_surfaces.items()
+        }
+        for field_name, sentinels in forbidden_fields.items()
+    }
+    privacy_passed = all(
+        surface_passed
+        for field_checks in privacy_checks.values()
+        for surface_passed in field_checks.values()
+    )
+    privacy_status = "PASS" if privacy_passed else "FAIL"
+    assert privacy_status == "PASS"
+    print(
+        "\nS1_PRIVACY_EVIDENCE "
+        f"fields={','.join(privacy_checks)} "
+        f"surfaces={','.join(checked_surfaces)} status={privacy_status}"
+    )
 
 
 def test_public_main_has_no_retriever_injection_and_help_is_bounded(

@@ -2,6 +2,35 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-09-03 — VFL-T02 S1 implementation moved to VERIFYING
+
+### Delivered implementation state
+
+- Task 6 starts from clean, fetched Task 1–5 implementation head
+  `4d902efef46a122e9a19128cba4c7d75eee67b14`, tree
+  `7bac6c9359d6c503307851d8ea55d3eb86142b41`, on
+  `codex/kaiyuan-feedback-loop-readonly-adapters-v1`.
+- The exact fetched task checkpoint sequence is `f0ead94` / `f5b76f3`
+  (strict inputs), `c393609` / `eedcc91` (source snapshots), `56f8dbb` /
+  `d237bb5` (strict retrieval), `2524067` / `752631b` (deterministic probes),
+  `29ceaeb` / `9195105` (cross-task provenance-key integration fix), and
+  `4d902ef` / `7bac6c9` (episode 22 CLI/E2E). Each task-level independent review
+  closed with `0 Critical / 0 Important`; this is not the required fresh
+  complete implementation review.
+- VFL-T02 is `VERIFYING`, not `DONE`. The complete named local matrix, honest
+  real-smoke disposition, fresh whole-branch implementation review and final
+  documentation review/delivery are still pending.
+
+### Read-only entry guards
+
+- Live readback kept `stable/kaiyuan-v2` at `99c0a85c1f944add8d013aedbae830fe022b7c3b`,
+  `main` at `98e0bb713a164a384d890b273af47d3b9b444682` and the unchanged S0 branch at
+  `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8`.
+- The only open PR remained Draft #54: `state=open`, `draft=true`,
+  `merged=false`, `head=codex/kaiyuan-b10-calibration-v2`,
+  `head_sha=932f9e68862025bc620e0cf2d439415c5ea37af4`,
+  `base=stable/kaiyuan-v2`. No PR or protected ref was modified.
+
 ## 2026-09-02 — VFL-T02 S1 read-only adapters started
 
 ### Entry state and authority

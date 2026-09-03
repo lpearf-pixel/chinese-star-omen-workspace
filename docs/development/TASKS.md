@@ -12,7 +12,7 @@
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
 Current feature branch: codex/kaiyuan-feedback-loop-readonly-adapters-v1
-Current task: VFL-T02 S1 read-only adapters IN_PROGRESS; VFL-T01-D1 and
+Current task: VFL-T02 S1 read-only adapters VERIFYING; VFL-T01-D1 and
 VFL-T01 local S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
@@ -716,7 +716,8 @@ merged and the resulting stable head is reverified.
 
 ### VFL-T02 — Read-only local evidence adapters
 
-- **Status:** `IN_PROGRESS`.
+- **Status:** `VERIFYING` (Task 1–5 implementation delivered; complete local
+  matrix and independent whole-branch review pending).
 - **Stacked base:** completed VFL-T01-D1 at
   `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8`.
 - **Branch:** `codex/kaiyuan-feedback-loop-readonly-adapters-v1`.
@@ -742,12 +743,15 @@ merged and the resulting stable head is reverified.
 - **Pilot:** only 祖山觀 episode 22 / work `7669807398794598565`, using
   `kb_book_id=kaiyuan_zhanjing`, collection `local_kb_kaiyuan_v2` and the
   corpus version frozen by the explicit query plan.
-- **Current checkpoint:** approved design commit
-  `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`, tree
-  `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`, was non-force delivered to the
-  S1 branch and fetched back with the same tree. Independent written-spec
-  reviews found `0 Critical / 0 Important`; the user approved the written spec
-  and authorized in-scope plan execution without later confirmation pauses.
+- **Current checkpoint:** Task 1–5 implementation head
+  `4d902efef46a122e9a19128cba4c7d75eee67b14`, tree
+  `7bac6c9359d6c503307851d8ea55d3eb86142b41`, was non-force delivered to the
+  S1 branch and fetched back with the same tree. Its task checkpoints are
+  `f0ead94` (strict inputs), `c393609` (source snapshots), `56f8dbb` (strict
+  retrieval), `2524067` (deterministic probes), `29ceaeb` (cross-task
+  provenance-key integration fix) and `4d902ef` (episode 22 CLI/E2E). Each
+  task-level review closed with `0 Critical / 0 Important`; the required fresh
+  complete implementation review has not yet occurred.
 - **Execution:** six TDD tasks, each independently verified, committed,
   non-force pushed and remote-tree read back before the next task. A real
   local-KB smoke is evidence-only and must be reported `BLOCKED` rather than
@@ -777,7 +781,7 @@ B10-R05 merged and recorded DONE
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
 → B10-PR-G/H and B11 remain BACKLOG behind the accepted B10 sequence
 ↳ VFL-T01 local S0 is DONE against frozen B9/external-audit interfaces
-→ VFL-T02 S1 is IN_PROGRESS on its isolated stacked branch and may only create deterministic unresolved/context-only probes through approved read-only adapters
+→ VFL-T02 S1 is VERIFYING on its isolated stacked branch after Task 1–5 delivery; complete local gates and fresh whole-branch review remain
 → VFL-T02 retains the unchanged S0 manual handoff; it does not start S2, render, upload, publish, apply proposals or release B12
 → B10 Reviewer B remains parked as the terminal formalization gate and does not block the independent VFL-T02 implementation
 ```

@@ -25,10 +25,11 @@
   `857a7a02c26d0cdf6d6d484345b4ded577ec232c`，tree
   `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`，也已非强制推送并读回一致。
 - VFL-T02 stacked 分支
-  `codex/kaiyuan-feedback-loop-readonly-adapters-v1` 已交付批准设计
-  `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`，tree
-  `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`；公开 fetch 与本地 tree
-  回读一致。S1 实现当前为 `IN_PROGRESS`，尚未宣称完成。
+  `codex/kaiyuan-feedback-loop-readonly-adapters-v1` 已交付 Task 1–5 实现
+  `4d902efef46a122e9a19128cba4c7d75eee67b14`，tree
+  `7bac6c9359d6c503307851d8ea55d3eb86142b41`；公开 fetch 与本地 tree
+  回读一致。S1 当前为 `VERIFYING`；完整本地门禁与 fresh
+  whole-branch review 仍未完成，尚未宣称 `DONE`。
 - 开放 PR 只有 #54；它仍为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
@@ -140,7 +141,8 @@ render、upload 或 publication；stable 与 PR #54 未变，Runner 仍为 `NOT 
 
 ### VFL-T02
 
-VFL-T02 已在独立 stacked 分支开始。批准的 Solution A 只消费既有 episode 22
+VFL-T02 已在独立 stacked 分支完成 Task 1–5 实现交付，并进入
+`VERIFYING`。批准的 Solution A 只消费既有 episode 22
 审计、显式两查询计划和 caller-supplied local-source snapshot，通过字面
 loopback、proxy-free、redirect-free 的现有两阶段 KB 客户端检索，并用同一
 snapshot bytes 重新完成 citable passage 验证。它不抓取平台、不调用模型、
