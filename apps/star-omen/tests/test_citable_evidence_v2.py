@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -8,9 +10,16 @@ import pytest
 import src.connectors.evidence_resolver as resolver_module
 import src.connectors.primary_passage_cache as cache_module
 from kb_text_core import parse_kaiyuan_passages
-from src.connectors.evidence_resolver import resolve_evidence
+from src.connectors.evidence_resolver import EvidenceResolverContext, resolve_evidence
 from src.connectors.kb_contract import is_citable_evidence
 from src.connectors.primary_passage_cache import PrimaryPassageCache
+from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+    LocalKBSourceSnapshotV1,
+    ReadOnlyAdapterError,
+    ReadOnlyErrorCode,
+    canonical_contract_sha256,
+)
+from src.video_pipeline.feedback_loop.source_snapshot_v1 import LocalKBSourceAccessor
 
 
 RAW_PASSAGE = "石氏曰熒惑守心，天下兵起。"
@@ -56,6 +65,50 @@ def _write_volume(root: Path) -> tuple[Path, dict]:
         "normalized_content_hash": passage.normalized_content_hash,
     }
     return path, evidence
+
+
+def _source_snapshot() -> LocalKBSourceSnapshotV1:
+    raw = _text().encode("utf-8")
+    files = [
+        {
+            "relative_path": "古籍/唐開元占經/分卷/KR3g0018_031.md",
+            "size_bytes": len(raw),
+            "sha256": hashlib.sha256(raw).hexdigest(),
+        }
+    ]
+    tree_sha256 = hashlib.sha256(
+        json.dumps(
+            files,
+            ensure_ascii=False,
+            allow_nan=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+    ).hexdigest()
+    return LocalKBSourceSnapshotV1.model_validate(
+        {
+            "schema_version": "local-kb-source-snapshot/v1",
+            "snapshot_id": "snapshot:citable-resolver-integration",
+            "corpus_version": "20260101T000000Z",
+            "collection": "local_kb_kaiyuan_v2",
+            "kb_book_id": "kaiyuan_zhanjing",
+            "files": files,
+            "tree_sha256": tree_sha256,
+        }
+    )
+
+
+class _CountingAccessor:
+    def __init__(self, accessor: LocalKBSourceAccessor) -> None:
+        self.accessor = accessor
+        self.calls: list[str] = []
+
+    def relative_paths(self) -> tuple[str, ...]:
+        return self.accessor.relative_paths()
+
+    def load(self, candidate, **kwargs):
+        self.calls.append(Path(candidate).as_posix())
+        return self.accessor.load(candidate, **kwargs)
 
 
 def test_fully_matched_fenjuan_passage_is_citable(tmp_path: Path):
@@ -229,3 +282,102 @@ def test_repeated_resolution_reuses_parse_but_revalidates_changed_bytes(
 
     path.unlink()
     assert resolve_evidence(evidence, tmp_path)["status"] == "missing_source"
+
+
+def test_injected_resolver_uses_only_loader_bytes_and_explicit_context(
+    monkeypatch, tmp_path: Path
+):
+    _path, evidence = _write_volume(tmp_path)
+    snapshot = _source_snapshot()
+    unrelated = tmp_path / "unrelated-cwd"
+    unrelated.mkdir()
+
+    def forbidden_settings():
+        raise AssertionError("injected resolver must not load global settings")
+
+    def forbidden_cache(*_args, **_kwargs):
+        raise AssertionError("injected resolver must not use the pathname cache")
+
+    monkeypatch.setattr(resolver_module, "get_settings", forbidden_settings)
+    monkeypatch.setattr(resolver_module.primary_passage_cache, "load", forbidden_cache)
+
+    with LocalKBSourceAccessor.open(kb_root=tmp_path, snapshot=snapshot) as accessor:
+        accessor.assert_bound(
+            kb_root=tmp_path,
+            snapshot=snapshot,
+            snapshot_sha256=canonical_contract_sha256(snapshot),
+        )
+        loader = _CountingAccessor(accessor)
+
+        def forbidden_path_read(*_args, **_kwargs):
+            raise AssertionError("resolver integration must use accessor bytes")
+
+        monkeypatch.setattr(Path, "read_bytes", forbidden_path_read)
+        monkeypatch.chdir(unrelated)
+
+        resolved = resolve_evidence(
+            evidence,
+            tmp_path,
+            passage_loader=loader,
+            resolver_context=EvidenceResolverContext(
+                source_root_label="snapshot-root",
+                ingest_source_label="snapshot-ingest",
+            ),
+        )
+
+        assert resolved["status"] == "citable"
+        assert resolved["ingest_source"] == "snapshot-ingest"
+        assert resolved["trace"]["source_root_label"] == "snapshot-root"
+        assert loader.calls == [str(evidence["relative_path"])]
+        accessor.assert_unchanged()
+
+
+def test_injected_resolver_preserves_lexical_path_and_propagates_no_follow_error(
+    monkeypatch, tmp_path: Path
+):
+    _path, evidence = _write_volume(tmp_path)
+    relative_path = str(evidence["relative_path"])
+    snapshot = _source_snapshot()
+
+    with LocalKBSourceAccessor.open(kb_root=tmp_path, snapshot=snapshot) as accessor:
+        accessor.assert_bound(
+            kb_root=tmp_path,
+            snapshot=snapshot,
+            snapshot_sha256=canonical_contract_sha256(snapshot),
+        )
+        loader = _CountingAccessor(accessor)
+        volume_directory = tmp_path / "古籍" / "唐開元占經" / "分卷"
+        held_directory = volume_directory.with_name("held-分卷")
+        volume_directory.rename(held_directory)
+        volume_directory.symlink_to(held_directory.name, target_is_directory=True)
+        path_calls: list[str] = []
+
+        def forbidden_resolve(*_args, **_kwargs):
+            path_calls.append("resolve")
+            raise AssertionError("injected resolver must not resolve child paths")
+
+        def forbidden_is_file(*_args, **_kwargs):
+            path_calls.append("is_file")
+            raise AssertionError("injected resolver must not stat child paths")
+
+        monkeypatch.setattr(Path, "resolve", forbidden_resolve)
+        monkeypatch.setattr(Path, "is_file", forbidden_is_file)
+        try:
+            with pytest.raises(ReadOnlyAdapterError) as exc_info:
+                resolve_evidence(
+                    evidence,
+                    tmp_path,
+                    passage_loader=loader,
+                    resolver_context=EvidenceResolverContext(
+                        source_root_label="snapshot-root",
+                        ingest_source_label="snapshot-ingest",
+                    ),
+                )
+        finally:
+            volume_directory.unlink()
+            held_directory.rename(volume_directory)
+
+        assert exc_info.value.code is ReadOnlyErrorCode.SOURCE_INTEGRITY_FAILED
+        assert loader.calls == [relative_path]
+        assert path_calls == []
+        accessor.assert_unchanged()

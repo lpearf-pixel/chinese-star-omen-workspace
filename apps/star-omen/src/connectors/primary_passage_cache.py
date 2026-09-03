@@ -5,7 +5,7 @@ from collections import OrderedDict
 from dataclasses import dataclass, replace
 from pathlib import Path
 from threading import RLock
-from typing import Any
+from typing import Any, Protocol
 
 from kb_text_core import parse_kaiyuan_passages
 
@@ -22,6 +22,64 @@ class PrimarySourceSnapshot:
     content_hash: str
     text: str
     passages: tuple[Any, ...]
+
+
+class PrimarySourceByteLoader(Protocol):
+    def load(
+        self,
+        path: str | Path,
+        *,
+        card_type: str,
+        kb_book_id: str,
+        book_title: str,
+    ) -> PrimarySourceSnapshot: ...
+
+    def relative_paths(self) -> tuple[str, ...]: ...
+
+
+def build_primary_source_snapshot(
+    raw_bytes: bytes,
+    *,
+    path: Path,
+    mtime_ns: int,
+    card_type: str,
+    kb_book_id: str,
+    book_title: str,
+) -> PrimarySourceSnapshot:
+    """Parse one already-opened immutable byte snapshot without reopening it."""
+
+    if not isinstance(raw_bytes, bytes):
+        raise TypeError("raw_bytes must be bytes")
+    if not isinstance(path, Path):
+        raise TypeError("path must be a Path")
+    if isinstance(mtime_ns, bool) or not isinstance(mtime_ns, int):
+        raise TypeError("mtime_ns must be an integer")
+    try:
+        text = raw_bytes.decode("utf-8", errors="strict")
+    except UnicodeDecodeError as exc:
+        raise PrimarySourceReadError("source_decode_failed") from exc
+    try:
+        parsed = parse_kaiyuan_passages(
+            text,
+            source_path=str(path),
+            card_type=card_type,
+            kb_book_id=kb_book_id,
+            book_title=book_title,
+        )
+    except Exception as exc:
+        raise PrimarySourceReadError("source_parse_failed") from exc
+    passages = tuple(
+        replace(passage, heading_path=tuple(passage.heading_path))
+        for passage in parsed
+    )
+    return PrimarySourceSnapshot(
+        path=path,
+        mtime_ns=mtime_ns,
+        size_bytes=len(raw_bytes),
+        content_hash="sha256:" + hashlib.sha256(raw_bytes).hexdigest(),
+        text=text,
+        passages=passages,
+    )
 
 
 ParserIdentity = tuple[str, str, str]
@@ -80,12 +138,6 @@ class PrimaryPassageCache:
 
         with self._lock:
             raw_bytes, stat = self._read_stable_bytes(resolved)
-            try:
-                text = raw_bytes.decode("utf-8", errors="strict")
-            except UnicodeDecodeError as exc:
-                raise PrimarySourceReadError(
-                    f"source_decode_failed:{resolved}:{exc}"
-                ) from exc
             content_hash = "sha256:" + hashlib.sha256(raw_bytes).hexdigest()
             cached = self._entries.get(key)
             if cached is not None and cached.content_hash == content_hash:
@@ -99,24 +151,13 @@ class PrimaryPassageCache:
                 self._entries.move_to_end(key)
                 return cached
 
-            parsed = parse_kaiyuan_passages(
-                text,
-                source_path=str(resolved),
+            snapshot = build_primary_source_snapshot(
+                raw_bytes,
+                path=resolved,
+                mtime_ns=stat.st_mtime_ns,
                 card_type=card_type,
                 kb_book_id=kb_book_id,
                 book_title=book_title,
-            )
-            passages = tuple(
-                replace(passage, heading_path=tuple(passage.heading_path))
-                for passage in parsed
-            )
-            snapshot = PrimarySourceSnapshot(
-                path=resolved,
-                mtime_ns=stat.st_mtime_ns,
-                size_bytes=stat.st_size,
-                content_hash=content_hash,
-                text=text,
-                passages=passages,
             )
             self._entries[key] = snapshot
             self._entries.move_to_end(key)

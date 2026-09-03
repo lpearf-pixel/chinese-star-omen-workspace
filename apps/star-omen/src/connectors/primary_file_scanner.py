@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 import os
 import re
 import sys
@@ -8,6 +9,7 @@ from typing import Any
 
 from src.connectors.kb_contract import infer_metadata_from_path
 from src.connectors.primary_passage_cache import (
+    PrimarySourceByteLoader,
     PrimarySourceReadError,
     primary_passage_cache,
 )
@@ -97,7 +99,9 @@ def scan_primary_files(
     book_id: str | None,
     mode: str,
     limit: int,
-    query_variants: list[str],
+    query_variants: Sequence[str],
+    passage_loader: PrimarySourceByteLoader | None = None,
+    strict_exact_passages: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Scan all eligible primary files, then rank, deduplicate and truncate.
 
@@ -105,7 +109,13 @@ def scan_primary_files(
     fenjuan match may appear after a fulltext file in filesystem order.
     """
 
-    roots = _unique_roots(settings)
+    if strict_exact_passages and passage_loader is None:
+        raise ValueError("strict_exact_passages requires passage_loader")
+    roots = (
+        [Path(settings.kb_sources_root)]
+        if strict_exact_passages
+        else _unique_roots(settings)
+    )
     debug_enabled = os.getenv("KB_DEBUG_SCAN", "").strip().lower() in {
         "1",
         "true",
@@ -118,37 +128,61 @@ def scan_primary_files(
     read_errors: list[dict[str, str]] = []
 
     for root in roots:
-        if not root.exists():
-            continue
-        for path in sorted(root.rglob("*.md")):
-            normalized_path = str(path).replace("\\", "/")
+        if strict_exact_passages:
+            assert passage_loader is not None
+            source_paths: Sequence[str | Path] = passage_loader.relative_paths()
+        else:
+            if not root.exists():
+                continue
+            source_paths = sorted(root.rglob("*.md"))
+        for source_path in source_paths:
+            loader_path: str | Path = source_path
+            path = Path(source_path)
+            if strict_exact_passages:
+                normalized_path = (root / path).as_posix()
+                metadata_path = path.as_posix()
+            else:
+                normalized_path = str(path).replace("\\", "/")
+                metadata_path = normalized_path
             if (
-                "/分卷/" not in normalized_path
-                and "全文合併版" not in normalized_path
-                and "全文合并版" not in normalized_path
+                "/分卷/" not in f"/{metadata_path}"
+                and "全文合併版" not in metadata_path
+                and "全文合并版" not in metadata_path
             ):
                 continue
 
-            meta = infer_metadata_from_path(normalized_path)
+            meta = infer_metadata_from_path(metadata_path)
             if meta.get("card_type") not in PRIMARY_CARD_TYPES:
+                if strict_exact_passages:
+                    raise ValueError("loader inventory contains a non-primary path")
                 continue
             kb_book_id = meta.get("kb_book_id") or meta.get("book_id")
-            if book_id and kb_book_id != book_id:
+            if strict_exact_passages:
+                kb_book_id = book_id or kb_book_id
+            elif book_id and kb_book_id != book_id:
                 continue
 
             files_scanned += 1
-            try:
-                snapshot = primary_passage_cache.load(
-                    path,
+            if passage_loader is not None:
+                snapshot = passage_loader.load(
+                    loader_path,
                     card_type=str(meta.get("card_type") or ""),
                     kb_book_id=str(kb_book_id or ""),
                     book_title=str(meta.get("book_title") or "唐開元占經"),
                 )
-                text = snapshot.text
-            except PrimarySourceReadError as exc:
-                if debug_enabled:
-                    read_errors.append({"path": normalized_path, "error": str(exc)})
-                continue
+            else:
+                try:
+                    snapshot = primary_passage_cache.load(
+                        path,
+                        card_type=str(meta.get("card_type") or ""),
+                        kb_book_id=str(kb_book_id or ""),
+                        book_title=str(meta.get("book_title") or "唐開元占經"),
+                    )
+                except PrimarySourceReadError as exc:
+                    if debug_enabled:
+                        read_errors.append({"path": normalized_path, "error": str(exc)})
+                    continue
+            text = snapshot.text
 
             spans = find_match_spans(
                 text,
@@ -176,19 +210,59 @@ def scan_primary_files(
                         span.start,
                     ),
                 )
-                locator = source_locator(normalized_path, context.page_marker)
-                volume = source_volume(locator, context.page_marker)
-                heading_text = normalize_search_text(" ".join(context.heading_path))
+                exact_passage = None
+                if strict_exact_passages:
+                    if best.match_type not in {"exact_raw", "exact_normalized"}:
+                        continue
+                    containing = [
+                        passage
+                        for passage in snapshot.passages
+                        if passage.raw_start <= best.start
+                        and best.end <= passage.raw_end
+                    ]
+                    if len(containing) != 1:
+                        continue
+                    exact_passage = containing[0]
+                page_marker = (
+                    exact_passage.page_marker
+                    if exact_passage is not None
+                    else context.page_marker
+                )
+                locator = (
+                    exact_passage.source_locator
+                    if exact_passage is not None
+                    else source_locator(normalized_path, page_marker)
+                )
+                volume = (
+                    exact_passage.source_volume
+                    if exact_passage is not None
+                    else source_volume(locator, page_marker)
+                )
+                heading_path = (
+                    list(exact_passage.heading_path)
+                    if exact_passage is not None
+                    else context.heading_path
+                )
+                paragraph_index = (
+                    exact_passage.paragraph_index
+                    if exact_passage is not None
+                    else context.paragraph_index
+                )
+                heading_text = normalize_search_text(" ".join(heading_path))
                 heading_term_hits = sum(
                     1
                     for term in split_loose_terms(query)
                     if term and normalize_search_text(term) in heading_text
                 )
-                anchor = context.anchor_text
+                anchor = (
+                    exact_passage.raw_text
+                    if exact_passage is not None
+                    else context.anchor_text
+                )
                 hit = {
                     "chunk_id": (
                         f"fallback:{path.name}:"
-                        f"{context.page_marker or locator}:{cluster.start}"
+                        f"{page_marker or locator}:{cluster.start}"
                     ),
                     "score": fallback_score(
                         best.match_type,
@@ -207,9 +281,9 @@ def scan_primary_files(
                     "source_locator": locator,
                     "source_volume": volume,
                     "volume": volume,
-                    "page_marker": context.page_marker,
-                    "heading_path": context.heading_path,
-                    "paragraph_index": context.paragraph_index,
+                    "page_marker": page_marker,
+                    "heading_path": heading_path,
+                    "paragraph_index": paragraph_index,
                     "anchor_text": anchor,
                     "match_type": best.match_type,
                     "matched_variant": best.matched_variant,
@@ -221,14 +295,26 @@ def scan_primary_files(
                     "match_count": len(cluster.spans),
                     "heading_term_hits": heading_term_hits,
                 }
+                if exact_passage is not None:
+                    hit.update(
+                        {
+                            "content_hash": exact_passage.raw_content_hash,
+                            "raw_content_hash": exact_passage.raw_content_hash,
+                            "normalized_content_hash": (
+                                exact_passage.normalized_content_hash
+                            ),
+                            "raw_start": exact_passage.raw_start,
+                            "raw_end": exact_passage.raw_end,
+                        }
+                    )
                 hits.append(hit)
                 if debug_enabled:
                     debug_matches.append(
                         {
                             "path": normalized_path,
                             "source_locator": locator,
-                            "page_marker": context.page_marker,
-                            "heading_path": context.heading_path,
+                            "page_marker": page_marker,
+                            "heading_path": heading_path,
                             "match_type": best.match_type,
                             "match_offset": cluster.start,
                             "match_count": len(cluster.spans),

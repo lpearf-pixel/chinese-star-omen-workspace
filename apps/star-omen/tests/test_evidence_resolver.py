@@ -1,6 +1,7 @@
 from pathlib import Path
 
-from src.connectors.evidence_resolver import resolve_evidence
+import src.connectors.evidence_resolver as resolver_module
+from src.connectors.evidence_resolver import EvidenceResolverContext, resolve_evidence
 
 
 def test_resolve_evidence_marks_candidate_only_for_non_primary(tmp_path: Path):
@@ -55,3 +56,24 @@ def test_resolve_evidence_includes_anchor_fields():
     assert out["heading_path"] == ["卷十二", "荧惑占"]
     assert out["anchor_text"] == "荧惑守心"
     assert out["paragraph_index"] == 2
+
+
+def test_explicit_root_and_context_do_not_consult_global_settings(
+    monkeypatch, tmp_path: Path
+):
+    def forbidden_settings():
+        raise AssertionError("explicit resolver context must be self-contained")
+
+    monkeypatch.setattr(resolver_module, "get_settings", forbidden_settings)
+    out = resolve_evidence(
+        {"card_type": "term_card", "relative_path": "a.md"},
+        tmp_path,
+        resolver_context=EvidenceResolverContext(
+            source_root_label="source-snapshot",
+            ingest_source_label="snapshot-ingest",
+        ),
+    )
+
+    assert out["status"] == "candidate_only"
+    assert out["ingest_source"] == "snapshot-ingest"
+    assert out["trace"]["source_root_label"] == "source-snapshot"

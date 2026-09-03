@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+from dataclasses import dataclass
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 from kb_text_core import (
@@ -17,6 +18,7 @@ from src.connectors.kb_contract import (
     resolve_evidence_level,
 )
 from src.connectors.primary_passage_cache import (
+    PrimarySourceByteLoader,
     PrimarySourceReadError,
     primary_passage_cache,
 )
@@ -34,6 +36,21 @@ CHECK_NAMES = (
     "anchor",
     "hash",
 )
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceResolverContext:
+    source_root_label: str
+    ingest_source_label: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.source_root_label, str)
+            or not self.source_root_label.strip()
+            or not isinstance(self.ingest_source_label, str)
+            or not self.ingest_source_label.strip()
+        ):
+            raise ValueError("resolver labels must be non-empty strings")
 
 
 def _sha256_text(value: str) -> str:
@@ -99,7 +116,9 @@ def _finish(
     return resolved
 
 
-def _base_resolved(evidence: dict[str, Any], settings: Any) -> dict[str, Any]:
+def _base_resolved(
+    evidence: dict[str, Any], context: EvidenceResolverContext
+) -> dict[str, Any]:
     card_type = str(evidence.get("card_type") or "")
     inferred_level = resolve_evidence_level(card_type) if card_type else None
     locator = evidence.get("locator")
@@ -141,7 +160,7 @@ def _base_resolved(evidence: dict[str, Any], settings: Any) -> dict[str, Any]:
         "raw_end": evidence.get("raw_end"),
         "ingest_source": evidence.get(
             "ingest_source",
-            settings.kb_obsidian_ingest_source_label,
+            context.ingest_source_label,
         ),
         "source_type": evidence.get("source_type", "docs"),
         "evidence_level": evidence.get("evidence_level") or inferred_level,
@@ -155,13 +174,25 @@ def _base_resolved(evidence: dict[str, Any], settings: Any) -> dict[str, Any]:
 def resolve_evidence(
     evidence: dict[str, Any],
     kb_root: str | Path | None = None,
+    *,
+    passage_loader: PrimarySourceByteLoader | None = None,
+    resolver_context: EvidenceResolverContext | None = None,
 ) -> dict[str, Any]:
     """Resolve and verify a rule evidence reference against immutable raw text."""
 
-    settings = get_settings()
-    resolved = _base_resolved(evidence, settings)
+    settings = None
+    if kb_root is None or resolver_context is None:
+        settings = get_settings()
+    context = resolver_context
+    if context is None:
+        assert settings is not None
+        context = EvidenceResolverContext(
+            source_root_label=settings.kb_obsidian_source_root_label,
+            ingest_source_label=settings.kb_obsidian_ingest_source_label,
+        )
+    resolved = _base_resolved(evidence, context)
     checks = _checks()
-    root_label = settings.kb_obsidian_source_root_label
+    root_label = context.source_root_label
     card_type = str(resolved.get("card_type") or "")
 
     if card_type not in PRIMARY_CARD_TYPES:
@@ -184,29 +215,60 @@ def resolve_evidence(
             root_label=root_label,
         )
 
+    assert kb_root is not None or settings is not None
     effective_root = Path(kb_root) if kb_root is not None else Path(settings.kb_sources_root)
-    root = effective_root.expanduser().resolve()
-    raw_relative = Path(str(relative_path)).expanduser()
-    full_path = raw_relative.resolve() if raw_relative.is_absolute() else (root / raw_relative).resolve()
-    resolved["resolved_path"] = str(full_path)
-    resolved["path_exists"] = full_path.is_file()
-    if not _is_within(full_path, root):
-        return _finish(
-            resolved,
-            status="source_outside_root",
-            reason="source_path_escapes_kb_root",
-            checks=checks,
-            root_label=root_label,
+    loader_path: str | Path
+    if passage_loader is not None:
+        raw_value = str(relative_path)
+        pure_relative = PurePosixPath(raw_value)
+        if (
+            not raw_value
+            or raw_value.startswith("/")
+            or raw_value.startswith("~")
+            or "\\" in raw_value
+            or "//" in raw_value
+            or pure_relative.as_posix() != raw_value
+            or any(part in {"", ".", ".."} for part in pure_relative.parts)
+        ):
+            return _finish(
+                resolved,
+                status="source_outside_root",
+                reason="source_path_escapes_kb_root",
+                checks=checks,
+                root_label=root_label,
+            )
+        root = effective_root
+        full_path = root / Path(*pure_relative.parts)
+        loader_path = raw_value
+        resolved["resolved_path"] = str(full_path)
+    else:
+        root = effective_root.expanduser().resolve()
+        raw_relative = Path(str(relative_path)).expanduser()
+        full_path = (
+            raw_relative.resolve()
+            if raw_relative.is_absolute()
+            else (root / raw_relative).resolve()
         )
-    if not full_path.is_file():
-        return _finish(
-            resolved,
-            status="missing_source",
-            reason="source_file_not_found",
-            checks=checks,
-            root_label=root_label,
-        )
-    checks["path"] = True
+        loader_path = full_path
+        resolved["resolved_path"] = str(full_path)
+        resolved["path_exists"] = full_path.is_file()
+        if not _is_within(full_path, root):
+            return _finish(
+                resolved,
+                status="source_outside_root",
+                reason="source_path_escapes_kb_root",
+                checks=checks,
+                root_label=root_label,
+            )
+        if not full_path.is_file():
+            return _finish(
+                resolved,
+                status="missing_source",
+                reason="source_file_not_found",
+                checks=checks,
+                root_label=root_label,
+            )
+        checks["path"] = True
 
     inferred = infer_metadata_from_path(str(full_path))
     inferred_book = inferred.get("kb_book_id") or inferred.get("book_id")
@@ -275,21 +337,31 @@ def resolve_evidence(
     resolved["volume"] = resolved["source_volume"]
     checks["locator"] = True
 
-    try:
-        snapshot = primary_passage_cache.load(
-            full_path,
+    if passage_loader is not None:
+        snapshot = passage_loader.load(
+            loader_path,
             card_type=card_type,
             kb_book_id=effective_book,
             book_title=str(resolved.get("book_title") or "唐開元占經"),
         )
-    except PrimarySourceReadError as exc:
-        return _finish(
-            resolved,
-            status="missing_source",
-            reason=f"source_read_failed:{exc}",
-            checks=checks,
-            root_label=root_label,
-        )
+        resolved["path_exists"] = True
+        checks["path"] = True
+    else:
+        try:
+            snapshot = primary_passage_cache.load(
+                full_path,
+                card_type=card_type,
+                kb_book_id=effective_book,
+                book_title=str(resolved.get("book_title") or "唐開元占經"),
+            )
+        except PrimarySourceReadError as exc:
+            return _finish(
+                resolved,
+                status="missing_source",
+                reason=f"source_read_failed:{exc}",
+                checks=checks,
+                root_label=root_label,
+            )
 
     passages = snapshot.passages
     page_passages = [

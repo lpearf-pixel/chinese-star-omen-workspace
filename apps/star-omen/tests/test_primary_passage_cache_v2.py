@@ -9,6 +9,7 @@ import src.connectors.primary_passage_cache as cache_module
 from src.connectors.primary_passage_cache import (
     PrimaryPassageCache,
     PrimarySourceReadError,
+    build_primary_source_snapshot,
 )
 
 
@@ -155,3 +156,40 @@ def test_lru_capacity_evicts_least_recently_used(monkeypatch, tmp_path: Path):
 def test_cache_rejects_invalid_capacity(capacity):
     with pytest.raises(ValueError, match="max_entries"):
         PrimaryPassageCache(max_entries=capacity)
+
+
+def test_pure_byte_builder_preserves_explicit_integer_mtime_and_passage_hashes(
+    tmp_path: Path,
+):
+    raw = (
+        "# 唐開元占經\n<pb:KR3g0018_WYG_031-17a>\n石氏曰熒惑守心。"
+    ).encode("utf-8")
+    path = tmp_path / "古籍" / "唐開元占經" / "分卷" / "KR3g0018_031.md"
+
+    snapshot = build_primary_source_snapshot(
+        raw,
+        path=path,
+        mtime_ns=123456789,
+        card_type="fenjuan",
+        kb_book_id="kaiyuan_zhanjing",
+        book_title="唐開元占經",
+    )
+
+    assert snapshot.path == path
+    assert snapshot.mtime_ns == 123456789
+    assert type(snapshot.mtime_ns) is int
+    assert snapshot.text.endswith("石氏曰熒惑守心。")
+    assert snapshot.passages[0].raw_content_hash.startswith("sha256:")
+
+
+@pytest.mark.parametrize("mtime_ns", [None, True, 1.0, "1"])
+def test_pure_byte_builder_rejects_non_integer_mtime(tmp_path: Path, mtime_ns):
+    with pytest.raises(TypeError, match="mtime_ns"):
+        build_primary_source_snapshot(
+            b"source",
+            path=tmp_path / "source.md",
+            mtime_ns=mtime_ns,
+            card_type="fenjuan",
+            kb_book_id="kaiyuan_zhanjing",
+            book_title="唐開元占經",
+        )
