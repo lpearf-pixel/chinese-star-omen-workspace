@@ -2,7 +2,7 @@ UPSTREAM_DIR=apps/local-kb-unified
 DOWNSTREAM_DIR=apps/star-omen
 PYTHON?=python3
 
-.PHONY: status up kb-search ingest health b9-preview vfl-s0-run sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
+.PHONY: status up kb-search ingest health b9-preview vfl-s0-run vfl-s1-run sync-kaiyuan-source inspect-kaiyuan validate-candidates promote-candidates generate-candidate sync downstream-test upstream-test contracts-test text-core-test audit-kaiyuan-corpus audit-kaiyuan-baseline compare-kaiyuan-volumes release-drill capture-release-observation assemble-release-artifact create-release-evidence-bundle verify-release-evidence-bundle
 
 status:
 	git status --short
@@ -55,6 +55,42 @@ vfl-s0-run:
 	fi; \
 	PYTHONPATH=$(DOWNSTREAM_DIR):packages/kb-contracts/python:packages/kb-text-core/python \
 	$(PYTHON) $(DOWNSTREAM_DIR)/scripts/run_video_feedback_loop.py "$$@"
+
+unexport VFL_S1_AUDIT VFL_S1_QUERY_PLAN VFL_S1_KB_ROOT VFL_S1_SOURCE_SNAPSHOT VFL_S1_OUTPUT
+vfl-s1-run: private override export VFL_S1_AUDIT_PATH := $(value VFL_S1_AUDIT)
+vfl-s1-run: private override export VFL_S1_QUERY_PLAN_PATH := $(value VFL_S1_QUERY_PLAN)
+vfl-s1-run: private override export VFL_S1_KB_ROOT_PATH := $(value VFL_S1_KB_ROOT)
+vfl-s1-run: private override export VFL_S1_SOURCE_SNAPSHOT_PATH := $(value VFL_S1_SOURCE_SNAPSHOT)
+vfl-s1-run: private override export VFL_S1_OUTPUT_PATH := $(value VFL_S1_OUTPUT)
+vfl-s1-run:
+	@test -n "$${VFL_S1_AUDIT_PATH}" || { \
+	  printf 'VFL_S1_AUDIT is required\n' >&2; \
+	  exit 2; \
+	}
+	@test -n "$${VFL_S1_QUERY_PLAN_PATH}" || { \
+	  printf 'VFL_S1_QUERY_PLAN is required\n' >&2; \
+	  exit 2; \
+	}
+	@test -n "$${VFL_S1_KB_ROOT_PATH}" || { \
+	  printf 'VFL_S1_KB_ROOT is required\n' >&2; \
+	  exit 2; \
+	}
+	@test -n "$${VFL_S1_SOURCE_SNAPSHOT_PATH}" || { \
+	  printf 'VFL_S1_SOURCE_SNAPSHOT is required\n' >&2; \
+	  exit 2; \
+	}
+	@test -n "$${VFL_S1_OUTPUT_PATH}" || { \
+	  printf 'VFL_S1_OUTPUT is required\n' >&2; \
+	  exit 2; \
+	}
+	@set -- \
+	  --audit "$${VFL_S1_AUDIT_PATH}" \
+	  --query-plan "$${VFL_S1_QUERY_PLAN_PATH}" \
+	  --kb-root "$${VFL_S1_KB_ROOT_PATH}" \
+	  --source-snapshot "$${VFL_S1_SOURCE_SNAPSHOT_PATH}" \
+	  --output "$${VFL_S1_OUTPUT_PATH}"; \
+	PYTHONPATH=$(DOWNSTREAM_DIR):packages/kb-contracts/python:packages/kb-text-core/python \
+	$(PYTHON) $(DOWNSTREAM_DIR)/scripts/run_video_feedback_loop_s1.py "$$@"
 
 sync-kaiyuan-source:
 	python scripts/sync_kaiyuan_source.py $(if $(KAIYUAN_SOURCE_DIR),--source-dir "$(KAIYUAN_SOURCE_DIR)",) --clean
