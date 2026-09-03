@@ -455,6 +455,8 @@ def _main_args(
 
 def _subprocess_env() -> dict[str, str]:
     env = os.environ.copy()
+    for name in ("MAKELEVEL", "MFLAGS", "MAKEFLAGS"):
+        env.pop(name, None)
     env["PYTHONPATH"] = os.pathsep.join(
         [
             str(WORKSPACE_ROOT / "packages" / "kb-contracts" / "python"),
@@ -861,8 +863,26 @@ def test_public_pilot_identity_gate_precedes_factory(
         ),
     ],
 )
-def test_make_target_requires_all_five_public_values(present: tuple[str, ...]) -> None:
+@pytest.mark.parametrize(
+    "make_recursion_environment",
+    [
+        pytest.param({}, id="direct"),
+        pytest.param(
+            {"MAKELEVEL": "1", "MFLAGS": "-s", "MAKEFLAGS": "s"},
+            id="inherited-make",
+        ),
+    ],
+)
+def test_make_target_requires_all_five_public_values(
+    present: tuple[str, ...],
+    make_recursion_environment: dict[str, str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """Catches a Make target choosing any hidden path default."""
+    for name in ("MAKELEVEL", "MFLAGS", "MAKEFLAGS"):
+        monkeypatch.delenv(name, raising=False)
+    for name, value in make_recursion_environment.items():
+        monkeypatch.setenv(name, value)
     values = {
         "VFL_S1_AUDIT": "audit",
         "VFL_S1_QUERY_PLAN": "plan",
