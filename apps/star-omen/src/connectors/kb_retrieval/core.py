@@ -489,7 +489,7 @@ class RetrievalCoreMixin:
                 if verified_provenance is not None
                 else raw_result.get("corpus_version")
             ),
-            provenance_sha256=(
+            upstream_provenance_sha256=(
                 verified_provenance.provenance_sha256
                 if verified_provenance is not None
                 else None

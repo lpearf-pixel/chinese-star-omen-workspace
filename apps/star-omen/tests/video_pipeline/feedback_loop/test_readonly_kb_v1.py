@@ -902,7 +902,7 @@ def test_real_s1_retriever_hard_pins_variants_fallback_and_wire_timeouts(
     configured_timeout: str,
     environment_timeout: str | None,
 ) -> None:
-    """Catches hostile settings reaching real retrieve requests or fallback policy."""
+    """Catches hostile settings or legacy provenance keys escaping the real seam."""
 
     root = tmp_path / "kb"
     snapshot = _source_snapshot(
@@ -1026,6 +1026,15 @@ def test_real_s1_retriever_hard_pins_variants_fallback_and_wire_timeouts(
     assert result["stage2"]["fallback_used"] is True
     assert result["stage2"]["fallback_reason"] == "official_primary_empty"
     assert result["stage2"]["primary_candidates"]
+    for observability in (
+        result["stage1"]["observability"],
+        result["stage2"]["official_result"]["observability"],
+        result["observability"],
+    ):
+        assert observability["upstream_provenance_sha256"] == (
+            "f786107305e14b583ee3c8d12500ec7686d4c2475c9c211e287fbfe72a7597af"
+        )
+        assert "provenance_sha256" not in observability
     assert all(call["timeout"] == 10.0 for call in retrieves + metas)
     assert all(call["headers"] == {} for call in metas)
     assert all(

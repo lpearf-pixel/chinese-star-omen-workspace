@@ -584,11 +584,15 @@ def test_verified_meta_provenance_is_added_only_to_observability(monkeypatch):
     for stage in (result["stage1"], result["stage2"]["official_result"]):
         assert "corpus_version" not in stage
         assert stage["observability"]["corpus_version"] == provenance.corpus_version
-        assert stage["observability"]["provenance_sha256"] == provenance.provenance_sha256
+        assert stage["observability"]["upstream_provenance_sha256"] == (
+            provenance.provenance_sha256
+        )
+        assert "provenance_sha256" not in stage["observability"]
         assert stage["observability"]["corpus_provenance"] == "upstream_meta"
     outer = result["observability"]
     assert outer["corpus_version"] == provenance.corpus_version
-    assert outer["provenance_sha256"] == provenance.provenance_sha256
+    assert outer["upstream_provenance_sha256"] == provenance.provenance_sha256
+    assert "provenance_sha256" not in outer
     assert outer["corpus_provenance"] == "upstream_meta"
     assert provenance.session_meta_sha256 not in json.dumps(result, ensure_ascii=False)
 
