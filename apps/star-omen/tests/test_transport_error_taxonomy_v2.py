@@ -1,12 +1,18 @@
 from __future__ import annotations
 
 import httpx
+import pytest
 
 from kb_contracts import SyncErrorCode
 from src.connectors.kb_retrieval.transport import (
     KBSearchError,
+    PinnedHTTPXJSONTransport,
     classify_transport_exception,
     decode_json_object,
+)
+from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+    ReadOnlyAdapterError,
+    ReadOnlyErrorCode,
 )
 
 
@@ -128,3 +134,38 @@ def test_decode_json_object_rejects_invalid_json_and_non_object_shapes():
         assert "JSON object" in str(exc)
     else:  # pragma: no cover
         raise AssertionError("non-object JSON must fail")
+
+
+def test_pinned_transport_exception_has_fixed_content_free_error(monkeypatch):
+    """Catches strict transport leaking a key, URL, body, or exception cause."""
+
+    class FailingClient:
+        def __init__(self, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None
+
+        def stream(self, *args, **kwargs):
+            raise RuntimeError("unit-secret http://remote.example raw-body")
+
+    import src.connectors.kb_retrieval.transport as transport_module
+
+    assert transport_module.httpx is not None
+    monkeypatch.setattr(transport_module.httpx, "Client", FailingClient)
+    transport = PinnedHTTPXJSONTransport("http://127.0.0.1:8008")
+    with pytest.raises(ReadOnlyAdapterError) as caught:
+        transport.request(
+            "GET",
+            "http://127.0.0.1:8008/v1/meta",
+            json_payload=None,
+            headers={},
+            timeout=10.0,
+        )
+    assert caught.value.code == ReadOnlyErrorCode.TRANSPORT_FAILED
+    assert str(caught.value) == "transport_failed"
+    assert caught.value.__cause__ is None
+    assert caught.value.__context__ is None

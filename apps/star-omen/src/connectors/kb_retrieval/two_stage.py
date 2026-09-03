@@ -266,16 +266,30 @@ class TwoStageMixin:
             official_stages,
             "corpus_version",
         )
+        provenance_sha256, provenance_sha_conflict = _consensus_provenance(
+            official_stages,
+            "provenance_sha256",
+        )
+        corpus_provenance, corpus_provenance_conflict = _consensus_provenance(
+            official_stages,
+            "corpus_provenance",
+        )
         provenance_conflicts = []
         if collection_conflict:
             provenance_conflicts.append("collection")
         if corpus_conflict:
             provenance_conflicts.append("corpus_version")
+        if provenance_sha_conflict:
+            provenance_conflicts.append("provenance_sha256")
+        if corpus_provenance_conflict:
+            provenance_conflicts.append("corpus_provenance")
         observability = base_observability(
             "two_stage_retrieve",
             total_latency_ms=elapsed_ms(total_started_ns, monotonic_ns()),
             collection=effective_collection,
             corpus_version=corpus_version,
+            provenance_sha256=provenance_sha256,
+            corpus_provenance=corpus_provenance,
             provenance_conflicts=provenance_conflicts,
             fallback_reason=fallback_reason,
             stages=stages,

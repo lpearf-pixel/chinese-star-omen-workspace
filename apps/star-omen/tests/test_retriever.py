@@ -286,6 +286,46 @@ def test_anchor_fields_are_present_in_normalized_hit(monkeypatch):
     assert hit["anchor_text"].startswith("荧惑守心")
 
 
+def test_strict_primary_normalization_does_not_synthesize_provenance(monkeypatch):
+    """Catches S1 manufacturing an anchor, identity, locator, heading, or hash."""
+
+    def fake_request(self, method, path, **kwargs):
+        return {
+            "hits": [
+                {
+                    "chunk_id": "strict-1",
+                    "title": "卷十二",
+                    "path": "/docs/古籍/唐開元占經/分卷/卷十二.md",
+                    "snippet": "荧惑守心",
+                    "score": 1.0,
+                }
+            ]
+        }
+
+    monkeypatch.setattr(KBSearchRetriever, "_request", fake_request)
+    retriever = KBSearchRetriever(
+        base_url="http://127.0.0.1:8008",
+        api_key="k",
+        strict_primary_passages=True,
+    )
+    hit = retriever.retrieve("荧惑守心")["hits"][0]
+
+    assert hit["snippet"] == "荧惑守心"
+    for absent in (
+        "anchor_text",
+        "source_locator",
+        "heading_path",
+        "kb_book_id",
+        "book_id",
+        "book_title",
+        "card_type",
+        "content_hash",
+        "raw_content_hash",
+        "normalized_content_hash",
+    ):
+        assert absent not in hit
+
+
 def test_retrieve_output_contains_payload_contract_spec(monkeypatch):
     def fake_request(self, method, path, **kwargs):
         return {"hits": []}

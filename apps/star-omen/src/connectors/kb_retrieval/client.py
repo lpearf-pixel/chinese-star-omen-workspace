@@ -2,15 +2,54 @@ from __future__ import annotations
 
 import copy
 from types import MethodType
-from typing import Any
+from typing import Any, Callable
+
+from src.config.settings import Settings
+from src.connectors.primary_passage_cache import PrimarySourceByteLoader
 
 from .core import RetrievalCoreMixin
-from .transport import KBSearchError, TransportMixin
+from .transport import (
+    JSONRequestTransport,
+    KBSearchError,
+    RawRetrieveResponseValidator,
+    TransportMixin,
+    VerifiedUpstreamProvenanceV1,
+)
 from .two_stage import TwoStageMixin
 
 
 class KBSearchRetriever(TwoStageMixin, RetrievalCoreMixin, TransportMixin):
     """Unified downstream client for official retrieval plus local primary fallback."""
+
+    def __init__(
+        self,
+        base_url: str | None = None,
+        api_key: str | None = None,
+        timeout: float | None = None,
+        default_collection: str | None = None,
+        settings: Settings | None = None,
+        *,
+        request_transport: JSONRequestTransport | None = None,
+        primary_source_byte_loader: PrimarySourceByteLoader | None = None,
+        raw_response_validator: RawRetrieveResponseValidator | None = None,
+        strict_primary_passages: bool = False,
+        verified_upstream_provenance: VerifiedUpstreamProvenanceV1 | None = None,
+        upstream_provenance_guard: Callable[[], None] | None = None,
+    ) -> None:
+        TransportMixin.__init__(
+            self,
+            base_url,
+            api_key,
+            timeout,
+            default_collection,
+            settings,
+            request_transport=request_transport,
+        )
+        self.primary_source_byte_loader = primary_source_byte_loader
+        self.raw_response_validator = raw_response_validator
+        self.strict_primary_passages = strict_primary_passages
+        self.verified_upstream_provenance = verified_upstream_provenance
+        self.upstream_provenance_guard = upstream_provenance_guard
 
     @staticmethod
     def _canonicalize_filters(

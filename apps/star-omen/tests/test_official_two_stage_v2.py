@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -9,6 +10,14 @@ import src.connectors.kb_retrieval.two_stage as two_stage_module
 from kb_contracts import SyncErrorCode
 from src.connectors.kb_search_retriever import KBSearchRetriever
 from src.connectors.kb_search_retriever import KBSearchError
+from src.connectors.kb_retrieval.transport import VerifiedUpstreamProvenanceV1
+from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+    ReadOnlyAdapterError,
+    ReadOnlyErrorCode,
+)
+from src.video_pipeline.feedback_loop.readonly_kb_v1 import (
+    validate_raw_official_retrieve_response,
+)
 
 
 def _settings(**overrides):
@@ -387,3 +396,236 @@ def test_official_primary_error_carries_trace_and_never_falls_back(monkeypatch):
     assert trace["latency_ms"] == 4.0
     assert trace["requested_top_k"] == 5
     assert trace["collection"] == "local_kb_kaiyuan_v2"
+
+
+def _verified_provenance() -> VerifiedUpstreamProvenanceV1:
+    return VerifiedUpstreamProvenanceV1(
+        corpus_version="20260903T010203Z",
+        collection="local_kb_kaiyuan_v2",
+        ingest_run_id="ingest_20260903T010203Z",
+        source_manifest_hash="sha256:" + "a" * 64,
+        created_at="2026-09-03T01:02:03Z",
+        session_meta_sha256="b" * 64,
+        provenance_sha256="c" * 64,
+    )
+
+
+def _strict_response(stage: str, hits: list[dict] | None = None) -> dict:
+    rows = list(hits or [])
+    return {
+        "schema_version": "kb-retrieve/v2",
+        "query_mode": "evidence",
+        "retrieval_stage": stage,
+        "card_types": (
+            ["zhusu_card", "term_card", "extract_card"]
+            if stage == "structured_recall"
+            else ["fenjuan", "fulltext"]
+        ),
+        "collection": "local_kb_kaiyuan_v2",
+        "filters": {"kb_book_id": "kaiyuan_zhanjing"},
+        "hits": rows,
+        "retrieved_count": len(rows),
+        "latency_ms": 1,
+    }
+
+
+def _strict_retriever(**kwargs) -> KBSearchRetriever:
+    provenance = _verified_provenance()
+
+    def validator(response, *, request_payload):
+        validate_raw_official_retrieve_response(
+            response,
+            request_payload=request_payload,
+            verified_provenance=provenance,
+        )
+
+    return KBSearchRetriever(
+        settings=_settings(
+            kb_sources_root="/snapshot",
+            kb_enable_obsidian_source=False,
+        ),
+        raw_response_validator=validator,
+        strict_primary_passages=True,
+        verified_upstream_provenance=provenance,
+        **kwargs,
+    )
+
+
+@pytest.mark.parametrize("card_type", [None, "term_card", ""])
+def test_malformed_nonempty_primary_response_fails_before_scanner(
+    monkeypatch,
+    card_type,
+):
+    """Catches filtering malformed official hits into fallback-eligible empty."""
+
+    retriever = _strict_retriever()
+    scanner_calls = 0
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        if stage == "structured_recall":
+            return _strict_response(stage)
+        hit = {"snippet": "x", "score": 1.0}
+        if card_type is not None:
+            hit["card_type"] = card_type
+        return _strict_response(stage, [hit])
+
+    def scanner(*args, **kwargs):
+        nonlocal scanner_calls
+        scanner_calls += 1
+        return [], {"files_scanned": 0}
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(retriever, "_scan_primary_files", scanner)
+
+    with pytest.raises(ReadOnlyAdapterError) as caught:
+        retriever.two_stage_retrieve(
+            "荧惑守心",
+            query_mode="evidence",
+            filters={"kb_book_id": "kaiyuan_zhanjing"},
+        )
+    assert caught.value.code == ReadOnlyErrorCode.RESPONSE_CONTRACT_REJECTED
+    assert scanner_calls == 0
+
+
+def test_malformed_empty_primary_response_fails_before_scanner(monkeypatch):
+    """Catches fallback running before raw mandatory-field validation."""
+
+    retriever = _strict_retriever()
+    scanner_calls = 0
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        response = _strict_response(stage)
+        if stage == "primary_evidence":
+            response.pop("filters")
+        return response
+
+    def scanner(*args, **kwargs):
+        nonlocal scanner_calls
+        scanner_calls += 1
+        return [], {"files_scanned": 0}
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(retriever, "_scan_primary_files", scanner)
+
+    with pytest.raises(ReadOnlyAdapterError):
+        retriever.two_stage_retrieve(
+            "荧惑守心",
+            query_mode="evidence",
+            filters={"kb_book_id": "kaiyuan_zhanjing"},
+        )
+    assert scanner_calls == 0
+
+
+def test_validated_raw_empty_primary_response_may_use_snapshot_scanner(monkeypatch):
+    """Catches preventing valid healthy-empty fallback after strict validation."""
+
+    retriever = _strict_retriever()
+    scanner_calls = 0
+
+    def fake_request(method, path, **kwargs):
+        return _strict_response(kwargs["json_payload"]["retrieval_stage"])
+
+    def scanner(*args, **kwargs):
+        nonlocal scanner_calls
+        scanner_calls += 1
+        return [], {
+            "files_scanned": 1,
+            "matched_files": [],
+            "matched_headings": [],
+            "matched_quotes": [],
+        }
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(retriever, "_scan_primary_files", scanner)
+    result = retriever.two_stage_retrieve(
+        "荧惑守心",
+        query_mode="evidence",
+        filters={"kb_book_id": "kaiyuan_zhanjing"},
+    )
+
+    assert scanner_calls == 1
+    assert result["stage2"]["official_primary_empty"] is True
+    assert result["stage2"]["fallback_used"] is True
+
+
+def test_verified_meta_provenance_is_added_only_to_observability(monkeypatch):
+    """Catches mislabeling separately verified meta as a raw response field."""
+
+    provenance = _verified_provenance()
+    retriever = _strict_retriever()
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        hits = []
+        if stage == "primary_evidence":
+            hits = [
+                {
+                    "snippet": "荧惑守心",
+                    "score": 1.0,
+                    "card_type": "fenjuan",
+                }
+            ]
+        return _strict_response(stage, hits)
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(
+        retriever,
+        "_scan_primary_files",
+        lambda *args, **kwargs: pytest.fail("official primary is nonempty"),
+    )
+    result = retriever.two_stage_retrieve(
+        "荧惑守心",
+        query_mode="evidence",
+        filters={"kb_book_id": "kaiyuan_zhanjing"},
+    )
+
+    for stage in (result["stage1"], result["stage2"]["official_result"]):
+        assert "corpus_version" not in stage
+        assert stage["observability"]["corpus_version"] == provenance.corpus_version
+        assert stage["observability"]["provenance_sha256"] == provenance.provenance_sha256
+        assert stage["observability"]["corpus_provenance"] == "upstream_meta"
+    outer = result["observability"]
+    assert outer["corpus_version"] == provenance.corpus_version
+    assert outer["provenance_sha256"] == provenance.provenance_sha256
+    assert outer["corpus_provenance"] == "upstream_meta"
+    assert provenance.session_meta_sha256 not in json.dumps(result, ensure_ascii=False)
+
+
+def test_provenance_guard_wraps_each_official_request_and_failure(monkeypatch):
+    """Catches missing a pre/post meta guard around a failed stage-2 request."""
+
+    events: list[str] = []
+    retriever = _strict_retriever(
+        upstream_provenance_guard=lambda: events.append("meta"),
+    )
+
+    def fake_request(method, path, **kwargs):
+        stage = kwargs["json_payload"]["retrieval_stage"]
+        events.append(stage)
+        if stage == "primary_evidence":
+            raise ReadOnlyAdapterError(ReadOnlyErrorCode.TRANSPORT_FAILED)
+        return _strict_response(stage)
+
+    monkeypatch.setattr(retriever, "_request", fake_request)
+    monkeypatch.setattr(
+        retriever,
+        "_scan_primary_files",
+        lambda *args, **kwargs: pytest.fail("failed official request must not scan"),
+    )
+
+    with pytest.raises(ReadOnlyAdapterError):
+        retriever.two_stage_retrieve(
+            "荧惑守心",
+            query_mode="evidence",
+            filters={"kb_book_id": "kaiyuan_zhanjing"},
+        )
+    assert events == [
+        "meta",
+        "structured_recall",
+        "meta",
+        "meta",
+        "primary_evidence",
+        "meta",
+    ]

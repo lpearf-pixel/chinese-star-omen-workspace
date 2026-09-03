@@ -13,7 +13,7 @@ except ModuleNotFoundError:  # pragma: no cover
     yaml = None
 
 
-DEFAULT_CONFIG_PATH = Path("config/config.yaml")
+DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "config.yaml"
 ENV_PATTERN = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)(?::-([^}]*))?\}")
 
 
@@ -141,10 +141,88 @@ def interpolate_env(text: str) -> str:
     return ENV_PATTERN.sub(_replace, text)
 
 
+def resolve_kb_search_config_path(config_path: Path | None = None) -> Path:
+    """Resolve the one configuration file used by an S1 factory call."""
+
+    selected: Path
+    if config_path is not None:
+        selected = Path(config_path)
+    else:
+        environment_path = os.getenv("APP_CONFIG_PATH", "")
+        selected = Path(environment_path) if environment_path else DEFAULT_CONFIG_PATH
+    try:
+        resolved = selected.expanduser().resolve(strict=True)
+    except (OSError, RuntimeError):
+        raise SettingsError("Config file is unavailable") from None
+    if not resolved.is_file():
+        raise SettingsError("Config file is unavailable")
+    return resolved
+
+
+def _endpoint_scalar(value: Any, *, environment_name: str) -> Any:
+    selected = value
+    if isinstance(value, str):
+        placeholder = ENV_PATTERN.fullmatch(value)
+        if placeholder is not None:
+            if placeholder.group(1) != environment_name:
+                raise SettingsError("Invalid KB Search endpoint configuration")
+            selected = placeholder.group(2)
+            if selected is None and environment_name not in os.environ:
+                raise SettingsError("Invalid KB Search endpoint configuration")
+        elif "${" in value:
+            raise SettingsError("Invalid KB Search endpoint configuration")
+    environment_value = os.getenv(environment_name)
+    if environment_value is not None:
+        selected = environment_value
+    return _parse_scalar(selected) if isinstance(selected, str) else selected
+
+
+def load_kb_search_endpoint(config_path: Path) -> str:
+    """Load only the KB endpoint fields without touching credential config."""
+
+    path = Path(config_path)
+    if not path.is_absolute() or not path.is_file():
+        raise SettingsError("Invalid KB Search endpoint configuration")
+    try:
+        raw_text = path.read_text(encoding="utf-8")
+        parsed = (
+            (yaml.safe_load(raw_text) or {})
+            if yaml is not None
+            else _minimal_yaml_parse(raw_text)
+        )
+        if not isinstance(parsed, dict):
+            raise ValueError
+        kb_search = parsed.get("kb_search")
+        if not isinstance(kb_search, dict):
+            raise ValueError
+
+        base_url = _endpoint_scalar(
+            kb_search.get("base_url", ""),
+            environment_name="KB_SEARCH_BASE_URL",
+        )
+        if str(base_url or ""):
+            return str(base_url)
+
+        port_value = _endpoint_scalar(
+            kb_search.get("api_port"),
+            environment_name="KB_SEARCH_API_PORT",
+        )
+        if isinstance(port_value, bool):
+            raise ValueError
+        port = int(port_value)
+        return f"http://127.0.0.1:{port}"
+    except SettingsError:
+        raise
+    except Exception:
+        raise SettingsError("Invalid KB Search endpoint configuration") from None
+
+
 def load_config(config_path: Path | None = None) -> dict[str, Any]:
-    path = config_path or Path(os.getenv("APP_CONFIG_PATH", str(DEFAULT_CONFIG_PATH)))
-    if not path.exists():
-        raise SettingsError(f"Config file not found: {path}")
+    path = Path(config_path) if config_path is not None else resolve_kb_search_config_path()
+    if not path.is_absolute():
+        path = resolve_kb_search_config_path(path)
+    elif not path.is_file():
+        raise SettingsError("Config file is unavailable")
     raw_text = interpolate_env(path.read_text(encoding="utf-8"))
     if yaml is not None:
         parsed = yaml.safe_load(raw_text) or {}
@@ -155,8 +233,17 @@ def load_config(config_path: Path | None = None) -> dict[str, Any]:
     return parsed
 
 
-def load_settings(config_path: Path | None = None) -> Settings:
-    cfg = load_config(config_path)
+def load_settings(
+    config_path: Path | None = None,
+    *,
+    kb_search_timeout_override: float | None = None,
+) -> Settings:
+    resolved_path = (
+        Path(config_path)
+        if config_path is not None and Path(config_path).is_absolute()
+        else resolve_kb_search_config_path(config_path)
+    )
+    cfg = load_config(resolved_path)
 
     app = cfg.get("app", {})
     kb_search = cfg.get("kb_search", {})
@@ -171,7 +258,17 @@ def load_settings(config_path: Path | None = None) -> Settings:
         kb_search_api_port=api_port,
         kb_search_api_key=_env_or("KB_SEARCH_API_KEY", kb_search.get("api_key")),
         kb_search_default_collection=str(_env_or("KB_SEARCH_DEFAULT_COLLECTION", kb_search.get("default_collection"))),
-        kb_search_timeout_seconds=_as_float("KB_SEARCH_TIMEOUT_SECONDS", _env_or("KB_SEARCH_TIMEOUT_SECONDS", kb_search.get("timeout_seconds"))),
+        kb_search_timeout_seconds=(
+            kb_search_timeout_override
+            if kb_search_timeout_override is not None
+            else _as_float(
+                "KB_SEARCH_TIMEOUT_SECONDS",
+                _env_or(
+                    "KB_SEARCH_TIMEOUT_SECONDS",
+                    kb_search.get("timeout_seconds"),
+                ),
+            )
+        ),
         kb_search_query_normalize=_as_bool(_env_or("KB_SEARCH_QUERY_NORMALIZE", kb_search.get("query_normalize", True))),
         kb_search_query_s2t=_as_bool(_env_or("KB_SEARCH_QUERY_S2T", kb_search.get("query_s2t", True))),
         kb_search_query_t2s=_as_bool(_env_or("KB_SEARCH_QUERY_T2S", kb_search.get("query_t2s", True))),
@@ -195,7 +292,7 @@ def load_settings(config_path: Path | None = None) -> Settings:
             "ASTRO_VISIBILITY_MIN_ALT_DEG",
             _env_or("ASTRO_VISIBILITY_MIN_ALT_DEG", astro.get("visibility_min_alt_deg")),
         ),
-        config_path=str(config_path or Path(os.getenv("APP_CONFIG_PATH", str(DEFAULT_CONFIG_PATH)))),
+        config_path=str(resolved_path),
         raw_config=cfg,
     )
 

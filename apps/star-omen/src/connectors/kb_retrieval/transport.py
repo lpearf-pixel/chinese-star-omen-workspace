@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import sys
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping, Protocol
+from urllib.parse import urlsplit
 
 try:
     import httpx
@@ -25,6 +28,235 @@ from src.config.settings import (  # noqa: E402
 )
 
 logger = logging.getLogger(__name__)
+
+S1_REQUEST_TIMEOUT_SECONDS = 10.0
+_META_MAX_BYTES = 256 * 1024
+_RETRIEVE_MAX_BYTES = 4 * 1024 * 1024
+_MAX_JSON_DEPTH = 64
+_MAX_JSON_NODES = 100_000
+
+
+class JSONRequestTransport(Protocol):
+    def request(
+        self,
+        method: str,
+        url: str,
+        *,
+        json_payload: dict[str, Any] | None,
+        headers: dict[str, str],
+        timeout: float,
+    ) -> dict[str, Any]: ...
+
+
+@dataclass(frozen=True, slots=True)
+class VerifiedUpstreamProvenanceV1:
+    corpus_version: str
+    collection: str
+    ingest_run_id: str
+    source_manifest_hash: str
+    created_at: str
+    session_meta_sha256: str
+    provenance_sha256: str
+
+
+class RawRetrieveResponseValidator(Protocol):
+    def __call__(
+        self,
+        response: Mapping[str, object],
+        *,
+        request_payload: Mapping[str, object],
+    ) -> None: ...
+
+
+class _DuplicateKeyError(ValueError):
+    pass
+
+
+def _readonly_failure(code_name: str) -> None:
+    from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+        ReadOnlyAdapterError,
+        ReadOnlyErrorCode,
+    )
+
+    raise ReadOnlyAdapterError(ReadOnlyErrorCode(code_name))
+
+
+def _strict_object_pairs(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    result: dict[str, object] = {}
+    for key, value in pairs:
+        if key in result:
+            raise _DuplicateKeyError
+        result[key] = value
+    return result
+
+
+def _reject_json_constant(_value: str) -> object:
+    raise ValueError
+
+
+def _validate_json_graph(value: object) -> None:
+    nodes = 0
+    stack: list[tuple[object, int]] = [(value, 1)]
+    while stack:
+        item, depth = stack.pop()
+        nodes += 1
+        if nodes > _MAX_JSON_NODES or depth > _MAX_JSON_DEPTH:
+            raise ValueError
+        if type(item) is int and abs(item) > sys.float_info.max:
+            raise ValueError
+        if type(item) is float and not math.isfinite(item):
+            raise ValueError
+        if isinstance(item, dict):
+            stack.extend((child, depth + 1) for child in item.values())
+        elif isinstance(item, list):
+            stack.extend((child, depth + 1) for child in item)
+
+
+class PinnedHTTPXJSONTransport:
+    """Strict streaming JSON transport pinned to one prevalidated loopback origin."""
+
+    def __init__(self, validated_origin: str) -> None:
+        self._origin = validated_origin.rstrip("/")
+
+    def request(
+        self,
+        method: str,
+        url: str,
+        *,
+        json_payload: dict[str, Any] | None,
+        headers: dict[str, str],
+        timeout: float,
+    ) -> dict[str, Any]:
+        path = self._validate_request(
+            method,
+            url,
+            json_payload=json_payload,
+            headers=headers,
+            timeout=timeout,
+        )
+        if httpx is None:
+            _readonly_failure("transport_failed")
+        try:
+            with httpx.Client(trust_env=False, follow_redirects=False) as client:
+                with client.stream(
+                    method,
+                    url,
+                    json=json_payload,
+                    headers=headers,
+                    timeout=timeout,
+                ) as response:
+                    if not isinstance(response.status_code, int) or not (
+                        200 <= response.status_code < 300
+                    ):
+                        _readonly_failure("transport_failed")
+                    return self._decode_response(response, path=path)
+        except Exception as exc:
+            from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+                ReadOnlyAdapterError,
+            )
+
+            if isinstance(exc, ReadOnlyAdapterError):
+                raise
+        _readonly_failure("transport_failed")
+
+    def _validate_request(
+        self,
+        method: str,
+        url: str,
+        *,
+        json_payload: dict[str, Any] | None,
+        headers: dict[str, str],
+        timeout: float,
+    ) -> str:
+        try:
+            parsed = urlsplit(url)
+            path = parsed.path
+        except ValueError:
+            parsed = None
+            path = ""
+        if parsed is None:
+            _readonly_failure("transport_failed")
+        if (
+            type(timeout) not in {int, float}
+            or (type(timeout) is float and not math.isfinite(timeout))
+            or timeout != S1_REQUEST_TIMEOUT_SECONDS
+            or parsed.query
+            or parsed.fragment
+            or f"{parsed.scheme}://{parsed.netloc}" != self._origin
+            or url != f"{self._origin}{path}"
+        ):
+            _readonly_failure("transport_failed")
+        if path == "/v1/meta":
+            if method != "GET" or json_payload is not None or headers != {}:
+                _readonly_failure("transport_failed")
+            return path
+        if path != "/v1/retrieve" or method != "POST" or not isinstance(
+            json_payload, dict
+        ):
+            _readonly_failure("transport_failed")
+        if set(headers) != {"Authorization", "X-API-Key"}:
+            _readonly_failure("transport_failed")
+        key = headers.get("X-API-Key")
+        authorization = headers.get("Authorization")
+        if (
+            not isinstance(key, str)
+            or not key
+            or key != key.strip()
+            or any(character.isspace() or ord(character) < 0x20 for character in key)
+            or not isinstance(authorization, str)
+            or authorization != f"Bearer {key}"
+        ):
+            _readonly_failure("transport_failed")
+        return path
+
+    @staticmethod
+    def _decode_response(response: Any, *, path: str) -> dict[str, Any]:
+        headers = {str(key).lower(): str(value) for key, value in response.headers.items()}
+        content_type = headers.get("content-type", "").split(";", 1)[0].strip().lower()
+        subtype = content_type.split("/", 1)[1] if content_type.startswith("application/") else ""
+        content_encoding = headers.get("content-encoding", "").strip().lower()
+        if (subtype != "json" and not subtype.endswith("+json")) or content_encoding not in {
+            "",
+            "identity",
+        }:
+            _readonly_failure("response_contract_rejected")
+        limit = _META_MAX_BYTES if path == "/v1/meta" else _RETRIEVE_MAX_BYTES
+        declared = headers.get("content-length")
+        if declared is not None:
+            declared_bytes: int | None = None
+            try:
+                if declared.isascii() and declared.isdecimal():
+                    declared_bytes = int(declared)
+            except ValueError:
+                pass
+            if declared_bytes is None or declared_bytes > limit:
+                _readonly_failure("response_contract_rejected")
+        chunks: list[bytes] = []
+        total = 0
+        try:
+            for chunk in response.iter_bytes():
+                total += len(chunk)
+                if total > limit:
+                    _readonly_failure("response_contract_rejected")
+                chunks.append(bytes(chunk))
+            text = b"".join(chunks).decode("utf-8", errors="strict")
+            payload = json.loads(
+                text,
+                object_pairs_hook=_strict_object_pairs,
+                parse_constant=_reject_json_constant,
+            )
+            _validate_json_graph(payload)
+            if not isinstance(payload, dict):
+                raise ValueError
+            return payload
+        except Exception as exc:
+            from src.video_pipeline.feedback_loop.readonly_contracts_v1 import (
+                ReadOnlyAdapterError,
+            )
+
+            if isinstance(exc, ReadOnlyAdapterError):
+                raise
+        _readonly_failure("response_contract_rejected")
 
 
 class KBSearchError(RuntimeError):
@@ -240,6 +472,8 @@ class TransportMixin:
         timeout: float | None = None,
         default_collection: str | None = None,
         settings: Settings | None = None,
+        *,
+        request_transport: JSONRequestTransport | None = None,
     ) -> None:
         cfg = settings or get_settings()
         self.settings = cfg
@@ -248,6 +482,7 @@ class TransportMixin:
         self.api_key = api_key if api_key is not None else cfg.kb_search_api_key
         self.default_collection = default_collection or cfg.kb_search_default_collection
         self.default_limit = cfg.app_default_limit
+        self.request_transport = request_transport
 
     def _auth_headers(self) -> dict[str, str]:
         key = (self.api_key or "").strip()
@@ -316,6 +551,14 @@ class TransportMixin:
         url = f"{self.base_url}{path}"
         headers = self._auth_headers() if use_auth else {}
         wire_payload = self._wire_payload(json_payload)
+        if self.request_transport is not None:
+            return self.request_transport.request(
+                method,
+                url,
+                json_payload=wire_payload,
+                headers=headers,
+                timeout=self.timeout,
+            )
         try:
             if httpx is not None:
                 with httpx.Client(timeout=self.timeout) as client:

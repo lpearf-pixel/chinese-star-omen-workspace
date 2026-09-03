@@ -77,7 +77,13 @@ class RetrievalCoreMixin:
         return core_query_variants(query)
 
     @staticmethod
-    def _normalize_hits(raw_hits: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def _normalize_hits(
+        raw_hits: list[dict[str, Any]],
+        *,
+        strict_primary_passages: bool = False,
+    ) -> list[dict[str, Any]]:
+        if strict_primary_passages:
+            return [dict(hit) for hit in raw_hits]
         inferred_hits: list[dict[str, Any]] = []
         for hit in raw_hits:
             upstream_meta = (
@@ -305,6 +311,10 @@ class RetrievalCoreMixin:
             mode=mode,
             limit=limit,
             query_variants=query_variants or self._query_variants(query),
+            passage_loader=getattr(self, "primary_source_byte_loader", None),
+            strict_exact_passages=bool(
+                getattr(self, "strict_primary_passages", False)
+            ),
         )
 
     def retrieve(
@@ -349,12 +359,19 @@ class RetrievalCoreMixin:
 
         started_ns = monotonic_ns()
         try:
-            raw_result = self._request(
-                "POST",
-                "/v1/retrieve",
-                json_payload=payload,
-                use_auth=True,
-            )
+            provenance_guard = getattr(self, "upstream_provenance_guard", None)
+            if provenance_guard is not None:
+                provenance_guard()
+            try:
+                raw_result = self._request(
+                    "POST",
+                    "/v1/retrieve",
+                    json_payload=payload,
+                    use_auth=True,
+                )
+            finally:
+                if provenance_guard is not None:
+                    provenance_guard()
         except KBSearchError as exc:
             exc.details["observability"] = base_observability(
                 "retrieve",
@@ -369,8 +386,16 @@ class RetrievalCoreMixin:
                 corpus_version=None,
             )
             raise
+        raw_validator = getattr(self, "raw_response_validator", None)
+        if raw_validator is not None:
+            raw_validator(raw_result, request_payload=payload)
         raw_hits = raw_result.get("hits", [])
-        inferred_hits = self._normalize_hits(raw_hits)
+        inferred_hits = self._normalize_hits(
+            raw_hits,
+            strict_primary_passages=bool(
+                getattr(self, "strict_primary_passages", False)
+            ),
+        )
         reranked, _, _, mode = self._rerank_hits(
             query,
             inferred_hits,
@@ -448,6 +473,7 @@ class RetrievalCoreMixin:
             "related_hits": related_hits[:effective_top_k],
             "hits": filtered_hits[:effective_top_k],
         }
+        verified_provenance = getattr(self, "verified_upstream_provenance", None)
         result["observability"] = base_observability(
             "retrieve",
             stage=result["retrieval_stage"],
@@ -458,7 +484,19 @@ class RetrievalCoreMixin:
             returned_pool_size=len(result["hits"]),
             card_types=list(effective_card_types),
             collection=result["collection"],
-            corpus_version=raw_result.get("corpus_version"),
+            corpus_version=(
+                verified_provenance.corpus_version
+                if verified_provenance is not None
+                else raw_result.get("corpus_version")
+            ),
+            provenance_sha256=(
+                verified_provenance.provenance_sha256
+                if verified_provenance is not None
+                else None
+            ),
+            corpus_provenance=(
+                "upstream_meta" if verified_provenance is not None else None
+            ),
         )
         return result
 
