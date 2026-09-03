@@ -1,6 +1,10 @@
 # Kaiyuan Feedback Loop S1 Read-only Adapters Design
 
-**Status:** APPROVED DIRECTION; WRITTEN SPEC REVIEW PENDING
+**Status:** APPROVED
+
+**Approval:** The user approved the written specification on 2026-09-02 and
+authorized subsequent in-scope plans/specifications to pass without another
+confirmation round.
 **Approval basis:** on 2026-09-02 the user approved Solution A: consume only
 local, already captured audit bundles and connect them to the existing local-KB
 read-only retrieval path. Live platform access remains deferred.
@@ -178,6 +182,7 @@ LocalEvidenceQueryPlanV1
   policy_version = vfl-readonly-probe/1.0.0
   source_id
   audit_id
+  execution_scope = hermetic_test | reviewed_live
   collection
   kb_book_id
   expected_corpus_version
@@ -200,7 +205,19 @@ audit identities. Every request's `kb_book_id` must equal the plan-level
 accepts `local_kb_kaiyuan_v2`; tests use an explicit ephemeral safe name.
 `local_kb_default` is rejected before constructing a retriever call. Hermetic
 tests may use `test_vfl_ephemeral_*` names only with the recording fake; the
-production CLI accepts exactly `local_kb_kaiyuan_v2` in S1.
+production CLI accepts exactly `execution_scope=reviewed_live` plus
+`local_kb_kaiyuan_v2` in S1. A test-only binder accepts
+`execution_scope=hermetic_test` plus `test_vfl_ephemeral_*` only when handed
+the concrete recording-fake type. Scope and collection cannot be crossed, and
+there is no public boolean or duck-typed bypass.
+
+Plan, snapshot and validated upstream meta share one `CorpusVersion` token.
+It accepts only a real UTC producer timestamp in exact
+`YYYYMMDDTHHMMSSZ` or `YYYY-MM-DDTHHMMSSZ` form and validates calendar/time
+fields by strict parse plus round trip. Control/whitespace characters, `=`,
+slashes, backslashes and all descriptive or path-like versions are rejected
+before retrieval. This makes the value safe for its fixed `key=value` note
+without escaping or leaking caller text.
 
 The adapter does not derive queries from claim prose. Query changes are explicit
 versioned research inputs, so a changed query produces a changed plan and run
@@ -208,7 +225,10 @@ identity rather than silently rewriting history.
 
 The query-plan file uses the same strict UTF-8, duplicate-key, non-finite-value,
 descriptor-stable double-read policy as the audit adapter, with a 256 KiB size
-limit. Its canonical model bytes are hashed before any retrieval call. The
+limit. Before Pydantic validation, every parsed JSON graph is iteratively
+bounded to depth 64 and 100,000 total mapping/list/scalar nodes; JSON decoder
+`RecursionError` and budget overflow map to the same fixed typed local-input
+failure. Its canonical model bytes are hashed before any retrieval call. The
 canonical plan SHA-256, fixed adapter policy version, plan and request IDs,
 query, `top_k`, collection, expected and observed corpus versions, response
 schema versions, any source-snapshot SHA-256 used for local file access and the
@@ -237,18 +257,31 @@ with beneath/no-symlink-component semantics. For each access it verifies
 descriptor identity, regular-file type, size and raw-byte SHA-256 against the
 manifest, then gives the scanner or resolver only the immutable bytes read from
 that same descriptor. The consumer never reopens the pathname or uses the
-existing path-keyed passage cache. Existing scanner and resolver semantics gain
-an additive byte-loader seam for this accessor; their default callers remain
-unchanged. Snapshot bytes are held only in memory for the batch and are never
-logged or persisted. Replace-and-restore, symlink, in-place rewrite and hash
-mismatch all abort.
+existing path-keyed passage cache. In strict S1 mode the scanner obtains its
+complete ordered inventory from the accessor's immutable snapshot-file tuple
+and attempts every exact manifest path; it never `rglob`s or otherwise
+enumerates the live root. A manifest file removed during its turn therefore
+fails its exact load even if restored before postflight, rather than silently
+disappearing from results under the same identity. Existing scanner and
+resolver semantics gain additive inventory/byte-loader seams for this
+accessor; their default callers remain unchanged.
+
+The resolver's legacy entry point currently consults global settings even when
+the root is explicit. S1 additionally supplies a narrow immutable resolver
+context containing only source-root and ingest-source labels. With explicit
+root, snapshot loader and context, the resolver neither calls global
+`get_settings()` nor re-resolves configuration; the production factory derives
+the context from its one isolated settings copy and hermetic tests provide a
+fixed test context. Snapshot bytes are held only in memory for the batch and
+are never logged or persisted. Replace-and-restore, symlink, in-place rewrite,
+missing manifest-path load and hash mismatch all abort.
 
 The canonical snapshot-manifest SHA-256 is safe provenance and enters every
 probe preimage. Missing, stale, incomplete or changing snapshot evidence aborts
 before any package is published. Hermetic tests create temporary hash-only
 snapshot manifests; no snapshot fixture or raw corpus byte is added to the
-repository. A real smoke requires a separately supplied matching manifest and
-is `BLOCKED`, not passed, when it is absent.
+repository. A real smoke requires a separately supplied reviewed live plan and
+matching manifest and is `BLOCKED`, not passed, when either is absent.
 
 ### 4.3 Read-only retriever protocol
 
@@ -264,17 +297,99 @@ The adapter calls only `two_stage_retrieve` with explicit `query_mode=evidence`,
 It never calls meta mutation, ingest, upsert, delete, promote or candidate-sync
 operations.
 
-Production construction is part of the safety boundary. After the loopback
-endpoint check and before any request, the factory creates an isolated settings
-copy that pins `kb_sources_root` to the validated explicit KB root, disables the
-additional Obsidian root, disables candidate overlay, and pins the retriever's
-default collection to the validated plan collection. The validated root must be
-a real directory; all fallback paths must remain within it. The original global
-settings object is not mutated. Tests must prove that an invalid endpoint is
-rejected before credential resolution or a request and that neither a key nor
-endpoint user information appears in errors. S1 uses an injected transport seam
-for the existing retriever logic with environment proxy use and redirects
-disabled; it does not fall back to the current `urllib` transport path.
+Production construction is part of the safety boundary. The production-only
+factory itself accepts exactly
+`collection=local_kb_kaiyuan_v2`; it rejects `local_kb_default`, hermetic
+ephemeral names and every other collection before config, endpoint, transport,
+meta, credential or retriever work, even if called without the CLI binder.
+After the loopback endpoint check, the factory uses the same pinned,
+proxy-free, redirect-free
+transport to read `/v1/meta` without a credential. It strictly requires
+`meta_status=ok`, `schema_version=corpus-manifest/v1`, the plan collection and
+expected corpus version, a non-empty ingest run ID and created-at string, and a
+lowercase `sha256:<64 hex>` source-manifest hash. The canonical validated meta
+shape accepts the two exact repository-produced variants: the corpus-manifest
+script adds string-list `source_roots` and `excluded_roots`; the normal ingest
+writer instead adds `managed_by="local-kb-unified/v2"`,
+`collection_schema="passage-v2"` and a closed `run_stats` object containing
+non-negative strict integers for `desired`, `new`, `changed`, `unchanged`,
+`stale`, `upserted`, `deleted`, `errors` and `elapsed_ms`. The base fields alone
+are also valid because they are the public `/v1/meta` minimum. Mixing variants,
+partial variants, all other unknown fields, wrong types and non-finite values
+fail closed. The complete validated object, including the exact accepted
+variant and all `run_stats`, is canonicalized into an in-memory
+`session_meta_sha256`. That digest is used only to detect any before/after
+session drift, including a change to `elapsed_ms`; it is never persisted in a
+probe, package, identifier or note. A second canonical semantic projection
+contains exactly `schema_version`, `corpus_version`, `ingest_run_id`,
+`source_manifest_hash`, `collection`, `created_at`, and the exact key
+`producer_variant`. Its value is `base`, `corpus_manifest_script` or
+`normal_ingest`. `base` adds no extension fields;
+`corpus_manifest_script` adds `source_roots` plus `excluded_roots`; and
+`normal_ingest` adds `managed_by` plus `collection_schema`. It excludes `meta_status` and the
+entire operational `run_stats` object. Its SHA-256 is `provenance_sha256` and
+is the only meta-derived digest allowed in persisted identity. Thus an
+in-session latency change still aborts, while two fresh sessions differing
+only in run telemetry have the same persisted provenance; a change to any
+semantic projection field changes persisted identity. Both digests become
+part of `VerifiedUpstreamProvenanceV1`. Only after that succeeds may the
+factory resolve a credential and create an isolated
+settings copy that pins `kb_sources_root` to the validated explicit KB root,
+disables the additional Obsidian root, disables candidate overlay, and pins the
+retriever's default collection to the validated plan collection. It also
+derives the narrow resolver context from that same copy, and the returned
+pinned session exposes only that immutable context rather than global settings.
+The validated
+root must be a real directory; all fallback paths must remain within it. The
+original global settings object is not mutated. Tests must prove that an
+invalid endpoint or invalid/mismatched meta response is rejected before
+credential resolution or retrieval and that neither a key, endpoint user
+information nor raw meta body appears in errors. S1 uses the injected strict
+transport seam for all meta and retrieval calls; it does not fall back to the
+current `urllib` transport path.
+
+S1 resolves configuration once per factory call: an explicit internal
+`config_path` wins, then a non-empty `APP_CONFIG_PATH`, otherwise the default is
+the module-derived absolute `apps/star-omen/config/config.yaml`, independent of
+the current working directory. The same resolved `Path` is passed to both the
+endpoint-only loader and the later fresh `load_settings`; they may not perform
+separate relative-path resolution.
+
+The pinned transport streams both response bodies before shape validation. It
+accepts only `GET /v1/meta` with no JSON payload/auth headers and
+`POST /v1/retrieve` with a mapping payload and the explicit credential headers;
+accepts only absent/identity content encoding and a JSON media type, enforces a
+256 KiB decoded-byte limit for `/v1/meta` and 4 MiB for `/v1/retrieve`, decodes
+strict UTF-8, rejects duplicate object keys and `NaN`/`Infinity`, applies the
+same depth/node budgets as local JSON, and requires a root mapping. It rejects
+an excessive `Content-Length` before iteration and stops as soon as streamed
+decoded bytes exceed the path-specific limit. No ordinary `response.json()` or
+already-parsed mapping may bypass this raw-body boundary.
+
+The deployed `/v1/retrieve` response schema does not itself carry a corpus
+version. S1 therefore does not invent one or require an unavailable response
+field. Its raw-response validator first enforces every field the deployed
+response does own (schema, mode, stage, card pool, collection, filters, counts,
+finite hits and bounded arrays). For a primary-stage response, raw `hits` must
+either be exactly empty or every hit must explicitly carry a non-null
+`card_type` from the requested primary card pool; missing, null or other card
+types are response errors before normalization and before fallback. Therefore
+`official_primary_empty` can only derive from a validated raw empty list, never
+from filtering a non-empty malformed list. If a future response supplies a corpus field,
+it must equal the verified meta value. Only after raw validation succeeds, a
+keyword-only S1 provenance seam annotates the retriever's internal normalized
+stage/observability dictionaries with the separately verified corpus version,
+semantic provenance SHA-256 and provenance source `upstream_meta`. The
+session-meta digest never leaves the pinned session. The two-stage validator
+requires those exact annotations and never represents them as response-native.
+A narrow `PinnedReadOnlyKBSession` re-fetches and strictly compares `/v1/meta`
+immediately before and after every `two_stage_retrieve` call. Any observed meta
+drift aborts the whole batch. An injected S1-only provenance guard also performs
+the same comparison immediately before and in `finally` after each actual
+official `/v1/retrieve` request, so stage-1/stage-2 drift cannot pass merely by
+restoring meta before the outer postflight. The limitation that an external
+service could change and restore state entirely between adjacent observations
+is recorded rather than claimed away.
 
 The source-snapshot accessor is also injected as the retriever's fallback
 guard: it must pass before `_scan_primary_files` may consume a file, and the
@@ -301,7 +416,13 @@ For every response the adapter requires a mapping with complete `stage1`,
 - top-level observability schema `kb-observability/v1`, operation
   `two_stage_retrieve`, empty `provenance_conflicts`, and collection/corpus
   provenance present and equal to the plan's collection and expected corpus
-  version.
+  version, with the exact preflight semantic provenance SHA-256 and provenance source
+  `upstream_meta`.
+
+The semantic provenance SHA requirement applies identically to
+`stage1.observability`, `stage2.official_result.observability` and the outer
+observability object. The SHA is exactly 64 lowercase hexadecimal characters;
+missing or differing values abort before projection.
 
 Omission is a contract error rather than permission to infer a value. The
 adapter also rejects conflicting official/fallback provenance, non-list hit
@@ -329,6 +450,18 @@ the resolver. Hit mappings must contain only finite JSON values; deep equality
 is equivalently equality of their strict canonical sorted-key JSON encodings,
 not unavailable upstream response bytes.
 
+After the complete envelope and hit checks pass, the validator canonicalizes
+every `stage2.exact_hits` mapping as strict sorted-key compact JSON bytes,
+removes only byte-identical mappings and sorts the remaining mappings by those
+bytes. Each item is retained only as an immutable canonical-byte wrapper; the
+projector decodes a fresh mapping and never retains or exposes a caller-owned
+mutable alias. That unique sorted tuple is the validated exact-hit tuple, and
+`exact_candidate_count` is its length. Consequently hit permutation and an
+identical duplicate cannot alter notes, probe identity or S0 run identity.
+Distinct mappings still count as distinct exact candidates even when the
+projection below resolves them to the same passage; passage-reference
+deduplication is intentionally a later, separate operation.
+
 ### 4.4 Citable projection
 
 Only `stage2.exact_hits` with `fenjuan|fulltext` card types are considered. A
@@ -347,13 +480,27 @@ rule-assessment helper is not reused implicitly. It applies these rules:
 - take an optional claimed locator only from `source_locator` or `locator`,
   rejecting conflicting non-empty aliases, so the resolver can validate it
   against the path and page rather than trusting it;
-- take the anchor only from `anchor_text`, `raw_text`, `quote` or `excerpt`,
-  rejecting conflicting non-empty aliases and never using `snippet` as a
-  fallback; and
+- take an explicitly supplied anchor only from `anchor_text`, `raw_text`,
+  `quote` or `excerpt`, rejecting conflicting non-empty aliases and never using
+  `snippet` as a fallback. Because the deployed official response exposes only
+  a truncated `snippet`, an official primary hit with no allowed anchor may be
+  rehydrated only from the snapshot accessor when it supplies canonical
+  `raw_start` and `raw_end` integer offsets: parse the verified immutable source
+  bytes, require exactly one passage with those exact boundaries, require every
+  supplied locator/page/paragraph/heading field to match that passage and every
+  hash to satisfy the field-specific resolver semantics below, and
+  use that passage's exact raw text as the in-memory resolver anchor. Missing,
+  invalid or non-unique boundaries reject the candidate; the snippet is never
+  compared, promoted or persisted; and
 - pass through only `content_hash`, `raw_content_hash` and
   `normalized_content_hash` under their original meanings; require every
   supplied value to match `^sha256:[0-9a-f]{64}$` and at least one to be
   present, with no hash inference or field substitution before resolution.
+  The resolver's established semantics remain exact:
+  `raw_content_hash` matches passage raw content,
+  `normalized_content_hash` matches passage normalized content, and
+  `content_hash` may match either the exact in-memory anchor hash or the
+  passage raw-content hash. Those three values need not be mutually equal.
 
 Every projected candidate is passed through the existing `resolve_evidence`
 validation path with the explicit KB root and snapshot accessor; it parses the
@@ -374,14 +521,19 @@ becomes a `LocalEvidenceReferenceV1`:
   `sha256:` prefix to the contract's exact 64-lowercase-hex form; the resolver's
   `content_hash` is never substituted;
 - stable reference ID is derived from claim, locator and evidence hash;
-- note states that semantic support/contradiction remains unreviewed.
+- note is the exact literal
+  `Semantic support or contradiction remains unreviewed.`.
 
 Raw retrieval/resolver source text, snippet, absolute path, retrieval score and
 upstream body are not persisted. Identical
 `(claim_id, locator, evidence_sha256)` tuples are deduplicated. References are
 sorted by
-`(evidence_locator, evidence_sha256, evidence_ref_id)`; the same reference ID
-for distinct tuples aborts the batch.
+`(evidence_locator, evidence_sha256, evidence_ref_id)`. One whole-batch registry
+maps each reference ID to its complete `(claim_id, locator, evidence_sha256)`
+tuple; a different tuple aborts both within one claim and across claims. The persisted `citable_count` is exactly
+the length of this final deduplicated, sorted reference tuple, not the number of
+resolver calls or pre-dedup citable results. Thus two distinct exact-hit
+mappings may contribute two exact candidates yet one citable reference.
 
 Rejected candidates never become evidence references. Only aggregate counts for
 the exact resolver status allowlist `candidate_only`, `source_outside_root`,
@@ -389,6 +541,18 @@ the exact resolver status allowlist `candidate_only`, `source_outside_root`,
 `page_mismatch`, `paragraph_mismatch`, `heading_mismatch`, `anchor_mismatch`
 and `hash_mismatch` may enter deterministic notes; no candidate-level
 diagnostic is persisted. An unknown resolver status aborts the batch.
+
+Projection has three non-overlapping failure classes. A malformed raw or
+two-stage envelope, provenance mismatch, snapshot/accessor integrity exception,
+unknown or malformed resolver result, inconsistent `citable` result, or
+reference-ID collision aborts the current claim and therefore the whole batch.
+A hit that passes the envelope but cannot form a safe resolver candidate due to
+missing/conflicting projection aliases, invalid/ambiguous offsets or another
+candidate-local allowlist defect is omitted without a resolver call, reference,
+resolver-status counter or candidate diagnostic; it still contributes to the
+already-fixed `exact_candidate_count`. A well-formed resolver result with one of the
+exact known non-citable statuses is omitted and increments only that aggregate
+status count. These classes cannot be silently promoted or collapsed.
 
 The adapter always emits `result_state=unresolved`, whether it finds zero or
 more citable context references. It never emits `corroborated` or
@@ -398,15 +562,26 @@ output of a successfully executed S1 plan.
 S1 binds provenance without changing `LocalEvidenceProbeV1`:
 
 - `probe_id` is a stable hash identity over adapter policy version, canonical
-  plan SHA-256, plan ID, request ID, source, claim, query, `top_k`, collection,
-  expected and observed corpus versions, any local source-snapshot SHA-256,
-  response schemas and projected references;
-- `retrieval_version` contains the fixed adapter policy, canonical query-plan
-  SHA-256, any local source-snapshot SHA-256 and validated response schema
-  versions;
+  plan SHA-256, plan ID, execution scope, request ID, source, claim, query, `top_k`, collection,
+  expected and observed corpus versions, verified upstream semantic
+  provenance SHA-256 and provenance marker, any local source-snapshot
+  SHA-256, response schemas and projected references;
+- `retrieval_version` is the bounded string
+  `vfl-readonly-probe/1.0.0:sha256:<64 lowercase hex>`. Its digest commits to
+  canonical sorted-key JSON containing the fixed adapter policy, canonical
+  query-plan SHA-256, verified upstream semantic provenance SHA-256/source, local
+  source-snapshot SHA-256 and validated response schema versions; this keeps
+  the existing S0 field within its 256-character contract without dropping
+  provenance;
 - deterministic allowlisted notes record plan ID, request ID, collection,
-  expected/observed corpus versions, `top_k`, exact-candidate count, citable
-  count, source-snapshot SHA-256 when used and per-status rejection counts.
+  expected/observed corpus versions, verified upstream semantic provenance
+  SHA-256/source, `top_k`, validated unique exact-candidate count, citable count,
+  source-snapshot SHA-256 when used and per-status rejection counts.
+
+The validated response-schema tuple is exactly
+`("kb-retrieve/v2", "kb-two-stage/v2", "kb-retrieve/v2")` in
+stage-1/wrapper/nested-official order. It is never deduplicated or derived from
+hit/input ordering.
 
 Because the complete probe object is already part of the S0 run preimage, a
 plan, collection, corpus version, response schema or projected-evidence change
@@ -425,7 +600,10 @@ the validated plan; the snapshot must agree rather than override them. Endpoint
 and key configuration use the constrained factory in Section 4.3. The CLI
 generates probes, calls the unchanged S0 build API and invokes S0 atomic
 no-replace publication only after the complete batch is valid. It prints a safe
-actionable error and exits nonzero on failure.
+actionable error and exits nonzero on failure. Its non-abbreviating argument
+parser overrides every parse-error path so unknown options, missing values and
+unexpected positionals produce only the fixed typed code and never echo argv;
+the outer exception boundary includes parsing itself.
 
 The first production CLI is deliberately episode-22-only because the unchanged
 S0 planner currently expects that pilot's two-claim shape. It requires source
@@ -434,6 +612,35 @@ S0 planner currently expects that pilot's two-claim shape. It requires source
 remain reusable at their internal contracts, but dispatching another audit is a
 later policy/version decision rather than an accidental side effect of this
 pilot CLI.
+
+The committed episode-22 query-plan asset is explicitly
+`execution_scope=hermetic_test`, uses a `test_vfl_ephemeral_*` collection and
+is not an attestation of the live release manifest. It uses the normal-ingest
+producer's timestamp grammar and is paired only with recording meta and a
+temporary matching snapshot through the test-only binder. The public CLI must
+reject this fixture before credential or retrieval access. An opt-in real smoke must instead use
+a separately caller-supplied, reviewed query plan whose exact corpus version
+matches both the caller snapshot and the currently served immutable release
+manifest. The CLI never copies or guesses that value from live meta. Absence of
+this live plan is a `BLOCKED` smoke precondition, not permission to treat the
+hermetic fixture as production evidence.
+
+Production `main` has no retriever-injection argument: it always applies the
+reviewed-live binder and constructs the pinned production session before
+calling a shared complete-batch/build/publish core. Hermetic E2E reaches that
+same core only through a helper defined in the test module that requires the
+concrete recording-retriever type and hermetic/ephemeral binder. Tests never
+monkeypatch the production binder or factory, and public CLI invocation of the
+committed fixture fails before credential or network access.
+
+A mandatory hermetic production-wiring E2E uses a reviewed-live temporary plan
+and snapshot, invokes the real root Make target/public CLI from repository root,
+uses the real production binder, factory, pinned HTTP transport, retriever,
+projector and publisher, and binds only a test-owned `127.0.0.1` random-port
+HTTP server that emits strict deployed-shape meta/retrieve bytes. It does not
+inject or monkeypatch a retriever, binder or factory. This proves the public
+assembly and CWD-independent default config path while remaining distinct from
+the optional real Local-KB smoke.
 
 ### 4.6 Compatibility and replacement boundaries
 
@@ -486,8 +693,8 @@ stderr.
 - **Narrow domain:** 祖山觀 episode 22 / work `7669807398794598565`.
 - **Target environment:** hermetic recording retriever for mandatory tests;
   configured local KB Search plus `local_kb_kaiyuan_v2` for an opt-in read-only
-  smoke, with a matching caller-supplied local source-snapshot manifest before
-  filesystem fallback or resolver access.
+  smoke, with a separately reviewed live query plan and matching caller-supplied
+  local source-snapshot manifest before filesystem fallback or resolver access.
 - **Entry condition:** the committed audit passes strict local/rights checks;
   the plan covers its two claims exactly; S0 head is the stacked ancestor.
 - **Queries:** `毕宿 烈风 古典原文 来源` and
@@ -611,8 +818,9 @@ implementation work.
 
 ### Current state
 
-- Repository:
-  `/workspace/scratch/58e5f469e352/chinese-star-omen-workspace`.
+- Repository: `lpearf-pixel/chinese-star-omen-workspace`; commands resolve the
+  active worktree with `git rev-parse --show-toplevel` rather than recording a
+  machine-specific absolute path.
 - Branch: `codex/kaiyuan-feedback-loop-readonly-adapters-v1`.
 - Base HEAD: `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8`.
 - Working tree at task start: clean.
@@ -674,7 +882,7 @@ two deterministic episode 22 builds and occupied-output replay
 ```
 
 The real local-KB smoke is reported separately and never fabricated when its
-service/configuration is unavailable.
+reviewed live plan, matching snapshot, service or configuration is unavailable.
 
 ### Delivery
 

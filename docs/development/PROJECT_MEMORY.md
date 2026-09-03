@@ -8,10 +8,10 @@
 Repository: lpearf-pixel/chinese-star-omen-workspace
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
-Verified at: 2026-08-31
-Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: no unblocked implementation task; VFL-T01-D1 and VFL-T01 local
-S0 DONE; B10-PR-C human-review BLOCKED
+Verified at: 2026-09-03
+Current feature branch: codex/kaiyuan-feedback-loop-readonly-adapters-v1
+Current task: VFL-T02 S1 read-only adapters IN_PROGRESS; VFL-T01-D1 and
+VFL-T01 local S0 DONE; B10-PR-C human-review BLOCKED
 Open PRs: #54 only; Draft and blocked on Reviewer B
 Forbidden target: main
 Protected collection: local_kb_default
@@ -56,6 +56,9 @@ B10 overall: IN_PROGRESS
 VFL-T01 offline evidence-to-video feedback skeleton: DONE for local S0
 implementation/review scope; feature branch delivered remotely at `f36b146`;
 PR/integration/render/publication unclaimed
+VFL-T02 read-only local evidence adapters: IN_PROGRESS on a separate stacked
+feature branch; design approved and remotely delivered at `fc65e2f` /
+`a6660fd`; implementation not yet claimed
 ```
 
 ### VFL-T01 local S0 closeout
@@ -103,6 +106,50 @@ PR/integration/render/publication unclaimed
   `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`, passed the complete local
   verification matrix and was non-force pushed/read back on the same feature
   branch. It changes delivery records only and grants no new authority.
+
+### VFL-T02 S1 read-only adapter start
+
+- VFL-T02 starts from exact stacked base
+  `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8` on isolated branch
+  `codex/kaiyuan-feedback-loop-readonly-adapters-v1`. Stable remains
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`; the only open PR remains Draft
+  #54, still blocked on independent human Reviewer B.
+- The approved design is
+  `docs/superpowers/specs/2026-09-02-kaiyuan-feedback-loop-readonly-adapters-design.md`.
+  Its remote checkpoint is `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`,
+  tree `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`; fetched remote tree and local
+  tree match. Two independent written-spec reviews reported
+  `0 Critical / 0 Important`.
+- S1 consumes only the existing captured episode 22 audit, an explicit strict
+  query plan and a caller-supplied hash-bound local-source snapshot. It pins a
+  read-only KB client to an exact literal-loopback HTTP origin, disables proxy
+  trust and redirects, validates raw retrieval provenance before fallback and
+  revalidates exact passages through the same snapshot bytes. Because the
+  deployed retrieve response omits corpus version and exposes only truncated
+  snippets, S1 separately binds strict `/v1/meta` provenance before/after calls
+  and may rehydrate an anchor only from exact snapshot passage offsets; it
+  never treats a snippet as source text. A full canonical meta session digest
+  detects even telemetry drift but is never persisted; probe/run identity uses
+  a separate semantic provenance digest that excludes `meta_status` and all
+  `run_stats`, so latency cannot affect canonical identity.
+- S1 cannot decide semantic support or contradiction. Every successful probe
+  remains `unresolved`; every emitted citable reference remains
+  `context_only`. The unchanged S0 builder retains atomic no-replace packaging
+  and manual publication handoff.
+- The implementation plan has six TDD tasks. Each task must be locally
+  verified, committed, non-force pushed and fetched back with exact tree
+  equality before the next task starts. Missing real local-KB service/snapshot
+  evidence is reported accurately as `BLOCKED` but does not invalidate
+  hermetic implementation completion.
+- The committed episode-22 query-plan asset is `hermetic_test` only and uses a
+  `test_vfl_ephemeral_*` collection. Production `main` accepts only a separately
+  reviewed `reviewed_live` plan for `local_kb_kaiyuan_v2`; there is no injected
+  retriever or fixture bypass in the public CLI.
+- No live platform, model, TTS, render, upload or publication is authorized.
+  No raw corpus, Qdrant, ingest/promotion, `local_kb_default`, S0 public
+  semantics, stable, `main`, PR #54, Reviewer material or B10 gate may change.
+  B10 Reviewer B stays parked as the terminal formalization gate and does not
+  block this separate S1 work.
 
 ## 3. B9 merge chain
 
@@ -338,7 +385,9 @@ ASTRO-R01 phases 1–5, DOC-R01 and PR #64 are integrated at stable 99c0a85c1f94
 → PR-C may publish canonical threshold-freeze.json only after every frozen gate passes
 → R05 does not authorize B10-PR-D/E/F; each remains BACKLOG until its entry gates pass and the task is separately recorded IN_PROGRESS
 ↳ VFL-T01 local S0 is DONE after renewed review of 33657fa / 8bcce818
-→ keep VFL-T01 at a manual publication handoff; all improvement/learning outputs remain non-applying proposals and any later stage requires a separate task
+→ execute VFL-T02 S1 as deterministic read-only unresolved/context-only adapters on its isolated stacked branch
+→ keep the unchanged S0 manual publication handoff; S2/media/upload/publishing remain separately gated
+→ keep B10 Reviewer B parked as the terminal human formalization gate without blocking VFL-T02
 → GOV-T04 does not replace nightly, real-device, corpus, scientific, security, migration or human evidence
 ```
 
@@ -348,3 +397,7 @@ automatic publishing or any operation on `main`.
 
 D-031 permits only the additive VFL-T01 offline control plane. It does not
 change the preceding B10/B11/B12 gates and cannot apply cross-module changes.
+
+D-032 permits only VFL-T02's bounded local read-through adapter. It adds no
+semantic authority, mutation authority, media/account authority or release
+authority and cannot substitute for B10 Reviewer B.

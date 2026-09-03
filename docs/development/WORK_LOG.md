@@ -2,6 +2,73 @@
 
 按时间倒序记录实际开发批次、任务编号、改动、验证证据和遗留风险。任务只有在这里记录最新验证后才能在 `TASKS.md` 标记 `DONE`。
 
+## 2026-09-02 — VFL-T02 S1 read-only adapters started
+
+### Entry state and authority
+
+- VFL-T02 starts on isolated stacked branch
+  `codex/kaiyuan-feedback-loop-readonly-adapters-v1` from exact S0 delivery
+  base `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8`. Stable was read back as
+  `99c0a85c1f944add8d013aedbae830fe022b7c3b`; the only open PR remained Draft
+  #54, still blocked on a different human Reviewer B.
+- Approved Solution A uses the already captured episode 22 audit plus an
+  explicit two-query plan, the existing read-only two-stage KB client and
+  citable resolver, and the unchanged S0 builder. It produces only
+  `unresolved` probes with `context_only` citable references and cannot infer
+  support, contradiction or classical authority.
+- The written design received two independent reviews with
+  `0 Critical / 0 Important`. The user approved the written specification and
+  authorized subsequent in-scope plans/specifications to pass without another
+  confirmation pause, with continuous execution and one non-force push after
+  each completed task.
+- Design checkpoint `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`, tree
+  `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`, was delivered to the S1 branch;
+  public fetch and local readback confirmed exact tree equality. No force push,
+  PR, merge, stable/main, PR #54, Runner, media or account operation occurred.
+
+### Execution contract
+
+- Task 1 freezes strict internal S1 contracts and descriptor-stable local JSON
+  loading. Task 2 pins all scanner/resolver source bytes to the caller snapshot.
+  Task 3 adds endpoint-first literal-loopback transport and pre-fallback raw
+  response validation. Task 4 projects only revalidated citable passages into
+  deterministic complete probes. Task 5 adds the episode 22 fixture, S1 CLI,
+  literal-safe Make target and hermetic E2E. Task 6 performs full verification,
+  independent review and durable closeout.
+- Production-compatibility review confirmed that deployed `/v1/retrieve`
+  responses omit corpus version and expose truncated `snippet` rather than a
+  resolver anchor. The plan therefore binds a strictly validated `/v1/meta`
+  object before/after retrieval, uses its full canonical hash only for
+  in-memory session drift, carries a separate semantic projection hash that
+  excludes `meta_status` and all `run_stats` as persisted provenance, disables
+  legacy snippet/provenance synthesis in S1 and permits
+  anchor rehydration only from an exact unique passage boundary in the caller
+  snapshot. Upstream service code and response contracts remain unchanged.
+- Every task follows RED/GREEN TDD, related regression, small commit,
+  non-force S1-branch delivery and fetched remote-tree equality before the next
+  task. The plan is
+  `docs/superpowers/plans/2026-09-02-kaiyuan-feedback-loop-readonly-adapters.md`.
+- The worktree-local ignored virtual environment's stale interpreter link was
+  repaired with the provided Python `3.12.13` runtime. `pip check` reported no
+  broken requirements; no tracked dependency declaration changed.
+- The inherited baseline passed before implementation: complete supported
+  downstream `759 passed in 61.45s`; governance unit discovery `21 tests, OK`.
+  The tracked changes at this checkpoint remain documentation-only.
+- A real local-KB smoke will run only when a separately reviewed live query
+  plan, matching caller-supplied snapshot and literal-loopback service are all
+  present. The committed query-plan asset is hermetic-test-only. Otherwise it will be
+  recorded as `BLOCKED`, never simulated or called `PASSED`; hermetic S1 may
+  still complete, while S2 remains unable to consume real output.
+
+### Non-authority and parked gate
+
+- VFL-T02 cannot access `local_kb_default`, mutate a collection, ingest,
+  promote, rewrite corpus/rules/thresholds, call a live platform/model, render,
+  upload or publish. It cannot alter S0/B9/external public semantics, PR #54,
+  Reviewer artifacts, stable, `main`, B10-PR-D/E/F, B11 or B12.
+- B10 Reviewer B remains parked as the final independent human formalization
+  gate. It does not block VFL-T02 and VFL-T02 cannot substitute for it.
+
 ## 2026-08-31 — VFL-T01-D1 remote delivery reconciliation completed
 
 ### Entry state and authority

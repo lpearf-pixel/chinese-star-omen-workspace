@@ -388,3 +388,63 @@
 - **Delivery:** S0 仅能交付到 `stable/kaiyuan-v2` 的 feature PR；禁止
   直接写 stable 或操作 `main`。后续 live source/local-KB adapter、模型、
   TTS/media 或上传分别需要新的阶段决定。
+
+## D-032 — S1 只读证据接线保持语义未决并绑定本地来源快照
+
+- **Status:** Accepted for VFL-T02 S1 implementation.
+- **Decision:** 采用 Solution A：仅消费已经捕获并通过 S0 契约校验的祖山
+  觀 episode 22 审计和显式两查询计划，通过现有两阶段 KB 检索与 citable
+  resolver 生成完整本地证据探针，再交给不变的 S0 原子 package builder。
+  S1 只证明可定位、可复核的段落身份，不判断语义支持、反驳或古典权威；
+  每个成功探针固定 `result_state=unresolved`，每个输出 reference 固定
+  `evidence_class=citable_passage` 与 `relationship=context_only`。
+- **Local boundary:** 生产 collection 只能是 `local_kb_kaiyuan_v2`；明确
+  拒绝 `local_kb_default`。KB endpoint 必须先验证为带显式合法端口的字面
+  `http://127.0.0.1` 或 `http://[::1]`，无 userinfo/query/fragment，path
+  只能为空或 `/`。验证完成前不得读取凭据；严格 transport 禁止环境
+  proxy、redirect 和 urllib request fallback。隔离 Settings 副本固定 KB
+  root/collection 并关闭 Obsidian 第二 root 与 candidate overlay，不修改
+  全局 Settings。部署中的 `/v1/retrieve` 不携带 corpus version，因此 S1
+  先以同一 pinned transport 严格校验 `/v1/meta`，在每次 two-stage 与每个
+  official request 前后复核。完整 meta（含 `run_stats`）的 session hash 只在
+  内存中检测漂移；持久 identity 只绑定排除 `meta_status` 与全部运行遥测的
+  semantic provenance hash。仅后者注入内部 observability；不伪造
+  response-native 字段，也不让 `elapsed_ms` 进入 probe/run identity。
+- **Snapshot boundary:** caller 必须提供与唯一 `kb_book_id` 匹配的
+  hash-bound local-source snapshot。S1 持有 root fd，以 beneath/no-symlink
+  component 语义读取；scanner 与 resolver 只消费同一 accessor 核验过的
+  immutable bytes，不重开路径、不使用全局 path cache。仓库不提交 source
+  snapshot fixture 或新原文 bytes。真实 official hit 只有截断 `snippet` 时，
+  `snippet` 永不充当 anchor；只有 exact raw offsets 能在 snapshot passage 中
+  唯一匹配且全部 locator/page/paragraph/heading/hash 一致时，才从相同 frozen
+  bytes 在内存中还原 resolver anchor。
+- **Failure:** 所有本地输入、rights、计划覆盖、snapshot、transport、raw
+  response、provenance、projection 或 resolver 完整性错误均为 typed、
+  fail-closed 的整批失败。完整探针在内存中成功且 snapshot postflight
+  通过之前，不调用 S0 build/publish，不留下部分探针、package 或 staging
+  目录。错误和输出不得泄漏 key、raw body、新读取的来源文本、KB root 或
+  绝对来源路径。
+- **Pilot:** v1 生产 CLI 只接受 episode 22 的 audit、query plan、KB root、
+  source snapshot 和 output 五个显式参数；不允许覆盖 probes、outcome、
+  collection、corpus、endpoint 或 API key。所有查询使用
+  `kb_book_id=kaiyuan_zhanjing`、`query_mode=evidence` 和计划内固定 collection/
+  corpus。计划显式区分 `hermetic_test`/ephemeral fixture 与
+  `reviewed_live`/production collection；public CLI 必须拒绝前者。真实
+  local-KB smoke 缺少另行审核的 live plan、匹配 snapshot 或 loopback
+  service 时准确记录 `BLOCKED`，不伪造成功。
+- **Implementation sequence:** 六个 TDD 任务分别交付 strict contracts/
+  inputs、snapshot byte seams、safe transport/pre-fallback validation、
+  citable projection/complete batch、episode 22 CLI/E2E、完整验证与治理。
+  每个任务单独验证、提交、非强制推送并远端 tree 回读后再继续。
+- **Non-authority:** 本决定不改变 S0/B9/external-media 公共语义，不批准
+  semantic classification、live platform、transcript/OCR、model、TTS、
+  render、upload、publication、corpus/rule/threshold mutation、official
+  ingest/promotion、Qdrant、`local_kb_default`、B10-PR-D/E/F、B11/B12、
+  stable、`main`、PR #54 或 Reviewer A/B 变更。
+- **Human gate:** B10 Reviewer B 仍由另一名真人独立完成并保留为正式规则
+  路径的末端门禁。它不阻塞 VFL-T02；VFL-T02 的 code/spec review 也不能
+  替代它。
+- **Reversal and delivery:** S1 可通过禁用 adapter 或回滚其独立提交撤销；
+  provenance 只追加不静默重写。交付仅到独立 stacked feature branch，
+  non-force push；不创建/合并 PR，不直接写 stable 或操作 `main`，Runner
+  保持 `NOT RUN`。

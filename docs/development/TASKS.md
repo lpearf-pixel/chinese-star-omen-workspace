@@ -11,9 +11,9 @@
 ```text
 Stable branch: stable/kaiyuan-v2
 Last verified stable HEAD: 99c0a85c1f944add8d013aedbae830fe022b7c3b
-Current feature branch: codex/kaiyuan-evidence-feedback-loop-skeleton-v1
-Current task: no unblocked implementation task; VFL-T01-D1 and VFL-T01 local
-S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
+Current feature branch: codex/kaiyuan-feedback-loop-readonly-adapters-v1
+Current task: VFL-T02 S1 read-only adapters IN_PROGRESS; VFL-T01-D1 and
+VFL-T01 local S0 DONE; B10-PR-C remains BLOCKED on Reviewer B
 Open PRs: #54 only; Draft and human-review blocked
 B9 overall: DONE
 B9-G6: DONE with accepted corrected archive
@@ -714,6 +714,51 @@ merged and the resulting stable head is reverified.
   back exactly; this final state-only closeout follows on the same feature
   branch. Runner remains `NOT RUN`; no PR was created or modified.
 
+### VFL-T02 — Read-only local evidence adapters
+
+- **Status:** `IN_PROGRESS`.
+- **Stacked base:** completed VFL-T01-D1 at
+  `e087d5e627bcb3e838e49015c61a3f74c0a5a2e8`.
+- **Branch:** `codex/kaiyuan-feedback-loop-readonly-adapters-v1`.
+- **Design:**
+  `docs/superpowers/specs/2026-09-02-kaiyuan-feedback-loop-readonly-adapters-design.md`.
+- **Plan:**
+  `docs/superpowers/plans/2026-09-02-kaiyuan-feedback-loop-readonly-adapters.md`.
+- **Goal:** turn the already captured episode 22 audit and an explicit
+  two-query plan into one deterministic, complete set of read-only local
+  evidence probes, then feed those probes to the unchanged S0 package builder.
+- **Acceptance:** strict descriptor-stable local JSON inputs; exact plan/audit
+  coverage; caller-supplied local-source snapshot binding; literal-loopback,
+  proxy-free, redirect-free KB transport; strict raw response provenance before
+  fallback; separately verified `/v1/meta` corpus provenance for the deployed
+  response shape, with a full in-memory session-drift digest and a persisted
+  semantic digest that excludes all run telemetry; snapshot-only exact-offset anchor rehydration with no
+  `snippet` fallback; resolver-revalidated citable passages only; every reference
+  `context_only`, every probe `unresolved`; complete-batch failure atomicity,
+  deterministic package identity and field-aware privacy checks.
+- **Execution scopes:** committed query-plan fixture is hermetic-only on a
+  `test_vfl_ephemeral_*` collection; the public CLI accepts only a separately
+  reviewed live plan bound to `local_kb_kaiyuan_v2` and matching meta/snapshot.
+- **Pilot:** only 祖山觀 episode 22 / work `7669807398794598565`, using
+  `kb_book_id=kaiyuan_zhanjing`, collection `local_kb_kaiyuan_v2` and the
+  corpus version frozen by the explicit query plan.
+- **Current checkpoint:** approved design commit
+  `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`, tree
+  `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`, was non-force delivered to the
+  S1 branch and fetched back with the same tree. Independent written-spec
+  reviews found `0 Critical / 0 Important`; the user approved the written spec
+  and authorized in-scope plan execution without later confirmation pauses.
+- **Execution:** six TDD tasks, each independently verified, committed,
+  non-force pushed and remote-tree read back before the next task. A real
+  local-KB smoke is evidence-only and must be reported `BLOCKED` rather than
+  fabricated when a matching caller snapshot or literal-loopback service is
+  absent.
+- **Boundary:** no live platform/model/media/account operation; no raw corpus,
+  Qdrant, ingest, promotion or `local_kb_default` access; no S0/B9/external
+  public semantic change; no PR #54, Reviewer A/B, threshold, B10-PR-D/E/F,
+  B11/B12, stable, `main`, merge, force push or Runner operation. B10 Reviewer
+  B remains parked as the final formalization gate and does not block VFL-T02.
+
 ## B12 — Batch media and publishing assistance
 - **Status:** `BACKLOG`
 - **Boundary:** automatic publishing requires a separate safety decision
@@ -732,7 +777,9 @@ B10-R05 merged and recorded DONE
 → B10-PR-D/E/F remain unauthorized and BACKLOG until their entry gates pass and each task is separately recorded IN_PROGRESS
 → B10-PR-G/H and B11 remain BACKLOG behind the accepted B10 sequence
 ↳ VFL-T01 local S0 is DONE against frozen B9/external-audit interfaces
-→ VFL-T01 remains at a manual handoff and may emit proposals only; any later adapter/stage requires separate authorization and it does not start or release B12
+→ VFL-T02 S1 is IN_PROGRESS on its isolated stacked branch and may only create deterministic unresolved/context-only probes through approved read-only adapters
+→ VFL-T02 retains the unchanged S0 manual handoff; it does not start S2, render, upload, publish, apply proposals or release B12
+→ B10 Reviewer B remains parked as the terminal formalization gate and does not block the independent VFL-T02 implementation
 ```
 
 Current prohibitions:
@@ -743,4 +790,6 @@ Current prohibitions:
 - no official Qdrant or `local_kb_default` mutation;
 - no automatic publishing or `final.mp4`;
 - no automatic application of a VFL improvement or learning proposal;
+- no S1 access to `local_kb_default`, ingest, promotion or mutation APIs;
+- no claim that lexical retrieval establishes support or contradiction;
 - no claim that hosted CI replaces human, corpus, scientific or real-device evidence.

@@ -1,6 +1,6 @@
 # Chinese Star Omen Workspace — 项目交接总结
 
-**快照日期：** 2026-08-31
+**快照日期：** 2026-09-03
 
 **仓库：** `lpearf-pixel/chinese-star-omen-workspace`
 
@@ -15,7 +15,7 @@
 
 ## 1. 最近实时核验状态
 
-2026-08-31 重新读取 GitHub 后确认：
+2026-09-03 重新读取 GitHub 后确认：
 
 - `stable/kaiyuan-v2`：`99c0a85c1f944add8d013aedbae830fe022b7c3b`。
 - VFL 功能分支 `codex/kaiyuan-evidence-feedback-loop-skeleton-v1` 已通过
@@ -24,6 +24,11 @@
   `fe4babc7c34328a4b18f22bbea998882ae38b2dc`；随后交付状态校准检查点
   `857a7a02c26d0cdf6d6d484345b4ded577ec232c`，tree
   `7f9f7d1c7eb2c363b205c2242cd2445992ddb6e9`，也已非强制推送并读回一致。
+- VFL-T02 stacked 分支
+  `codex/kaiyuan-feedback-loop-readonly-adapters-v1` 已交付批准设计
+  `fc65e2fbf0eec6652919bfb2b75bb63eee06f64d`，tree
+  `a6660fd3a8e1d7bc419daeba7b7e932ffa9840bb`；公开 fetch 与本地 tree
+  回读一致。S1 实现当前为 `IN_PROGRESS`，尚未宣称完成。
 - 开放 PR 只有 #54；它仍为 Draft、未合并。
 - PR #54：B10 calibration safety，仍被两名不同真人 Reviewer A/B 门禁
   阻塞；不得启动依赖 threshold freeze 的后续正式阶段。
@@ -133,6 +138,42 @@ exact closeout `f36b146` 非强制推送到同名功能分支。当前仍无 VFL
 render、upload 或 publication；stable 与 PR #54 未变，Runner 仍为 `NOT RUN`。
 该远端分支交付不扩大本地 S0 的 `DONE` 范围；任何后续 VFL stage 仍须独立授权。
 
+### VFL-T02
+
+VFL-T02 已在独立 stacked 分支开始。批准的 Solution A 只消费既有 episode 22
+审计、显式两查询计划和 caller-supplied local-source snapshot，通过字面
+loopback、proxy-free、redirect-free 的现有两阶段 KB 客户端检索，并用同一
+snapshot bytes 重新完成 citable passage 验证。它不抓取平台、不调用模型、
+不改 corpus/Qdrant/rule，也不访问 `local_kb_default`。
+
+部署中的 `/v1/retrieve` 没有 corpus version，且 official hit 只有截断
+`snippet` 而不是 resolver anchor。S1 不伪造这两个字段：它通过同一 pinned
+transport 在调用前后校验 `/v1/meta`：完整 meta session hash 只用于内存漂移
+检测，持久 identity 只绑定排除 `meta_status` 与全部 `run_stats` 的 semantic
+provenance hash，因此 latency 不会改变 probe/run identity；
+`snippet` 永不作 anchor，只有 raw offsets 唯一匹配 caller snapshot passage 且
+locator/page/paragraph/heading/hash 全部一致时，才从 frozen bytes 在内存中还原。
+
+S1 输出不具有语义判定权：所有成功 probes 固定 `unresolved`，所有 reference
+固定 `citable_passage/context_only`。只有完整批次和 snapshot postflight 成功
+后才调用不变的 S0 atomic package builder；任何 typed failure 都不得留下部分
+probe、package 或 staging 输出。
+
+仓库内 episode 22 query plan 明确是 `hermetic_test`/ephemeral fixture，public
+CLI 会在凭据或网络前拒绝它。真实 smoke 只接受另行审核、与当前 meta 和 caller
+snapshot 精确一致的 `reviewed_live` plan；缺少任一前提均记录 `BLOCKED`。
+
+书面设计已获用户批准，两个独立规格审查均为
+`0 Critical / 0 Important`。六任务 TDD 计划已冻结：strict local inputs、
+source snapshot/byte-loader seams、safe transport/pre-fallback validation、
+citable projection/complete batch、episode 22 CLI/E2E、完整验证/独立审查/
+治理收口。每项任务完成后独立提交、非强制推送并远端 tree 回读。
+
+真实 local-KB smoke 只有在匹配 snapshot 与 literal-loopback service 同时可用
+时运行；缺失则准确记为 `BLOCKED`，不冒充通过。该环境证据不妨碍 hermetic
+S1 结束，但继续阻止 S2 使用真实 S1 输出。B10 Reviewer B 仍放在正式规则路径
+末端，由不同真人独立完成；它不阻塞 VFL-T02，也不能被 S1 审查替代。
+
 ## 4. ASTRO-R01：二十八宿与外部媒体审计
 
 批准设计：
@@ -224,6 +265,8 @@ tuple，以及把 WMO evidence_ref_id/URL/SHA 与 canonical snapshot 交叉绑�
 - 不自动启动 B10-PR-D、B11、B12 或 ASTRO-R01 Phase 6；VFL-T01 仅是
   已单独授权的离线接口骨架，不构成这些阶段的启动或发布。
 - 不自动应用 VFL 候选/提案，不自动渲染、上传或发布。
+- VFL-T02 不访问 `local_kb_default`，不把检索命中解释成语义支持或反驳，
+  不绕过 caller snapshot 或 literal-loopback 边界。
 - 不为普通 Draft/文档提交运行 Runner；只有 exact major-version stable
   merge candidate 才运行一次统一 Runner。
 
